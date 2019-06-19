@@ -2,10 +2,7 @@
   <div class="slider-menu">
     <el-menu
       default-active="2"
-      text-color="#fff"
-      active-text-color="#ffd04b"
       class="el-menu-vertical-demo"
-      background-color="#545c64"
       @open="handleOpen"
       @close="handleClose"
     >
