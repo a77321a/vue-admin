@@ -1,15 +1,30 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-Vue.use(Router)
 
+import userManage from './userManage'
+Vue.use(Router)
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/index',
-      name: 'home',
-      component: () => import('@/views/Home/Home.vue')
+      path: '/',
+      name: '/',
+      redirect: 'Index',
+      component: () => import('@/Layout.vue'),
+      children: [
+        {
+          path: '/index',
+          name: 'Index',
+          component: () => import('@/views/Home/Home.vue')
+        },
+        ...userManage
+      ]
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: () => import('@/views/Home/Login.vue')
     }
   ]
 })
