@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="logo">
-      <img src="../../common/image/logo@2x.png" alt>
+      <!-- <img src="../../common/image/logo@2x.png" alt> -->
     </div>
     <div class="tool-bar">
       <ul style="float:right" class="bar-list">
