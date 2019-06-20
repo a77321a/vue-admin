@@ -1,0 +1,11 @@
+export default [
+  {
+    path: 'teacherManage',
+    component: () => import('@/empty.vue'),
+    children: [{
+      path: 'index',
+      name: 'teacherManage',
+      component: () => import('@/views/TeacherManage/teacherManage.vue')
+    }]
+  }
+]

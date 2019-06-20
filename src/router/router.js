@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import userManage from './userManage'
+import teacherManage from './teacherManage'
 Vue.use(Router)
 export default new Router({
   mode: 'history',
@@ -18,7 +19,8 @@ export default new Router({
           name: 'Index',
           component: () => import('@/views/Home/Home.vue')
         },
-        ...userManage
+        ...userManage,
+        ...teacherManage
       ]
     },
     {
