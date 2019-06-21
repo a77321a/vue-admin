@@ -8,8 +8,8 @@
         <el-aside class="slider" width="200px">
           <slider-menu></slider-menu>
         </el-aside>
-        <el-main>
-          <div class="content">
+        <el-main class="content">
+          <div class="padding">
             <router-view></router-view>
           </div>
         </el-main>
@@ -18,15 +18,15 @@
   </div>
 </template>
 <script>
-import sliderMenu from './components/SliderMenu/SliderMenu.vue';
-import VHeader from './components/Header/VHeader.vue';
+import sliderMenu from "./components/SliderMenu/SliderMenu.vue";
+import VHeader from "./components/Header/VHeader.vue";
 export default {
-  name: 'layout',
+  name: "layout",
   components: {
     sliderMenu,
     VHeader
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .layout {
@@ -38,7 +38,8 @@ export default {
     min-height: 100vh;
     overflow: hidden;
     .slider {
-      min-height: 100%;
+      height: calc(100vh - 60px);
+      background-color: #fff;
       .slider-menu {
         height: 100%;
         .el-menu {
@@ -50,12 +51,27 @@ export default {
       padding: 0;
     }
     .content {
-      background-color: #fff;
-      padding: 15px;
-      min-height: calc(100vh - 120px);
+      height: calc(100vh - 60px);
       overflow-y: auto;
       overflow-x: hidden;
+      .padding {
+        padding: 15px;
+        background-color: #fff;
+      }
     }
   }
+}
+::-webkit-scrollbar {
+  width: 2px;
+  height: 0;
+  background-color: #eee;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-track {
+  background: #fff;
 }
 </style>

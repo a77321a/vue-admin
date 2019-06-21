@@ -6,6 +6,12 @@ export default [
       path: 'index',
       name: 'teacherManage',
       component: () => import('@/views/TeacherManage/teacherManage.vue')
-    }]
+    },
+    {
+      path: 'classify',
+      name: 'teacherClassify',
+      component: () => import('@/views/TeacherManage/teacherClassify.vue')
+    }
+    ]
   }
 ]

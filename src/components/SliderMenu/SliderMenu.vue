@@ -3,6 +3,7 @@
     <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
+      :unique-opened="true"
       @open="handleOpen"
       @close="handleClose"
     >
@@ -43,10 +44,19 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+::-webkit-scrollbar {
+  width: 2px;
+}
+.el-menu {
+  border-right: 0;
+}
 .el-submenu {
   width: 200px;
 }
 .el-menu-vertical-demo {
   height: 100%;
+}
+.el-menu-item.is-active {
+  background-color: rgba(64, 158, 255, 0.1) !important;
 }
 </style>

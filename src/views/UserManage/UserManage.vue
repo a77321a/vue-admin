@@ -38,7 +38,7 @@
       border
       style="width: 100%"
     >
-      <el-table-column prop="id" label="ID" width="40"></el-table-column>
+      <el-table-column prop="id" label="ID" width="70"></el-table-column>
       <el-table-column prop="user_nickname" label="昵称"></el-table-column>
       <el-table-column prop="mobile" label="手机号" width="110"></el-table-column>
       <el-table-column prop="status" label="状态" width="70" align="center">
@@ -192,7 +192,7 @@ export default {
     },
     handleStatus (row) {
       let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？';
+        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -212,7 +212,7 @@ export default {
         .catch(() => {})
     },
     resetPassword (id) {
-      let content = '您确定给该用户重置密码？默认密码为123456';
+      let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -271,7 +271,7 @@ export default {
     tabRowClassName ({ row, column, rowIndex, columnIndex }) {
       if (rowIndex % 2 === 0) {
         // eslint-disable-next-line semi
-        return { 'background-color': '#f2f2f2' };
+        return { 'background-color': '#f2f2f2' }
       }
     }
   }

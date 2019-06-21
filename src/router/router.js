@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import userManage from './userManage'
 import teacherManage from './teacherManage'
+import courseManage from './courseManage'
 Vue.use(Router)
 export default new Router({
   mode: 'history',
@@ -20,7 +21,8 @@ export default new Router({
           component: () => import('@/views/Home/Home.vue')
         },
         ...userManage,
-        ...teacherManage
+        ...teacherManage,
+        ...courseManage
       ]
     },
     {

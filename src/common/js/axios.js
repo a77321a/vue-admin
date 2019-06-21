@@ -145,7 +145,7 @@ function get (url, params = {}, loading = true) {
       loading: loading,
       headers: {
         // 'zywxtoken': 'zywx' + localStorage.webToken
-        'zywxtoken': 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdGVzdC5hcGkubHhtLnpoYW95b25na2FuZy5jb20vYXBpL2FkbWluL2xvZ2luIiwiaWF0IjoxNTYwOTI0ODU3LCJleHAiOjE1NjE1Mjk2NTcsIm5iZiI6MTU2MDkyNDg1NywianRpIjoiUnpFTjJhdU9pR1RYa3FiOCIsInN1YiI6MSwicHJ2IjoiOGY0ZTk1NTIwMTk1Yjg2NmVlMTI2YzQ0YTQ2Njk5ZGVhMmE1ZDRlNiJ9.scmXYAOGaLSMvMYffy6gU3zEwtjNC_kMC0QqIHnMQKI'
+        'zywxtoken': 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8venl3eC5hcGkuemhpeXVuODguY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTU2MTAzMzA3NCwiZXhwIjoxNTYxNjM3ODc0LCJuYmYiOjE1NjEwMzMwNzQsImp0aSI6IlJjNFRNbGltdmdxdDZ3NDEiLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.gh2DtV0jQgAkZkFvA9HYVmcGmVXiWnoLSLAmzUqp7wc'
       }
     })
       .then(response => {
@@ -165,7 +165,7 @@ function post (url, data = {}, loading = true) {
       loading: loading,
       headers: {
         // 'zywxtoken': 'zywx' + localStorage.webToken
-        'zywxtoken': 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdGVzdC5hcGkubHhtLnpoYW95b25na2FuZy5jb20vYXBpL2FkbWluL2xvZ2luIiwiaWF0IjoxNTYwOTI0ODU3LCJleHAiOjE1NjE1Mjk2NTcsIm5iZiI6MTU2MDkyNDg1NywianRpIjoiUnpFTjJhdU9pR1RYa3FiOCIsInN1YiI6MSwicHJ2IjoiOGY0ZTk1NTIwMTk1Yjg2NmVlMTI2YzQ0YTQ2Njk5ZGVhMmE1ZDRlNiJ9.scmXYAOGaLSMvMYffy6gU3zEwtjNC_kMC0QqIHnMQKI'
+        'zywxtoken': 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8venl3eC5hcGkuemhpeXVuODguY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTU2MTAzMzA3NCwiZXhwIjoxNTYxNjM3ODc0LCJuYmYiOjE1NjEwMzMwNzQsImp0aSI6IlJjNFRNbGltdmdxdDZ3NDEiLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.gh2DtV0jQgAkZkFvA9HYVmcGmVXiWnoLSLAmzUqp7wc'
 
       }
     })
@@ -219,7 +219,7 @@ function todelete (url, params = {}) {
   })
 }
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://test.api.lxm.zhaoyongkang.com/' // 测试环境
-axios.defaults.headers.zywxtoken = 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdGVzdC5hcGkubHhtLnpoYW95b25na2FuZy5jb20vYXBpL2FkbWluL2xvZ2luIiwiaWF0IjoxNTYwOTI0ODU3LCJleHAiOjE1NjE1Mjk2NTcsIm5iZiI6MTU2MDkyNDg1NywianRpIjoiUnpFTjJhdU9pR1RYa3FiOCIsInN1YiI6MSwicHJ2IjoiOGY0ZTk1NTIwMTk1Yjg2NmVlMTI2YzQ0YTQ2Njk5ZGVhMmE1ZDRlNiJ9.scmXYAOGaLSMvMYffy6gU3zEwtjNC_kMC0QqIHnMQKI'
+axios.defaults.baseURL = 'http://zywx.api.zhiyun88.com/' // 测试环境
+axios.defaults.headers.zywxtoken = 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8venl3eC5hcGkuemhpeXVuODguY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTU2MTAzMzA3NCwiZXhwIjoxNTYxNjM3ODc0LCJuYmYiOjE1NjEwMzMwNzQsImp0aSI6IlJjNFRNbGltdmdxdDZ3NDEiLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.gh2DtV0jQgAkZkFvA9HYVmcGmVXiWnoLSLAmzUqp7wc'
 
 export default { get, post, patch, put, todelete }
