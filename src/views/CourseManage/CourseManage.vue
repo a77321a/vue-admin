@@ -3,10 +3,14 @@
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="所属分类">
-        <el-cascader v-model="searchData.course_classify_id"></el-cascader>
+        <el-cascader
+          :props="{value:'id',label:'title',checkStrictly : true}"
+          :options="courseClassify"
+          v-model="searchData.course_classify_id"
+        ></el-cascader>
       </el-form-item>
       <el-form-item label="课程状态">
-        <el-select v-model="searchData.states" placeholder="请选择用户状态">
+        <el-select v-model="searchData.states" placeholder="请选择课程状态">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="正常" value="1"></el-option>
           <el-option label="已禁用" value="0"></el-option>
@@ -80,26 +84,25 @@
 <script>
 export default {
   name: 'userManage',
-  data() {
+  data () {
     return {
       searchData: {},
       courseList: [],
+      courseClassify: [],
       page: 1,
-      page2: 1,
       total: 0,
-      total2: 0,
       limit: 10,
-      limit2: 10,
       dialogVisible: false,
       searchCourse: {},
       mobile: ''
     }
   },
-  created() {
+  created () {
     this.getCourseList(true)
+    this.getCourseClassify()
   },
   methods: {
-    getCourseList(param) {
+    getCourseList (param) {
       if (param) {
         this.page = 1
       }
@@ -119,17 +122,42 @@ export default {
           this.total = res.total_count
         })
     },
-    getCourseClassify() {
-      this.$http.get('/api/course/classify').then(res => {})
+    getCourseClassify () {
+      this.$http.get('/api/course/classify').then(res => {
+        let parent = []
+        let children = []
+        if (res.rows && res.rows.length > 0) {
+          res.rows.forEach(i => {
+            if (i.packageDuration === 0) {
+              i.children = []
+              parent.push(i)
+            } else {
+              children.push(i)
+            }
+          })
+          parent.forEach(i => {
+            children.forEach(j => {
+              if (j.packageDuration === i.id) {
+                i.children.push(j)
+              }
+            })
+          })
+        }
+        for (let i = 0; i < res.rows.length; i++) {
+          if (res.rows[i].packageDuration === 0) {
+            this.courseClassify.push(res.rows[i])
+          }
+        }
+      })
     },
-    handlePage(val) {
+    handlePage (val) {
       this.page = val
       this.getCourseList()
     },
-    handlePage2(val) {
+    handlePage2 (val) {
       this.page2 = val
     },
-    handleStatus(row) {
+    handleStatus (row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -150,7 +178,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetPassword(id) {
+    resetPassword (id) {
       let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
@@ -169,12 +197,12 @@ export default {
         })
         .catch(() => {})
     },
-    purchasedCourse(row) {
+    purchasedCourse (row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)
     },
-    getCouseList(param) {
+    getCouseList (param) {
       if (param) {
         this.page2 = 1
       }
@@ -196,22 +224,6 @@ export default {
           }
           this.total2 = this.total_count
         })
-    },
-    handleUserInfo(id) {},
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (rowIndex % 2 === 0) {
-        if (columnIndex === 0) {
-          return [1, 8]
-        } else if (columnIndex === 7) {
-          return [0, 0]
-        }
-      }
-    },
-    tabRowClassName({ row, column, rowIndex, columnIndex }) {
-      if (rowIndex % 2 === 0) {
-        // eslint-disable-next-line semi
-        return { 'background-color': '#f2f2f2' }
-      }
     }
   }
 }
