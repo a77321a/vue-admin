@@ -78,7 +78,6 @@
         :total="total"
       ></el-pagination>
     </div>
-    <!-- 已购课程 -->
     <el-dialog :close-on-click-modal="false" width="70%" title="已购课程" :visible.sync="dialogVisible">
       <el-form inline ref="form1" label-width="80px" size="small">
         <el-form-item label="用户状态">
