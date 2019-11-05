@@ -99,11 +99,9 @@
       <el-table
         border
         size="small"
-        :span-method="arraySpanMethod"
         :header-cell-style="{background:'#f2f2f2'}"
         :data="courseList"
         style="width: 100%"
-        :cell-style="tabRowClassName"
       >
         <el-table-column prop="user_name" label="下单用户"></el-table-column>
         <el-table-column prop="mobile" label="用户手机号"></el-table-column>
@@ -136,7 +134,7 @@
 <script>
 export default {
   name: 'userManage',
-  data () {
+  data() {
     return {
       searchData: {},
       teacherList: [],
@@ -152,17 +150,17 @@ export default {
       courseList: []
     }
   },
-  created () {
+  created() {
     this.getTeacherList(true)
   },
   methods: {
-    getTeacherList (param) {
+    getTeacherList(param) {
       if (param) {
         this.page = 1
       }
       this.$http
         .get(
-          '/api/teacher',
+          '/api/user',
           Object.assign(
             {
               page: this.page,
@@ -177,14 +175,14 @@ export default {
           this.total = res.total_count
         })
     },
-    handlePage (val) {
+    handlePage(val) {
       this.page = val
       this.getTeacherList()
     },
-    handlePage2 (val) {
+    handlePage2(val) {
       this.page2 = val
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -205,7 +203,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetPassword (id) {
+    resetPassword(id) {
       let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
@@ -224,36 +222,14 @@ export default {
         })
         .catch(() => {})
     },
-    purchasedCourse (row) {
+    purchasedCourse(row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)
     },
-    getCouseList (param) {
-      if (param) {
-        this.page2 = 1
-      }
-      this.$http
-        .post(
-          '/api/order/index',
-          Object.assign(this.searchCourse, {
-            mobile: this.mobile
-          })
-        )
-        .then(res => {
-          this.courseList = res.data
-          for (let i = 0; i < this.courseList.length; i++) {
-            if (i % 2 === 0) {
-              this.courseList.splice(i, 0, {
-                user_name: '订单编号：' + this.courseList[i].order_number
-              })
-            }
-          }
-          this.total2 = this.total_count
-        })
-    },
-    handleUserInfo (id) {},
-    arraySpanMethod ({ row, column, rowIndex, columnIndex }) {
+
+    handleUserInfo(id) {},
+    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
       if (rowIndex % 2 === 0) {
         if (columnIndex === 0) {
           return [1, 8]
@@ -262,7 +238,7 @@ export default {
         }
       }
     },
-    tabRowClassName ({ row, column, rowIndex, columnIndex }) {
+    tabRowClassName({ row, column, rowIndex, columnIndex }) {
       if (rowIndex % 2 === 0) {
         // eslint-disable-next-line semi
         return { 'background-color': '#f2f2f2' }

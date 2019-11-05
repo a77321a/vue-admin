@@ -3,6 +3,18 @@
     <div class="logo">
       <!-- <img src="../../common/image/logo@2x.png" alt> -->
     </div>
+    <div class="header-wrap">
+      <div
+        class="header-item"
+        :class="item.active"
+        :data-src="item.active"
+        :key="index"
+        v-for="(item,index) in routerList"
+      >
+        <i style="vertical-align:middle" :class="item.icon"></i>
+        <span class="width-none">{{item.name}}</span>
+      </div>
+    </div>
     <div class="tool-bar">
       <ul style="float:right" class="bar-list">
         <li v-click-outside="closeDialog">
@@ -29,13 +41,13 @@
               </div>
               <div class="tdui-user-body-list">
                 <div class="tdui-user-body-list-start">
-                  <i color="#aaa" size="20" class="el-icon-setting"/>
+                  <i color="#aaa" size="20" class="el-icon-setting" />
                 </div>
                 <div class="tdui-user-body-list-end" name="account-setting">账号设置</div>
               </div>
               <div class="tdui-user-body-list">
                 <div class="tdui-user-body-list-start">
-                  <i color="#aaa" size="20" class="el-icon-s-promotion"/>
+                  <i color="#aaa" size="20" class="el-icon-s-promotion" />
                 </div>
                 <div class="tdui-user-body-list-end" name="account-exit">退出登录</div>
               </div>
@@ -47,22 +59,24 @@
   </div>
 </template>
 <script>
+import routerList from './routerList'
 export default {
   name: 'vheader',
-  data () {
+  data() {
     return {
+      routerList,
       infoBlock: false
     }
   },
   methods: {
-    closeDialog (event) {
+    closeDialog(event) {
       this.infoBlock = false
     }
   },
   directives: {
     clickOutside: {
-      bind (el, binding, vnode) {
-        function clickHandler (e) {
+      bind(el, binding, vnode) {
+        function clickHandler(e) {
           // 这里判断点击的元素是否是本身，是本身，则返回
           if (el.contains(e.target)) {
             return false
@@ -77,8 +91,8 @@ export default {
         el.__vueClickOutside__ = clickHandler
         document.addEventListener('click', clickHandler)
       },
-      update () {},
-      unbind (el, binding) {
+      update() {},
+      unbind(el, binding) {
         // 解除事件监听
         document.removeEventListener('click', el.__vueClickOutside__)
         delete el.__vueClickOutside__
@@ -90,18 +104,58 @@ export default {
 <style lang="scss" scoped>
 .header {
   background-color: #fff;
-  height: 60px;
+  height: 65px;
   .logo {
     float: left;
-    height: 60px;
-    line-height: 60px;
+    height: 65px;
+    line-height: 65px;
     width: 200px;
     text-align: center;
-    background-color: rgb(84, 92, 100);
     img {
       display: inline-block;
       height: 40px;
       vertical-align: middle;
+    }
+  }
+  background-color: #2b83f9;
+  background-image: linear-gradient(143deg, #2945cb 20%, #2b83f9 81%, #3a9dff);
+  .header-wrap {
+    padding: 0 20px;
+    display: inline-block;
+    height: 100%;
+    .header-item {
+      display: inline-block;
+      margin-right: 40px;
+      position: relative;
+      height: 65px;
+      line-height: 65px;
+      font-size: 14px;
+      color: #fff;
+      opacity: 0.69;
+      cursor: pointer;
+      min-width: 30px;
+      text-align: center;
+      transition: all 0.2s ease-in-out;
+      i {
+        display: inline-block;
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+    }
+    .header-item.active,
+    .header-item:hover {
+      color: #fff;
+      opacity: 1;
+    }
+    .active::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 4px;
+      background-color: #4fe3c1;
+      position: absolute;
+      bottom: 0;
+      left: 0;
     }
   }
   .tool-bar {

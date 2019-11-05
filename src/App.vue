@@ -1,6 +1,13 @@
+<!--
+ * @Descripttion:
+ * @Author:
+ * @Date: 2019-11-05 10:27:14
+ * @LastEditors:
+ * @LastEditTime: 2019-11-05 16:45:30
+ -->
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 <script>
@@ -9,17 +16,17 @@ export default {
   data () {
     return {}
   },
-  created () {},
+  created () {
+    console.log(this.$route)
+  },
   methods: {}
 }
 </script>
 <style lang="scss">
-@import "./common/css/variable.scss";
-@import "./common/css/variable.scss";
+@import './common/css/variable.scss';
+@import './common/css/reset.scss';
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
   height: 100%;
   width: 100%;
 }

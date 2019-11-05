@@ -1,7 +1,14 @@
+<!--
+ * @Descripttion:
+ * @Author:
+ * @Date: 2019-11-05 10:27:14
+ * @LastEditors:
+ * @LastEditTime: 2019-11-05 16:39:51
+ -->
 <template>
   <div class="layout">
     <el-container class="main-content">
-      <el-header class="l-header">
+      <el-header style="height:65px;" class="l-header">
         <v-header></v-header>
       </el-header>
       <el-container>
@@ -18,15 +25,15 @@
   </div>
 </template>
 <script>
-import sliderMenu from "./components/SliderMenu/SliderMenu.vue";
-import VHeader from "./components/Header/VHeader.vue";
+import sliderMenu from './components/SliderMenu/SliderMenu.vue'
+import VHeader from './components/Header/VHeader.vue'
 export default {
-  name: "layout",
+  name: 'layout',
   components: {
     sliderMenu,
     VHeader
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .layout {

@@ -1,3 +1,4 @@
+
 import axios from 'axios'
 import { Message, Loading } from 'element-ui'
 import router from '@/router/router'
@@ -51,16 +52,16 @@ function endLoading () {
   loading.close()
 }
 // 防抖实现函数
-function debounce (action, idle) {
-  var last
-  return function () {
-    var ctx = this; var args = arguments
-    clearTimeout(last)
-    last = setTimeout(function () {
-      action.apply(ctx, args)
-    }, idle)
-  }
-}
+// function debounce (action, idle) {
+//   var last
+//   return function () {
+//     var ctx = this; var args = arguments
+//     clearTimeout(last)
+//     last = setTimeout(function () {
+//       action.apply(ctx, args)
+//     }, idle)
+//   }
+// }
 // 一段时间内的请求共用一个loading
 let needLoadingRequestCount = 0
 export function showFullScreenLoading () {
@@ -219,7 +220,7 @@ function todelete (url, params = {}) {
   })
 }
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://zywx.api.zhiyun88.com/' // 测试环境
-axios.defaults.headers.zywxtoken = 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8venl3eC5hcGkuemhpeXVuODguY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTU2MTAzMzA3NCwiZXhwIjoxNTYxNjM3ODc0LCJuYmYiOjE1NjEwMzMwNzQsImp0aSI6IlJjNFRNbGltdmdxdDZ3NDEiLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.gh2DtV0jQgAkZkFvA9HYVmcGmVXiWnoLSLAmzUqp7wc'
+axios.defaults.baseURL = 'http://wangxiao33-sq.admin.zhouhaiyang.com/' // 测试环境
+axios.defaults.headers.Authorization = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd2FuZ3hpYW8zMy1zcS5hZG1pbi56aG91aGFpeWFuZy5jb20vYXBpL2FkbWluVXNlci9sb2dpbiIsImlhdCI6MTU3MjkyNDMxNywiZXhwIjoxNTczMjI2NzE3LCJuYmYiOjE1NzI5MjQzMTcsImp0aSI6InNqcmJJb2RBNWN4am5uWk0iLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.z8VFyjtf10HSJ_p-yMIUgoHKUM5zOIUSI45xYSej0W8'
 
 export default { get, post, patch, put, todelete }

@@ -1,9 +1,15 @@
+<!--
+ * @Descripttion:左侧菜单
+ * @Author:
+ * @Date: 2019-11-05 10:27:14
+ * @LastEditors:
+ * @LastEditTime: 2019-11-05 13:06:40
+ -->
 <template>
   <div class="slider-menu">
     <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
-      :unique-opened="true"
       @open="handleOpen"
       @close="handleClose"
     >
@@ -23,7 +29,7 @@
   </div>
 </template>
 <script>
-import { routerList } from '@/config/config';
+import { routerList } from '@/config/config'
 export default {
   name: 'sliderMenu',
   data () {
