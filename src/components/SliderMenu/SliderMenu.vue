@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-05 13:06:40
+ * @LastEditTime: 2019-11-06 10:47:57
  -->
 <template>
   <div class="slider-menu">
@@ -29,15 +29,18 @@
   </div>
 </template>
 <script>
-import { routerList } from '@/config/config'
+// import { routerList } from '@/config/config'
 export default {
   name: 'sliderMenu',
   data () {
-    return {
-      routerList
-    }
+    return {}
   },
   created () {},
+  computed: {
+    routerList () {
+      return this.$store.state.navList
+    }
+  },
   methods: {
     handleOpen (key, keyPath) {},
     handleClose (key, keyPath) {},

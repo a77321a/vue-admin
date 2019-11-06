@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-05 16:39:51
+ * @LastEditTime: 2019-11-06 12:51:48
  -->
 <template>
   <div class="layout">
@@ -12,7 +12,7 @@
         <v-header></v-header>
       </el-header>
       <el-container>
-        <el-aside class="slider" width="200px">
+        <el-aside v-if="$store.state.navList.length >0" class="slider" width="200px">
           <slider-menu></slider-menu>
         </el-aside>
         <el-main class="content">
@@ -58,11 +58,12 @@ export default {
       padding: 0;
     }
     .content {
-      height: calc(100vh - 60px);
+      height: calc(100vh - 65px);
       overflow-y: auto;
       overflow-x: hidden;
       .padding {
         padding: 15px;
+        height: calc(100vh - 125px);
         background-color: #fff;
       }
     }

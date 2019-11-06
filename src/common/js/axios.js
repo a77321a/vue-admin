@@ -4,41 +4,6 @@ import { Message, Loading } from 'element-ui'
 import router from '@/router/router'
 import store from '@/store/store'
 
-router.beforeEach((to, from, next) => {
-  var elm = document.getElementById('bdshare_weixin_qrcode_dialog')
-  if (elm) {
-    elm.style.cssText = 'display:none'
-  };
-  if (to.name === 'Login') {
-    to.query.relogin = from.name
-  };
-  if (to.meta.requireAuth) {
-    if (localStorage.webToken) {
-      /* 路由发生变化修改页面title */
-      if (to.meta.title) {
-        store.dispatch('get_web_config', to.meta.title)
-      };
-      next()
-    } else {
-      /* 路由发生变化修改页面title */
-      if (to.meta.title) {
-        store.dispatch('get_web_config', to.meta.title)
-      };
-      next({
-        name: 'Login'
-      })
-    };
-  } else {
-    /* 路由发生变化修改页面title */
-    if (to.meta.title) {
-      // document.title = to.meta.title;
-      store.dispatch('get_web_config', to.meta.title)
-      // document.title = store.state.config.site_name + to.meta.title;
-    };
-    next()
-  };
-})
-
 // 全局定义loading
 let loading
 function startLoading () {

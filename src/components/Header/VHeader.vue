@@ -6,9 +6,10 @@
     <div class="header-wrap">
       <div
         class="header-item"
-        :class="item.active"
+        :class="activeLink.indexOf(item.active) > -1 ? 'active' : ''"
         :data-src="item.active"
         :key="index"
+        @click="setNavList(item)"
         v-for="(item,index) in routerList"
       >
         <i style="vertical-align:middle" :class="item.icon"></i>
@@ -62,21 +63,44 @@
 import routerList from './routerList'
 export default {
   name: 'vheader',
-  data() {
+  data () {
     return {
       routerList,
-      infoBlock: false
+      infoBlock: false,
+      activeLink: ''
+    }
+  },
+  watch: {
+    $route (val) {
+      this.activeLink = val.fullPath
     }
   },
   methods: {
-    closeDialog(event) {
+    closeDialog (event) {
       this.infoBlock = false
+    },
+    setNavList (item) {
+      console.log(item)
+      if (item.hasOwnProperty('children')) {
+        this.$router.push({
+          name: item.children[0].children[0].url
+        })
+        if (Array.isArray(item.children)) {
+          this.$store.commit('setNavList', item.children)
+        } else {
+          this.$store.commit('setNavList', [])
+        }
+      } else {
+        this.$router.push({
+          name: item.url
+        })
+      }
     }
   },
   directives: {
     clickOutside: {
-      bind(el, binding, vnode) {
-        function clickHandler(e) {
+      bind (el, binding, vnode) {
+        function clickHandler (e) {
           // 这里判断点击的元素是否是本身，是本身，则返回
           if (el.contains(e.target)) {
             return false
@@ -91,8 +115,8 @@ export default {
         el.__vueClickOutside__ = clickHandler
         document.addEventListener('click', clickHandler)
       },
-      update() {},
-      unbind(el, binding) {
+      update () {},
+      unbind (el, binding) {
         // 解除事件监听
         document.removeEventListener('click', el.__vueClickOutside__)
         delete el.__vueClickOutside__

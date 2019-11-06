@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-05 16:45:30
+ * @LastEditTime: 2019-11-06 11:38:44
  -->
 <template>
   <div id="app">
@@ -16,9 +16,7 @@ export default {
   data () {
     return {}
   },
-  created () {
-    console.log(this.$route)
-  },
+  created () {},
   methods: {}
 }
 </script>
@@ -29,5 +27,11 @@ export default {
   overflow: hidden;
   height: 100%;
   width: 100%;
+}
+/deep/ #nprogress {
+  .bar {
+    height: 4px;
+    color: #4fe3c1;
+  }
 }
 </style>

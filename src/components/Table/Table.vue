@@ -3,11 +3,13 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-05 16:49:26
+ * @LastEditTime: 2019-11-06 22:21:29
  -->
 <template>
   <div>
     <el-table
+      v-loading="loading"
+      :span-method="spanMethod"
       :data="dataSource"
       row-key="uid"
       :size="size"
@@ -29,9 +31,9 @@
       <!-- <el-table-column v-if="hasIndex" type="index" width="55"></el-table-column> -->
       <!--数据源-->
       <el-table-column
-        v-for="(column) in columns"
+        v-for="(column,index) in columns"
         :sortable="column.sortable"
-        :key="column.prop"
+        :key="column.index"
         :prop="column.prop"
         :label="column.label"
         :min-width="column.minWidth"
@@ -60,22 +62,31 @@
 </template>
 
 <script>
+import MockData from './Mock'
 export default {
   name: 'Table',
   data () {
     return {
+      loading: false,
       resizable: false,
-      dataSource: [],
+      dataSource: MockData,
       selectionArr: [],
       headerCellStyle: {
         background: '#f8f8f9'
       },
       page: 1,
       total: 0,
-      limit: 10
+      limit: 10,
+      rowList: [],
+      spanArr: [],
+      position: 0,
+      listData: []
     }
   },
   props: {
+    spanMethod: {
+      type: Function
+    },
     searchRefresh: {
       type: Boolean,
       required: true
@@ -137,6 +148,9 @@ export default {
       default: function () {
         return {}
       }
+    },
+    selectRefresh: {
+      type: Boolean
     }
   },
   created () {
@@ -149,6 +163,7 @@ export default {
      * @return: list
      */
     getList (param) {
+      this.loading = true
       if (param) {
         this.page = 1
       }
@@ -161,10 +176,16 @@ export default {
           },
           this.searchObj
         )
-      ).then(res => {
-        this.dataSource = res.data.list
-        this.total = res.data.total
-      })
+      )
+        .then(res => {
+          this.loading = false
+          this.dataSource = res.data.list
+          this.total = res.data.total
+        })
+        .catch(err => {
+          console.log(err)
+          this.loading = false
+        })
     },
     // 将选中的行发送到父组件
     handleSelectionChange (val) {
@@ -186,6 +207,10 @@ export default {
   },
   watch: {
     searchRefresh () {
+      // this.selectionArr = []
+      this.getList(true)
+    },
+    selectRefresh () {
       this.selectionArr = []
       this.getList(true)
     }
