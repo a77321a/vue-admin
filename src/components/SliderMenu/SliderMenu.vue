@@ -3,12 +3,13 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 10:47:57
+ * @LastEditTime: 2019-11-07 18:05:43
  -->
 <template>
   <div class="slider-menu">
     <el-menu
-      default-active="2"
+      :default-active="active"
+      :default-openeds="opens"
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
@@ -20,9 +21,9 @@
         </template>
         <el-menu-item
           @click="handleClick(son)"
-          v-for="(son, si) in item.children"
-          :key="si"
-          :index="son.name"
+          v-for="(son) in item.children"
+          :key="son.url"
+          :index="son.url"
         >{{son.name}}</el-menu-item>
       </el-submenu>
     </el-menu>
@@ -33,12 +34,21 @@
 export default {
   name: 'sliderMenu',
   data () {
-    return {}
+    return {
+      active: '',
+      opens: []
+    }
   },
   created () {},
   computed: {
     routerList () {
       return this.$store.state.navList
+    }
+  },
+  watch: {
+    $route (val) {
+      this.active = val.meta.parent ? val.meta.parent : val.name
+      this.opens = this.$store.state.opens
     }
   },
   methods: {

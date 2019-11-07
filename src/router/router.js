@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 22:51:12
+ * @LastEditTime: 2019-11-07 15:10:00
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -18,11 +18,11 @@ const syncRoute = [
   {
     path: '/',
     name: 'Index',
-    redirect: 'Home',
+    redirect: '/Home',
     component: () => import('@/Layout.vue'),
     children: [
       {
-        path: '/home',
+        path: '/Home',
         name: 'Home',
         component: () => import('@/views/Home/Home.vue')
       },
@@ -42,5 +42,17 @@ const syncRoute = [
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+  scrollBehavior (to, from, savedPosition) {
+    if (to.hash) {
+      return {
+        selector: to.hash
+      }
+    }
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  },
   routes: syncRoute
 })

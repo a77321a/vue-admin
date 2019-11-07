@@ -155,7 +155,23 @@ function patch (url, data = {}) {
       })
   })
 }
-
+// 封装 formData 表单提交
+function postForm (url, formData, loading = true) {
+  return new Promise((resolve, reject) => {
+    axios.post(url, formData, {
+      timeout: 0,
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.webToken,
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(response => {
+        resolve(response.data)
+      }, err => {
+        reject(err)
+      })
+  })
+}
 // 封装put请求
 
 function put (url, data = {}) {
@@ -188,4 +204,4 @@ axios.defaults.timeout = 10000
 axios.defaults.baseURL = 'http://wangxiao33-sq.admin.zhouhaiyang.com/' // 测试环境
 axios.defaults.headers.Authorization = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd2FuZ3hpYW8zMy1zcS5hZG1pbi56aG91aGFpeWFuZy5jb20vYXBpL2FkbWluVXNlci9sb2dpbiIsImlhdCI6MTU3MjkyNDMxNywiZXhwIjoxNTczMjI2NzE3LCJuYmYiOjE1NzI5MjQzMTcsImp0aSI6InNqcmJJb2RBNWN4am5uWk0iLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.z8VFyjtf10HSJ_p-yMIUgoHKUM5zOIUSI45xYSej0W8'
 
-export default { get, post, patch, put, todelete }
+export default { get, post, patch, put, todelete, postForm }

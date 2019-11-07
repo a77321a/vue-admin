@@ -66,13 +66,12 @@ export default {
   data () {
     return {
       routerList,
-      infoBlock: false,
-      activeLink: ''
+      infoBlock: false
     }
   },
-  watch: {
-    $route (val) {
-      this.activeLink = val.fullPath
+  computed: {
+    activeLink () {
+      return this.$store.state.fullPath
     }
   },
   methods: {
@@ -80,17 +79,18 @@ export default {
       this.infoBlock = false
     },
     setNavList (item) {
-      console.log(item)
       if (item.hasOwnProperty('children')) {
         this.$router.push({
           name: item.children[0].children[0].url
         })
         if (Array.isArray(item.children)) {
           this.$store.commit('setNavList', item.children)
+          this.$store.commit('setOpenName', item.children[0].name)
         } else {
           this.$store.commit('setNavList', [])
         }
       } else {
+        this.$store.commit('setNavList', [])
         this.$router.push({
           name: item.url
         })

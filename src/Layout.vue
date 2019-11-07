@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 12:51:48
+ * @LastEditTime: 2019-11-07 19:22:34
  -->
 <template>
   <div class="layout">
@@ -12,7 +12,7 @@
         <v-header></v-header>
       </el-header>
       <el-container>
-        <el-aside v-if="$store.state.navList.length >0" class="slider" width="200px">
+        <el-aside v-if="showSideNav" class="slider" width="200px">
           <slider-menu></slider-menu>
         </el-aside>
         <el-main class="content">
@@ -32,6 +32,16 @@ export default {
   components: {
     sliderMenu,
     VHeader
+  },
+  // data(){
+  //   return{
+  //     showSideNav:false,
+  //   }
+  // }
+  computed: {
+    showSideNav() {
+      return this.$store.state.navList.length !== 0
+    }
   }
 }
 </script>
@@ -64,6 +74,7 @@ export default {
       .padding {
         padding: 15px;
         height: calc(100vh - 125px);
+        overflow: auto;
         background-color: #fff;
       }
     }

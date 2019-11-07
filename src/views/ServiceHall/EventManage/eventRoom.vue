@@ -3,53 +3,84 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 21:55:29
+ * @LastEditTime: 2019-11-07 21:07:16
  -->
 <template>
   <div class="user-manage">
     <!-- 筛选 -->
-    <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="所属机构">
-        <el-select clearable v-model="searchData.status" placeholder="请选择所属机构">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="菜品名称">
-        <el-input placeholder="请输入菜品名称关键字" v-model="searchData.mobile"></el-input>
-      </el-form-item>
-      <el-form-item label="活动室">
-        <el-input placeholder="请输入活动室编号关键字" v-model="searchData.mobile"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          size="small"
-          type="primary"
-          @click="searchRefresh = !searchRefresh"
-          icon="el-icon-search"
-        >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <el-button style="margin-bottom:15px" size="small" type="primary">新增活动室</el-button>
-
-    <!-- 列表 -->
-    <Table
-      @commitSelection="commitSelection"
-      :searchRefresh="searchRefresh"
-      :searchObj="searchData"
-      :selection="true"
-      :columns="tableColumns"
-      api
-      method="get"
-    ></Table>
+    <el-row :gutter="20">
+      <el-col style="background:#f9f9f9;height:calc(100vh - 140px)" :span="6">
+        <div class="checked">和康养老机构1部</div>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="禾康养老机构总部" name="1">
+            <div>和康养老机构1部</div>
+            <div>和康养老机构2部</div>
+          </el-collapse-item>
+          <el-collapse-item title="禾康养老机构总部1" name="2">
+            <div>和康养老机构1部</div>
+            <div>和康养老机构2部</div>
+          </el-collapse-item>
+          <el-collapse-item title="禾康养老机构总部2" name="3">
+            <div>和康养老机构1部</div>
+            <div>和康养老机构2部</div>
+          </el-collapse-item>
+          <el-collapse-item title="禾康养老机构总部3" name="4">
+            <div>和康养老机构1部</div>
+            <div>和康养老机构2部</div>
+          </el-collapse-item>
+        </el-collapse>
+      </el-col>
+      <el-col :span="18">
+        <div class="grid-content bg-purple">
+          <el-form inline ref="form" label-width="80px" size="small">
+            <el-form-item label="所属机构">
+              <el-select clearable v-model="searchData.status" placeholder="请选择所属机构">
+                <el-option label="全部" value="-1"></el-option>
+                <el-option label="启用" value="1"></el-option>
+                <el-option label="禁用" value="0"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="菜品名称">
+              <el-input placeholder="请输入菜品名称关键字" v-model="searchData.mobile"></el-input>
+            </el-form-item>
+            <el-form-item label="活动室">
+              <el-input placeholder="请输入活动室编号关键字" v-model="searchData.mobile"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                size="small"
+                type="primary"
+                @click="searchRefresh = !searchRefresh"
+                icon="el-icon-search"
+              >搜索</el-button>
+              <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+            </el-form-item>
+          </el-form>
+          <el-button
+            @click="$router.push({name:'editEventRoom'})"
+            style="margin-bottom:15px"
+            size="small"
+            type="primary"
+          >新增活动室</el-button>
+          <!-- 列表 -->
+          <Table
+            @commitSelection="commitSelection"
+            :searchRefresh="searchRefresh"
+            :searchObj="searchData"
+            :selection="true"
+            :columns="tableColumns"
+            api
+            method="get"
+          ></Table>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
 export default {
   name: 'userManage',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -74,15 +105,16 @@ export default {
       dialogVisible: false,
       searchCourse: {},
       mobile: '',
-      courseList: []
+      courseList: [],
+      activeNames: ''
     }
   },
-  created() {},
+  created () {},
   methods: {
-    commitSelection(data) {
+    commitSelection (data) {
       console.log(data)
     },
-    handleStatus(row) {
+    handleStatus (row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -102,7 +134,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetPassword(id) {
+    resetPassword (id) {
       let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
@@ -121,7 +153,7 @@ export default {
         })
         .catch(() => {})
     },
-    purchasedCourse(row) {
+    purchasedCourse (row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)
@@ -131,6 +163,31 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-manage {
+  /deep/ .el-collapse-item__header {
+    padding-left: 10px;
+  }
+  .checked {
+    width: calc(100% - 30px);
+    padding-left: 20px;
+    height: 34px;
+    line-height: 34px;
+    margin: 10px 0;
+    border-left: 5px solid #409eff;
+    background-color: #fff;
+    position: relative;
+    &::after {
+      position: absolute;
+      top: -1px;
+      right: -8px;
+      display: block;
+      width: 0;
+      height: 0;
+      content: ' ';
+      border-color: transparent transparent transparent #fff;
+      border-style: solid;
+      border-width: 18px 0 18px 8px;
+    }
+  }
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 193px;

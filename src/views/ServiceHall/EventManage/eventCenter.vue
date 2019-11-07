@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 21:54:48
+ * @LastEditTime: 2019-11-07 19:33:32
  -->
 <template>
   <div class="user-manage">
@@ -39,7 +39,12 @@
         <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button style="margin-bottom:15px" size="small" type="primary">新增活动</el-button>
+    <el-button
+      @click="$router.push({name:'editEvent'})"
+      style="margin-bottom:15px"
+      size="small"
+      type="primary"
+    >新增活动</el-button>
     <!-- 列表 -->
     <Table
       @commitSelection="commitSelection"
@@ -49,13 +54,21 @@
       :columns="tableColumns"
       api="/api/user"
       method="get"
-    ></Table>
+    >
+      <template slot="handleColumn">
+        <el-table-column fixed="right" label="操作" width="100">
+          <template slot-scope="scope">
+            <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">查看详情</el-button>
+          </template>
+        </el-table-column>
+      </template>
+    </Table>
   </div>
 </template>
 <script>
 export default {
   name: 'userManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -79,7 +92,7 @@ export default {
         },
         {
           label: '操作',
-          slot: 'action',
+          slot: 'handleColumn',
           fixed: 'right',
           minWidth: 200
         }
@@ -93,12 +106,12 @@ export default {
       courseList: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    commitSelection (data) {
+    commitSelection(data) {
       console.log(data)
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -118,7 +131,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetPassword (id) {
+    resetPassword(id) {
       let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
@@ -137,7 +150,7 @@ export default {
         })
         .catch(() => {})
     },
-    purchasedCourse (row) {
+    purchasedCourse(row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)

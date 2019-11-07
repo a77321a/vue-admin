@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-06 22:21:29
+ * @LastEditTime: 2019-11-07 15:04:01
  -->
 <template>
   <div>
@@ -31,7 +31,7 @@
       <!-- <el-table-column v-if="hasIndex" type="index" width="55"></el-table-column> -->
       <!--数据源-->
       <el-table-column
-        v-for="(column,index) in columns"
+        v-for="(column) in columns"
         :sortable="column.sortable"
         :key="column.index"
         :prop="column.prop"

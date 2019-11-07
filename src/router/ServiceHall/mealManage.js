@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-06 16:43:35
+ * @LastEditTime: 2019-11-07 21:11:13
  */
 export default [
   {
@@ -22,6 +22,14 @@ export default [
     meta: {
       title: '助餐中心',
       root: true
+    }
+  },
+  {
+    path: 'editMealRecord',
+    name: 'editMealRecord',
+    component: () => import('@/views/ServiceHall/MealManage/editMealRecord.vue'),
+    meta: {
+      title: '新增/编辑助餐记录'
     }
   },
   {

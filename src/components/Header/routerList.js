@@ -3,13 +3,13 @@
  * @Author:
  * @Date: 2019-11-05 16:05:09
  * @LastEditors:
- * @LastEditTime: 2019-11-06 22:51:58
+ * @LastEditTime: 2019-11-07 15:05:02
  */
 export default [
   {
     name: '首页',
     url: 'Home',
-    active: 'home',
+    active: 'Home',
     icon: 'fa-bars'
   },
   {
