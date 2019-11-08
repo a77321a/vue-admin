@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-07 15:04:01
+ * @LastEditTime: 2019-11-08 14:20:18
  -->
 <template>
   <div>
@@ -21,7 +21,7 @@
     >
       <!--选择-->
       <el-table-column
-        :reserve-selection="true"
+        :reserve-selection="false"
         align="center"
         v-if="selection"
         type="selection"
@@ -42,12 +42,19 @@
         :show-overflow-tooltip="columns.showOverflowTooltip"
         :align="column.align || 'center'"
         :resizable="resizable"
-      ></el-table-column>
+      >
+        <template v-if="column.slot" slot-scope="scope">
+          <slot :row="scope.row" :index="scope.$index" :name="column.slot">{{column.slot}}</slot>
+        </template>
+      </el-table-column>
       <!--操作-->
-      <slot name="handleColumn"></slot>
     </el-table>
     <div class="pagination-wrap">
+      <div style="float:left;margin-top:-5px">
+        <slot name="footer-left"></slot>
+      </div>
       <el-pagination
+        style="margin-top:5px;"
         hide-on-single-page
         @current-change="handlePage"
         @size-change="handleSizeChange"

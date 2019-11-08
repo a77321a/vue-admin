@@ -39,7 +39,7 @@ export default {
   //   }
   // }
   computed: {
-    showSideNav() {
+    showSideNav () {
       return this.$store.state.navList.length !== 0
     }
   }

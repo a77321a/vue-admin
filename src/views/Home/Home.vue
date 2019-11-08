@@ -1,12 +1,16 @@
+<!--
+ * @Descripttion:主页
+ * @Author:
+ * @Date: 2019-11-05 10:27:14
+ * @LastEditors:
+ * @LastEditTime: 2019-11-08 10:17:46
+ -->
 <template>
-  <div class="home">
-    
-  </div>
+  <div class="Home"></div>
 </template>
 
 <script>
-
 export default {
-  name: 'home',
+  name: 'Home'
 }
 </script>

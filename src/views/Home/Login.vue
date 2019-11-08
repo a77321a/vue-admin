@@ -2,7 +2,7 @@
  * @Descripttion: 登陆界面
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-11-06 10:33:45
+ * @LastEditTime: 2019-11-08 10:08:17
  -->
 <template>
   <el-row
@@ -12,50 +12,12 @@
     class="login"
     @keydown.enter.native="submitLogin"
   >
-    <el-col v-if="$store.state.userType =='DING'" :xs="{span:22}" style="width: 368px;">
-      <el-row class="header">
-        <img src="../../assets/login-logo.png" width="220px" />
-        <!-- <div class="description">企培标品</div> -->
-      </el-row>
-      <div class="major">欢迎使用后台管理系统</div>
-      <el-row class="login-form">
-        <el-form ref="usernameLoginForm" :model="form" :rules="rules" class="form">
-          <el-form-item prop="username">
-            <el-input
-              v-model="form.username"
-              prefix="ios-contact"
-              size="large"
-              clearable
-              placeholder="请输入手机号"
-              autocomplete="off"
-            />
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input
-              type="password"
-              v-model="form.password"
-              prefix="ios-lock"
-              size="large"
-              clearable
-              placeholder="请输入密码"
-              autocomplete="off"
-            />
-          </el-form-item>
-        </el-form>
-        <el-row>
-          <el-button class="login-btn" type="primary" size="large" @click="submitLogin" long>
-            <span v-if="!loading">登录</span>
-            <span v-else>登录中...</span>
-          </el-button>
-        </el-row>
-      </el-row>
-    </el-col>
-    <el-col v-else :xs="{span:22}" style="width: 368px;">
+    <el-col :xs="{span:22}" style="width: 368px;">
       <el-row class="header">
         <img src="../../assets/login-logo.png" width="220px" />
         <!-- <div class="description">企业主后台</div> -->
       </el-row>
-      <div class="major">登录你的企业大学</div>
+      <div class="major">管理平台</div>
       <el-row class="login-form">
         <el-form ref="usernameLoginForm" :model="form" :rules="rules" class="form">
           <el-form-item prop="username">
@@ -80,10 +42,14 @@
             />
           </el-form-item>
         </el-form>
-        <el-button class="lost-password" :to="{name:'lostPassword'}" type="text">忘记密码</el-button>
+        <el-button
+          class="lost-password"
+          @click="$router.push({name:'lostPassword'})"
+          type="text"
+        >忘记密码</el-button>
 
         <el-row>
-          <el-button class="login-btn" type="primary" size="large" @click="submitLogin" long>
+          <el-button class="login-btn" type="primary" size="large" @click="submitLogin">
             <span v-if="!loading">登录</span>
             <span v-else>登录中...</span>
           </el-button>
@@ -94,7 +60,6 @@
 </template>
 
 <script>
-// import encryption from '../../tools/encryption.js'
 export default {
   data () {
     return {
@@ -152,7 +117,7 @@ export default {
     text-align: center;
     .description {
       font-size: 14px;
-      el-color: rgba(0, 0, 0, 0.45);
+      color: rgba(0, 0, 0, 0.45);
       margin-top: 1vh;
     }
   }
@@ -160,7 +125,7 @@ export default {
     font-size: 20px;
     margin-bottom: 20px;
     text-align: center;
-    el-color: #2d8cf0;
+    color: #2d8cf0;
   }
   .login-form {
     margin-bottom: 16vh;
@@ -188,8 +153,9 @@ export default {
   .other-way {
     font-size: 14px;
   }
-  .login-btn,
-  .other-login {
+  .login-btn {
+    display: block;
+    width: 100%;
     margin-top: 1vh;
   }
   .icons {
@@ -201,23 +167,23 @@ export default {
     margin-left: 10px;
     display: flex;
     align-items: center;
-    el-color: rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.2);
     :hover {
-      el-color: #2d8cf0;
+      color: #2d8cf0;
     }
   }
   .foot {
     margin-bottom: 2vh;
-    el-color: rgba(0, 0, 0, 0.45);
+    color: rgba(0, 0, 0, 0.45);
     font-size: 14px;
     .help {
       margin: 0 auto 1vh;
       width: 60%;
       .item {
-        el-color: rgba(0, 0, 0, 0.45);
+        color: rgba(0, 0, 0, 0.45);
       }
       :hover {
-        el-color: rgba(0, 0, 0, 0.65);
+        color: rgba(0, 0, 0, 0.65);
       }
     }
   }
@@ -230,7 +196,7 @@ export default {
   margin-bottom: 5px;
 }
 .lost-password {
-  el-color: #2d8cf0;
+  color: #2d8cf0;
   padding-left: 0;
 }
 </style>

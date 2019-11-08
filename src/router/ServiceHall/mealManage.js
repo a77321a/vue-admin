@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-07 21:11:13
+ * @LastEditTime: 2019-11-07 21:19:18
  */
 export default [
   {
@@ -39,6 +39,15 @@ export default [
     meta: {
       title: '菜单管理',
       root: true
+    }
+  },
+  {
+    path: 'editMenu',
+    name: 'editMenu',
+    component: () => import('@/views/ServiceHall/MealManage/editMenu.vue'),
+    meta: {
+      title: '新增菜谱',
+      parent: 'menuManage'
     }
   }
 ]

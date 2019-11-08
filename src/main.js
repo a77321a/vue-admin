@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-07 18:46:52
+ * @LastEditTime: 2019-11-08 16:24:11
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -19,10 +19,18 @@ import Table from './components/Table/Table.vue'
 import UEditor from './components/UEditor/UEditor.vue'
 
 import axios from './common/js/axios'
-
+// 配置NProgress进度条选项  —— 动画效果
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-// 配置NProgress进度条选项  —— 动画效果
+// 高德地图
+import VueAMap from 'vue-amap'
+Vue.use(VueAMap)
+// VueAMap.initAMapApiLoader({
+//   key: '307510b98ac36649578b31a1c86cb116',
+//   plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geolocation'],
+//   v: '1.4.4'
+// })
+
 window.docTitle = document.title
 Vue.component('Table', Table)
 Vue.component('UEditor', UEditor)

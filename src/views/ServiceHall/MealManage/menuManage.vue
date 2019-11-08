@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 21:57:54
+ * @LastEditTime: 2019-11-07 21:21:04
  -->
 <template>
   <div class="meal-center">
@@ -39,7 +39,12 @@
         <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button style="margin-bottom:15px" size="small" type="primary">新增菜谱</el-button>
+    <el-button
+      @click="$router.push({name:'editMenu'})"
+      style="margin-bottom:15px"
+      size="small"
+      type="primary"
+    >新增菜谱</el-button>
     <el-button style="margin-bottom:15px" size="small">复制菜谱</el-button>
     <!-- 列表 -->
     <Table

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-07 19:33:32
+ * @LastEditTime: 2019-11-08 14:31:05
  -->
 <template>
   <div class="user-manage">
@@ -55,12 +55,13 @@
       api="/api/user"
       method="get"
     >
-      <template slot="handleColumn">
-        <el-table-column fixed="right" label="操作" width="100">
-          <template slot-scope="scope">
-            <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">查看详情</el-button>
-          </template>
-        </el-table-column>
+      <template slot-scope="{row}" slot="handleColumn">
+        <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">查看详情</el-button>
+        <el-button @click="clickInfo(row)" type="text" size="small">查看详情</el-button>
+      </template>
+      <template slot="footer-left">
+        <el-button type="text">结束活动</el-button>
+        <el-button type="text">删除</el-button>
       </template>
     </Table>
   </div>
@@ -68,7 +69,7 @@
 <script>
 export default {
   name: 'userManage',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -106,12 +107,15 @@ export default {
       courseList: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    commitSelection(data) {
+    clickInfo (row) {
+      console.log(row)
+    },
+    commitSelection (data) {
       console.log(data)
     },
-    handleStatus(row) {
+    handleStatus (row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -131,7 +135,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetPassword(id) {
+    resetPassword (id) {
       let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
@@ -150,7 +154,7 @@ export default {
         })
         .catch(() => {})
     },
-    purchasedCourse(row) {
+    purchasedCourse (row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)

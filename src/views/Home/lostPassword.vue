@@ -1,0 +1,368 @@
+<template>
+  <el-row type="flex" justify="center" align="middle" class="login" @keydown.enter.native="submit">
+    <el-col :xs="{span:22}" style="width: 368px;">
+      <div class="major">找回密码</div>
+      <el-row class="login-form">
+        <el-form ref="usernameLoginForm" :model="form" :rules="rules" class="form">
+          <el-form-item prop="mobile">
+            <el-input
+              v-model="form.mobile"
+              prefix="ios-phone-portrait"
+              size="large"
+              clearable
+              placeholder="请输入手机号"
+              autocomplete="off"
+            />
+          </el-form-item>
+          <el-form-item style="position:relative" prop="imgCode">
+            <el-input
+              type="text"
+              v-model="form.imgCode"
+              prefix="ios-lock"
+              size="large"
+              placeholder="验证码"
+              autocomplete="off"
+            />
+            <img @click="getIdentCode" class="img-code" :src="imgIndetCode" alt />
+          </el-form-item>
+          <el-form-item style="position:relative" prop="code">
+            <el-input
+              v-model="form.code"
+              prefix="ios-person"
+              size="large"
+              placeholder="请输入验证码"
+              autocomplete="off"
+            />
+            <el-button
+              style="color:#2d8cf0"
+              class="img-code code-btn"
+              :disabled="codeBtn"
+              @click="getSmsCode"
+              type="text"
+            >{{codeBtnInfo}}</el-button>
+          </el-form-item>
+          <el-form-item prop="new_pass">
+            <el-input
+              type="password"
+              v-model="form.new_pass"
+              prefix="ios-lock"
+              size="large"
+              clearable
+              placeholder="新密码"
+              autocomplete="off"
+            />
+          </el-form-item>
+          <el-form-item prop="confirm_new_pass">
+            <el-input
+              type="password"
+              v-model="form.confirm_new_pass"
+              prefix="ios-lock"
+              size="large"
+              placeholder="确认新密码"
+            />
+          </el-form-item>
+        </el-form>
+        <el-row>
+          <el-button class="login-btn" type="primary" size="large" @click="submit" long>
+            <span>重设密码</span>
+          </el-button>
+        </el-row>
+        <el-button
+          @click="$router.push({name:'Login'})"
+          type="text"
+          style="float:right;color:#2d8cf0"
+        >返回登录</el-button>
+      </el-row>
+    </el-col>
+  </el-row>
+</template>
+
+<script>
+export default {
+  data () {
+    let validatePhone = (rule, value, callback) => {
+      let reg = /^1\d{10}$/
+      if (value === '') {
+        callback(new Error('请输入正确的手机号码'))
+      } else if (reg.test(value) === false) {
+        callback(new Error('请输入正确的11位号码！'))
+      } else {
+        this.isMobile(callback)
+        // callback();
+      }
+    }
+    let validateCode = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入验证码'))
+      } else {
+        this.isMobile(callback)
+      }
+    }
+    var validateRePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (this.form.reNewPass !== this.form.newPass) {
+        callback(new Error('两次输入密码不一致'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      loginBg: require('@/assets/login_bg.png'),
+      codeBtn: false, // 是否禁用获取手机验证码
+      codeBtnInfo: '获取验证码', // 验证码倒计时信息
+      imgIndetCode: '',
+      imgkey: '',
+      loading: false,
+      sending: false,
+      sended: false,
+      maxLength: 6,
+      errorCode: '',
+      form: {
+        mobile: '',
+        code: '',
+        imgCode: '',
+        new_pass: '',
+        confirm_new_pass: ''
+      },
+      rules: {
+        mobile: [
+          {
+            required: true,
+            validator: validatePhone,
+            trigger: 'blur'
+          }
+        ],
+        imgCode: [
+          {
+            required: true,
+            message: '图片验证码必须填写',
+            trigger: 'blur'
+          }
+        ],
+        code: [
+          {
+            required: true,
+            validator: validateCode,
+            trigger: 'blur'
+          }
+        ],
+        new_pass: [
+          {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur'
+          },
+          {
+            min: 6,
+            max: 16,
+            message: '密码长度在 6 到 16 个字符',
+            trigger: 'blur'
+          }
+        ],
+        confirm_new_pass: [
+          {
+            required: true,
+            validator: validateRePass,
+            trigger: 'blur'
+          }
+        ]
+      }
+    }
+  },
+  created () {
+    this.getIdentCode()
+  },
+  methods: {
+    getIdentCode () {
+      this.$http.get('/api/app/captcha').then(res => {
+        this.imgIndetCode = res.data.img
+        this.imgkey = res.data.key
+      })
+    },
+    submit () {
+      this.$refs['usernameLoginForm'].validate(valid => {
+        if (!valid) return
+        this.$http
+          .post('/api/app/findpass', {
+            mobile: this.form.mobile,
+            new_pass: this.form.new_pass,
+            confirm_new_pass: this.form.confirm_new_pass,
+            code: this.form.code,
+            admin: true
+          })
+          .then(res => {
+            if (res.code === 200) {
+              this.$router.push({
+                name: 'login'
+              })
+            } else {
+              this.getIdentCode()
+            }
+          })
+      })
+    },
+    getSmsCode () {
+      this.$refs['usernameLoginForm'].validateField('mobile', valid => {
+        if (valid === '') {
+          this.$refs['usernameLoginForm'].validateField('imgCode', valid => {
+            if (valid === '') {
+              this.$http
+                .post('/api/app/getsmscode', {
+                  mobile: this.form.mobile,
+                  sms_type: 'findpassword',
+                  captcha: this.form.imgCode,
+                  key: this.imgkey
+                })
+                .then(res => {
+                  if (res.code === 200) {
+                    let count = 60
+                    this.codeBtn = true
+                    this.$Message.success('验证码已发送')
+                    var sendTimer = setInterval(() => {
+                      count--
+                      this.codeBtnInfo = '重新发送' + count
+                      if (count < 0) {
+                        this.codeBtn = false
+                        clearInterval(sendTimer)
+                        this.codeBtnInfo = '获取验证码'
+                      }
+                    }, 1000)
+                  } else if (res.code === 201) {
+                    this.getIdentCode()
+                  }
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+            } else {
+              return false
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    isMobile (callback) {
+      this.$http
+        .post('/api/app/isMobile', {
+          mobile: this.form.mobile,
+          type: 1
+        })
+        .then(res => {
+          if (res.code === 200) {
+            callback()
+          } else {
+            callback(res.msg)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  },
+  mounted () {}
+}
+</script>
+
+<style lang="scss" scoped>
+.login {
+  height: 100vh;
+  background: url('../../assets/login_bg.png');
+  background-size: 100% 100%;
+  .header {
+    margin-bottom: 3vh;
+    text-align: center;
+    .description {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.45);
+      margin-top: 1vh;
+    }
+  }
+  .major {
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #2d8cf0;
+  }
+  .login-form {
+    margin-bottom: 16vh;
+  }
+  .ivu-tabs-nav-container {
+    line-height: 2;
+    font-size: 17px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    zoom: 1;
+  }
+  .form {
+    padding-top: 1vh;
+    .input-verify {
+      width: 70%;
+    }
+    .count-verify,
+    .send-verify {
+      width: 100px;
+    }
+  }
+  .forget-pass,
+  .other-way {
+    font-size: 14px;
+  }
+  .login-btn {
+    display: block;
+    width: 100%;
+    margin-top: 3vh;
+  }
+  .icons {
+    display: flex;
+    align-items: center;
+  }
+  .other-icon {
+    cursor: pointer;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.2);
+    :hover {
+      color: #2d8cf0;
+    }
+  }
+  .foot {
+    margin-bottom: 2vh;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+    .help {
+      margin: 0 auto 1vh;
+      width: 60%;
+      .item {
+        color: rgba(0, 0, 0, 0.45);
+      }
+      :hover {
+        color: rgba(0, 0, 0, 0.65);
+      }
+    }
+  }
+}
+
+.ivu-tabs-nav .ivu-tabs-tab .ivu-icon {
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  margin-bottom: 5px;
+}
+.img-code {
+  position: absolute;
+  right: 5px;
+  bottom: 0;
+  height: 80%;
+  top: 0;
+  margin: auto;
+}
+.code-btn {
+  bottom: 9px;
+}
+</style>

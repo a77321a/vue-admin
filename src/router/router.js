@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-07 15:10:00
+ * @LastEditTime: 2019-11-08 10:21:08
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -26,6 +26,15 @@ const syncRoute = [
         name: 'Home',
         component: () => import('@/views/Home/Home.vue')
       },
+      {
+        path: 'Home/accountInfo',
+        name: 'accountInfo',
+        component: () => import('@/views/Home/accountInfo.vue'),
+        meta: {
+          parent: 'home',
+          title: '个人信息'
+        }
+      },
       ...ServiceHall,
       ...ResourceCenter,
       ...UserManage,
@@ -37,7 +46,13 @@ const syncRoute = [
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Home/Login.vue')
+  },
+  {
+    path: '/lostPassword',
+    name: 'lostPassword',
+    component: () => import('@/views/Home/lostPassword.vue')
   }
+
 ]
 export default new Router({
   mode: 'history',

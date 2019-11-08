@@ -5,20 +5,20 @@
 </template>
 <script>
 export default {
-  name: "UEditor",
-  data() {
+  name: 'UEditor',
+  data () {
     return {
-      id: "",
+      id: '',
       editor: null,
-      editorContent: "",
+      editorContent: '',
       ready: false,
       timer: 0,
       destroyed: false
-    };
+    }
   },
   model: {
-    prop: "content",
-    event: "change"
+    prop: 'content',
+    event: 'change'
   },
   props: {
     content: {
@@ -39,14 +39,14 @@ export default {
   },
   components: {
     Editor: {
-      render(createElement) {
-        return createElement("script", {
+      render (createElement) {
+        return createElement('script', {
           attrs: {
-            type: "text/plain",
+            type: 'text/plain',
             id: this.id,
-            style: "width:100%;height:" + this.height + "px"
+            style: 'width:100%;height:' + this.height + 'px'
           }
-        });
+        })
       },
       props: {
         id: { type: String, required: true },
@@ -54,55 +54,55 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.id =
-      "editor" +
+      'editor' +
       new Date().getTime() +
-      parseInt(Math.random() * 10000000).toString();
+      parseInt(Math.random() * 10000000).toString()
   },
-  mounted() {
-    let self = this;
+  mounted () {
+    let self = this
     this.$nextTick(async () => {
       let config = {
         autoFloatEnabled: false,
         zIndex: 99,
         readonly: this.readonly
-      };
-      if (this.maxlength > 0) {
-        config.maximumWords = this.maxlength;
       }
-      let editor = window.UE.getEditor(this.id, config);
+      if (this.maxlength > 0) {
+        config.maximumWords = this.maxlength
+      }
+      let editor = window.UE.getEditor(this.id, config)
       editor.ready(() => {
-        this.ready = true;
-        editor.setContent(this.content || "");
+        this.ready = true
+        editor.setContent(this.content || '')
         this.timer = setInterval(() => {
           if (this.destroyed) {
-            return;
+            return
           }
-          self.editorContent = editor.getContent();
-          self.$emit("change", self.editorContent);
-        }, 500);
-      });
-      this.editor = editor;
-    });
+          self.editorContent = editor.getContent()
+          self.$emit('change', self.editorContent)
+        }, 500)
+      })
+      this.editor = editor
+    })
   },
   watch: {
-    content: function(newVal) {
-      if (newVal == this.editorContent) {
-        return;
+    content: function (newVal) {
+      if (newVal === this.editorContent) {
+        return
       }
       if (!this.ready || this.destroyed) {
-        return;
+        return
       }
-      this.editor.setContent(newVal || "");
+      this.editor.setContent(newVal || '')
     }
   },
-  beforeDestroy() {
-    clearInterval(this.timer);
-    this.destroyed = true;
-    this.editor.destroy();
+  beforeDestroy () {
+    clearInterval(this.timer)
+    this.destroyed = true
+    this.editor.destroy()
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .ueditor {

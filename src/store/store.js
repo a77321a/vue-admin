@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-07 18:02:08
+ * @LastEditTime: 2019-11-08 18:14:27
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -15,7 +15,8 @@ export default new Vuex.Store({
     token: '',
     fullPath: '',
     navList: sessionStorage.navList ? JSON.parse(sessionStorage.navList) : [],
-    opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : []
+    opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
+    dialogHeight: `${(document.documentElement.clientHeight) - 330}`
   },
   mutations: {
     setNavList (state, data) {

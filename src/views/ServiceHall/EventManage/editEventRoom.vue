@@ -46,7 +46,7 @@
 <script>
 export default {
   name: 'editEvent',
-  data() {
+  data () {
     return {
       formInfo: {
         content: ''
@@ -54,7 +54,7 @@ export default {
     }
   },
   methods: {
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
