@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-11 15:16:16
+ * @LastEditTime: 2019-11-11 18:16:41
  -->
 <template>
   <div class="account-setting">
@@ -39,19 +39,20 @@
     >新增角色</el-button>
     <!-- 列表 -->
     <Table
+      :rowsForamtter="rowsForamtter"
       @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
-      api="/role/pageSearch"
+      api="/user/pageSearch"
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button @click="$router.push({name:'editRole'})" type="text" size="small">查看</el-button>
+        <el-button @click="$router.push({name:'editAccount'})" type="text" size="small">查看</el-button>
         <span>-</span>
         <el-button
-          @click="$router.push({name:'editRole',query:{id:row.roleId}})"
+          @click="$router.push({name:'editAccount',query:{id:row.roleId}})"
           type="text"
           size="small"
         >编辑</el-button>
@@ -72,12 +73,17 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '角色名称', prop: 'roleName', minWidth: 200 },
-        { label: '角色描述', prop: 'roleDesc', minWidth: 200 },
+        { label: '昵称', prop: 'nickName', minWidth: 200 },
+        { label: '角色', prop: 'account', minWidth: 200 },
+        {
+          label: '人员类型',
+          prop: 'accountType',
+          minWidth: 120
+        },
         {
           label: '更新时间',
           prop: 'updateTime',
-          minWidth: 120
+          minWidth: 140
         },
         {
           label: '操作',
@@ -92,20 +98,22 @@ export default {
       dialogVisible: false,
       searchCourse: {},
       mobile: '',
-      selectRole: []
+      selectAccount: []
     }
   },
   created () {},
   methods: {
-    clickInfo (row) {
-      console.log(row)
+    rowsForamtter (rows) {
+      rows.forEach(row => {
+        row.accountType = row.superAdmin ? '超级管理员' : '--'
+      })
     },
     commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.roleId)
       })
-      this.selectRole = arr
+      this.selectAccount = arr
     },
     handleStatus (row) {
       let content =
@@ -128,15 +136,15 @@ export default {
         .catch(() => {})
     },
     handleDelete (row) {
-      let id = row ? row.roleId : this.selectRole.join(',')
-      let content = '删除后，该角色将无法恢复，是否确定？'
+      let id = row ? row.roleId : this.selectAccount.join(',')
+      let content = '删除后，该手机号将无法登录后台，是否确定？'
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.todelete('/role/delete?roleId=' + id).then(res => {
+          this.$http.todelete('/user/delete?roleId=' + id).then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.searchRefresh = !this.searchRefresh
@@ -144,11 +152,6 @@ export default {
           })
         })
         .catch(() => {})
-    },
-    purchasedCourse (row) {
-      this.dialogVisible = true
-      this.mobile = row.mobile
-      this.getCouseList(true)
     }
   }
 }

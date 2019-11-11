@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-11 17:14:12
+ * @LastEditTime: 2019-11-11 18:03:11
  -->
 <template>
   <div id="edit-service-user">
@@ -120,6 +120,10 @@
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item size="large">
+        <el-button @click="handleSave" type="primary">立即创建</el-button>
+        <el-button @click="$router.go(-1)">取消</el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -174,9 +178,8 @@ export default {
         serviceScope: [
           {
             required: true,
-            message: '请输入手机号',
-            trigger: 'change',
-            type: 'array'
+            message: '请选择服务范围',
+            trigger: 'change'
           }
         ],
         orgId: [
@@ -202,9 +205,19 @@ export default {
     }
   },
   methods: {
-    uploadImg () {},
+    uploadImg (file) {
+      let formdata = new FormData()
+      formdata.append('file', file)
+      this.$http.postForm('/file/upload', formdata).then(res => {
+        if (res.code === SUCCESS) {
+          this.formInfo.indexPic = `http://118.24.54.72:8061/${res.payload}`
+        }
+      })
+      return false
+    },
     handleRemove () {},
     handleSave () {
+      console.log(this.formInfo)
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         if (this.$route.query.fid) {
