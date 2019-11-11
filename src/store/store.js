@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-10 19:41:01
+ * @LastEditTime: 2019-11-11 09:56:35
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -12,6 +12,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    userInfo: localStorage.userInfo ? JSON.parse(localStorage.userInfo) : {},
     token: localStorage.webToken || '', // token
     fullPath: '',
     navList: sessionStorage.navList ? JSON.parse(sessionStorage.navList) : [],
@@ -19,6 +20,10 @@ export default new Vuex.Store({
     dialogHeight: `${(document.documentElement.clientHeight) - 330}`
   },
   mutations: {
+    setUserInfo (state, data) {
+      state.userInfo = data
+      localStorage.setItem('userInfo', JSON.stringify(data))
+    },
     setToken (state, token) {
       state.token = token
       localStorage.setItem('webToken', token)
@@ -30,14 +35,20 @@ export default new Vuex.Store({
     setPath (state, data) {
       state.fullPath = data
     },
-    setOpenName (state, data) {
+    delOpenName (state, data) {
       let arr = new Set(state.opens)
       if (arr.has(data)) {
         arr.delete(data)
-      } else {
+      }
+      let newArr = [...arr]
+      sessionStorage.setItem('opens', JSON.stringify(newArr))
+    },
+    setOpenName (state, data) {
+      let arr = new Set(state.opens)
+      if (!arr.has(data)) {
         arr.add(data)
       }
-      console.log(arr)
+
       let newArr = [...arr]
       sessionStorage.setItem('opens', JSON.stringify(newArr))
     }

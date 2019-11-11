@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-10 20:06:51
+ * @LastEditTime: 2019-11-11 13:58:39
  -->
 <template>
   <div>
@@ -194,7 +194,7 @@ export default {
       )
         .then(res => {
           this.loading = false
-          if (res.code === '00000000') {
+          if (res.code === SUCCESS) {
             this.dataSource = res.payload.records
             if (this.rowsForamtter) {
               this.rowsForamtter(this.dataSource)

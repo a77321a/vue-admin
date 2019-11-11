@@ -104,13 +104,13 @@ axios.interceptors.response.use(
 
 // 封装get方法
 
-function get (url, params = {}, loading = true) {
+function get (url, params = {}, loading = false) {
   return new Promise((resolve, reject) => {
     axios.get(url, {
       params: params,
       loading: loading,
       headers: {
-        'zywxtoken': 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8venl3eC5hcGkuemhpeXVuODguY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTU2MTAzMzA3NCwiZXhwIjoxNTYxNjM3ODc0LCJuYmYiOjE1NjEwMzMwNzQsImp0aSI6IlJjNFRNbGltdmdxdDZ3NDEiLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.gh2DtV0jQgAkZkFvA9HYVmcGmVXiWnoLSLAmzUqp7wc'
+        'X-Token': localStorage.webToken
       }
     })
       .then(response => {
@@ -124,13 +124,12 @@ function get (url, params = {}, loading = true) {
 
 // 封装post请求
 
-function post (url, data = {}, loading = true) {
+function post (url, data = {}, loading = false) {
   return new Promise((resolve, reject) => {
     axios.post(url, data, {
       loading: loading,
       headers: {
-        'zywxtoken': 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8venl3eC5hcGkuemhpeXVuODguY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTU2MTAzMzA3NCwiZXhwIjoxNTYxNjM3ODc0LCJuYmYiOjE1NjEwMzMwNzQsImp0aSI6IlJjNFRNbGltdmdxdDZ3NDEiLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.gh2DtV0jQgAkZkFvA9HYVmcGmVXiWnoLSLAmzUqp7wc'
-
+        'X-Token': localStorage.webToken
       }
     })
       .then(response => {

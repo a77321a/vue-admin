@@ -3,28 +3,28 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-09 22:31:46
+ * @LastEditTime: 2019-11-11 16:48:35
  -->
 <template>
   <div class="dish-manage">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="菜品类型">
-        <el-select clearable v-model="searchData.status" placeholder="请选择用户状态">
+        <el-select clearable v-model="searchData.foodType" placeholder="请选择用户状态">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="适用季节">
-        <el-select clearable v-model="searchData.status" placeholder="请选择用户状态">
+        <el-select clearable v-model="searchData.season" placeholder="请选择用户状态">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="菜品名称">
-        <el-input placeholder="请输入菜品名称关键字" v-model="searchData.mobile"></el-input>
+        <el-input placeholder="请输入菜品名称关键字" v-model="searchData.foodName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -36,8 +36,12 @@
         <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button style="margin-bottom:15px" size="small" type="primary">新增菜品</el-button>
-
+    <el-button
+      @click="$router.push({name:'editDish'})"
+      style="margin-bottom:15px"
+      size="small"
+      type="primary"
+    >新增菜品</el-button>
     <!-- 列表 -->
     <Table
       @commitSelection="commitSelection"
@@ -47,7 +51,20 @@
       :columns="tableColumns"
       api="/food/pageSearch"
       method="post"
-    ></Table>
+    >
+      <template slot-scope="{row}" slot="action">
+        <el-button
+          @click="$router.push({name:'editDish',query:{fid:row.foodId}})"
+          type="text"
+          size="small"
+        >编辑</el-button>
+        <span>-</span>
+        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+      </template>
+    </Table>
+  </div>
+</template>
+    </Table>
   </div>
 </template>
 <script>
@@ -82,35 +99,29 @@ export default {
           minWidth: 200
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      courseList: []
+      selectFood: []
     }
   },
   created () {},
   methods: {
     commitSelection (data) {
-      console.log(data)
+      let arr = []
+      data.forEach(i => {
+        arr.push(i.activityId)
+      })
+      this.selectFood = arr
     },
-    handleStatus (row) {
-      let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
+    handleDelete (row) {
+      this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
+          this.$http.post('/food/delete?foodId' + row.foodId).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.searchRefresh = !this.searchRefresh
             }
           })
         })
@@ -134,11 +145,6 @@ export default {
           })
         })
         .catch(() => {})
-    },
-    purchasedCourse (row) {
-      this.dialogVisible = true
-      this.mobile = row.mobile
-      this.getCouseList(true)
     }
   }
 }

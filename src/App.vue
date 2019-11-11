@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 11:38:44
+ * @LastEditTime: 2019-11-11 15:19:58
  -->
 <template>
   <div id="app">
@@ -28,10 +28,7 @@ export default {
   height: 100%;
   width: 100%;
 }
-/deep/ #nprogress {
-  .bar {
-    height: 4px;
-    color: #4fe3c1;
-  }
+#nprogress .bar {
+  background: #4fe3c1 !important; //自定义颜色
 }
 </style>

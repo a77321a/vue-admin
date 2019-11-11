@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-10 19:42:42
+ * @LastEditTime: 2019-11-11 10:05:06
  -->
 <template>
   <div class="slider-menu">
@@ -12,7 +12,7 @@
       :default-openeds="opens"
       class="el-menu-vertical-demo"
       @open="handleOpen"
-      @close="handleOpen"
+      @close="handleClose"
     >
       <el-submenu v-for="(item, index) in routerList" :key="index" :index="item.name">
         <template slot="title">
@@ -53,14 +53,16 @@ export default {
   watch: {
     $route (val) {
       console.log(val)
-
       this.active = val.meta.parent ? val.meta.parent : val.name
-      this.opens = this.$store.state.opens
+      this.opens = sessionStorage.opens ? JSON.parse(sessionStorage.opens) : ''
     }
   },
   methods: {
     handleOpen (key, keyPath) {
       this.$store.commit('setOpenName', key)
+    },
+    handleClose (key, keyPath) {
+      this.$store.commit('delOpenName', key)
     },
     handleClick (son) {
       this.$router.push({

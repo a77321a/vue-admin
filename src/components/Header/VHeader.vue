@@ -94,6 +94,7 @@ export default {
         })
         if (Array.isArray(item.children)) {
           this.$store.commit('setNavList', item.children)
+          console.log(item.children[0].name)
           this.$store.commit('setOpenName', item.children[0].name)
         } else {
           this.$store.commit('setNavList', [])

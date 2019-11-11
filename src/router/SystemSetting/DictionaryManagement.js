@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-06 22:48:30
+ * @LastEditTime: 2019-11-11 15:00:15
  */
 export default [
   {
@@ -13,6 +13,15 @@ export default [
     meta: {
       title: '字典配置',
       root: true
+    }
+  },
+  {
+    path: 'editDictionary',
+    name: 'editDictionary',
+    component: () => import('@/views/SystemSetting/DictionaryManagement/editDictionary.vue'),
+    meta: {
+      title: '新增/编辑字典',
+      parent: 'dictionaryConfig'
     }
   }
 

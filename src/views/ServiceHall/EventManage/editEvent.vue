@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-07 19:25:49
+ * @LastEditTime: 2019-11-11 15:34:03
  -->
 <template>
   <div id="edit-event">
@@ -14,12 +14,14 @@
       </el-form-item>
       <el-form-item label="活动区域">
         <el-upload
+          list-type="picture-card"
           :show-file-list="false"
           class="upload-demo"
           action="api/dw"
           :before-upload="uploadImg"
         >
-          <el-button size="small" type="primary">点击上传</el-button>
+          <img v-if="formInfo.imageUrl" :src="formInfo.imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
@@ -38,9 +40,7 @@
           :autosize="{ minRows: 2, maxRows: 4}"
           placeholder="请输入活动地点，最多不超过68个字"
           v-model="formInfo.content"
-        >
-          <span>{{formInfo.content.length}}</span>
-        </el-input>
+        ></el-input>
       </el-form-item>
       <el-form-item label="活动详情">
         <UEditor v-model="formInfo.content"></UEditor>
@@ -64,32 +64,41 @@
         <el-button icon="el-icon-plus">选择人员</el-button>
       </el-form-item>
       <el-form-item label="服务对象">
-        <el-button icon="el-icon-plus">选择人员</el-button>
+        <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
       </el-form-item>
       <el-form-item size="large">
         <el-button type="primary">立即创建</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog width="60%" destroy-on-close title="选择服务对象" :visible.sync="dialogServiceObject">
+      <selectServiceObject></selectServiceObject>
+    </el-dialog>
   </div>
 </template>
 <script>
+import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue'
 export default {
   name: 'editEvent',
+  components: {
+    selectServiceObject
+  },
   data () {
     return {
       formInfo: {
         content: ''
-      }
+      },
+      dialogServiceObject: false,
+      dialogServiceUser: false
     }
   },
   methods: {
     uploadImg (file) {
       let formdata = new FormData()
-      formdata.append('file', this.file)
-      this.$http.postForm('', formdata).then(res => {
-        if (res.code === 200) {
-          this.formInfo.cover = res.data.path
+      formdata.append('file', file)
+      this.$http.postForm('/file/upload', formdata).then(res => {
+        if (res.code === SUCCESS) {
+          this.formInfo.imageUrl = `http://118.24.54.72:8061/${res.payload}`
         }
       })
       return false

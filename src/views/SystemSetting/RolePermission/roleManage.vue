@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-10 20:21:03
+ * @LastEditTime: 2019-11-11 15:08:15
  -->
 <template>
   <div class="role-manage">
@@ -42,12 +42,12 @@
         <el-button @click="$router.push({name:'editRole'})" type="text" size="small">查看</el-button>
         <span>-</span>
         <el-button
-          @click="$router.push({name:'editRole',query:{id:row.id}})"
+          @click="$router.push({name:'editRole',query:{id:row.roleId}})"
           type="text"
           size="small"
         >编辑</el-button>
         <span>-</span>
-        <el-button @click="handleDelete(row)" type="text" size="small">查看</el-button>
+        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
         <el-button @click="handleDelete(null)" type="text">删除</el-button>
@@ -58,7 +58,7 @@
 <script>
 export default {
   name: 'userManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -86,15 +86,19 @@ export default {
       selectRole: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    clickInfo (row) {
+    clickInfo(row) {
       console.log(row)
     },
-    commitSelection (data) {
-      this.selectRole = data
+    commitSelection(data) {
+      let arr = []
+      data.forEach(i => {
+        arr.push(i.roleId)
+      })
+      this.selectRole = arr
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -114,7 +118,8 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete (id) {
+    handleDelete(row) {
+      let id = row ? row.roleId : this.selectRole.join(',')
       let content = '删除后，该角色将无法恢复，是否确定？'
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',
@@ -122,14 +127,16 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          console.log(this.selectRole)
-          // this.$http.post('/api/user/repwd', { id: id }).then(res => {
-
-          // })
+          this.$http.todelete('/role/delete?roleId=' + id).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.searchRefresh = !this.searchRefresh
+            }
+          })
         })
         .catch(() => {})
     },
-    purchasedCourse (row) {
+    purchasedCourse(row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)

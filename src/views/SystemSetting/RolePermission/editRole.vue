@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-10 23:09:11
+ * @LastEditTime: 2019-11-11 15:12:49
  -->
 <template>
   <div id="edit-role">
@@ -54,7 +54,8 @@ export default {
     return {
       formInfo: {
         roleName: '',
-        roleDesc: ''
+        roleDesc: '',
+        permissionIds: []
       },
       rules: {
         roleName: [
@@ -119,7 +120,22 @@ export default {
       ]
     }
   },
+  created () {
+    if (this.$route.query.id) {
+      this.getRoleInfo()
+    }
+  },
   methods: {
+    getRoleInfo () {
+      this.$http.get('/role/get?roleId=' + this.$route.query.id).then(res => {
+        if (res.code === SUCCESS) {
+          this.formInfo = res.payload
+          delete this.formInfo.isVisible
+          delete this.formInfo.createTime
+          delete this.formInfo.updateTime
+        }
+      })
+    },
     uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
@@ -130,9 +146,26 @@ export default {
       })
       return false
     },
-    handleSave(){
-      this.$refs[]
-    },
+    handleSave () {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        if (this.$route.query.id) {
+          this.$http.post('/role/update', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
+        } else {
+          this.$http.post('/role/add', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
+        }
+      })
+    }
   }
 }
 </script>

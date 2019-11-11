@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-07 21:19:18
+ * @LastEditTime: 2019-11-11 15:22:54
  */
 export default [
   {
@@ -13,6 +13,15 @@ export default [
     meta: {
       title: '菜品管理',
       root: true
+    }
+  },
+  {
+    path: 'editDish',
+    name: 'editDish',
+    component: () => import('@/views/ServiceHall/MealManage/editDish.vue'),
+    meta: {
+      title: '新增/编辑菜品',
+      parent: 'dishManage'
     }
   },
   {

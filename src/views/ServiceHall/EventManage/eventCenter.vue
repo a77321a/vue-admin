@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-10 19:55:40
+ * @LastEditTime: 2019-11-11 13:59:07
  -->
 <template>
   <div class="user-manage">
@@ -57,11 +57,19 @@
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">查看详情</el-button>
+        <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">查看</el-button>
+        <span>-</span>
+        <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">编辑</el-button>
+        <span>-</span>
+        <el-button @click="handleCloseActivity(row)" type="text" size="small">结束活动</el-button>
+        <span>-</span>
+        <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">总结活动</el-button>
+        <span>-</span>
+        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button type="text">结束活动</el-button>
-        <el-button type="text">删除</el-button>
+        <el-button @click="handleCloseActivity(null)" type="text">结束活动</el-button>
+        <el-button @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>
@@ -69,7 +77,7 @@
 <script>
 export default {
   name: 'userManage',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -95,7 +103,7 @@ export default {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 200
+          minWidth: 240
         }
       ],
       userList: [],
@@ -104,65 +112,66 @@ export default {
       dialogVisible: false,
       searchCourse: {},
       mobile: '',
-      courseList: []
+      selectActivity: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    clickInfo(row) {
+    clickInfo (row) {
       console.log(row)
     },
-    commitSelection(data) {
-      console.log(data)
+    commitSelection (data) {
+      let arr = []
+      data.forEach(i => {
+        arr.push(i.activityId)
+      })
+      this.selectActivity = arr
     },
-    handleStatus(row) {
-      let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
+    handleDelete (row) {
+      let id = row ? [row.activityId] : this.selectActivity
+      this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
+          this.$http.post('/activity/delete', id).then(res => {
             if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
+              this.$message.success('操作成功')
+              this.searchRefresh = !this.searchRefresh
             }
           })
         })
         .catch(() => {})
     },
-    resetPassword(id) {
-      let content = '您确定给该用户重置密码？默认密码为123456'
-      this.$confirm(content, '温馨提示', {
+    handleCloseActivity (row) {
+      let id = row ? row.activityId : this.selectActivity.join(',')
+      let content = '是否要提前结束活动？'
+      this.$confirm(content, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/repwd', { id: id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
+          this.$http
+            .post(`/activity/close?activityIdList=${id}`, {
+              activityIdList: id
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message({
+                  type: 'success',
+                  message: '操作成功!'
+                })
+              }
+            })
         })
         .catch(() => {})
-    },
-    purchasedCourse(row) {
-      this.dialogVisible = true
-      this.mobile = row.mobile
-      this.getCouseList(true)
     }
   }
 }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 22:00:33
+ * @LastEditTime: 2019-11-11 16:52:49
  -->
 <template>
   <div class="service-center">
@@ -32,8 +32,12 @@
         <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button style="margin-bottom:15px" size="small" type="primary">新增人员</el-button>
-
+    <el-button
+      @click="$router.push({name:'editServiceUser'})"
+      style="margin-bottom:15px"
+      size="small"
+      type="primary"
+    >新增人员</el-button>
     <!-- 列表 -->
     <Table
       @commitSelection="commitSelection"

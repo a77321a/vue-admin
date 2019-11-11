@@ -2,7 +2,7 @@
  * @Descripttion: 登陆界面
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-11-09 21:33:34
+ * @LastEditTime: 2019-11-11 15:32:09
  -->
 <template>
   <el-row
@@ -23,7 +23,7 @@
           <el-form-item prop="username">
             <el-input
               v-model="form.account"
-              prefix="ios-contact"
+              prefix-icon="el-icon-user"
               size="large"
               clearable
               placeholder="请输入手机号"
@@ -34,7 +34,8 @@
             <el-input
               type="password"
               v-model="form.password"
-              prefix="ios-lock"
+              show-password
+              prefix-icon="el-icon-lock"
               size="large"
               clearable
               placeholder="请输入密码"
@@ -89,7 +90,10 @@ export default {
       }
     }
   },
-  created () {},
+  created () {
+    sessionStorage.clear()
+    this.$store.commit('setNavList', [])
+  },
   methods: {
     submitLogin () {
       this.$http
@@ -98,9 +102,9 @@ export default {
           password: this.form.password
         })
         .then(res => {
-          if (res.code === '00000000') {
+          if (res.code === SUCCESS) {
             this.$store.commit('setToken', res.payload.token)
-            this.$store.commit('userInfo', JSON.stringify(res.payload))
+            this.$store.commit('setUserInfo', JSON.stringify(res.payload))
             this.$router.push({
               name: 'Home'
             })
