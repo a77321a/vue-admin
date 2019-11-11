@@ -3,14 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-08 10:21:08
+ * @LastEditTime: 2019-11-11 21:54:46
  */
 import Vue from 'vue'
 import Router from 'vue-router'
 
 import ServiceHall from './ServiceHall'
 import ResourceCenter from './ResourceCenter'
-import UserManage from './UserManage'
+import UserManage from './userManage/index.js'
 import StatisticalAnalysis from './StatisticalAnalysis'
 import SystemSetting from './SystemSetting'
 Vue.use(Router)

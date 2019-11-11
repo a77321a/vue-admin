@@ -3,14 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-11 13:59:07
+ * @LastEditTime: 2019-11-11 23:37:24
  -->
 <template>
   <div class="user-manage">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="活动状态">
-        <el-select clearable v-model="searchData.status" placeholder="请选择用户状态">
+        <el-select style="width:200px" clearable v-model="searchData.activityStatus" placeholder="请选择用户状态">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
@@ -22,12 +22,14 @@
           style="width:360px;"
           type="datetimerange"
           range-separator="至"
+          @change="handlTime"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          value-format="yyyy-MM-dd HH:mm:ss"
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="活动名称">
-        <el-input placeholder="请输入活动名称关键字" v-model="searchData.mobile"></el-input>
+        <el-input  style="width:200px" placeholder="请输入活动名称关键字" v-model="searchData.activityName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -82,8 +84,8 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动名称', prop: 'activityName', minWidth: 200 },
-        { label: '活动时间', prop: 'activityTime', minWidth: 150 },
+        { label: '活动名称', prop: 'activityName', minWidth: 150 },
+        { label: '活动时间', prop: 'activityTime', minWidth: 260 },
         {
           label: '参与人员',
           prop: 'orgName',
@@ -122,8 +124,15 @@ export default {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    clickInfo (row) {
-      console.log(row)
+    handlTime(date){
+      if(date){
+        this.searchData.startTime = date[0]
+         this.searchData.endTime = date[1]
+      }
+      else{
+        this.searchData.startTime = ''
+         this.searchData.endTime = ''
+      }
     },
     commitSelection (data) {
       let arr = []
