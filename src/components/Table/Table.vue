@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-08 14:20:18
+ * @LastEditTime: 2019-11-10 20:06:51
  -->
 <template>
   <div>
@@ -11,7 +11,6 @@
       v-loading="loading"
       :span-method="spanMethod"
       :data="dataSource"
-      row-key="uid"
       :size="size"
       :border="border"
       stripe
@@ -43,8 +42,14 @@
         :align="column.align || 'center'"
         :resizable="resizable"
       >
-        <template v-if="column.slot" slot-scope="scope">
-          <slot :row="scope.row" :index="scope.$index" :name="column.slot">{{column.slot}}</slot>
+        <template slot-scope="scope">
+          <slot
+            v-if="column.slot"
+            :row="scope.row"
+            :index="scope.$index"
+            :name="column.slot"
+          >{{column.slot}}</slot>
+          <span>{{scope.row[column.prop]}}</span>
         </template>
       </el-table-column>
       <!--操作-->
@@ -59,7 +64,7 @@
         @current-change="handlePage"
         @size-change="handleSizeChange"
         :total="total"
-        :page-size="15"
+        :page-size="pageSize"
         background
         layout="total,prev, pager, next,sizes,jumper"
         :page-sizes="[10, 20, 30, 40, 50]"
@@ -69,21 +74,21 @@
 </template>
 
 <script>
-import MockData from './Mock'
+// import MockData from './Mock'
 export default {
   name: 'Table',
   data () {
     return {
       loading: false,
       resizable: false,
-      dataSource: MockData,
+      dataSource: [],
       selectionArr: [],
       headerCellStyle: {
         background: '#f8f8f9'
       },
       page: 1,
       total: 0,
-      limit: 10,
+      pageSize: 10,
       rowList: [],
       spanArr: [],
       position: 0,
@@ -91,6 +96,9 @@ export default {
     }
   },
   props: {
+    rowsForamtter: {
+      type: Function
+    },
     spanMethod: {
       type: Function
     },
@@ -178,16 +186,22 @@ export default {
         this.api,
         Object.assign(
           {
-            page: this.page,
-            limit: this.limit
+            pageNum: this.page,
+            pageSize: this.pageSize
           },
           this.searchObj
         )
       )
         .then(res => {
           this.loading = false
-          this.dataSource = res.data.list
-          this.total = res.data.total
+          if (res.code === '00000000') {
+            this.dataSource = res.payload.records
+            if (this.rowsForamtter) {
+              this.rowsForamtter(this.dataSource)
+            }
+            this.total = Number(res.payload.total)
+            console.log(this.dataSource)
+          }
         })
         .catch(err => {
           console.log(err)
@@ -208,7 +222,7 @@ export default {
       this.getList()
     },
     handleSizeChange (val) {
-      this.limit = val
+      this.pageSize = val
       this.getList(true)
     }
   },

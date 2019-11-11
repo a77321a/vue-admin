@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-08 14:31:05
+ * @LastEditTime: 2019-11-10 19:55:40
  -->
 <template>
   <div class="user-manage">
@@ -49,15 +49,15 @@
     <Table
       @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
+      :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
-      api="/api/user"
-      method="get"
+      api="/activity/pageSearch"
+      method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
         <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">查看详情</el-button>
-        <el-button @click="clickInfo(row)" type="text" size="small">查看详情</el-button>
       </template>
       <template slot="footer-left">
         <el-button type="text">结束活动</el-button>
@@ -69,26 +69,26 @@
 <script>
 export default {
   name: 'userManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动名称', prop: '', minWidth: 200 },
-        { label: '活动时间', prop: '', minWidth: 150 },
+        { label: '活动名称', prop: 'activityName', minWidth: 200 },
+        { label: '活动时间', prop: 'activityTime', minWidth: 150 },
         {
           label: '参与人员',
-          prop: '',
+          prop: 'orgName',
           minWidth: 100
         },
         {
           label: '活动状态',
-          prop: '',
+          prop: 'activityStatus',
           minWidth: 150
         },
         {
           label: '创建人',
-          prop: '',
+          prop: 'userName',
           minWidth: 150
         },
         {
@@ -107,15 +107,20 @@ export default {
       courseList: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    clickInfo (row) {
+    rowsForamtter(rows) {
+      rows.forEach(row => {
+        row.activityTime = row.startTime + '~' + row.endTime
+      })
+    },
+    clickInfo(row) {
       console.log(row)
     },
-    commitSelection (data) {
+    commitSelection(data) {
       console.log(data)
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -135,7 +140,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetPassword (id) {
+    resetPassword(id) {
       let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
@@ -154,7 +159,7 @@ export default {
         })
         .catch(() => {})
     },
-    purchasedCourse (row) {
+    purchasedCourse(row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)

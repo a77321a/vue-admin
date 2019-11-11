@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-08 16:24:11
+ * @LastEditTime: 2019-11-10 19:26:46
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -40,11 +40,14 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   store.commit('setPath', to.fullPath)
+  if (!localStorage.webToken && to.name != 'Login') {
+    router.push({ name: 'Login' })
+  }
   if (to.meta.title) {
     document.title = window.docTitle + ' - ' + to.meta.title
   }
   if (to.name == null) {
-    router.push({ name: 'Home' })
+    router.push({ name: 'Login' })
   }
   NProgress.start()
   next()

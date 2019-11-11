@@ -2,7 +2,7 @@
  * @Descripttion: 登陆界面
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-11-08 10:08:17
+ * @LastEditTime: 2019-11-09 21:33:34
  -->
 <template>
   <el-row
@@ -22,7 +22,7 @@
         <el-form ref="usernameLoginForm" :model="form" :rules="rules" class="form">
           <el-form-item prop="username">
             <el-input
-              v-model="form.username"
+              v-model="form.account"
               prefix="ios-contact"
               size="large"
               clearable
@@ -70,11 +70,11 @@ export default {
       maxLength: 6,
       errorCode: '',
       form: {
-        username: '',
-        password: ''
+        account: 'test',
+        password: '654321'
       },
       rules: {
-        username: [
+        account: [
           {
             required: true,
             message: '账号不能为空'
@@ -93,12 +93,17 @@ export default {
   methods: {
     submitLogin () {
       this.$http
-        .post('/api/adminUser/login', {
-          username: this.form.username,
+        .post('/admin/login', {
+          account: this.form.account,
           password: this.form.password
         })
         .then(res => {
-          if (res.code === 200) {
+          if (res.code === '00000000') {
+            this.$store.commit('setToken', res.payload.token)
+            this.$store.commit('userInfo', JSON.stringify(res.payload))
+            this.$router.push({
+              name: 'Home'
+            })
           }
         })
     }

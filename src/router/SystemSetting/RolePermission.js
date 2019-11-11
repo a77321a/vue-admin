@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-06 22:47:17
+ * @LastEditTime: 2019-11-10 20:14:43
  */
 export default [
   {
@@ -22,6 +22,14 @@ export default [
     meta: {
       title: '账号设置',
       root: true
+    }
+  }, {
+    path: 'editRole',
+    name: 'editRole',
+    component: () => import('@/views/SystemSetting/RolePermission/editRole.vue'),
+    meta: {
+      title: '新增/编辑角色',
+      parent: 'roleManage'
     }
   }
 ]

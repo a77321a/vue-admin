@@ -76,9 +76,9 @@ axios.interceptors.response.use(
     if (response.config.loading) {
       tryHideFullScreenLoading()
     };
-    if (response.data.code === 200) {
-    } else if (response.data.code === 202 || response.data.code === 203 || response.data.code === 204 || response.data.code === 205) {
-      Message.error(response.data.msg)
+    if (response.data.code === '00000000') {
+    } else if (response.data.code === '00001111' || response.data.code === '11111111') {
+      Message.error(response.data.message)
       localStorage.removeItem('webToken')
       localStorage.removeItem('userId')
       store.commit('setUser', {})
@@ -86,7 +86,7 @@ axios.interceptors.response.use(
         name: 'Login'
       })
     } else {
-      Message.error(response.data.msg)
+      Message.error(response.data.message)
       endLoading()
     };
     return response
@@ -110,7 +110,6 @@ function get (url, params = {}, loading = true) {
       params: params,
       loading: loading,
       headers: {
-        // 'zywxtoken': 'zywx' + localStorage.webToken
         'zywxtoken': 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8venl3eC5hcGkuemhpeXVuODguY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTU2MTAzMzA3NCwiZXhwIjoxNTYxNjM3ODc0LCJuYmYiOjE1NjEwMzMwNzQsImp0aSI6IlJjNFRNbGltdmdxdDZ3NDEiLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.gh2DtV0jQgAkZkFvA9HYVmcGmVXiWnoLSLAmzUqp7wc'
       }
     })
@@ -130,7 +129,6 @@ function post (url, data = {}, loading = true) {
     axios.post(url, data, {
       loading: loading,
       headers: {
-        // 'zywxtoken': 'zywx' + localStorage.webToken
         'zywxtoken': 'zywxeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8venl3eC5hcGkuemhpeXVuODguY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTU2MTAzMzA3NCwiZXhwIjoxNTYxNjM3ODc0LCJuYmYiOjE1NjEwMzMwNzQsImp0aSI6IlJjNFRNbGltdmdxdDZ3NDEiLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.gh2DtV0jQgAkZkFvA9HYVmcGmVXiWnoLSLAmzUqp7wc'
 
       }
@@ -201,7 +199,8 @@ function todelete (url, params = {}) {
   })
 }
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://wangxiao33-sq.admin.zhouhaiyang.com/' // 测试环境
-axios.defaults.headers.Authorization = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd2FuZ3hpYW8zMy1zcS5hZG1pbi56aG91aGFpeWFuZy5jb20vYXBpL2FkbWluVXNlci9sb2dpbiIsImlhdCI6MTU3MjkyNDMxNywiZXhwIjoxNTczMjI2NzE3LCJuYmYiOjE1NzI5MjQzMTcsImp0aSI6InNqcmJJb2RBNWN4am5uWk0iLCJzdWIiOjEsInBydiI6ImU1Mzg0Mjk4MzQ2MmJkODk1MmFlNTkyMzYzN2FjYTBlOTZiMjU5OGMifQ.z8VFyjtf10HSJ_p-yMIUgoHKUM5zOIUSI45xYSej0W8'
+axios.defaults.baseURL = 'http://118.24.54.72:8061/' // 测试环境
+axios.defaults.headers.Authorization = ''
+// axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 
 export default { get, post, patch, put, todelete, postForm }

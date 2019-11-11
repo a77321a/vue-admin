@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-07 18:05:43
+ * @LastEditTime: 2019-11-10 19:42:42
  -->
 <template>
   <div class="slider-menu">
@@ -12,7 +12,7 @@
       :default-openeds="opens"
       class="el-menu-vertical-demo"
       @open="handleOpen"
-      @close="handleClose"
+      @close="handleOpen"
     >
       <el-submenu v-for="(item, index) in routerList" :key="index" :index="item.name">
         <template slot="title">
@@ -39,7 +39,12 @@ export default {
       opens: []
     }
   },
-  created () {},
+  created () {
+    this.active = this.$route.meta.parent
+      ? this.$route.meta.parent
+      : this.$route.name
+    this.opens = this.$store.state.opens
+  },
   computed: {
     routerList () {
       return this.$store.state.navList
@@ -47,13 +52,16 @@ export default {
   },
   watch: {
     $route (val) {
+      console.log(val)
+
       this.active = val.meta.parent ? val.meta.parent : val.name
       this.opens = this.$store.state.opens
     }
   },
   methods: {
-    handleOpen (key, keyPath) {},
-    handleClose (key, keyPath) {},
+    handleOpen (key, keyPath) {
+      this.$store.commit('setOpenName', key)
+    },
     handleClick (son) {
       this.$router.push({
         name: son.url

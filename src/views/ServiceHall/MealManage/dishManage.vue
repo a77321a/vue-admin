@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 21:58:47
+ * @LastEditTime: 2019-11-09 22:31:46
  -->
 <template>
   <div class="dish-manage">
@@ -45,8 +45,8 @@
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
-      api="/api/user"
-      method="get"
+      api="/food/pageSearch"
+      method="post"
     ></Table>
   </div>
 </template>
@@ -58,20 +58,20 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动名称', prop: '', minWidth: 200 },
-        { label: '活动时间', prop: '', minWidth: 150 },
+        { label: '菜品名称', prop: 'foodName', minWidth: 200 },
+        { label: '菜品类型', prop: 'foodType', minWidth: 150 },
         {
-          label: '参与人员',
-          prop: '',
+          label: '适用季节',
+          prop: 'season',
           minWidth: 100
         },
         {
-          label: '活动状态',
+          label: '创建人',
           prop: '',
           minWidth: 150
         },
         {
-          label: '创建人',
+          label: '创建时间',
           prop: '',
           minWidth: 150
         },

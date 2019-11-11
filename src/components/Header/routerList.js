@@ -1,9 +1,9 @@
 /*
- * @Descripttion:顶部路由模拟
+ * @Descripttion:路由模拟
  * @Author:
  * @Date: 2019-11-05 16:05:09
  * @LastEditors:
- * @LastEditTime: 2019-11-07 15:05:02
+ * @LastEditTime: 2019-11-09 22:05:49
  */
 export default [
   {
@@ -111,6 +111,22 @@ export default [
           }
 
         ]
+      },
+      {
+        url: '',
+        name: '养老产品',
+        icon: '',
+        children: [
+          {
+            url: 'pensionProduct',
+            name: '养老产品'
+          },
+          {
+            url: 'productType',
+            name: '产品类型'
+          }
+
+        ]
       }
     ]
   },
@@ -162,7 +178,7 @@ export default [
     name: '系统设置',
     url: '',
     active: 'SystemSetting',
-    icon: 'fa-users',
+    icon: '',
     children: [
       {
         url: '',

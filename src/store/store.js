@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-08 18:14:27
+ * @LastEditTime: 2019-11-10 19:41:01
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -12,13 +12,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token: '',
+    token: localStorage.webToken || '', // token
     fullPath: '',
     navList: sessionStorage.navList ? JSON.parse(sessionStorage.navList) : [],
     opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
     dialogHeight: `${(document.documentElement.clientHeight) - 330}`
   },
   mutations: {
+    setToken (state, token) {
+      state.token = token
+      localStorage.setItem('webToken', token)
+    },
     setNavList (state, data) {
       sessionStorage.setItem('navList', JSON.stringify(data))
       state.navList = data
@@ -27,9 +31,15 @@ export default new Vuex.Store({
       state.fullPath = data
     },
     setOpenName (state, data) {
-      state.opens.push(data)
-      let arr = [...new Set(state.opens)]
-      sessionStorage.setItem('opens', JSON.stringify(arr))
+      let arr = new Set(state.opens)
+      if (arr.has(data)) {
+        arr.delete(data)
+      } else {
+        arr.add(data)
+      }
+      console.log(arr)
+      let newArr = [...arr]
+      sessionStorage.setItem('opens', JSON.stringify(newArr))
     }
   },
   actions: {

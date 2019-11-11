@@ -1,0 +1,157 @@
+<!--
+ * @Descripttion:角色管理
+ * @Author:
+ * @Date: 2019-11-05 10:27:14
+ * @LastEditors:
+ * @LastEditTime: 2019-11-10 20:21:03
+ -->
+<template>
+  <div class="role-manage">
+    <!-- 筛选 -->
+    <el-form inline ref="form" label-width="80px" size="small">
+      <el-form-item label="角色名称">
+        <el-input placeholder="请输入角色名称关键字" v-model="searchData.roleName"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          size="small"
+          type="primary"
+          @click="searchRefresh = !searchRefresh"
+          icon="el-icon-search"
+        >搜索</el-button>
+        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+      </el-form-item>
+    </el-form>
+    <el-button
+      @click="$router.push({name:'editRole'})"
+      style="margin-bottom:15px"
+      size="small"
+      type="primary"
+    >新增角色</el-button>
+    <!-- 列表 -->
+    <Table
+      @commitSelection="commitSelection"
+      :searchRefresh="searchRefresh"
+      :searchObj="searchData"
+      :selection="true"
+      :columns="tableColumns"
+      api="/role/pageSearch"
+      method="post"
+    >
+      <template slot-scope="{row}" slot="handleColumn">
+        <el-button @click="$router.push({name:'editRole'})" type="text" size="small">查看</el-button>
+        <span>-</span>
+        <el-button
+          @click="$router.push({name:'editRole',query:{id:row.id}})"
+          type="text"
+          size="small"
+        >编辑</el-button>
+        <span>-</span>
+        <el-button @click="handleDelete(row)" type="text" size="small">查看</el-button>
+      </template>
+      <template slot="footer-left">
+        <el-button @click="handleDelete(null)" type="text">删除</el-button>
+      </template>
+    </Table>
+  </div>
+</template>
+<script>
+export default {
+  name: 'userManage',
+  data () {
+    return {
+      searchRefresh: true,
+      searchData: {},
+      tableColumns: [
+        { label: '角色名称', prop: 'roleName', minWidth: 200 },
+        { label: '角色描述', prop: 'roleDesc', minWidth: 200 },
+        {
+          label: '更新时间',
+          prop: 'updateTime',
+          minWidth: 120
+        },
+        {
+          label: '操作',
+          slot: 'handleColumn',
+          fixed: 'right',
+          minWidth: 200
+        }
+      ],
+      userList: [],
+      limit: 10,
+      limit2: 10,
+      dialogVisible: false,
+      searchCourse: {},
+      mobile: '',
+      selectRole: []
+    }
+  },
+  created () {},
+  methods: {
+    clickInfo (row) {
+      console.log(row)
+    },
+    commitSelection (data) {
+      this.selectRole = data
+    },
+    handleStatus (row) {
+      let content =
+        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
+      this.$confirm(content, '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$http.post('/api/user/status', { id: row.id }).then(res => {
+            if (res.code === 200) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    handleDelete (id) {
+      let content = '删除后，该角色将无法恢复，是否确定？'
+      this.$confirm(content, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          console.log(this.selectRole)
+          // this.$http.post('/api/user/repwd', { id: id }).then(res => {
+
+          // })
+        })
+        .catch(() => {})
+    },
+    purchasedCourse (row) {
+      this.dialogVisible = true
+      this.mobile = row.mobile
+      this.getCouseList(true)
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+.role-manage {
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 193px;
+  }
+  .el-input--small {
+    width: 193px;
+  }
+  .pages {
+    text-align: center;
+    margin: 15px 0;
+  }
+  .warning-row {
+    background-color: #f2f2f2;
+  }
+}
+</style>

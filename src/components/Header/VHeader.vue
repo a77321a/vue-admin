@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="logo">
-      <!-- <img src="../../common/image/logo@2x.png" alt> -->
+      <img src="../../common/image/logo@2x.png" alt />
     </div>
     <div class="header-wrap">
       <div
@@ -49,7 +49,7 @@
                 </div>
                 <div class="tdui-user-body-list-end" name="account-setting">账号设置</div>
               </div>
-              <div class="tdui-user-body-list">
+              <div @click="loginOut" class="tdui-user-body-list">
                 <div class="tdui-user-body-list-start">
                   <i color="#aaa" size="20" class="el-icon-s-promotion" />
                 </div>
@@ -66,22 +66,28 @@
 import routerList from './routerList'
 export default {
   name: 'vheader',
-  data() {
+  data () {
     return {
       routerList,
       infoBlock: false
     }
   },
   computed: {
-    activeLink() {
+    activeLink () {
       return this.$store.state.fullPath
     }
   },
   methods: {
-    closeDialog(event) {
+    loginOut () {
+      this.$http.post('/admin/logout').then(res => {})
+      this.$router.push({
+        name: 'Login'
+      })
+    },
+    closeDialog (event) {
       this.infoBlock = false
     },
-    setNavList(item) {
+    setNavList (item) {
       if (item.hasOwnProperty('children')) {
         this.$router.push({
           name: item.children[0].children[0].url
@@ -102,8 +108,8 @@ export default {
   },
   directives: {
     clickOutside: {
-      bind(el, binding, vnode) {
-        function clickHandler(e) {
+      bind (el, binding, vnode) {
+        function clickHandler (e) {
           // 这里判断点击的元素是否是本身，是本身，则返回
           if (el.contains(e.target)) {
             return false
@@ -118,8 +124,8 @@ export default {
         el.__vueClickOutside__ = clickHandler
         document.addEventListener('click', clickHandler)
       },
-      update() {},
-      unbind(el, binding) {
+      update () {},
+      unbind (el, binding) {
         // 解除事件监听
         document.removeEventListener('click', el.__vueClickOutside__)
         delete el.__vueClickOutside__
@@ -140,6 +146,7 @@ export default {
     text-align: center;
     img {
       display: inline-block;
+      width: 140px;
       height: 40px;
       vertical-align: middle;
     }

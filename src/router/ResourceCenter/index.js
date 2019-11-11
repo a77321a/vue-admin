@@ -3,17 +3,19 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 22:18:35
+ * @LastEditTime: 2019-11-09 11:21:22
  */
 import CommunityAgencyRoute from './CommunityAgency'
 import SpaceResource from './SpaceResource'
+import PensionProduct from './PensionProduct'
 export default [
   {
     path: 'ResourceCenter',
     component: () => import('@/empty.vue'),
     children: [
       ...CommunityAgencyRoute,
-      ...SpaceResource
+      ...SpaceResource,
+      ...PensionProduct
     ]
   }
 ]
