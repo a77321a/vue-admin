@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 22:06:08
+ * @LastEditTime: 2019-11-12 22:40:39
  -->
 <template>
   <div class="service-product">
@@ -31,9 +31,15 @@
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
-      api="/api/user"
+      api="/serviceType/pageSearch"
       method="get"
-    ></Table>
+    >
+    <template slot-scope="{row}" slot="handleColumn">
+        <el-button @click="$router.push({name:'editServiceType'})" type="text" size="small">编辑</el-button>
+        <span>-</span>
+        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+      </template>
+    </Table>
   </div>
 </template>
 <script>
@@ -44,23 +50,8 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动名称', prop: '', minWidth: 200 },
-        { label: '活动时间', prop: '', minWidth: 150 },
-        {
-          label: '参与人员',
-          prop: '',
-          minWidth: 100
-        },
-        {
-          label: '活动状态',
-          prop: '',
-          minWidth: 150
-        },
-        {
-          label: '创建人',
-          prop: '',
-          minWidth: 150
-        },
+        { label: '类型名称', prop: '', minWidth: 200 },
+        { label: '服务产品数量', prop: '', minWidth: 150 },
         {
           label: '操作',
           slot: 'action',
@@ -68,59 +59,28 @@ export default {
           minWidth: 200
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      courseList: []
+
     }
   },
   created () {},
   methods: {
-    commitSelection (data) {
-      console.log(data)
-    },
-    handleStatus (row) {
-      let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
+    handleDelete (row) {
+      let id = row ? [row.serviceTypeId] : ''
+      this.$confirm('确定要删除该分类吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
+          this.$http.post('/activity/delete', id).then(res => {
             if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
+              this.$message.success('操作成功')
+              this.searchRefresh = !this.searchRefresh
             }
           })
         })
         .catch(() => {})
     },
-    resetPassword (id) {
-      let content = '您确定给该用户重置密码？默认密码为123456'
-      this.$confirm(content, '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http.post('/api/user/repwd', { id: id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
-        })
-        .catch(() => {})
-    }
   }
 }
 </script>
