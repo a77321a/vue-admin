@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-12 16:10:39
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:40:49
+ * @LastEditTime: 2019-11-12 16:50:03
  -->
 <template>
   <div id="bread-crumb">
@@ -20,24 +20,29 @@
 export default {
   name: 'BreadCrumb',
   data () {
-    return {
-      breadList: []
-    }
+    return {}
   },
-  created () {
-    this.breadList = this.$store.state.breadList
+  created () {},
+  computed: {
+    breadList: {
+      set () {
+        return this.$store.state.breadList
+      },
+      get () {
+        return this.$store.state.breadList
+      }
+    }
   },
   watch: {
     $route () {
       this.breadList = this.$store.state.breadList
-      console.log(this.breadList)
-
       let arr = []
       for (let i = 0; i < this.breadList.length; i++) {
         arr.push(this.breadList[i])
-        if (this.breadList[i].menu_url === this.$route.name) {
+        if (this.breadList[i].url === this.$route.name) {
           this.$store.commit('setBreadList', arr)
           this.breadList = arr
+          console.log(this.breadList)
           break
         }
       }

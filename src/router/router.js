@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:16:33
+ * @LastEditTime: 2019-11-12 16:56:01
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -24,14 +24,18 @@ const syncRoute = [
       {
         path: '/Home',
         name: 'Home',
-        component: () => import('@/views/Home/Home.vue')
+        component: () => import('@/views/Home/Home.vue'),
+        meta: {
+          title: '首页',
+          root: true
+        }
       },
       {
         path: 'Home/accountInfo',
         name: 'accountInfo',
         component: () => import('@/views/Home/accountInfo.vue'),
         meta: {
-          parent: 'home',
+          parent: 'Home',
           title: '个人信息'
         }
       },
