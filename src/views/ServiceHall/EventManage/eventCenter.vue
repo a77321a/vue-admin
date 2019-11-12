@@ -10,7 +10,12 @@
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="活动状态">
-        <el-select style="width:200px" clearable v-model="searchData.activityStatus" placeholder="请选择用户状态">
+        <el-select
+          style="width:200px"
+          clearable
+          v-model="searchData.activityStatus"
+          placeholder="请选择用户状态"
+        >
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
@@ -29,7 +34,7 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="活动名称">
-        <el-input  style="width:200px" placeholder="请输入活动名称关键字" v-model="searchData.activityName"></el-input>
+        <el-input style="width:200px" placeholder="请输入活动名称关键字" v-model="searchData.activityName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -124,14 +129,13 @@ export default {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime(date){
-      if(date){
+    handlTime (date) {
+      if (date) {
         this.searchData.startTime = date[0]
-         this.searchData.endTime = date[1]
-      }
-      else{
+        this.searchData.endTime = date[1]
+      } else {
         this.searchData.startTime = ''
-         this.searchData.endTime = ''
+        this.searchData.endTime = ''
       }
     },
     commitSelection (data) {

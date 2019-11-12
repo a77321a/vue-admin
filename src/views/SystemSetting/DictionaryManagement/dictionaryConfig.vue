@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-11 15:00:47
+ * @LastEditTime: 2019-11-12 12:32:16
  -->
 <template>
   <div class="dictionare-config">
@@ -23,16 +23,14 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editDictionary'})"
+      @click="formInfo = {};dialogFormVisible = true"
       style="margin-bottom:15px"
       size="small"
       type="primary"
     >新增目录</el-button>
     <!-- 列表 -->
     <Table
-      @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
-      :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :columns="tableColumns"
       api="/dictionary/pageSearch"
@@ -46,6 +44,17 @@
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
     </Table>
+    <el-dialog :title="formInfo.name ? '编辑目录' :'新增目录'" :visible.sync="dialogFormVisible">
+      <el-form ref="formInfo" :model="formInfo">
+        <el-form-item label="目录名称" label-width="80" prop>
+          <el-input v-model="formInfo.name" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSaveForm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -55,17 +64,18 @@ export default {
     return {
       searchRefresh: true,
       searchData: {},
+      formInfo: { name: '' },
       tableColumns: [
-        { label: '字典目录', prop: 'activityName', minWidth: 200 },
-        { label: '字典key', prop: 'activityTime', minWidth: 150 },
+        { label: '字典目录', prop: 'dictionaryLabel', minWidth: 200 },
+        { label: '字典key', prop: 'dictionaryKey', minWidth: 150 },
         {
           label: '字典值',
-          prop: 'orgName',
+          prop: 'dictionaryValue',
           minWidth: 100
         },
         {
           label: '模块类型',
-          prop: 'activityStatus',
+          prop: 'dictCatalogKey',
           minWidth: 150
         },
         {
@@ -80,13 +90,7 @@ export default {
           minWidth: 240
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      selectActivity: []
+      dialogFormVisible: false
     }
   },
   created () {},
@@ -96,15 +100,15 @@ export default {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    clickInfo (row) {
-      console.log(row)
-    },
-    commitSelection (data) {
-      let arr = []
-      data.forEach(i => {
-        arr.push(i.activityId)
+    handleSaveForm () {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        this.$http.post('', {}).then(res => {
+          if (res.code === SUCCESS) {
+            this.$message.success('操作成功')
+          }
+        })
       })
-      this.selectActivity = arr
     },
     handleDelete (row) {
       this.$confirm(

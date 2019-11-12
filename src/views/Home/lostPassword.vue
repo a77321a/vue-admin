@@ -79,7 +79,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     let validatePhone = (rule, value, callback) => {
       let reg = /^1\d{10}$/
       if (value === '') {
@@ -170,24 +170,23 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.getIdentCode()
   },
   methods: {
-    getIdentCode () {
+    getIdentCode() {
       this.$http.get('/api/app/captcha').then(res => {
         this.imgIndetCode = res.data.img
         this.imgkey = res.data.key
       })
     },
-    submit () {
+    submit() {
       this.$refs['usernameLoginForm'].validate(valid => {
         if (!valid) return
         this.$http
-          .post('/api/app/findpass', {
+          .post('/admin/resetPwd', {
             mobile: this.form.mobile,
             new_pass: this.form.new_pass,
-            confirm_new_pass: this.form.confirm_new_pass,
             code: this.form.code,
             admin: true
           })
@@ -202,17 +201,14 @@ export default {
           })
       })
     },
-    getSmsCode () {
+    getSmsCode() {
       this.$refs['usernameLoginForm'].validateField('mobile', valid => {
         if (valid === '') {
           this.$refs['usernameLoginForm'].validateField('imgCode', valid => {
             if (valid === '') {
               this.$http
-                .post('/api/app/getsmscode', {
-                  mobile: this.form.mobile,
-                  sms_type: 'findpassword',
-                  captcha: this.form.imgCode,
-                  key: this.imgkey
+                .post('/sms/send', {
+                  mobile: this.form.mobile
                 })
                 .then(res => {
                   if (res.code === 200) {
@@ -244,7 +240,7 @@ export default {
         }
       })
     },
-    isMobile (callback) {
+    isMobile(callback) {
       this.$http
         .post('/api/app/isMobile', {
           mobile: this.form.mobile,
@@ -262,7 +258,7 @@ export default {
         })
     }
   },
-  mounted () {}
+  mounted() {}
 }
 </script>
 

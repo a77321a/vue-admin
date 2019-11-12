@@ -200,11 +200,9 @@ export default {
               this.rowsForamtter(this.dataSource)
             }
             this.total = Number(res.payload.total)
-            console.log(this.dataSource)
           }
         })
         .catch(err => {
-          console.log(err)
           this.loading = false
         })
     },

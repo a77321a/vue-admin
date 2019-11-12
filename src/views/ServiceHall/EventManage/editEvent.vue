@@ -10,7 +10,12 @@
     <div class="title">基本信息</div>
     <el-form style="width:700px" ref="form" :model="formInfo" label-width="80px" size="medium">
       <el-form-item label="活动名称" prop="activityName">
-        <el-input placeholder="请输入活动名称，最多不超过50个字" show-word-limit :maxlength="50" v-model="formInfo.activityName"></el-input>
+        <el-input
+          placeholder="请输入活动名称，最多不超过50个字"
+          show-word-limit
+          :maxlength="50"
+          v-model="formInfo.activityName"
+        ></el-input>
       </el-form-item>
       <el-form-item label="活动封面" prop="activityIndexPic">
         <el-upload
@@ -54,14 +59,24 @@
         </el-select>
       </el-form-item>
       <el-form-item label="活动室" prop="activityRoomId">
-        <el-select clearable v-model="formInfo.activityRoomId" style="width:220px" placeholder="请选择">
+        <el-select
+          clearable
+          v-model="formInfo.activityRoomId"
+          style="width:220px"
+          placeholder="请选择"
+        >
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="服务产品" prop="serviceProductId">
-        <el-select clearable v-model="formInfo.serviceProductId" style="width:220px" placeholder="请选择">
+        <el-select
+          clearable
+          v-model="formInfo.serviceProductId"
+          style="width:220px"
+          placeholder="请选择"
+        >
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
@@ -99,18 +114,20 @@ export default {
       dialogServiceUser: false
     }
   },
-  created(){
-    if(this.$route.query.aid){
+  created () {
+    if (this.$route.query.aid) {
       this.getActivityInfo()
     }
   },
   methods: {
-    getActivityInfo(){
-      this.$http.get('/activity/get?activityId='this.$route.query.aid).then((res)=>{
-        if(res.code === SUCCESS){
-          this.formInfo = res.payload
-        }
-      })
+    getActivityInfo () {
+      this.$http
+        .get('/activity/get?activityId=' + this.$route.query.aid)
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.formInfo = res.payload
+          }
+        })
     },
     uploadImg (file) {
       let formdata = new FormData()

@@ -3,30 +3,40 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-07 21:09:18
+ * @LastEditTime: 2019-11-12 16:10:02
  -->
 <template>
   <div id="edit-event">
     <div class="title">基本信息</div>
     <el-form style="width:700px" ref="form" :model="formInfo" label-width="100px" size="medium">
       <el-form-item label="活动室名称">
-        <el-input placeholder="请输入活动室名称，最多不超过28个字" v-model="formInfo.name"></el-input>
+        <el-input
+          :maxlength="28"
+          show-word-limit
+          placeholder="请输入活动室名称，最多不超过28个字"
+          v-model="formInfo.activityRoomName"
+        ></el-input>
       </el-form-item>
       <el-form-item label="活动室编号">
-        <el-input placeholder="请输入活动室编号，最多不超过16个字" v-model="formInfo.name"></el-input>
+        <el-input
+          :maxlength="16"
+          show-word-limit
+          placeholder="请输入活动室编号，最多不超过16个字"
+          v-model="formInfo.activityRoomCode"
+        ></el-input>
       </el-form-item>
       <el-form-item label="活动室介绍">
         <el-input
+          :maxlength="68"
+          show-word-limit
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4}"
           placeholder="请输入活动室介绍，最多不超过68个字"
-          v-model="formInfo.content"
-        >
-          <span>{{formInfo.content.length}}</span>
-        </el-input>
+          v-model="formInfo.activityRoomDesc"
+        ></el-input>
       </el-form-item>
       <el-form-item label="所属机构">
-        <el-select clearable v-model="formInfo.content" style="width:220px" placeholder="请选择用户状态">
+        <el-select clearable v-model="formInfo.orgId" style="width:220px" placeholder="请选择用户状态">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
@@ -37,8 +47,8 @@
         <el-input placeholder="请输入活动室监控海康威视流地址" v-model="formInfo.name"></el-input>
       </el-form-item>
       <el-form-item size="large">
-        <el-button type="primary">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="handleSave" type="primary">立即创建</el-button>
+        <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -46,15 +56,20 @@
 <script>
 export default {
   name: 'editEvent',
-  data () {
+  data() {
     return {
       formInfo: {
         content: ''
       }
     }
   },
+  created() {
+    if (this.$route.query.eid) {
+      this.getEventRoomInfo()
+    }
+  },
   methods: {
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -63,6 +78,40 @@ export default {
         }
       })
       return false
+    },
+    /**
+     * @descripttion: 获取服务人员信息
+     * @return: 信息
+     */
+    getEventRoomInfo() {
+      this.$http
+        .get('/activity/room/get?activityRoomId=' + this.$route.query.eid)
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.formInfo = res.payload
+          }
+        })
+    },
+    // 保存按钮
+    handleSave() {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        if (this.$route.query.fid) {
+          this.$http.post('/activity/room/update', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
+        } else {
+          this.$http.post('/activity/room/add', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
+        }
+      })
     }
   }
 }

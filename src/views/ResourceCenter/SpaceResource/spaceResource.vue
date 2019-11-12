@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-11-08 18:30:21
+ * @LastEditTime: 2019-11-12 15:59:29
  -->
 <template>
   <div id="space-resource">
@@ -83,7 +83,7 @@ export default {
         citylimit: true
       },
       markers: [],
-      dialogVisible: true,
+      dialogVisible: false,
       data: [
         {
           id: 1,
@@ -204,7 +204,17 @@ export default {
       ]
     }
   },
+  created () {
+    this.getTree()
+  },
   methods: {
+    getTree () {
+      this.$http.get('/address/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.data = res.payload
+        }
+      })
+    },
     open (str) {
       this.$confirm(`确定选择地址：${str}`, '提示', {
         confirmButtonText: '确定',

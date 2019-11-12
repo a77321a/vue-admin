@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-07 19:22:34
+ * @LastEditTime: 2019-11-12 16:38:39
  -->
 <template>
   <div class="layout">
@@ -16,6 +16,7 @@
           <slider-menu></slider-menu>
         </el-aside>
         <el-main class="content">
+          <BreadCrumb></BreadCrumb>
           <div class="padding">
             <router-view></router-view>
           </div>
@@ -27,11 +28,13 @@
 <script>
 import sliderMenu from './components/SliderMenu/SliderMenu.vue'
 import VHeader from './components/Header/VHeader.vue'
+import BreadCrumb from './components/BreadCrumb/BreadCrumb.vue'
 export default {
   name: 'layout',
   components: {
     sliderMenu,
-    VHeader
+    VHeader,
+    BreadCrumb
   },
   // data(){
   //   return{
@@ -39,7 +42,7 @@ export default {
   //   }
   // }
   computed: {
-    showSideNav () {
+    showSideNav() {
       return this.$store.state.navList.length !== 0
     }
   }
@@ -68,6 +71,8 @@ export default {
       padding: 0;
     }
     .content {
+      padding: 0;
+      background-color: #fff;
       height: calc(100vh - 65px);
       overflow-y: auto;
       overflow-x: hidden;

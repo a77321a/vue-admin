@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-07 21:07:16
+ * @LastEditTime: 2019-11-12 16:07:45
  -->
 <template>
   <div class="user-manage">
@@ -64,14 +64,23 @@
           >新增活动室</el-button>
           <!-- 列表 -->
           <Table
-            @commitSelection="commitSelection"
             :searchRefresh="searchRefresh"
             :searchObj="searchData"
-            :selection="true"
             :columns="tableColumns"
-            api
-            method="get"
-          ></Table>
+            api="/activity/room/pageSearch"
+            method="post"
+          >
+            <template slot-scope="{row}" slot="handleColumn">
+              <el-button @click="$router.push({name:'eventRoomInfo'})" type="text" size="small">查看</el-button>
+              <span>-</span>
+              <el-button @click="$router.push({name:'editEventRoom'})" type="text" size="small">编辑</el-button>
+              <span>-</span>
+              <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+            </template>
+            <template slot="footer-left">
+              <el-button @click="handleDelete(null)" type="text">删除</el-button>
+            </template>
+          </Table>
         </div>
       </el-col>
     </el-row>
@@ -85,12 +94,12 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动室名称', prop: '', minWidth: 200 },
-        { label: '所属机构', prop: '', minWidth: 150 },
+        { label: '活动室名称', prop: 'activityRoomName', minWidth: 200 },
+        { label: '所属机构', prop: 'orgName', minWidth: 100 },
         {
           label: '更新时间',
-          prop: '',
-          minWidth: 100
+          prop: 'updateTime',
+          minWidth: 140
         },
         {
           label: '操作',
@@ -99,64 +108,28 @@ export default {
           minWidth: 100
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      courseList: [],
-      activeNames: ''
+      activeNames: '',
+      selectActivity: []
     }
   },
   created () {},
   methods: {
-    commitSelection (data) {
-      console.log(data)
-    },
-    handleStatus (row) {
-      let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
+    handleDelete (row) {
+      let id = row ? [row.activityRoomId] : this.selectActivity
+      this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
+          this.$http.post('/activity/room/delete', id).then(res => {
             if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
+              this.$message.success('操作成功')
+              this.searchRefresh = !this.searchRefresh
             }
           })
         })
         .catch(() => {})
-    },
-    resetPassword (id) {
-      let content = '您确定给该用户重置密码？默认密码为123456'
-      this.$confirm(content, '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http.post('/api/user/repwd', { id: id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
-        })
-        .catch(() => {})
-    },
-    purchasedCourse (row) {
-      this.dialogVisible = true
-      this.mobile = row.mobile
-      this.getCouseList(true)
     }
   }
 }

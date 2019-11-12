@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-11 15:19:14
+ * @LastEditTime: 2019-11-12 16:41:33
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -40,8 +40,9 @@ Vue.use(ElementUI)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
+  NProgress.start()
   store.commit('setPath', to.fullPath)
-  if (!localStorage.webToken && to.name != 'Login') {
+  if (!localStorage.webToken && to.name !== 'Login') {
     router.push({ name: 'Login' })
   }
   if (to.meta.title) {
@@ -49,8 +50,13 @@ router.beforeEach((to, from, next) => {
   }
   if (to.name == null) {
     router.push({ name: 'Login' })
+  } else if (to.name !== 'login' && to.name !== 'lostPassword' && to.name !== '404') {
+    if (to.meta.root) {
+      store.commit('setBreadList', [{ url: to.name, title: to.meta.title }])
+    } else {
+      store.commit('addBread', { url: to.name, title: to.meta.title })
+    }
   }
-  NProgress.start()
   next()
 })
 router.afterEach(transition => {

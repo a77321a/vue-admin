@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-09 14:34:11
+ * @LastEditTime: 2019-11-12 12:53:39
  -->
 <template>
   <div id="edit-event">
@@ -112,6 +112,42 @@ export default {
         }
       })
       return false
+    },
+    /**
+     * @descripttion: 获取服务对象信息
+     * @return: 信息
+     */
+    getServiceUserInfo () {
+      this.$http
+        .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.formInfo = res.payload
+          }
+        })
+    },
+    // 保存按钮
+    handleSave () {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        if (this.$route.query.sid) {
+          this.$http
+            .post('/service/customer/update', this.formInfo)
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.$router.go(-1)
+              }
+            })
+        } else {
+          this.$http.post('/service/customer/add', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
+        }
+      })
     }
   }
 }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-09 12:06:53
+ * @LastEditTime: 2019-11-12 12:51:04
  -->
 <template>
   <div class="serviceObject">
@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="姓名">
-        <el-input placeholder="请输入姓名关键字" v-model="searchData.mobile"></el-input>
+        <el-input placeholder="请输入姓名关键字" v-model="searchData.serviceCustomerName"></el-input>
       </el-form-item>
       <el-form-item label="手机号">
         <el-input placeholder="请输入活动名称关键字" v-model="searchData.mobile"></el-input>
@@ -46,12 +46,17 @@
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
-      api="/api/user"
+      api="/service/customer/pageSearch"
       method="get"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">查看详情</el-button>
-        <el-button @click="clickInfo(row)" type="text" size="small">查看详情</el-button>
+        <el-button type="text" size="small">详情</el-button>
+        <span>-</span>
+        <el-button type="text" size="small">健康管理</el-button>
+        <span>-</span>
+        <el-button type="text" size="small">编辑</el-button>
+        <span>-</span>
+        <el-button type="text" size="small">编辑</el-button>
       </template>
       <template slot="footer-left">
         <el-button type="text">删除</el-button>
@@ -91,66 +96,35 @@ export default {
           minWidth: 200
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      courseList: []
+
+      selectServiceObject: []
     }
   },
   created () {},
   methods: {
-    clickInfo (row) {
-      console.log(row)
-    },
     commitSelection (data) {
-      console.log(data)
+      let arr = []
+      data.forEach(i => {
+        arr.push(i.serviceCustomerId)
+      })
+      this.selectServiceObject = arr
     },
-    handleStatus (row) {
-      let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
+    handleDelete (row) {
+      let id = row ? [row.serviceCustomerId] : this.selectServiceObject
+      this.$confirm('删除后，该服务对象将被移除，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
+          this.$http.post('/service/customer/delete', id).then(res => {
             if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
+              this.$message.success('操作成功')
+              this.searchRefresh = !this.searchRefresh
             }
           })
         })
         .catch(() => {})
-    },
-    resetPassword (id) {
-      let content = '您确定给该用户重置密码？默认密码为123456'
-      this.$confirm(content, '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http.post('/api/user/repwd', { id: id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
-        })
-        .catch(() => {})
-    },
-    purchasedCourse (row) {
-      this.dialogVisible = true
-      this.mobile = row.mobile
-      this.getCouseList(true)
     }
   }
 }

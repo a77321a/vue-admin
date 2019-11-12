@@ -3,14 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-11 21:54:46
+ * @LastEditTime: 2019-11-12 16:16:33
  */
 import Vue from 'vue'
 import Router from 'vue-router'
 
 import ServiceHall from './ServiceHall'
 import ResourceCenter from './ResourceCenter'
-import UserManage from './userManage/index.js'
+import UserManage from './UserManage'
 import StatisticalAnalysis from './StatisticalAnalysis'
 import SystemSetting from './SystemSetting'
 Vue.use(Router)
@@ -51,6 +51,11 @@ const syncRoute = [
     path: '/lostPassword',
     name: 'lostPassword',
     component: () => import('@/views/Home/lostPassword.vue')
+  },
+  {
+    path: '*',
+    name: '404',
+    component: () => import('@/views/404.vue')
   }
 
 ]

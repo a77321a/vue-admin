@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-11 09:56:35
+ * @LastEditTime: 2019-11-12 16:18:26
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -16,10 +16,19 @@ export default new Vuex.Store({
     token: localStorage.webToken || '', // token
     fullPath: '',
     navList: sessionStorage.navList ? JSON.parse(sessionStorage.navList) : [],
+    breadList: sessionStorage.breadList ? JSON.parse(sessionStorage.breadList) : [],
     opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
     dialogHeight: `${(document.documentElement.clientHeight) - 330}`
   },
   mutations: {
+    setBreadList (state, breadList) {
+      state.breadList = breadList
+      sessionStorage.setItem('breadList', JSON.stringify(breadList))
+    },
+    addBread (state, breadList) {
+      state.breadList.push(breadList)
+      sessionStorage.setItem('breadList', JSON.stringify(state.breadList))
+    },
     setUserInfo (state, data) {
       state.userInfo = data
       localStorage.setItem('userInfo', JSON.stringify(data))

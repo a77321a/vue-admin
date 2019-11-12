@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-11 18:03:11
+ * @LastEditTime: 2019-11-12 12:46:13
  -->
 <template>
   <div id="edit-service-user">
@@ -204,7 +204,16 @@ export default {
       }
     }
   },
+  created () {
+    if (this.$route.query.sid) {
+      this.getServiceUserInfo()
+    }
+  },
   methods: {
+    /**
+     * @descripttion: 图片自定义上传 同所有单照片表单
+     * @param {type}   file
+     */
     uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
@@ -216,8 +225,23 @@ export default {
       return false
     },
     handleRemove () {},
+    /**
+     * @descripttion: 获取服务人员信息
+     * @return: 信息
+     */
+    getServiceUserInfo () {
+      this.$http
+        .get(
+          '/serviceProvider/detail?serviceProviderId=' + this.$route.query.sid
+        )
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.formInfo = res.payload
+          }
+        })
+    },
+    // 保存按钮
     handleSave () {
-      console.log(this.formInfo)
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         if (this.$route.query.fid) {
