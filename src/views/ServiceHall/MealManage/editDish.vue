@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 15:21:28
  * @LastEditors:
- * @LastEditTime: 2019-11-11 16:49:12
+ * @LastEditTime: 2019-11-13 21:25:21
  -->
 <template>
   <div id="edit-dish">
@@ -38,7 +38,7 @@
         <el-upload action="#" list-type="picture-card" :before-upload="uploadImg">
           <i slot="default" class="el-icon-plus"></i>
           <div slot="file" slot-scope="{file}">
-            <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+            <img class="el-upload-list__item-thumbnail" :src="formInfo.indexPic" alt />
             <span class="el-upload-list__item-actions">
               <span class="el-upload-list__item-delete" @click="handleRemove(file)">
                 <i class="el-icon-delete"></i>
@@ -72,17 +72,17 @@
       <el-form-item label="价格" prop="price">
         <el-input-number v-model="formInfo.price" :precision="2" controls-position="right" :min="0"></el-input-number>
       </el-form-item>
-      <el-form-item label="划线价" prop="salePrice">
+      <el-form-item label="划线价" prop="lineationPrice">
         <el-input-number
-          v-model="formInfo.salePrice"
+          v-model="formInfo.lineationPrice"
           :precision="2"
           controls-position="right"
           :min="0"
         ></el-input-number>
       </el-form-item>
       <el-form-item size="large">
-        <el-button type="primary">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="handleSave" type="primary">立即创建</el-button>
+        <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -93,7 +93,7 @@ export default {
   data () {
     return {
       formInfo: {
-        indexPic: [],
+        indexPic: '',
         price: 0,
         salePrice: 0,
         foodDescription: '',
@@ -106,7 +106,7 @@ export default {
           { required: true, message: '请输入菜品名称', trigger: 'blur' }
         ],
         price: [{ required: true, message: '请输入菜品价格', trigger: 'blur' }],
-        salePrice: [
+        lineationPrice : [
           { required: true, message: '请输入划线价格', trigger: 'blur' }
         ],
         foodType: [
@@ -135,9 +135,7 @@ export default {
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
-          this.formInfo.indexPic.push({
-            url: `http://118.24.54.72:8061/${res.payload}`
-          })
+          this.formInfo.indexPic = `http://118.24.54.72:8061/${res.payload}`
         }
       })
       return false

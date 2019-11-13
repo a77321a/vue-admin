@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-11-12 15:59:29
+ * @LastEditTime: 2019-11-13 22:21:57
  -->
 <template>
   <div id="space-resource">
@@ -214,6 +214,23 @@ export default {
           this.data = res.payload
         }
       })
+    },
+    handleDelete(row){
+      let id = row ? [row.activityId] : this.selectActivity
+      this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$http.post('/address/delete', id).then(res => {
+            if (res.code === 200) {
+              this.$message.success('操作成功')
+              this.searchRefresh = !this.searchRefresh
+            }
+          })
+        })
+        .catch(() => {})
     },
     open (str) {
       this.$confirm(`确定选择地址：${str}`, '提示', {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 15:12:23
+ * @LastEditTime: 2019-11-13 21:39:21
  -->
 <template>
   <div class="user-manage">
@@ -130,7 +130,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/activity/room/delete', id).then(res => {
+          this.$http.post('/activity/room/delete', {activityRoomIdList:id}).then(res => {
             if (res.code === 200) {
               this.$message.success('操作成功')
               this.searchRefresh = !this.searchRefresh

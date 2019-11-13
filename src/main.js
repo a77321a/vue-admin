@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 16:32:35
+ * @LastEditTime: 2019-11-13 22:15:25
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -32,6 +32,7 @@ Vue.use(VueAMap)
 //   v: '1.4.4'
 // })
 window.SUCCESS = '00000000'
+window.ctx = "http://118.24.54.72:8061/"
 window.docTitle = document.title
 Vue.component('Table', Table)
 Vue.component('UEditor', UEditor)
