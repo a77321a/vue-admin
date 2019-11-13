@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:54:17
+ * @LastEditTime: 2019-11-13 16:32:35
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -54,7 +54,7 @@ router.beforeEach((to, from, next) => {
     if (to.meta.root) {
       store.commit('setBreadList', [{ url: to.name, title: to.meta.title }])
     } else {
-      store.commit('addBread', { url: to.name, title: to.meta.title })
+      store.commit('addBread', { url: to.name, title: to.meta.title, query: to.query })
       let breadList = store.state.breadList
       let arr = []
       for (let i = 0; i < breadList.length; i++) {

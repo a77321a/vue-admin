@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-12 16:10:39
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:50:03
+ * @LastEditTime: 2019-11-13 16:35:08
  -->
 <template>
   <div id="bread-crumb">
@@ -11,7 +11,7 @@
       <el-breadcrumb-item
         v-for="item in breadList"
         :key="item.url"
-        :to="{ name: item.url }"
+        :to="item.query ? {name:item.url,query:item.query} : item.url"
       >{{item.title}}</el-breadcrumb-item>
     </el-breadcrumb>
   </div>
@@ -53,6 +53,6 @@ export default {
 <style lang="scss" scoped>
 #bread-crumb {
   padding: 15px 10px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #e6e6e6;
 }
 </style>

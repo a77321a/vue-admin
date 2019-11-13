@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:21:48
+ * @LastEditTime: 2019-11-13 15:58:29
  -->
 <template>
   <div class="slider-menu">
@@ -75,9 +75,7 @@ export default {
 ::-webkit-scrollbar {
   width: 2px;
 }
-.el-menu {
-  border-right: 0;
-}
+
 .el-submenu {
   width: 200px;
 }

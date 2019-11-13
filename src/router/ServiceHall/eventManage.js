@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-07 21:09:33
+ * @LastEditTime: 2019-11-13 15:13:19
  */
 export default [
   {
@@ -48,6 +48,15 @@ export default [
     component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
     meta: {
       title: '新增/编辑活动室',
+      parent: 'eventRoom'
+    }
+  },
+  {
+    path: 'eventRoomInfo',
+    name: 'eventRoomInfo',
+    component: () => import('@/views/ServiceHall/EventManage/eventRoomInfo.vue'),
+    meta: {
+      title: '活动室详情',
       parent: 'eventRoom'
     }
   }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:07:45
+ * @LastEditTime: 2019-11-13 15:12:23
  -->
 <template>
   <div class="user-manage">
@@ -70,10 +70,18 @@
             api="/activity/room/pageSearch"
             method="post"
           >
-            <template slot-scope="{row}" slot="handleColumn">
-              <el-button @click="$router.push({name:'eventRoomInfo'})" type="text" size="small">查看</el-button>
+            <template slot-scope="{row}" slot="action">
+              <el-button
+                @click="$router.push({name:'eventRoomInfo',query:{aid:row.activityRoomId}})"
+                type="text"
+                size="small"
+              >查看</el-button>
               <span>-</span>
-              <el-button @click="$router.push({name:'editEventRoom'})" type="text" size="small">编辑</el-button>
+              <el-button
+                @click="$router.push({name:'editEventRoom',query:{aid:row.activityRoomId}})"
+                type="text"
+                size="small"
+              >编辑</el-button>
               <span>-</span>
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>

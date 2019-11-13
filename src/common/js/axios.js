@@ -3,7 +3,8 @@ import axios from 'axios'
 import { Message, Loading } from 'element-ui'
 import router from '@/router/router'
 import store from '@/store/store'
-
+import NProgress from 'nprogress'
+NProgress.configure({ showSpinner: false })
 // 全局定义loading
 let loading
 function startLoading () {
@@ -61,6 +62,7 @@ axios.interceptors.request.use(
       requestList.push(request)
       if (config.loading) {
         showFullScreenLoading()
+        NProgress.start()
       };
     }
     return config
@@ -79,8 +81,8 @@ axios.interceptors.response.use(
     if (response.data.code === '00000000') {
     } else if (response.data.code === '00001111' || response.data.code === '11111111') {
       Message.error(response.data.message)
-      localStorage.removeItem('webToken')
-      localStorage.removeItem('userId')
+      localStorage.clear()
+      sessionStorage.clear()
       store.commit('setUser', {})
       router.push({
         name: 'Login'
@@ -89,6 +91,7 @@ axios.interceptors.response.use(
       Message.error(response.data.message)
       endLoading()
     };
+    NProgress.done()
     return response
   },
   (error) => {

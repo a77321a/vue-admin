@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:38:39
+ * @LastEditTime: 2019-11-13 16:03:05
  -->
 <template>
   <div class="layout">
@@ -42,7 +42,7 @@ export default {
   //   }
   // }
   computed: {
-    showSideNav() {
+    showSideNav () {
       return this.$store.state.navList.length !== 0
     }
   }
@@ -53,6 +53,9 @@ export default {
   overflow: hidden;
   .el-main {
     padding: 15px;
+  }
+  /deep/.el-submenu .el-menu {
+    border-right: 1px solid #e6e6e6 !important;
   }
   .main-content {
     min-height: 100vh;

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 15:55:35
+ * @LastEditTime: 2019-11-13 15:45:26
  -->
 <template>
   <div class="user-manage">
@@ -14,7 +14,7 @@
           style="width:200px"
           clearable
           v-model="searchData.activityStatus"
-          placeholder="请选择用户状态"
+          placeholder="请选择"
         >
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
@@ -43,7 +43,10 @@
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
         >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+        <el-button
+          @click="searchData = {activityRoomId: activityRoomId};searchRefresh = !searchRefresh"
+          size="small"
+        >重置</el-button>
       </el-form-item>
     </el-form>
     <el-button
@@ -91,7 +94,6 @@
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleCloseActivity(null)" type="text">结束活动</el-button>
         <el-button @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
@@ -99,18 +101,15 @@
 </template>
 <script>
 export default {
-  name: 'userManage',
-  data () {
+  name: 'eventRecords',
+  data() {
     return {
       searchRefresh: true,
-      searchData: {},
+      searchData: {
+        activityRoomId: this.activityRoomId
+      },
       tableColumns: [
-        {
-          label: '活动名称',
-          align: 'left',
-          slot: 'activityName',
-          minWidth: 200
-        },
+        { label: '活动名称', slot: 'activityName', minWidth: 150 },
         { label: '活动时间', prop: 'activityTime', minWidth: 260 },
         {
           label: '参与人员',
@@ -143,14 +142,15 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created() {},
+  props: ['activityRoomId'],
   methods: {
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime (date) {
+    handlTime(date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -159,14 +159,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.activityId)
       })
       this.selectActivity = arr
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
@@ -183,7 +183,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity (row) {
+    handleCloseActivity(row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {

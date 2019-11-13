@@ -7,9 +7,33 @@
     position: absolute;
     left: 0;
     top: 7px;
-    content: '';
+    content: "";
     height: 20px;
     background-color: #2d8cf0;
     width: 4px;
+  }
+}
+.flex-t-l {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  img {
+    float: left;
+    display: inline-block;
+    width: 80px;
+    height: 45px;
+    margin: 5px 0;
+    margin-right: 9px;
+    vertical-align: middle;
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+  .flex-column-t {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    .f-title {
+      margin-top: 5px;
+    }
   }
 }

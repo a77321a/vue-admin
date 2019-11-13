@@ -1,40 +1,28 @@
 <!--
- * @Descripttion:活动中心
+ * @Descripttion:参与人员
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 15:55:35
+ * @LastEditTime: 2019-11-13 14:49:57
  -->
 <template>
-  <div class="user-manage">
+  <div class="Participants">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="活动状态">
+      <el-form-item label="老人类型">
         <el-select
           style="width:200px"
           clearable
           v-model="searchData.activityStatus"
-          placeholder="请选择用户状态"
+          placeholder="请选择"
         >
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="活动时间">
-        <el-date-picker
-          v-model="searchData.rangeTime"
-          style="width:360px;"
-          type="datetimerange"
-          range-separator="至"
-          @change="handlTime"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="活动名称">
-        <el-input style="width:200px" placeholder="请输入活动名称关键字" v-model="searchData.activityName"></el-input>
+      <el-form-item label="老人名称">
+        <el-input style="width:200px" placeholder="请输入老人名称关键字" v-model="searchData.activityName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -46,86 +34,39 @@
         <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button
-      @click="$router.push({name:'editEvent'})"
-      style="margin-bottom:15px"
-      size="small"
-      type="primary"
-    >新增活动</el-button>
     <!-- 列表 -->
     <Table
-      @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
-      :selection="true"
       :columns="tableColumns"
-      api="/activity/pageSearch"
+      api
       method="post"
     >
-      <template slot-scope="{row}" slot="activityName">
-        <div class="flex-t-l">
-          <img class="course-avatar" :src="row.activityIndexPic" alt />
-          <div class="flex-column-t">
-            <span class="f-title">{{row.activityName}}</span>
-          </div>
-        </div>
-      </template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
           type="text"
           size="small"
         >查看</el-button>
-        <span>-</span>
-        <el-button
-          @click="$router.push({name:'editEventInfo',query:{aid:row.activityId}})"
-          type="text"
-          size="small"
-        >编辑</el-button>
-        <span>-</span>
-        <el-button @click="handleCloseActivity(row)" type="text" size="small">结束活动</el-button>
-        <span>-</span>
-        <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">总结活动</el-button>
-        <span>-</span>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
-      </template>
-      <template slot="footer-left">
-        <el-button @click="handleCloseActivity(null)" type="text">结束活动</el-button>
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>
 </template>
 <script>
 export default {
-  name: 'userManage',
+  name: 'Participants',
   data () {
     return {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
+        { label: '姓名', slot: 'activityName', minWidth: 150 },
+        { label: '紧急联系人电话', prop: 'activityTime', minWidth: 260 },
         {
-          label: '活动名称',
-          align: 'left',
-          slot: 'activityName',
-          minWidth: 200
-        },
-        { label: '活动时间', prop: 'activityTime', minWidth: 260 },
-        {
-          label: '参与人员',
+          label: '老人类别',
           prop: 'orgName',
           minWidth: 100
-        },
-        {
-          label: '活动状态',
-          prop: 'activityStatus',
-          minWidth: 150
-        },
-        {
-          label: '创建人',
-          prop: 'userName',
-          minWidth: 150
         },
         {
           label: '操作',
@@ -211,7 +152,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.user-manage {
+.Participants {
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 193px;
