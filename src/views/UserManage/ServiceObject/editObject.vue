@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-12 12:53:39
+ * @LastEditTime: 2019-11-13 18:27:19
  -->
 <template>
   <div id="edit-event">
@@ -23,50 +23,53 @@
         <el-input type="textarea" v-model="formInfo.name"></el-input>
       </el-form-item>
       <el-form-item label="头像">
-        <el-upload
-          list-type="picture-card"
-          class="upload-demo"
-          action="api/dw"
-          :before-upload="uploadImg"
-        >
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        <el-upload action="#" list-type="picture-card" :before-upload="uploadImg">
+          <i slot="default" class="el-icon-plus"></i>
+          <div slot="file" slot-scope="{file}">
+            <img class="el-upload-list__item-thumbnail" :src="formInfo.avatar" alt />
+            <span class="el-upload-list__item-actions">
+              <span class="el-upload-list__item-delete" @click="handleRemove(file)">
+                <i class="el-icon-delete"></i>
+              </span>
+            </span>
+          </div>
         </el-upload>
       </el-form-item>
       <el-form-item label="照片">
-        <el-upload
-          list-type="picture-card"
-          class="upload-demo"
-          action="api/dw"
-          :before-upload="uploadImg"
-        >
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        <el-upload action="#" list-type="picture-card" :before-upload="uploadImg">
+          <i slot="default" class="el-icon-plus"></i>
+          <div slot="file" slot-scope="{file}">
+            <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+            <span class="el-upload-list__item-actions">
+              <span class="el-upload-list__item-delete" @click="handleRemove(file)">
+                <i class="el-icon-delete"></i>
+              </span>
+            </span>
+          </div>
         </el-upload>
       </el-form-item>
       <el-form-item label="性别">
-        <el-select clearable v-model="formInfo.content" style="width:220px" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
+        <el-select clearable v-model="formInfo.gender" style="width:220px" placeholder="请选择">
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="婚姻状态">
-        <el-select clearable v-model="formInfo.content" style="width:220px" placeholder="请选择">
+        <el-select clearable v-model="formInfo.maritalStatus" style="width:220px" placeholder="请选择">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="老人居住状况">
-        <el-select clearable v-model="formInfo.content" style="width:220px" placeholder="请选择">
+        <el-select clearable v-model="formInfo.liveStatus" style="width:220px" placeholder="请选择">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="民族">
-        <el-select clearable v-model="formInfo.content" style="width:220px" placeholder="请选择">
+        <el-select clearable v-model="formInfo.ethnic" style="width:220px" placeholder="请选择">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
@@ -74,12 +77,17 @@
       </el-form-item>
       <el-form-item label="证件信息">
         <div style="margin-bottom:10px">
-          <el-input style="width:300px"></el-input>
-        </div>
-        <el-input style="width:300px"></el-input>
+          身份证：
+          <el-input v-model="formInfo.idCard" style="width:300px"></el-input>
+        </div>市民卡：
+        <el-input v-model="formInfo.citizenCard" style="width:300px"></el-input>
       </el-form-item>
-      <el-form-item label="所在区域"></el-form-item>
-      <el-form-item label="详细地址"></el-form-item>
+      <el-form-item label="所在区域">
+        <el-cascader v-model="formInfo.cityId"></el-cascader>
+      </el-form-item>
+      <el-form-item label="详细地址">
+        <el-input v-model="formInfo.address"></el-input>
+      </el-form-item>
       <div class="title">紧急联系人</div>
       <el-form-item label="紧急联系人">
         <el-button>选择人员</el-button>
@@ -102,6 +110,11 @@ export default {
       }
     }
   },
+  created () {
+    if (this.$route.query.sid) {
+      this.getServiceUserInfo()
+    }
+  },
   methods: {
     uploadImg (file) {
       let formdata = new FormData()
@@ -113,6 +126,7 @@ export default {
       })
       return false
     },
+    handleRemove () {},
     /**
      * @descripttion: 获取服务对象信息
      * @return: 信息

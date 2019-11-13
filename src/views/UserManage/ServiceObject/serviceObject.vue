@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 12:51:04
+ * @LastEditTime: 2019-11-13 18:28:07
  -->
 <template>
   <div class="serviceObject">
@@ -54,9 +54,13 @@
         <span>-</span>
         <el-button type="text" size="small">健康管理</el-button>
         <span>-</span>
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button
+          @click="$router.push({name:'editObject',query:{sid:row.serviceCustomerId}})"
+          type="text"
+          size="small"
+        >编辑</el-button>
         <span>-</span>
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
         <el-button type="text">删除</el-button>
