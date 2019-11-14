@@ -3,12 +3,12 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-11 23:49:13
+ * @LastEditTime: 2019-11-13 22:12:57
  -->
 <template>
   <div id="edit-event">
     <div class="title">基本信息</div>
-    <el-form style="width:700px" ref="form" :model="formInfo" label-width="80px" size="medium">
+    <el-form style="width:700px" ref="formInfo" :rules="rules" :model="formInfo" label-width="80px" size="medium">
       <el-form-item label="活动名称" prop="activityName">
         <el-input
           placeholder="请输入活动名称，最多不超过50个字"
@@ -65,9 +65,7 @@
           style="width:220px"
           placeholder="请选择"
         >
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+          <el-option v-for="(item, index) in eventRoomList" :key="index" :label="item.activityRoomName" :value="item.activityRoomId"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="服务产品" prop="serviceProductId">
@@ -82,15 +80,15 @@
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="服务人员">
+      <el-form-item label="服务人员" prop="serviceProvider">
         <el-button icon="el-icon-plus">选择人员</el-button>
       </el-form-item>
-      <el-form-item label="服务对象">
+      <el-form-item label="参加对象"  prop="Object">
         <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
       </el-form-item>
       <el-form-item size="large">
-        <el-button type="primary">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="handleSave" type="primary">立即创建</el-button>
+        <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
     <el-dialog width="60%" destroy-on-close title="选择服务对象" :visible.sync="dialogServiceObject">
@@ -108,18 +106,54 @@ export default {
   data () {
     return {
       formInfo: {
-        content: ''
+      },
+      rules:{
+        activityName : [
+          { required: true, message: '请输入活动名称', trigger: 'blur' }
+        ],
+        eventTime: [
+          { required: true, message: '请选择活动时间',trigger: 'change' }
+        ],
+        activityAddress: [
+          { required: true, message: '请输入活动地点', trigger: 'change' }
+        ],
+        activityIndexPic: [
+          { required: true, message: '请上传活动封面', trigger: 'change' }
+        ],
+        orgId: [
+          { required: true, message: '请选择所属机构', trigger: 'change' }
+        ],
+        activityRoomId: [
+          { required: true, message: '请选择活动室', trigger: 'blur' }
+        ],
+        serviceProductId: [
+          { required: true, message: '请选择服务产品', trigger: 'change' }
+        ],
+        serviceProvider: [
+          {
+            required: true,
+            message: '请选择服务人员',
+            trigger: 'change'
+          }
+        ],
       },
       dialogServiceObject: false,
-      dialogServiceUser: false
+      dialogServiceUser: false,
+      eventRoomList:[]
     }
   },
   created () {
     if (this.$route.query.aid) {
       this.getActivityInfo()
     }
+    this.getEventRoomList()
   },
   methods: {
+    getEventRoomList(){
+      this.$http.post('/activity/room/pageSearch',{pageSize:99999}).then((res)=>{
+        this.eventRoomList = res.payload.records
+      })
+    },
     getActivityInfo () {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
@@ -128,6 +162,30 @@ export default {
             this.formInfo = res.payload
           }
         })
+    },
+        // 保存按钮
+    handleSave () {
+      this.$refs['formInfo'].validate(valid => {
+        console.log(valid)
+        if (!valid) return
+        if (this.$route.query.aid) {
+          this.$http
+            .post('/activity/update', this.formInfo)
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.$router.go(-1)
+              }
+            })
+        } else {
+          this.$http.post('/activity/add', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
+        }
+      })
     },
     uploadImg (file) {
       let formdata = new FormData()

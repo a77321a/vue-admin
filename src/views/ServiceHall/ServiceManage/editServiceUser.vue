@@ -8,7 +8,6 @@
 <template>
   <div id="edit-service-user">
     <div class="title">基本信息</div>
-
     <el-form
       style="width:700px"
       ref="formInfo"
