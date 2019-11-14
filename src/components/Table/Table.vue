@@ -8,6 +8,7 @@
 <template>
   <div>
     <el-table
+      :row-key="rowKey"
       v-loading="loading"
       :span-method="spanMethod"
       :data="dataSource"
@@ -30,7 +31,7 @@
       <!-- <el-table-column v-if="hasIndex" type="index" width="55"></el-table-column> -->
       <!--数据源-->
       <el-table-column
-        v-for="(column) in columns"
+        v-for="column in columns"
         :sortable="column.sortable"
         :key="column.index"
         :prop="column.prop"
@@ -48,8 +49,9 @@
             :row="scope.row"
             :index="scope.$index"
             :name="column.slot"
-          >{{column.slot}}</slot>
-          <span>{{scope.row[column.prop]}}</span>
+            >{{ column.slot }}</slot
+          >
+          <span>{{ scope.row[column.prop] }}</span>
         </template>
       </el-table-column>
       <!--操作-->
@@ -96,6 +98,9 @@ export default {
     }
   },
   props: {
+    rowKey: {
+      type: String
+    },
     rowsForamtter: {
       type: Function
     },

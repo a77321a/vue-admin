@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-14 09:43:16
+ * @LastEditTime: 2019-11-14 20:45:03
  -->
 <template>
   <div class="angecy-manage">
@@ -17,22 +17,35 @@
         </el-select>
       </el-form-item>
       <el-form-item label="机构类型">
-        <el-select clearable v-model="searchData.status" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+        <el-select clearable v-model="searchData.orgType" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in orgTypeList"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="服务类型">
-        <el-select clearable v-model="searchData.status" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+        <el-select
+          clearable
+          v-model="searchData.serviceType"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in serviceTypeList"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>
         </el-select>
       </el-form-item>
 
       <el-form-item label="机构名称">
-        <el-input placeholder="请输入机构名称关键字" v-model="searchData.mobile"></el-input>
+        <el-input
+          placeholder="请输入机构名称关键字"
+          v-model="searchData.mobile"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -40,26 +53,60 @@
           type="primary"
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
-        >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+          >搜索</el-button
+        >
+        <el-button
+          @click="
+            searchData = {}
+            searchRefresh = !searchRefresh
+          "
+          size="small"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editAgency'})"
+      @click="$router.push({ name: 'editAgency' })"
       style="margin-bottom:15px"
       size="small"
       type="primary"
-    >新增机构</el-button>
+      >新增机构</el-button
+    >
     <el-button style="margin-bottom:15px" size="small">导出数据</el-button>
     <!-- 列表 -->
     <Table
+      rowKey="orgId"
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
       :selection="false"
       :columns="tableColumns"
       api="/org/pageSearch"
       method="post"
-    ></Table>
+    >
+      <template slot="handleColumn" slot-scope="{ row }">
+        <el-button type="text" size="small">新增分部</el-button>
+        <el-button
+          @click="handleStatus(row)"
+          v-if="!row.children"
+          type="text"
+          size="small"
+          >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button
+        >
+        <span>-</span>
+        <el-button
+          @click="
+            $router.push({ name: 'editAgency', query: { oid: row.orgId } })
+          "
+          type="text"
+          size="small"
+          >编辑</el-button
+        >
+        <span>-</span>
+        <el-button @click="handleDelete(row)" type="text" size="small"
+          >删除</el-button
+        >
+      </template>
+    </Table>
   </div>
 </template>
 <script>
@@ -70,21 +117,21 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '机构名称', prop: '', minWidth: 200 },
-        { label: '服务范围', prop: '', minWidth: 150 },
+        { label: '机构名称', prop: 'orgName', minWidth: 200 },
+        { label: '服务范围', prop: 'orgAddress', minWidth: 150 },
         {
           label: '机构类型',
-          prop: '',
+          prop: 'orgType',
           minWidth: 100
         },
         {
           label: '服务类型',
-          prop: '',
+          prop: 'serviceType',
           minWidth: 150
         },
         {
           label: '机构状态',
-          prop: '',
+          prop: 'status',
           minWidth: 150
         },
         {
@@ -94,17 +141,29 @@ export default {
           minWidth: 200
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      courseList: []
+      orgTypeList: [],
+      serviceTypeList: []
     }
   },
-  created () {},
+  created () {
+    this.getOrgType()
+    this.getServiceType()
+  },
   methods: {
+    getServiceType () {
+      this.$http.get('/org/serviceType').then(res => {
+        if (res.code === SUCCESS) {
+          this.serviceTypeList = res.payload
+        }
+      })
+    },
+    getOrgType () {
+      this.$http.get('/org/orgType').then(res => {
+        if (res.code === SUCCESS) {
+          this.orgTypeList = res.payload
+        }
+      })
+    },
     clickInfo (row) {
       console.log(row)
     },
@@ -116,7 +175,9 @@ export default {
     // },
     handleStatus (row) {
       let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
+        row.status === 1
+          ? '注销后，与该机构管理的旧数据不受影响，新增数据时，将无法关联该机构，同时仅与该机构关联的管理员，将无法登录平台，是否确认？'
+          : '确认要对该机构重新入网吗？'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -129,6 +190,27 @@ export default {
                 type: 'success',
                 message: '操作成功!'
               })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    handleDelete (row) {
+      let id = [row.orgId]
+      this.$confirm(
+        '删除后，与该机构相关的数据将被取消关联，同时仅与该机构关联的管理员，将无法登录平台，是否确认？',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
+        .then(() => {
+          this.$http.post('/activity/delete', { orgIds: id }).then(res => {
+            if (res.code === 200) {
+              this.$message.success('操作成功')
+              this.searchRefresh = !this.searchRefresh
             }
           })
         })

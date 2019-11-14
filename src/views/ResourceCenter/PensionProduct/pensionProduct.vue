@@ -34,7 +34,10 @@
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="80px" size="small">
             <el-form-item label="产品名称">
-              <el-input placeholder="请输入产品名称关键字" v-model="searchData.mobile"></el-input>
+              <el-input
+                placeholder="请输入产品名称关键字"
+                v-model="searchData.mobile"
+              ></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -42,16 +45,25 @@
                 type="primary"
                 @click="searchRefresh = !searchRefresh"
                 icon="el-icon-search"
-              >搜索</el-button>
-              <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+                >搜索</el-button
+              >
+              <el-button
+                @click="
+                  searchData = {}
+                  searchRefresh = !searchRefresh
+                "
+                size="small"
+                >重置</el-button
+              >
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editPensionProduct'})"
+            @click="$router.push({ name: 'editPensionProduct' })"
             style="margin-bottom:15px"
             size="small"
             type="primary"
-          >新增产品</el-button>
+            >新增产品</el-button
+          >
           <!-- 列表 -->
           <Table
             @commitSelection="commitSelection"
