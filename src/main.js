@@ -32,7 +32,7 @@ Vue.use(VueAMap)
 //   v: '1.4.4'
 // })
 window.SUCCESS = '00000000'
-window.ctx = "http://118.24.54.72:8061/"
+window.ctx = 'http://118.24.54.72:8061/'
 window.docTitle = document.title
 Vue.component('Table', Table)
 Vue.component('UEditor', UEditor)

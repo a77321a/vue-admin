@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 18:28:07
+ * @LastEditTime: 2019-11-14 17:21:18
  -->
 <template>
   <div class="serviceObject">
@@ -47,10 +47,14 @@
       :selection="true"
       :columns="tableColumns"
       api="/service/customer/pageSearch"
-      method="get"
+      method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button type="text" size="small">详情</el-button>
+        <el-button
+          @click="$router.push({name:'serviceObjectInfo',query:{sid:row.serviceCustomerId}})"
+          type="text"
+          size="small"
+        >详情</el-button>
         <span>-</span>
         <el-button type="text" size="small">健康管理</el-button>
         <span>-</span>

@@ -3,12 +3,12 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 21:43:56
+ * @LastEditTime: 2019-11-14 09:19:19
  -->
 <template>
   <div class="dish-manage">
     <el-row :gutter="20">
-    <el-col style="background:#f9f9f9;height:calc(100vh - 140px)" :span="6">
+      <el-col style="background:#f9f9f9;height:calc(100vh - 140px)" :span="6">
         <div class="checked">和康养老机构1部</div>
         <el-collapse v-model="activeNames">
           <el-collapse-item title="禾康养老机构总部" name="1">
@@ -30,79 +30,75 @@
         </el-collapse>
       </el-col>
       <el-col :span="18">
-
-    <!-- 筛选 -->
-    <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="菜品类型">
-        <el-select clearable v-model="searchData.foodType" placeholder="请选择用户状态">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="适用季节">
-        <el-select clearable v-model="searchData.season" placeholder="请选择用户状态">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="菜品名称">
-        <el-input placeholder="请输入菜品名称关键字" v-model="searchData.foodName"></el-input>
-      </el-form-item>
-      <el-form-item>
+        <!-- 筛选 -->
+        <el-form inline ref="form" label-width="80px" size="small">
+          <el-form-item label="菜品类型">
+            <el-select clearable v-model="searchData.foodType" placeholder="请选择用户状态">
+              <el-option label="全部" value="-1"></el-option>
+              <el-option label="启用" value="1"></el-option>
+              <el-option label="禁用" value="0"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="适用季节">
+            <el-select clearable v-model="searchData.season" placeholder="请选择用户状态">
+              <el-option label="全部" value="-1"></el-option>
+              <el-option label="启用" value="1"></el-option>
+              <el-option label="禁用" value="0"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="菜品名称">
+            <el-input placeholder="请输入菜品名称关键字" v-model="searchData.foodName"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              size="small"
+              type="primary"
+              @click="searchRefresh = !searchRefresh"
+              icon="el-icon-search"
+            >搜索</el-button>
+            <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+          </el-form-item>
+        </el-form>
         <el-button
+          @click="$router.push({name:'editDish'})"
+          style="margin-bottom:15px"
           size="small"
           type="primary"
-          @click="searchRefresh = !searchRefresh"
-          icon="el-icon-search"
-        >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <el-button
-      @click="$router.push({name:'editDish'})"
-      style="margin-bottom:15px"
-      size="small"
-      type="primary"
-    >新增菜品</el-button>
-    <!-- 列表 -->
-    <Table
-      @commitSelection="commitSelection"
-      :searchRefresh="searchRefresh"
-      :searchObj="searchData"
-      :selection="true"
-      :columns="tableColumns"
-      api="/food/pageSearch"
-      method="post"
-    >
-    <template slot-scope="{row}" slot="foodName">
-        <div class="flex-t-l">
-          <img class="course-avatar" :src="row.indexPic" alt />
-          <div class="flex-column-t">
-            <span class="f-title">{{row.foodName}}</span>
-            <p class="sm-title">￥{{row.price}}</p>
-          </div>
-        </div>
-      </template>
-      <template slot-scope="{row}" slot="action">
-        <el-button
-          @click="$router.push({name:'editDish',query:{fid:row.foodId}})"
-          type="text"
-          size="small"
-        >编辑</el-button>
-        <span>-</span>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
-      </template>
-      <template slot="footer-left">
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
-      </template>
-    </Table>
-    </el-col>
+        >新增菜品</el-button>
+        <!-- 列表 -->
+        <Table
+          @commitSelection="commitSelection"
+          :searchRefresh="searchRefresh"
+          :searchObj="searchData"
+          :selection="true"
+          :columns="tableColumns"
+          api="/food/pageSearch"
+          method="post"
+        >
+          <template slot-scope="{row}" slot="foodName">
+            <div class="flex-t-l">
+              <img class="course-avatar" :src="row.indexPic" alt />
+              <div class="flex-column-t">
+                <span class="f-title">{{row.foodName}}</span>
+                <p class="sm-title">￥{{row.price}}</p>
+              </div>
+            </div>
+          </template>
+          <template slot-scope="{row}" slot="action">
+            <el-button
+              @click="$router.push({name:'editDish',query:{fid:row.foodId}})"
+              type="text"
+              size="small"
+            >编辑</el-button>
+            <span>-</span>
+            <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+          </template>
+          <template slot="footer-left">
+            <el-button @click="handleDelete(null)" type="text">删除</el-button>
+          </template>
+        </Table>
+      </el-col>
     </el-row>
-  </div>
-</template>
-    </Table>
   </div>
 </template>
 <script>
@@ -150,14 +146,14 @@ export default {
       this.selectFood = arr
     },
     handleDelete (row) {
-      let id = row ? [row.foodId] :this.selectFood
+      let id = row ? [row.foodId] : this.selectFood
       this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/food/delete',{foodIds:id}).then(res => {
+          this.$http.post('/food/delete', { foodIds: id }).then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.searchRefresh = !this.searchRefresh
@@ -165,7 +161,7 @@ export default {
           })
         })
         .catch(() => {})
-    },
+    }
   }
 }
 </script>

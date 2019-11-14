@@ -215,7 +215,7 @@ export default {
         }
       })
     },
-    handleDelete(row){
+    handleDelete (row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',

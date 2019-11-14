@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-09 11:09:24
+ * @LastEditTime: 2019-11-14 09:43:16
  -->
 <template>
   <div class="angecy-manage">
@@ -53,13 +53,12 @@
     <el-button style="margin-bottom:15px" size="small">导出数据</el-button>
     <!-- 列表 -->
     <Table
-      @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
       :selection="false"
       :columns="tableColumns"
-      api="/api/user"
-      method="get"
+      api="/org/pageSearch"
+      method="post"
     ></Table>
   </div>
 </template>
@@ -112,6 +111,9 @@ export default {
     commitSelection (data) {
       console.log(data)
     },
+    // getAgencyInfo(){
+
+    // },
     handleStatus (row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
@@ -131,30 +133,6 @@ export default {
           })
         })
         .catch(() => {})
-    },
-    resetPassword (id) {
-      let content = '您确定给该用户重置密码？默认密码为123456'
-      this.$confirm(content, '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http.post('/api/user/repwd', { id: id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
-        })
-        .catch(() => {})
-    },
-    purchasedCourse (row) {
-      this.dialogVisible = true
-      this.mobile = row.mobile
-      this.getCouseList(true)
     }
   }
 }

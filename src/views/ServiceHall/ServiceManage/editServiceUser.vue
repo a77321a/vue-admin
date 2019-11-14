@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-12 12:46:13
+ * @LastEditTime: 2019-11-14 09:57:58
  -->
 <template>
   <div id="edit-service-user">
@@ -245,7 +245,7 @@ export default {
         if (!valid) return
         if (this.$route.query.fid) {
           this.$http
-            .post('/serviceProvider/update', this.formInfo)
+            .post('/org/service/provider/update', this.formInfo)
             .then(res => {
               if (res.code === SUCCESS) {
                 this.$message.success('操作成功')
@@ -253,12 +253,14 @@ export default {
               }
             })
         } else {
-          this.$http.post('/serviceProvider/add', this.formInfo).then(res => {
-            if (res.code === SUCCESS) {
-              this.$message.success('操作成功')
-              this.$router.go(-1)
-            }
-          })
+          this.$http
+            .post('/org/service/provider/add', this.formInfo)
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.$router.go(-1)
+              }
+            })
         }
       })
     }

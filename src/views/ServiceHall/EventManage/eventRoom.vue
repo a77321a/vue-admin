@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 21:39:21
+ * @LastEditTime: 2019-11-14 10:23:54
  -->
 <template>
   <div class="user-manage">
@@ -32,19 +32,12 @@
       </el-col>
       <el-col :span="18">
         <div class="grid-content bg-purple">
-          <el-form inline ref="form" label-width="80px" size="small">
-            <el-form-item label="所属机构">
-              <el-select clearable v-model="searchData.status" placeholder="请选择所属机构">
-                <el-option label="全部" value="-1"></el-option>
-                <el-option label="启用" value="1"></el-option>
-                <el-option label="禁用" value="0"></el-option>
-              </el-select>
+          <el-form inline ref="form" label-width="90px" size="small">
+            <el-form-item label="活动室名称">
+              <el-input placeholder="请输入活动室名称关键字" v-model="searchData.activityRoomName"></el-input>
             </el-form-item>
-            <el-form-item label="菜品名称">
-              <el-input placeholder="请输入菜品名称关键字" v-model="searchData.mobile"></el-input>
-            </el-form-item>
-            <el-form-item label="活动室">
-              <el-input placeholder="请输入活动室编号关键字" v-model="searchData.mobile"></el-input>
+            <el-form-item label="活动室编号">
+              <el-input placeholder="请输入活动室编号关键字" v-model="searchData.activityRoomCode"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -130,12 +123,14 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/activity/room/delete', {activityRoomIdList:id}).then(res => {
-            if (res.code === 200) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
+          this.$http
+            .post('/activity/room/delete', { activityRoomIdList: id })
+            .then(res => {
+              if (res.code === 200) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     }

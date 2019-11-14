@@ -106,7 +106,7 @@ export default {
           { required: true, message: '请输入菜品名称', trigger: 'blur' }
         ],
         price: [{ required: true, message: '请输入菜品价格', trigger: 'blur' }],
-        lineationPrice : [
+        lineationPrice: [
           { required: true, message: '请输入划线价格', trigger: 'blur' }
         ],
         foodType: [

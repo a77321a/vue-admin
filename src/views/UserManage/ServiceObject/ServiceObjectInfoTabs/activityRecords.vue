@@ -1,63 +1,20 @@
 <!--
- * @Descripttion:活动中心
+ * @Descripttion:活动记录
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-14 17:14:23
+ * @LastEditTime: 2019-11-14 17:15:37
  -->
 <template>
-  <div class="user-manage">
-    <!-- 筛选 -->
-    <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="活动状态">
-        <el-select
-          style="width:200px"
-          clearable
-          v-model="searchData.activityStatus"
-          placeholder="请选择"
-        >
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="活动时间">
-        <el-date-picker
-          v-model="searchData.rangeTime"
-          style="width:360px;"
-          type="datetimerange"
-          range-separator="至"
-          @change="handlTime"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="活动名称">
-        <el-input style="width:200px" placeholder="请输入活动名称关键字" v-model="searchData.activityName"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          size="small"
-          type="primary"
-          @click="searchRefresh = !searchRefresh"
-          icon="el-icon-search"
-        >搜索</el-button>
-        <el-button
-          @click="searchData = {activityRoomId: activityRoomId};searchRefresh = !searchRefresh"
-          size="small"
-        >重置</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="activity-records">
     <!-- 列表 -->
     <Table
-      @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
-      :selection="true"
+      :selection="false"
       :columns="tableColumns"
-      api="/activity/pageSearch"
+      api="/service/customer/activity/pageSearch"
       method="post"
     >
       <template slot-scope="{row}" slot="activityName">
@@ -96,11 +53,11 @@
 <script>
 export default {
   name: 'eventRecords',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {
-        activityRoomId: this.activityRoomId
+        serviceCustomerId: this.serviceCustomerId
       },
       tableColumns: [
         { label: '活动名称', slot: 'activityName', minWidth: 150 },
@@ -136,15 +93,15 @@ export default {
       selectActivity: []
     }
   },
-  created() {},
-  props: ['activityRoomId'],
+  created () {},
+  props: ['serviceCustomerId'],
   methods: {
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime(date) {
+    handlTime (date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -153,14 +110,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    commitSelection(data) {
+    commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.activityId)
       })
       this.selectActivity = arr
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
@@ -177,7 +134,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity(row) {
+    handleCloseActivity (row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {
@@ -205,7 +162,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.user-manage {
+.activity-records {
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 193px;

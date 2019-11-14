@@ -8,7 +8,14 @@
 <template>
   <div id="edit-event">
     <div class="title">基本信息</div>
-    <el-form style="width:700px" ref="formInfo" :rules="rules" :model="formInfo" label-width="80px" size="medium">
+    <el-form
+      style="width:700px"
+      ref="formInfo"
+      :rules="rules"
+      :model="formInfo"
+      label-width="80px"
+      size="medium"
+    >
       <el-form-item label="活动名称" prop="activityName">
         <el-input
           placeholder="请输入活动名称，最多不超过50个字"
@@ -65,7 +72,12 @@
           style="width:220px"
           placeholder="请选择"
         >
-          <el-option v-for="(item, index) in eventRoomList" :key="index" :label="item.activityRoomName" :value="item.activityRoomId"></el-option>
+          <el-option
+            v-for="(item, index) in eventRoomList"
+            :key="index"
+            :label="item.activityRoomName"
+            :value="item.activityRoomId"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="服务产品" prop="serviceProductId">
@@ -75,15 +87,13 @@
           style="width:220px"
           placeholder="请选择"
         >
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+        
         </el-select>
       </el-form-item>
       <el-form-item label="服务人员" prop="serviceProvider">
         <el-button icon="el-icon-plus">选择人员</el-button>
       </el-form-item>
-      <el-form-item label="参加对象"  prop="Object">
+      <el-form-item label="参加对象" prop="Object">
         <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
       </el-form-item>
       <el-form-item size="large">
@@ -105,14 +115,13 @@ export default {
   },
   data () {
     return {
-      formInfo: {
-      },
-      rules:{
-        activityName : [
+      formInfo: {},
+      rules: {
+        activityName: [
           { required: true, message: '请输入活动名称', trigger: 'blur' }
         ],
         eventTime: [
-          { required: true, message: '请选择活动时间',trigger: 'change' }
+          { required: true, message: '请选择活动时间', trigger: 'change' }
         ],
         activityAddress: [
           { required: true, message: '请输入活动地点', trigger: 'change' }
@@ -135,11 +144,11 @@ export default {
             message: '请选择服务人员',
             trigger: 'change'
           }
-        ],
+        ]
       },
       dialogServiceObject: false,
       dialogServiceUser: false,
-      eventRoomList:[]
+      eventRoomList: []
     }
   },
   created () {
@@ -149,10 +158,12 @@ export default {
     this.getEventRoomList()
   },
   methods: {
-    getEventRoomList(){
-      this.$http.post('/activity/room/pageSearch',{pageSize:99999}).then((res)=>{
-        this.eventRoomList = res.payload.records
-      })
+    getEventRoomList () {
+      this.$http
+        .post('/activity/room/pageSearch', { pageSize: 99999 })
+        .then(res => {
+          this.eventRoomList = res.payload.records
+        })
     },
     getActivityInfo () {
       this.$http
@@ -163,20 +174,18 @@ export default {
           }
         })
     },
-        // 保存按钮
+    // 保存按钮
     handleSave () {
       this.$refs['formInfo'].validate(valid => {
         console.log(valid)
         if (!valid) return
         if (this.$route.query.aid) {
-          this.$http
-            .post('/activity/update', this.formInfo)
-            .then(res => {
-              if (res.code === SUCCESS) {
-                this.$message.success('操作成功')
-                this.$router.go(-1)
-              }
-            })
+          this.$http.post('/activity/update', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
         } else {
           this.$http.post('/activity/add', this.formInfo).then(res => {
             if (res.code === SUCCESS) {

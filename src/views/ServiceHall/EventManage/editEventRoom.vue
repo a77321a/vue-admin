@@ -3,13 +3,20 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:10:02
+ * @LastEditTime: 2019-11-14 10:28:19
  -->
 <template>
   <div id="edit-event">
     <div class="title">基本信息</div>
-    <el-form style="width:700px" ref="form" :model="formInfo" label-width="100px" size="medium">
-      <el-form-item label="活动室名称">
+    <el-form
+      :rules="rules"
+      style="width:700px"
+      ref="formInfo"
+      :model="formInfo"
+      label-width="100px"
+      size="medium"
+    >
+      <el-form-item label="活动室名称" prop="activityRoomName">
         <el-input
           :maxlength="28"
           show-word-limit
@@ -17,7 +24,7 @@
           v-model="formInfo.activityRoomName"
         ></el-input>
       </el-form-item>
-      <el-form-item label="活动室编号">
+      <el-form-item label="活动室编号" prop="activityRoomCode">
         <el-input
           :maxlength="16"
           show-word-limit
@@ -25,7 +32,7 @@
           v-model="formInfo.activityRoomCode"
         ></el-input>
       </el-form-item>
-      <el-form-item label="活动室介绍">
+      <el-form-item label="活动室介绍" prop="activityRoomDesc">
         <el-input
           :maxlength="68"
           show-word-limit
@@ -35,12 +42,14 @@
           v-model="formInfo.activityRoomDesc"
         ></el-input>
       </el-form-item>
-      <el-form-item label="所属机构">
-        <el-select clearable v-model="formInfo.orgId" style="width:220px" placeholder="请选择用户状态">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
+      <el-form-item label="所属机构" prop="orgId">
+        <el-cascader
+          :props="{ value: 'orgId',label:'orgName' }"
+          v-model="formInfo.orgId"
+          :show-all-levels="false"
+          clearable
+          :options="orgTree"
+        ></el-cascader>
       </el-form-item>
       <div class="title">附件信息</div>
       <el-form-item label="活动室编号">
@@ -56,20 +65,48 @@
 <script>
 export default {
   name: 'editEvent',
-  data() {
+  data () {
     return {
-      formInfo: {
-        content: ''
+      formInfo: {},
+      orgTree: [],
+      rules: {
+        activityRoomName: [
+          { required: true, message: '请输入活动室名称', trigger: 'blur' }
+        ],
+        activityRoomCode: [
+          { required: true, message: '请输入活动室编号', trigger: 'blur' }
+        ],
+        activityRoomDesc: [
+          { required: true, message: '请输入活动室介绍', trigger: 'blur' }
+        ],
+        orgId: [{ required: true, message: '请选择机构', trigger: 'change' }]
+        // 海康威视
+        // orgId: [
+        //   { required: true, message: '请选择机构', trigger: 'change' }
+        // ],
       }
     }
   },
-  created() {
-    if (this.$route.query.eid) {
+  created () {
+    if (this.$route.query.aid) {
       this.getEventRoomInfo()
     }
+    this.getOrgList()
   },
   methods: {
-    uploadImg(file) {
+    getOrgList () {
+      this.$http.post('/org/tree').then(res => {
+        this.orgTree = res.payload
+        this.orgTree.forEach(i => {
+          if (i.children.length > 0) {
+            i.children.forEach(j => {
+              delete j.children
+            })
+          }
+        })
+      })
+    },
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -83,9 +120,9 @@ export default {
      * @descripttion: 获取服务人员信息
      * @return: 信息
      */
-    getEventRoomInfo() {
+    getEventRoomInfo () {
       this.$http
-        .get('/activity/room/get?activityRoomId=' + this.$route.query.eid)
+        .get('/activity/room/get?activityRoomId=' + this.$route.query.aid)
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
@@ -93,18 +130,20 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
-        if (this.$route.query.fid) {
-          this.$http.post('/activity/room/update', this.formInfo).then(res => {
+        let form = JSON.parse(JSON.stringify(this.formInfo))
+        form.orgId = this.formInfo.orgId[this.formInfo.orgId.length - 1]
+        if (this.$route.query.aid) {
+          this.$http.post('/activity/room/update', form).then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.$router.go(-1)
             }
           })
         } else {
-          this.$http.post('/activity/room/add', this.formInfo).then(res => {
+          this.$http.post('/activity/room/add', form).then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.$router.go(-1)

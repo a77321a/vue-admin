@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 12:46:55
+ * @LastEditTime: 2019-11-14 09:56:05
  -->
 <template>
   <div class="service-user">
@@ -62,9 +62,13 @@
             :searchObj="searchData"
             :selection="true"
             :columns="tableColumns"
-            api="/serviceProvider/pageSearch"
-            method="get"
+            api="/org/service/provider/pageSearch"
+            method="post"
           >
+            <template slot-scope="{row}" slot="orgServiceProviderName">
+              <el-avatar size="medium" :src="row.indexPic"></el-avatar>
+              {{row.orgServiceProviderName}}
+            </template>
             <template slot-scope="{row}" slot="action">
               <el-button @click="$router.push({name:'serviceUserInfo'})" type="text" size="small">详情</el-button>
               <span>-</span>
@@ -93,10 +97,10 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '姓名', prop: '', minWidth: 100 },
-        { label: '性别', prop: '', minWidth: 100 },
-        { label: '手机号', prop: '', minWidth: 100 },
-        { label: '所属机构', prop: '', minWidth: 100 },
+        { label: '姓名', slot: 'orgServiceProviderName', minWidth: 100 },
+        { label: '性别', prop: 'sex', minWidth: 100 },
+        { label: '手机号', prop: 'telephoneNum', minWidth: 100 },
+        { label: '所属机构', prop: 'orgName', minWidth: 100 },
         { label: '创建人', prop: '', minWidth: 100 },
         { label: '创建时间', prop: '', minWidth: 100 },
         {
@@ -129,7 +133,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/serviceProvider/delete', id).then(res => {
+          this.$http.post('/org/service/provider/delete', id).then(res => {
             if (res.code === 200) {
               this.$message.success('操作成功')
               this.searchRefresh = !this.searchRefresh
