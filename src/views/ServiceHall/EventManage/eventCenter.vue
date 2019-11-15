@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 15:55:35
+ * @LastEditTime: 2019-11-15 22:03:46
  -->
 <template>
   <div class="user-manage">
@@ -14,12 +14,8 @@
           style="width:200px"
           clearable
           v-model="searchData.activityStatus"
-          placeholder="请选择用户状态"
-        >
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
+          placeholder="请选择"
+        ></el-select>
       </el-form-item>
       <el-form-item label="活动时间">
         <el-date-picker
@@ -86,7 +82,11 @@
         <span>-</span>
         <el-button @click="handleCloseActivity(row)" type="text" size="small">结束活动</el-button>
         <span>-</span>
-        <el-button @click="$router.push({name:'eventInfo'})" type="text" size="small">总结活动</el-button>
+        <el-button
+          @click="$router.push({name:'summayEvent',query:{aid:row.activityId}})"
+          type="text"
+          size="small"
+        >总结活动</el-button>
         <span>-</span>
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>

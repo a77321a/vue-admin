@@ -3,27 +3,26 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-07 21:21:04
+ * @LastEditTime: 2019-11-15 22:31:37
  -->
 <template>
   <div class="meal-center">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="所属机构">
-        <el-select clearable v-model="searchData.status" placeholder="请选择用户状态">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
+        <el-cascader
+          clearable
+          :props="{value:'orgId',label:'orgName'}"
+          :options="orgList"
+          v-model="searchData.orgId"
+        ></el-cascader>
       </el-form-item>
       <el-form-item label="助餐时间">
         <el-date-picker
-          v-model="searchData.rangeTime"
-          style="width:360px;"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          v-model="searchData.week"
+          type="week"
+          format="yyyy 第 WW 周"
+          placeholder="选择周"
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="姓名">
@@ -51,16 +50,17 @@
       @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
       :spanMethod="cellMerge"
+      :spanFilter="getSpanArr"
       :searchObj="searchData"
       :selection="false"
       :columns="tableColumns"
-      api
-      method="get"
+      api="/org/foodMenu/week"
+      method="post"
     ></Table>
   </div>
 </template>
 <script>
-import MockData from '../../../components/Table/Mock'
+// import MockData from '../../../components/Table/Mock'
 
 export default {
   name: 'mealCenter',
@@ -68,8 +68,9 @@ export default {
     return {
       searchRefresh: true,
       searchData: {},
+      orgList: [],
       tableColumns: [
-        { label: '时段及日期', prop: 'type', minWidth: 200 },
+        { label: '时段及日期', prop: 'dateTime', minWidth: 200 },
         { label: '星期一', prop: 'one', minWidth: 150 },
         {
           label: '星期二',
@@ -108,9 +109,23 @@ export default {
     }
   },
   created () {
-    this.getSpanArr(MockData)
+    this.getOrgList()
   },
   methods: {
+    getOrgList () {
+      this.$http.post('/org/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.orgList = res.payload
+          this.orgList.forEach(i => {
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                delete j.children
+              })
+            }
+          })
+        }
+      })
+    },
     cellMerge ({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex]

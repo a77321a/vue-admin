@@ -1,23 +1,16 @@
 <!--
- * @Descripttion:选择服务对象
+ * @Descripttion:选择服务人员
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-15 21:36:05
+ * @LastEditTime: 2019-11-15 21:07:06
  -->
 <template>
   <div id="select-service-object">
     <el-form>
       <el-form inline ref="form" label-width="80px" size="small">
         <el-form-item label="名称">
-          <el-cascader
-            :props="{value:'orgId',label:'orgName'}"
-            :options="orgList"
-            v-model="searchData.orgId"
-          ></el-cascader>
-        </el-form-item>
-        <el-form-item label="名称">
-          <el-input placeholder="请输入服务对象名字" v-model="name"></el-input>
+          <el-input placeholder="请输入服务人员名称" v-model="searchData.orgServiceProviderName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -26,24 +19,27 @@
             @click="searchRefresh = !searchRefresh"
             icon="el-icon-search"
           >搜索</el-button>
-          <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+          <el-button
+            @click="searchData.orgServiceProviderName = '';searchRefresh = !searchRefresh"
+            size="small"
+          >重置</el-button>
         </el-form-item>
       </el-form>
     </el-form>
     <Table
       @commitSelection="commitSelection"
-      :height="dialogHeight"
+      :height="$store.state.dialogHeight-100"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
-      api="/service/customer/pageSearch "
+      api="/org/service/provider/pageSearch"
       method="post"
     >
       <template slot="userInfo" slot-scope="{row}">
-        <el-avatar size="medium" :src="row.avatar"></el-avatar>
-        {{row.serviceCustomerName}}
+        <el-avatar size="medium" :src="row.indexPic"></el-avatar>
+        {{row.orgServiceProviderName}}
       </template>
     </Table>
   </div>
@@ -56,14 +52,21 @@ export default {
       name: '',
       searchRefresh: true,
       selectData: [],
-      searchData: {},
+      searchData: {
+        orgId: Number(this.orgId[this.orgId.length - 1])
+      },
       tableColumns: [
         { label: '服务人员', slot: 'userInfo', minWidth: 200 },
-        { label: '所在区域', prop: 'activityTime', minWidth: 150 }
+        { label: '所属机构', prop: 'orgName', minWidth: 150 }
       ]
     }
   },
 
+  props: {
+    orgId: {
+      type: Array
+    }
+  },
   methods: {
     commitSelection (data) {
       this.selectData = data

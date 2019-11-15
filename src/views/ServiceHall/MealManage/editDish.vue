@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 15:21:28
  * @LastEditors:
- * @LastEditTime: 2019-11-13 21:25:21
+ * @LastEditTime: 2019-11-15 22:13:45
  -->
 <template>
   <div id="edit-dish">
@@ -48,22 +48,23 @@
         </el-upload>
       </el-form-item>
       <div class="title">上架信息</div>
-      <el-form-item label="所属机构" prop>
-        <el-select clearable v-model="formInfo.content" style="width:220px" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
+      <el-form-item label="所属机构" prop="orgId">
+        <el-cascader
+          clearable
+          :props="{value:'orgId',label:'orgName'}"
+          :options="orgList"
+          v-model="formInfo.orgId"
+        ></el-cascader>
       </el-form-item>
       <el-form-item label="菜品类型" prop="foodType">
-        <el-select clearable v-model="formInfo.foodType" style="width:220px" placeholder="请选择">
+        <el-select clearable v-model="formInfo.foodType" placeholder="请选择">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="适应季节" prop="season">
-        <el-select clearable v-model="formInfo.season" style="width:220px" placeholder="请选择">
+        <el-select clearable v-model="formInfo.season" placeholder="请选择">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
@@ -120,16 +121,35 @@ export default {
         ],
         season: [
           { required: true, message: '请选择菜品适用季节', trigger: 'change' }
+        ],
+        orgId: [
+          { required: true, message: '请选择所属机构', trigger: 'change' }
         ]
-      }
+      },
+      orgList: []
     }
   },
   created () {
     if (this.$route.query.fid) {
       this.getFoodInfo()
     }
+    this.getOrgList()
   },
   methods: {
+    getOrgList () {
+      this.$http.post('/org/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.orgList = res.payload
+          this.orgList.forEach(i => {
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                delete j.children
+              })
+            }
+          })
+        }
+      })
+    },
     uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
@@ -162,11 +182,13 @@ export default {
       })
     },
     getFoodInfo () {
-      this.$http.get('/food/get?foodId=' + this.$route.query.fid).then(res => {
-        if (res.code === SUCCESS) {
-          this.formInfo = res.payload
-        }
-      })
+      this.$http
+        .get('/food/detail?foodId=' + this.$route.query.fid)
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.formInfo = res.payload
+          }
+        })
     }
   }
 }

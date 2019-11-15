@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-14 10:28:19
+ * @LastEditTime: 2019-11-15 22:08:53
  -->
 <template>
   <div id="edit-event">
@@ -51,10 +51,7 @@
           :options="orgTree"
         ></el-cascader>
       </el-form-item>
-      <div class="title">附件信息</div>
-      <el-form-item label="活动室编号">
-        <el-input placeholder="请输入活动室监控海康威视流地址" v-model="formInfo.name"></el-input>
-      </el-form-item>
+
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 16:03:05
+ * @LastEditTime: 2019-11-15 22:10:09
  -->
 <template>
   <div class="layout">
@@ -77,11 +77,11 @@ export default {
       padding: 0;
       background-color: #fff;
       height: calc(100vh - 65px);
-      overflow-y: auto;
+      overflow-y: hidden;
       overflow-x: hidden;
       .padding {
         padding: 15px;
-        height: calc(100vh - 125px);
+        height: calc(100vh - 165px);
         overflow: auto;
         background-color: #fff;
       }

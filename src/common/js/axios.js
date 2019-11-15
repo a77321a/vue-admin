@@ -161,7 +161,7 @@ function postForm (url, formData, loading = true) {
     axios.post(url, formData, {
       timeout: 0,
       headers: {
-        'Authorization': 'Bearer ' + localStorage.webToken,
+        'X-Token': localStorage.webToken,
         'Content-Type': 'multipart/form-data'
       }
     })

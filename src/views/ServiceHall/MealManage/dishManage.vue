@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-14 09:19:19
+ * @LastEditTime: 2019-11-15 22:41:19
  -->
 <template>
   <div class="dish-manage">
@@ -33,7 +33,7 @@
         <!-- 筛选 -->
         <el-form inline ref="form" label-width="80px" size="small">
           <el-form-item label="菜品类型">
-            <el-select clearable v-model="searchData.foodType" placeholder="请选择用户状态">
+            <el-select clearable v-model="searchData.foodType" placeholder="请选择">
               <el-option label="全部" value="-1"></el-option>
               <el-option label="启用" value="1"></el-option>
               <el-option label="禁用" value="0"></el-option>

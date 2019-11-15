@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-06 21:44:36
+ * @LastEditTime: 2019-11-15 22:45:26
  */
 export default [
   {
@@ -22,6 +22,15 @@ export default [
     meta: {
       title: '服务类型',
       root: true
+    }
+  },
+  {
+    path: 'editServiceType',
+    name: 'editServiceType',
+    component: () => import('@/views/ServiceHall/ServiceProduct/editServiceType.vue'),
+    meta: {
+      title: '新增/编辑服务类型',
+      parent: 'serviceType'
     }
   }
 ]

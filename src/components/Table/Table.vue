@@ -3,13 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-11 13:58:39
+ * @LastEditTime: 2019-11-15 22:42:15
  -->
 <template>
   <div>
     <el-table
       :row-key="rowKey"
       v-loading="loading"
+      :height="height"
       :span-method="spanMethod"
       :data="dataSource"
       :size="size"
@@ -19,6 +20,7 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
+      <slot name="empty"></slot>
       <!--选择-->
       <el-table-column
         :reserve-selection="false"
@@ -49,8 +51,7 @@
             :row="scope.row"
             :index="scope.$index"
             :name="column.slot"
-            >{{ column.slot }}</slot
-          >
+          >{{ column.slot }}</slot>
           <span>{{ scope.row[column.prop] }}</span>
         </template>
       </el-table-column>
@@ -98,6 +99,12 @@ export default {
     }
   },
   props: {
+    getSpanArr: {
+      type: Function
+    },
+    height: {
+      type: Number
+    },
     rowKey: {
       type: String
     },
@@ -203,6 +210,9 @@ export default {
             this.dataSource = res.payload.records
             if (this.rowsForamtter) {
               this.rowsForamtter(this.dataSource)
+            }
+            if (this.getSpanArr) {
+              this.getSpanArr(res.payload)
             }
             this.total = Number(res.payload.total)
           }
