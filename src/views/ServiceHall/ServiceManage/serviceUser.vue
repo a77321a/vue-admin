@@ -3,34 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-14 09:56:05
+ * @LastEditTime: 2019-11-17 22:34:11
  -->
 <template>
   <div class="service-user">
     <!-- 筛选 -->
-    <el-row :gutter="20">
-      <el-col style="background:#f9f9f9;height:calc(100vh - 140px)" :span="6">
-        <div class="checked">和康养老机构1部</div>
-        <el-collapse v-model="activeNames">
-          <el-collapse-item title="禾康养老机构总部" name="1">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部1" name="2">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部2" name="3">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部3" name="4">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-        </el-collapse>
-      </el-col>
-      <el-col :span="18">
+    <el-row class="row-span" :gutter="40">
+      <OrgTreeList @toggleChange="toggleChange"></OrgTreeList>
+      <el-col :span="toggleWidth">
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="80px" size="small">
             <el-form-item label="姓名">
@@ -66,8 +46,10 @@
             method="post"
           >
             <template slot-scope="{row}" slot="orgServiceProviderName">
-              <el-avatar size="medium" :src="row.indexPic"></el-avatar>
-              {{row.orgServiceProviderName}}
+              <div class="flex-t-u">
+                <el-avatar class="avatar" size="medium" :src="row.indexPic"></el-avatar>
+                <span class="f-title">{{row.orgServiceProviderName}}</span>
+              </div>
             </template>
             <template slot-scope="{row}" slot="action">
               <el-button @click="$router.push({name:'serviceUserInfo'})" type="text" size="small">详情</el-button>
@@ -90,14 +72,20 @@
   </div>
 </template>
 <script>
+import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
+
 export default {
   name: 'serviceUser',
+  components: {
+    OrgTreeList
+  },
   data () {
     return {
+      toggleWidth: 18,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '姓名', slot: 'orgServiceProviderName', minWidth: 100 },
+        { label: '姓名', slot: 'orgServiceProviderName', minWidth: 140 },
         { label: '性别', prop: 'sex', minWidth: 100 },
         { label: '手机号', prop: 'telephoneNum', minWidth: 100 },
         { label: '所属机构', prop: 'orgName', minWidth: 100 },
@@ -107,7 +95,7 @@ export default {
           label: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 100
+          minWidth: 140
         }
       ],
       activeNames: '',
@@ -116,6 +104,9 @@ export default {
   },
   created () {},
   methods: {
+    toggleChange (val) {
+      this.toggleWidth = val
+    },
     // 多选  同所有表格
     commitSelection (data) {
       let arr = []

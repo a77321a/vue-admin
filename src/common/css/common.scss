@@ -7,13 +7,13 @@
     position: absolute;
     left: 0;
     top: 7px;
-    content: "";
+    content: '';
     height: 20px;
     background-color: #2d8cf0;
     width: 4px;
   }
 }
-.sm-title{
+.sm-title {
   color: #666;
 }
 .flex-t-l {
@@ -38,5 +38,27 @@
     .f-title {
       margin-top: 5px;
     }
+  }
+}
+.row-span {
+  margin: 0 !important;
+}
+.col-span {
+  padding-right: 0 !important;
+}
+.col-span.el-col-23 {
+  width: 99%;
+}
+.flex-t-u {
+  .avatar {
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .f-title {
+    display: inline-block;
+    width: 70px;
+    text-align: left;
+    vertical-align: middle;
   }
 }

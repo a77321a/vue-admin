@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-14 09:57:58
+ * @LastEditTime: 2019-11-16 20:26:25
  -->
 <template>
   <div id="edit-service-user">
@@ -231,7 +231,8 @@ export default {
     getServiceUserInfo () {
       this.$http
         .get(
-          '/serviceProvider/detail?serviceProviderId=' + this.$route.query.sid
+          '/org/service/provider/detai?serviceProviderId=' +
+            this.$route.query.sid
         )
         .then(res => {
           if (res.code === SUCCESS) {

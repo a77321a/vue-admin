@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 12:32:16
+ * @LastEditTime: 2019-11-16 23:36:10
  -->
 <template>
   <div class="dictionare-config">
@@ -39,7 +39,11 @@
       <template slot-scope="{row}" slot="handleColumn">
         <el-button type="text" size="small">新增字典</el-button>
         <span>-</span>
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button
+          @click="$router.push({name:'editDictionary',query:{did:row.dictionaryId}})"
+          type="text"
+          size="small"
+        >编辑</el-button>
         <span>-</span>
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
@@ -47,6 +51,9 @@
     <el-dialog :title="formInfo.name ? '编辑目录' :'新增目录'" :visible.sync="dialogFormVisible">
       <el-form ref="formInfo" :model="formInfo">
         <el-form-item label="目录名称" label-width="80" prop>
+          <el-input v-model="formInfo.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="目录标识" label-width="80" prop>
           <el-input v-model="formInfo.name" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>

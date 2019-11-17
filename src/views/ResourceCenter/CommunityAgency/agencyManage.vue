@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-14 20:45:03
+ * @LastEditTime: 2019-11-17 22:21:58
  -->
 <template>
   <div class="angecy-manage">
@@ -27,25 +27,17 @@
         </el-select>
       </el-form-item>
       <el-form-item label="服务类型">
-        <el-select
-          clearable
-          v-model="searchData.serviceType"
-          placeholder="请选择"
-        >
+        <el-select clearable v-model="searchData.operationMode" placeholder="请选择">
           <el-option
-            v-for="(item, index) in serviceTypeList"
+            v-for="(item, index) in operationModeList"
             :key="index"
             :label="item.dictionaryLabel"
             :value="item.dictionaryValue"
           ></el-option>
         </el-select>
       </el-form-item>
-
       <el-form-item label="机构名称">
-        <el-input
-          placeholder="请输入机构名称关键字"
-          v-model="searchData.mobile"
-        ></el-input>
+        <el-input placeholder="请输入机构名称关键字" v-model="searchData.orgName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -53,16 +45,14 @@
           type="primary"
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
-          >搜索</el-button
-        >
+        >搜索</el-button>
         <el-button
           @click="
             searchData = {}
             searchRefresh = !searchRefresh
           "
           size="small"
-          >重置</el-button
-        >
+        >重置</el-button>
       </el-form-item>
     </el-form>
     <el-button
@@ -70,8 +60,7 @@
       style="margin-bottom:15px"
       size="small"
       type="primary"
-      >新增机构</el-button
-    >
+    >新增机构</el-button>
     <el-button style="margin-bottom:15px" size="small">导出数据</el-button>
     <!-- 列表 -->
     <Table
@@ -80,31 +69,27 @@
       :searchObj="searchData"
       :selection="false"
       :columns="tableColumns"
-      api="/org/pageSearch"
+      :treeProps="{children: 'children'}"
+      api="/org/tree"
       method="post"
     >
       <template slot="handleColumn" slot-scope="{ row }">
-        <el-button type="text" size="small">新增分部</el-button>
+        <el-button v-if="row.parentOrgId == 0" type="text" size="small">新增分部</el-button>
+        <el-button v-else type="text" size="small">{{row.status == 1?'注销机构':'重新入网'}}</el-button>
         <el-button
           @click="handleStatus(row)"
           v-if="!row.children"
           type="text"
           size="small"
-          >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button
-        >
+        >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button>
         <span>-</span>
         <el-button
-          @click="
-            $router.push({ name: 'editAgency', query: { oid: row.orgId } })
-          "
           type="text"
           size="small"
-          >编辑</el-button
-        >
+          @click="$router.push({ name: 'editAgency', query: { oid: row.orgId }})"
+        >编辑</el-button>
         <span>-</span>
-        <el-button @click="handleDelete(row)" type="text" size="small"
-          >删除</el-button
-        >
+        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
     </Table>
   </div>
@@ -142,12 +127,14 @@ export default {
         }
       ],
       orgTypeList: [],
-      serviceTypeList: []
+      serviceTypeList: [],
+      operationModeList: []
     }
   },
   created () {
     this.getOrgType()
     this.getServiceType()
+    this.getOperationMode()
   },
   methods: {
     getServiceType () {
@@ -161,6 +148,13 @@ export default {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
+        }
+      })
+    },
+    getOperationMode () {
+      this.$http.get('/org/operationMode').then(res => {
+        if (res.code === SUCCESS) {
+          this.operationModeList = res.payload
         }
       })
     },

@@ -3,96 +3,121 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-06 21:59:26
+ * @LastEditTime: 2019-11-17 22:08:16
  -->
 <template>
   <div class="service-center">
-    <!-- 筛选 -->
-    <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="所属机构">
-        <el-select clearable v-model="searchData.status" placeholder="请选择用户状态">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="活动室">
-        <el-select clearable v-model="searchData.status" placeholder="请选择用户状态">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="服务名称">
-        <el-input placeholder="请输入服务名称关键字" v-model="searchData.mobile"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          size="small"
-          type="primary"
-          @click="searchRefresh = !searchRefresh"
-          icon="el-icon-search"
-        >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <el-button style="margin-bottom:15px" size="small" type="primary">新增产品</el-button>
+    <el-row class="row-span" :gutter="40">
+      <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
+      <el-col :span="toggleWidth">
+        <!-- 筛选 -->
+        <el-form inline ref="form" label-width="80px" size="small">
+          <el-form-item label="活动室">
+            <el-select clearable v-model="searchData.activityRoomId" placeholder="请选择">
+              <el-option
+                v-for="(item, index) in eventRoomList"
+                :key="index"
+                :label="item.activityRoomName"
+                :value="item.activityRoomId"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="服务名称">
+            <el-input placeholder="请输入服务名称关键字" v-model="searchData.serviceRecordName"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              size="small"
+              type="primary"
+              @click="searchRefresh = !searchRefresh"
+              icon="el-icon-search"
+            >搜索</el-button>
+            <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+          </el-form-item>
+        </el-form>
+        <el-button style="margin-bottom:15px" size="small" type="primary">新增产品</el-button>
 
-    <!-- 列表 -->
-    <Table
-      @commitSelection="commitSelection"
-      :searchRefresh="searchRefresh"
-      :searchObj="searchData"
-      :selection="true"
-      :columns="tableColumns"
-      api="/api/user"
-      method="get"
-    ></Table>
+        <!-- 列表 -->
+        <Table
+          :searchRefresh="searchRefresh"
+          :searchObj="searchData"
+          :columns="tableColumns"
+          api="/service/record/pageSearch "
+          method="post"
+        >
+          <template slot="customerNum" slot-scope="{row}">{{row.customerNum}}人</template>
+          <template slot="action" slot-scope="{row}">
+            <el-button
+              @click="$router.push({name:'editServiceCenter',query:{sid:row.serviceRecordId}})"
+              type="text"
+            >编辑</el-button>
+            <span>-</span>
+            <el-button type="text">删除</el-button>
+          </template>
+        </Table>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
+import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
+
 export default {
   name: 'serviceCenter',
+  components: {
+    OrgTreeList
+  },
   data () {
     return {
+      toggleWidth: 18,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动名称', prop: '', minWidth: 200 },
-        { label: '活动时间', prop: '', minWidth: 150 },
+        { label: '服务名称', prop: 'serviceRecordName', minWidth: 200 },
+        { label: '服务老人', slot: 'customerNum', minWidth: 150 },
         {
-          label: '参与人员',
-          prop: '',
+          label: '所在活动室',
+          prop: 'activityRoomName',
           minWidth: 100
         },
         {
-          label: '活动状态',
-          prop: '',
-          minWidth: 150
+          label: '创建人',
+          prop: 'createUserName',
+          width: 150
         },
         {
-          label: '创建人',
-          prop: '',
+          label: '创建时间',
+          prop: 'createTime',
           minWidth: 150
         },
         {
           label: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 200
+          minWidth: 100
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      courseList: []
+      eventRoomList: []
     }
   },
-  created () {},
+  created () {
+    this.getEventRoomList()
+  },
   methods: {
+    filterOrg (val) {
+      this.searchData.orgId = val
+      this.searchRefresh = !this.searchRefresh
+    },
+    getEventRoomList () {
+      this.$http
+        .post('/activity/room/pageSearch', { pageSize: 99999 })
+        .then(res => {
+          this.eventRoomList = res.payload.records
+        })
+    },
+    toggleChange (val) {
+      this.toggleWidth = val
+    },
     commitSelection (data) {
       console.log(data)
     },

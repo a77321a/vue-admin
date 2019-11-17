@@ -75,7 +75,7 @@
         >查看</el-button>
         <span>-</span>
         <el-button
-          @click="$router.push({name:'editEventInfo',query:{aid:row.activityId}})"
+          @click="$router.push({name:'editEvent',query:{aid:row.activityId}})"
           type="text"
           size="small"
         >编辑</el-button>

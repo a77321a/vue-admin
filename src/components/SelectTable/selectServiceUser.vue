@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-15 21:07:06
+ * @LastEditTime: 2019-11-16 18:38:32
  -->
 <template>
   <div id="select-service-object">
@@ -53,7 +53,9 @@ export default {
       searchRefresh: true,
       selectData: [],
       searchData: {
-        orgId: Number(this.orgId[this.orgId.length - 1])
+        orgId: Array.isArray(this.orgId)
+          ? Number(this.orgId[this.orgId.length - 1])
+          : this.orgId
       },
       tableColumns: [
         { label: '服务人员', slot: 'userInfo', minWidth: 200 },
@@ -62,11 +64,7 @@ export default {
     }
   },
 
-  props: {
-    orgId: {
-      type: Array
-    }
-  },
+  props: ['orgId'],
   methods: {
     commitSelection (data) {
       this.selectData = data

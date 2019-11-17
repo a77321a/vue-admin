@@ -3,34 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-14 10:23:54
+ * @LastEditTime: 2019-11-17 21:58:15
  -->
 <template>
-  <div class="user-manage">
+  <div class="event-room">
     <!-- 筛选 -->
-    <el-row :gutter="20">
-      <el-col style="background:#f9f9f9;height:calc(100vh - 140px)" :span="6">
-        <div class="checked">和康养老机构1部</div>
-        <el-collapse v-model="activeNames">
-          <el-collapse-item title="禾康养老机构总部" name="1">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部1" name="2">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部2" name="3">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部3" name="4">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-        </el-collapse>
-      </el-col>
-      <el-col :span="18">
+    <el-row class="row-span" :gutter="40">
+      <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
+      <el-col class="col-span" :span="toggleWidth">
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="90px" size="small">
             <el-form-item label="活动室名称">
@@ -88,10 +68,15 @@
   </div>
 </template>
 <script>
+import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
 export default {
-  name: 'userManage',
+  name: 'eventRoom',
+  components: {
+    OrgTreeList
+  },
   data () {
     return {
+      toggleWidth: 18,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
@@ -115,6 +100,13 @@ export default {
   },
   created () {},
   methods: {
+    filterOrg (val) {
+      this.searchData.orgId = val
+      this.searchRefresh = !this.searchRefresh
+    },
+    toggleChange (val) {
+      this.toggleWidth = val
+    },
     handleDelete (row) {
       let id = row ? [row.activityRoomId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
@@ -138,31 +130,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.user-manage {
-  /deep/ .el-collapse-item__header {
-    padding-left: 10px;
-  }
-  .checked {
-    width: calc(100% - 30px);
-    padding-left: 20px;
-    height: 34px;
-    line-height: 34px;
-    margin: 10px 0;
-    border-left: 5px solid #409eff;
-    background-color: #fff;
-    position: relative;
-    &::after {
-      position: absolute;
-      top: -1px;
-      right: -8px;
-      display: block;
-      width: 0;
-      height: 0;
-      content: ' ';
-      border-color: transparent transparent transparent #fff;
-      border-style: solid;
-      border-width: 18px 0 18px 8px;
-    }
+.event-room {
+  .row-span {
+    margin: 0 !important;
   }
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {

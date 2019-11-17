@@ -3,19 +3,12 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-15 21:36:05
+ * @LastEditTime: 2019-11-16 20:12:13
  -->
 <template>
   <div id="select-service-object">
     <el-form>
       <el-form inline ref="form" label-width="80px" size="small">
-        <el-form-item label="名称">
-          <el-cascader
-            :props="{value:'orgId',label:'orgName'}"
-            :options="orgList"
-            v-model="searchData.orgId"
-          ></el-cascader>
-        </el-form-item>
         <el-form-item label="名称">
           <el-input placeholder="请输入服务对象名字" v-model="name"></el-input>
         </el-form-item>
@@ -32,7 +25,7 @@
     </el-form>
     <Table
       @commitSelection="commitSelection"
-      :height="dialogHeight"
+      :height="$store.state.dialogHeight -100"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
@@ -58,7 +51,7 @@ export default {
       selectData: [],
       searchData: {},
       tableColumns: [
-        { label: '服务人员', slot: 'userInfo', minWidth: 200 },
+        { label: '服务人员', slot: 'userInfo', align: 'left', minWidth: 100 },
         { label: '所在区域', prop: 'activityTime', minWidth: 150 }
       ]
     }

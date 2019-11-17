@@ -3,33 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:41:19
+ * @LastEditTime: 2019-11-17 22:12:11
  -->
 <template>
   <div class="dish-manage">
-    <el-row :gutter="20">
-      <el-col style="background:#f9f9f9;height:calc(100vh - 140px)" :span="6">
-        <div class="checked">和康养老机构1部</div>
-        <el-collapse v-model="activeNames">
-          <el-collapse-item title="禾康养老机构总部" name="1">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部1" name="2">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部2" name="3">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部3" name="4">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-        </el-collapse>
-      </el-col>
-      <el-col :span="18">
+    <el-row class="row-span" :gutter="40">
+      <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
+
+      <el-col class="col-span" :span="toggleWidth">
         <!-- 筛选 -->
         <el-form inline ref="form" label-width="80px" size="small">
           <el-form-item label="菜品类型">
@@ -102,10 +83,16 @@
   </div>
 </template>
 <script>
+import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
+
 export default {
   name: 'mealCenter',
+  components: {
+    OrgTreeList
+  },
   data () {
     return {
+      toggleWidth: 18,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
@@ -138,6 +125,13 @@ export default {
   },
   created () {},
   methods: {
+    filterOrg (val) {
+      this.searchData.orgId = val
+      this.searchRefresh = !this.searchRefresh
+    },
+    toggleChange (val) {
+      this.toggleWidth = val
+    },
     commitSelection (data) {
       let arr = []
       data.forEach(i => {

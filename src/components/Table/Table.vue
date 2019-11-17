@@ -3,16 +3,18 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:42:15
+ * @LastEditTime: 2019-11-17 22:18:04
  -->
 <template>
   <div>
     <el-table
       :row-key="rowKey"
       v-loading="loading"
+      default-expand-all
       :height="height"
       :span-method="spanMethod"
       :data="dataSource"
+      :tree-props="treeProps"
       :size="size"
       :border="border"
       stripe
@@ -99,6 +101,9 @@ export default {
     }
   },
   props: {
+    treeProps: {
+      type: Object
+    },
     getSpanArr: {
       type: Function
     },
@@ -194,6 +199,11 @@ export default {
       if (param) {
         this.page = 1
       }
+      if (this.searchObj.orgId) {
+        this.searchObj.orgId = Array.isArray(this.searchObj.orgId)
+          ? this.searchObj.orgId[this.searchObj.orgId.length - 1]
+          : this.searchObj.orgId
+      }
       this.$http[this.method](
         this.api,
         Object.assign(
@@ -208,6 +218,9 @@ export default {
           this.loading = false
           if (res.code === SUCCESS) {
             this.dataSource = res.payload.records
+              ? res.payload.records
+              : res.payload
+
             if (this.rowsForamtter) {
               this.rowsForamtter(this.dataSource)
             }

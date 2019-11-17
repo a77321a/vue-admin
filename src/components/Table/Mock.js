@@ -5,9 +5,11 @@
  * @LastEditors:
  * @LastEditTime: 2019-11-06 16:34:22
  */
-export default [
+export default
+[
   {
     type: '早餐',
+    date: '11',
     one: '周一早',
     two: '油条',
     three: '油条',
@@ -18,6 +20,7 @@ export default [
   },
   {
     type: '早餐',
+    date: '11',
     one: '油条',
     two: '周一早',
     three: '油条',
@@ -28,6 +31,7 @@ export default [
   },
   {
     type: '早餐',
+    date: '11',
     one: '油条',
     two: '油条',
     three: '周一早',
@@ -38,6 +42,7 @@ export default [
   },
   {
     type: '午餐',
+    date: '11',
     one: '油条',
     two: '油条',
     three: '油条',

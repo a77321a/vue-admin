@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:07:53
+ * @LastEditTime: 2019-11-16 18:33:06
  -->
 <template>
   <div id="edit-event">
@@ -40,8 +40,9 @@
       <el-form-item label="活动时间" prop="eventTime">
         <el-date-picker
           v-model="formInfo.eventTime"
-          type="daterange"
+          type="datetimerange"
           range-separator="至"
+          value-format="yyyy-MM-dd HH:mm:ss"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         ></el-date-picker>
@@ -144,10 +145,11 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data () {
+  data() {
     return {
       formInfo: {
         orgId: [],
+        eventTime: [],
         activityRoomId: ''
       },
       rules: {
@@ -186,7 +188,7 @@ export default {
       orgList: []
     }
   },
-  created () {
+  created() {
     if (this.$route.query.aid) {
       this.getActivityInfo()
     }
@@ -194,7 +196,7 @@ export default {
     this.getOrgList()
   },
   methods: {
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -208,24 +210,29 @@ export default {
         }
       })
     },
-    getEventRoomList () {
+    getEventRoomList() {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    getActivityInfo () {
+    getActivityInfo() {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
+            this.$set(this.formInfo, 'eventTime', [
+              res.payload.startTime,
+              res.payload.endTime
+            ])
+            console.log(this.formInfo)
           }
         })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         console.log(valid)
         if (!valid) return
@@ -246,7 +253,7 @@ export default {
         }
       })
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {

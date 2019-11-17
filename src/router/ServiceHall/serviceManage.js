@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-11 16:52:22
+ * @LastEditTime: 2019-11-16 20:06:27
  */
 export default [
   {
@@ -31,6 +31,15 @@ export default [
     meta: {
       title: '新增/编辑服务人员',
       parent: 'serviceUser'
+    }
+  },
+  {
+    path: 'editServiceCenter',
+    name: 'editServiceCenter',
+    component: () => import('@/views/ServiceHall/ServiceManage/editServiceCenter.vue'),
+    meta: {
+      title: '新增/编辑服务信息',
+      parent: 'serviceCenter'
     }
   }
 ]
