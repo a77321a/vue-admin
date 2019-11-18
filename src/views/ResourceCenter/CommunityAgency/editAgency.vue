@@ -3,10 +3,10 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-18 18:11:07
+ * @LastEditTime: 2019-11-18 18:15:30
  -->
 <template>
-  <div id="edit-event">
+  <div id="edit-agency">
     <div class="title">基本信息</div>
     <el-form
       style="width:700px"
@@ -125,7 +125,7 @@ export default {
   components: {
     GdMap
   },
-  data() {
+  data () {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -185,45 +185,45 @@ export default {
       mapShow: false
     }
   },
-  created() {
+  created () {
     this.getOrgType()
     this.getServiceType()
     this.getOperationMode()
   },
   methods: {
-    openMap() {
+    openMap () {
       this.mapShow = true
     },
-    selectArea(row) {
+    selectArea (row) {
       this.formInfo.latitude = row.lat
       this.formInfo.longitude = row.lng
       this.formInfo.latLong = `${row.lng}，${row.lat}`
       this.mapShow = false
     },
-    getOperationMode() {
+    getOperationMode () {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
         }
       })
     },
-    getServiceType() {
+    getServiceType () {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType() {
+    getOrgType () {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    handleRemove() {},
+    handleRemove () {},
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         console.log(valid)
         if (!valid) return
@@ -244,7 +244,7 @@ export default {
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {

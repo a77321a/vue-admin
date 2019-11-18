@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-09 11:44:16
+ * @LastEditTime: 2019-11-18 18:26:06
  */
 export default [
   {
@@ -11,7 +11,7 @@ export default [
     name: 'pensionProduct',
     component: () => import('@/views/ResourceCenter/PensionProduct/pensionProduct.vue'),
     meta: {
-      title: '养老产品',
+      title: '产品中心',
       root: true
     }
   },
@@ -29,7 +29,7 @@ export default [
     name: 'productType',
     component: () => import('@/views/ResourceCenter/PensionProduct/productType.vue'),
     meta: {
-      title: '产品类型',
+      title: '产品目录',
       root: true
     }
   }

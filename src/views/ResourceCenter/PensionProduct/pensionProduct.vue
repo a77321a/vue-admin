@@ -1,43 +1,20 @@
 <!--
- * @Descripttion:养老产品
+ * @Descripttion:活动室
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-09 11:25:13
+ * @LastEditTime: 2019-11-18 18:30:25
  -->
 <template>
-  <div class="user-manage">
+  <div class="event-room">
     <!-- 筛选 -->
-    <el-row :gutter="20">
-      <el-col style="background:#f9f9f9;height:calc(100vh - 140px)" :span="6">
-        <div class="checked">和康养老机构1部</div>
-        <el-collapse v-model="activeNames">
-          <el-collapse-item title="禾康养老机构总部" name="1">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部1" name="2">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部2" name="3">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部3" name="4">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-        </el-collapse>
-      </el-col>
-      <el-col :span="18">
+    <el-row class="row-span" :gutter="40">
+      <ServiceTypeFilter @filterOrg="filterOrg" @toggleChange="toggleChange"></ServiceTypeFilter>
+      <el-col class="col-span" :span="toggleWidth">
         <div class="grid-content bg-purple">
-          <el-form inline ref="form" label-width="80px" size="small">
+          <el-form inline ref="form" label-width="90px" size="small">
             <el-form-item label="产品名称">
-              <el-input
-                placeholder="请输入产品名称关键字"
-                v-model="searchData.mobile"
-              ></el-input>
+              <el-input placeholder="请输入产品名称关键字" v-model="searchData.activityRoomCode"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -45,54 +22,67 @@
                 type="primary"
                 @click="searchRefresh = !searchRefresh"
                 icon="el-icon-search"
-                >搜索</el-button
-              >
-              <el-button
-                @click="
-                  searchData = {}
-                  searchRefresh = !searchRefresh
-                "
-                size="small"
-                >重置</el-button
-              >
+              >搜索</el-button>
+              <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({ name: 'editPensionProduct' })"
+            @click="$router.push({name:'editEventRoom'})"
             style="margin-bottom:15px"
             size="small"
             type="primary"
-            >新增产品</el-button
-          >
+          >新增活动室</el-button>
           <!-- 列表 -->
           <Table
-            @commitSelection="commitSelection"
             :searchRefresh="searchRefresh"
             :searchObj="searchData"
-            :selection="true"
             :columns="tableColumns"
-            api
-            method="get"
-          ></Table>
+            api="/activity/room/pageSearch"
+            method="post"
+          >
+            <template slot-scope="{row}" slot="action">
+              <el-button
+                @click="$router.push({name:'pensionProductInfo',query:{aid:row.activityRoomId}})"
+                type="text"
+                size="small"
+              >查看</el-button>
+              <span>-</span>
+              <el-button
+                @click="$router.push({name:'editEventRoom',query:{aid:row.activityRoomId}})"
+                type="text"
+                size="small"
+              >编辑</el-button>
+              <span>-</span>
+              <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+            </template>
+            <template slot="footer-left">
+              <el-button @click="handleDelete(null)" type="text">删除</el-button>
+            </template>
+          </Table>
         </div>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
+import ServiceTypeFilter from '@/components/ServiceTypeFilter/ServiceTypeFilter'
 export default {
-  name: 'userManage',
-  data () {
+  name: 'pensionProduct',
+  components: {
+    ServiceTypeFilter
+  },
+  data() {
     return {
+      toggleWidth: 18,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动室名称', prop: '', minWidth: 200 },
-        { label: '所属机构', prop: '', minWidth: 150 },
+        { label: '活动室名称', prop: 'activityRoomName', minWidth: 200 },
+        { label: '所属机构', prop: 'orgName', minWidth: 100 },
         {
           label: '更新时间',
-          prop: '',
-          minWidth: 100
+          prop: 'updateTime',
+          minWidth: 140
         },
         {
           label: '操作',
@@ -101,94 +91,45 @@ export default {
           minWidth: 100
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      courseList: [],
-      activeNames: ''
+      activeNames: '',
+      selectActivity: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    commitSelection (data) {
-      console.log(data)
+    filterOrg(val) {
+      this.searchData.orgId = val
+      this.searchRefresh = !this.searchRefresh
     },
-    handleStatus (row) {
-      let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
+    toggleChange(val) {
+      this.toggleWidth = val
+    },
+    handleDelete(row) {
+      let id = row ? [row.activityRoomId] : this.selectActivity
+      this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
+          this.$http
+            .post('/activity/room/delete', { activityRoomIdList: id })
+            .then(res => {
+              if (res.code === 200) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
-    },
-    resetPassword (id) {
-      let content = '您确定给该用户重置密码？默认密码为123456'
-      this.$confirm(content, '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http.post('/api/user/repwd', { id: id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
-        })
-        .catch(() => {})
-    },
-    purchasedCourse (row) {
-      this.dialogVisible = true
-      this.mobile = row.mobile
-      this.getCouseList(true)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.user-manage {
-  /deep/ .el-collapse-item__header {
-    padding-left: 10px;
-  }
-  .checked {
-    width: calc(100% - 30px);
-    padding-left: 20px;
-    height: 34px;
-    line-height: 34px;
-    margin: 10px 0;
-    border-left: 5px solid #409eff;
-    background-color: #fff;
-    position: relative;
-    &::after {
-      position: absolute;
-      top: -1px;
-      right: -8px;
-      display: block;
-      width: 0;
-      height: 0;
-      content: ' ';
-      border-color: transparent transparent transparent #fff;
-      border-style: solid;
-      border-width: 18px 0 18px 8px;
-    }
+.event-room {
+  .row-span {
+    margin: 0 !important;
   }
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
