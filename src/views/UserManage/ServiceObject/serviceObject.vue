@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-14 17:21:18
+ * @LastEditTime: 2019-11-18 11:40:30
  -->
 <template>
   <div class="serviceObject">
@@ -49,6 +49,21 @@
       api="/service/customer/pageSearch"
       method="post"
     >
+      <template slot-scope="{row}" slot="serviceCustomerName">
+        <div class="flex-t-u">
+          <el-avatar class="avatar" size="medium" :src="row.indexPic"></el-avatar>
+          <span class="f-title">{{row.serviceCustomerName}}</span>
+        </div>
+      </template>
+      <template slot-scope="{row}" slot="gender">
+        <div>{{row.gender == 1 ?'男':'女'}}</div>
+      </template>
+      <template slot-scope="{row}" slot="emergencyList">
+        <span v-for="(item, index) in row.emergencyList" :key="index">
+          <span>{{item.mobile}}</span>
+          <span v-if="index !=row.emergencyList.length -1">、</span>
+        </span>
+      </template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           @click="$router.push({name:'serviceObjectInfo',query:{sid:row.serviceCustomerId}})"
@@ -80,21 +95,21 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '姓名', prop: '', minWidth: 200 },
-        { label: '性别', prop: '', minWidth: 150 },
+        { label: '姓名', slot: 'serviceCustomerName', minWidth: 200 },
+        { label: '性别', slot: 'gender', minWidth: 150 },
         {
           label: '手机号',
-          prop: '',
+          prop: 'mobile',
           minWidth: 100
         },
         {
           label: '紧急联系电话',
-          prop: '',
+          slot: 'emergencyList',
           minWidth: 150
         },
         {
           label: '所在区域',
-          prop: '',
+          prop: 'streetName',
           minWidth: 150
         },
         {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-17 22:18:04
+ * @LastEditTime: 2019-11-18 14:35:11
  -->
 <template>
   <div>
@@ -38,6 +38,7 @@
         v-for="column in columns"
         :sortable="column.sortable"
         :key="column.index"
+        :header-align="column.headerAlign||'center'"
         :prop="column.prop"
         :label="column.label"
         :min-width="column.minWidth"

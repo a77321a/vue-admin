@@ -3,14 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-16 23:36:10
+ * @LastEditTime: 2019-11-18 15:20:58
  -->
 <template>
   <div class="dictionare-config">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="字典名称">
-        <el-input placeholder="请输入字典名称关键字" v-model="searchData.dictName"></el-input>
+        <el-input placeholder="请输入字典名称关键字" v-model="searchData.dictCatalogName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -30,31 +30,54 @@
     >新增目录</el-button>
     <!-- 列表 -->
     <Table
+      rowKey="RowIndex"
+      :rowsForamtter="rowsForamtter"
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
       :columns="tableColumns"
-      api="/dictionary/pageSearch"
+      :treeProps="{children:'dictionaries'}"
+      api="/dictionary/tree"
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button type="text" size="small">新增字典</el-button>
-        <span>-</span>
         <el-button
-          @click="$router.push({name:'editDictionary',query:{did:row.dictionaryId}})"
+          @click="$router.push({name:'editDictionary',query:{parent:row.dictCatalogKey}})"
+          v-if="row.dictionaries"
+          type="text"
+          size="small"
+        >新增字典</el-button>
+        <span v-if="row.dictionaries">-</span>
+        <el-button
+          v-if="row.dictionaries"
+          @click="formInfo = row;dialogFormVisible = true"
+          type="text"
+          size="small"
+        >编辑</el-button>
+        <el-button
+          v-else
+          @click="$router.push({name:'editDictionary',query:{did:row.dictionaryId,parent:row.parent}})"
           type="text"
           size="small"
         >编辑</el-button>
         <span>-</span>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button
+          @click="handleDelete(row,row.dictionaries?true:false)"
+          type="text"
+          size="small"
+        >删除</el-button>
       </template>
     </Table>
-    <el-dialog :title="formInfo.name ? '编辑目录' :'新增目录'" :visible.sync="dialogFormVisible">
-      <el-form ref="formInfo" :model="formInfo">
-        <el-form-item label="目录名称" label-width="80" prop>
-          <el-input v-model="formInfo.name" autocomplete="off"></el-input>
+    <el-dialog :title="formInfo.dictCatalogId ? '编辑目录' :'新增目录'" :visible.sync="dialogFormVisible">
+      <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
+        <el-form-item label="目录名称" prop="dictCatalogName">
+          <el-input v-model="formInfo.dictCatalogName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="目录标识" label-width="80" prop>
-          <el-input v-model="formInfo.name" autocomplete="off"></el-input>
+        <el-form-item label="目录标识" prop="dictCatalogKey">
+          <el-input
+            :disabled="formInfo.dictCatalogId"
+            v-model="formInfo.dictCatalogKey"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -66,15 +89,28 @@
 </template>
 <script>
 export default {
-  name: 'userManage',
-  data () {
+  name: 'dictionaryConfig',
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
       formInfo: { name: '' },
+      rules: {
+        dictCatalogName: [
+          { required: true, message: '请输入目录名称', trigger: 'blur' }
+        ],
+        dictCatalogKey: [
+          { required: true, message: '请输入目录标识', trigger: 'blur' }
+        ]
+      },
       tableColumns: [
-        { label: '字典目录', prop: 'dictionaryLabel', minWidth: 200 },
-        { label: '字典key', prop: 'dictionaryKey', minWidth: 150 },
+        {
+          label: '字典目录',
+          align: 'left',
+          prop: 'dictCatalogName',
+          minWidth: 100
+        },
+        { label: '字典key', prop: 'dictCatalogKey', minWidth: 150 },
         {
           label: '字典值',
           prop: 'dictionaryValue',
@@ -87,37 +123,70 @@ export default {
         },
         {
           label: '更新时间',
-          prop: 'userName',
+          prop: 'updateTime',
           minWidth: 150
         },
         {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 240
+          minWidth: 140
         }
       ],
       dialogFormVisible: false
     }
   },
-  created () {},
+  created() {},
   methods: {
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
+      let RowIndex = 1
       rows.forEach(row => {
-        row.activityTime = row.startTime + '~' + row.endTime
+        row.RowIndex = RowIndex
+        RowIndex++
+        if (Array.isArray(row.dictionaries) && row.dictionaries.length > 0) {
+          row.dictionaries.forEach(j => {
+            j.RowIndex = RowIndex
+            RowIndex++
+            j.dictCatalogName = j.dictionaryLabel
+            j.parent = j.dictCatalogKey
+            j.dictCatalogKey = j.dictionaryKey
+          })
+        }
       })
     },
-    handleSaveForm () {
+    handleSaveForm() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
-        this.$http.post('', {}).then(res => {
-          if (res.code === SUCCESS) {
-            this.$message.success('操作成功')
-          }
-        })
+        if (this.formInfo.dictCatalogId) {
+          this.$http
+            .post('/dictionaryType/update', {
+              dictCatalogId: this.formInfo.dictCatalogId,
+              dictCatalogName: this.formInfo.dictCatalogName
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.dialogFormVisible = false
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
+        } else {
+          this.$http.post('/dictionaryType/add', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.dialogFormVisible = false
+              this.searchRefresh = !this.searchRefresh
+            }
+          })
+        }
       })
     },
-    handleDelete (row) {
+    handleDelete(row, parent) {
+      let id = parent ? [row.dictCatalogId] : [row.dictionaryId]
+      if (parent && row.dictionaries.length > 0) {
+        this.$message.error('当前目录下含有字典，无法删除')
+        return
+      }
       this.$confirm(
         '删除后，与该字典关联的数据值都将被清空，是否确认？',
         '提示',
@@ -128,18 +197,29 @@ export default {
         }
       )
         .then(() => {
-          this.$http
-            .todelete('/dictionary/delete?dictionaryIds' + row.dictionaryId)
-            .then(res => {
-              if (res.code === SUCCESS) {
-                this.$message.success('操作成功')
-                this.searchRefresh = !this.searchRefresh
-              }
-            })
+          if (parent) {
+            this.$http
+              .post('/dictionaryType/delete', { dictionaryTypeIds: id })
+              .then(res => {
+                if (res.code === SUCCESS) {
+                  this.$message.success('操作成功')
+                  this.searchRefresh = !this.searchRefresh
+                }
+              })
+          } else {
+            this.$http
+              .post('/dictionary/delete', { dictionaryIds: id })
+              .then(res => {
+                if (res.code === SUCCESS) {
+                  this.$message.success('操作成功')
+                  this.searchRefresh = !this.searchRefresh
+                }
+              })
+          }
         })
         .catch(() => {})
     },
-    handleCloseActivity (row) {
+    handleCloseActivity(row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {

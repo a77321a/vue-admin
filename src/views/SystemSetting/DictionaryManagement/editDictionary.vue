@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 14:52:54
  * @LastEditors:
- * @LastEditTime: 2019-11-11 15:03:34
+ * @LastEditTime: 2019-11-18 15:04:45
  -->
 <template>
   <div id="edit-dictionary">
@@ -16,25 +16,25 @@
       label-width="80px"
       size="medium"
     >
-      <el-form-item label="字典名称" prop="dictName">
+      <el-form-item label="字典名称" prop="dictionaryLabel">
         <el-input
           :maxlength="10"
           show-word-limit
           placeholder="请输入字典名称，最多不超过10个字"
-          v-model="formInfo.dictName"
+          v-model="formInfo.dictionaryLabel"
         ></el-input>
       </el-form-item>
-      <el-form-item label="key" prop="dictKey">
-        <el-input placeholder="请输入字典key" v-model="formInfo.dictKey"></el-input>
+      <el-form-item label="key" prop="dictionaryKey">
+        <el-input placeholder="请输入字典key" v-model="formInfo.dictionaryKey"></el-input>
       </el-form-item>
-      <el-form-item label="字典值" prop="dictValue">
-        <el-input placeholder="请输入字典值" v-model="formInfo.dictValue"></el-input>
+      <el-form-item label="字典值" prop="dictionaryValue">
+        <el-input placeholder="请输入字典值" v-model="formInfo.dictionaryValue"></el-input>
       </el-form-item>
-      <el-form-item label="字典类型" prop="dictType">
-        <el-select clearable v-model="formInfo.dictType" style="width:220px" placeholder="请选择用户状态">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+      <el-form-item label="字典类型" prop="status">
+        <el-select clearable v-model="formInfo.status" style="width:220px" placeholder="请选择">
+          <el-option label="全部" :value="-1"></el-option>
+          <el-option label="启用" :value="1"></el-option>
+          <el-option label="禁用" :value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item size="large">
@@ -51,30 +51,62 @@ export default {
     return {
       formInfo: {},
       rules: {
-        dictName: [
+        dictionaryLabel: [
           { required: true, message: '请输入字典名称', trigger: 'blur' }
         ],
-        dictKey: [
+        dictionaryKey: [
           { required: true, message: '请输入字典key', trigger: 'blur' }
         ],
-        dictValue: [
+        dictionaryValue: [
           { required: true, message: '请输入字典值', trigger: 'blur' }
         ],
-        dictType: [
-          { required: true, message: '请输入字典值', trigger: 'change' }
+        status: [
+          { required: true, message: '请选择字典类型', trigger: 'change' }
         ]
       }
     }
   },
+  created () {
+    if (this.$route.query.did) {
+      this.getDictionaryInfo()
+    }
+  },
   methods: {
+    getDictionaryInfo () {
+      this.$http
+        .get('/dictionary/get?dictionaryId=' + this.$route.query.did)
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.formInfo = res.payload
+          }
+        })
+    },
     handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
-        this.$http.post('/dictionary/add', this.formInfo).then(res => {
-          if (res.code === SUCCESS) {
-            this.$message.success('操作成功')
-          }
-        })
+        if (this.$route.query.did) {
+          this.$http.post('/dictionary/update', this.formInfo).then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
+        } else {
+          this.$http
+            .post(
+              '/dictionary/add',
+              Object.assign(
+                { dictCatalogKey: this.$route.query.parent },
+                this.formInfo
+              )
+            )
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.$router.go(-1)
+              }
+            })
+        }
       })
     }
   }
