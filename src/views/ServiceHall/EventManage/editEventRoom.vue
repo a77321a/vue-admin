@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:08:53
+ * @LastEditTime: 2019-11-18 20:58:59
  -->
 <template>
   <div id="edit-event">
@@ -46,7 +46,6 @@
         <el-cascader
           :props="{ value: 'orgId',label:'orgName' }"
           v-model="formInfo.orgId"
-          :show-all-levels="false"
           clearable
           :options="orgTree"
         ></el-cascader>
@@ -85,9 +84,6 @@ export default {
     }
   },
   created () {
-    if (this.$route.query.aid) {
-      this.getEventRoomInfo()
-    }
     this.getOrgList()
   },
   methods: {
@@ -101,6 +97,9 @@ export default {
             })
           }
         })
+        if (this.$route.query.aid) {
+          this.getEventRoomInfo()
+        }
       })
     },
     uploadImg (file) {
@@ -123,6 +122,20 @@ export default {
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
+            if (Array.isArray(this.orgTree)) {
+              this.orgTree.forEach(i => {
+                if (Array.isArray(i.children)) {
+                  i.children.forEach(j => {
+                    if (j.orgId === this.formInfo.orgId) {
+                      this.$set(this.formInfo, 'orgId', [
+                        j.parentOrgId,
+                        j.orgId
+                      ])
+                    }
+                  })
+                }
+              })
+            }
           }
         })
     },

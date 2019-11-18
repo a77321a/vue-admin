@@ -3,19 +3,19 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-09 11:43:21
+ * @LastEditTime: 2019-11-18 22:12:38
  -->
 <template>
   <div id="edit-event">
     <div class="title">基本信息</div>
     <el-form style="width:700px" ref="form" :model="formInfo" label-width="80px" size="medium">
-      <el-form-item label="服务名称">
+      <el-form-item label="产品名称">
         <el-input v-model="formInfo.name"></el-input>
       </el-form-item>
-      <el-form-item label="服务简介">
+      <el-form-item label="产品简介">
         <el-input type="textarea" v-model="formInfo.name"></el-input>
       </el-form-item>
-      <el-form-item label="服务封面">
+      <el-form-item label="产品封面">
         <el-upload
           :show-file-list="false"
           class="upload-demo"
@@ -26,7 +26,7 @@
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="服务详情">
+      <el-form-item label="产品详情">
         <UEditor v-model="formInfo.content"></UEditor>
       </el-form-item>
       <div class="title">价格/类型</div>

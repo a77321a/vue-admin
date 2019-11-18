@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-15 20:02:35
+ * @LastEditTime: 2019-11-18 21:36:31
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -32,7 +32,7 @@ Vue.use(VueAMap)
 //   v: '1.4.4'
 // })
 window.SUCCESS = '00000000'
-window.MAXSIZE = '99999'
+window.MAXSIZE = 999
 
 window.ctx = 'http://118.24.54.72:8061/'
 window.docTitle = document.title
