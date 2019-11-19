@@ -3,10 +3,10 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 10:57:55
+ * @LastEditTime: 2019-11-19 17:02:36
  -->
 <template>
-  <div class="user-manage">
+  <div class="event-center">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="活动状态">
@@ -15,7 +15,14 @@
           clearable
           v-model="searchData.activityStatus"
           placeholder="请选择"
-        ></el-select>
+        >
+          <el-option
+            v-for="(item, index) in $store.state.config.activityStatus"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="活动时间">
         <el-date-picker
@@ -71,6 +78,11 @@
           </div>
         </div>
       </template>
+      <template
+        slot="activityStatus"
+        slot-scope="{row}"
+      >{{$store.state.config.activityStatus[row.activityStatus].dictionaryLabel}}</template>
+      <template slot="joinUser" slot-scope="{row}">{{row.actualCustomerNum}}/{{row.customerNum}}</template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
@@ -87,7 +99,7 @@
         <el-button @click="handleCloseActivity(row)" type="text" size="small">结束活动</el-button>
         <span>-</span>
         <el-button
-          @click="$router.push({name:'summayEvent',query:{aid:row.activityId}})"
+          @click="$router.push({name:'editActivitySummary',query:{aid:row.activityId}})"
           type="text"
           size="small"
         >总结活动</el-button>
@@ -104,7 +116,7 @@
 <script>
 export default {
   name: 'userManage',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -118,17 +130,17 @@ export default {
         { label: '活动时间', prop: 'activityTime', minWidth: 260 },
         {
           label: '参与人员',
-          prop: 'orgName',
+          slot: 'joinUser',
           minWidth: 100
         },
         {
           label: '活动状态',
-          prop: 'activityStatus',
+          slot: 'activityStatus',
           minWidth: 150
         },
         {
           label: '创建人',
-          prop: 'userName',
+          prop: 'createUserName',
           minWidth: 150
         },
         {
@@ -147,16 +159,16 @@ export default {
       selectActivity: []
     }
   },
-  created() {
+  created () {
     // this.$store.dispatch('getDictionaryManagement')
   },
   methods: {
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime(date) {
+    handlTime (date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -165,14 +177,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    commitSelection(data) {
+    commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.activityId)
       })
       this.selectActivity = arr
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
@@ -189,7 +201,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity(row) {
+    handleCloseActivity (row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {
@@ -217,7 +229,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.user-manage {
+.event-center {
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 193px;

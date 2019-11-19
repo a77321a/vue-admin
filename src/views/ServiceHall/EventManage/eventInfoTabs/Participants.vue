@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 14:49:57
+ * @LastEditTime: 2019-11-19 16:47:09
  -->
 <template>
   <div class="Participants">
@@ -13,16 +13,23 @@
         <el-select
           style="width:200px"
           clearable
-          v-model="searchData.activityStatus"
+          v-model="searchData.customerCategory"
           placeholder="请选择"
         >
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+          <el-option
+            v-for="(item, index) in $store.state.config.pensionTypeList"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="老人名称">
-        <el-input style="width:200px" placeholder="请输入老人名称关键字" v-model="searchData.activityName"></el-input>
+        <el-input
+          style="width:200px"
+          placeholder="请输入老人名称关键字"
+          v-model="searchData.serviceCustomerName"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -31,7 +38,7 @@
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
         >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+        <el-button @click="searchData = {activityId};searchRefresh = !searchRefresh" size="small">重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 列表 -->
@@ -40,9 +47,31 @@
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :columns="tableColumns"
-      api
+      api="/activity/customer/pageSearch"
       method="post"
     >
+      <template slot="serviceCustomerName" slot-scope="{row}">
+        <div class="flex-t-u">
+          <el-avatar
+            class="avatar"
+            size="medium"
+            :src="$store.state.config.systemConfig[0].dictionaryValue+row.avatar"
+          ></el-avatar>
+          <span class="f-title">{{row.serviceCustomerName}}</span>
+        </div>
+      </template>
+      <template slot="emergencyList" slot-scope="{row}">
+        <span v-for="(item, index) in row.emergencyList" :key="index">
+          {{item.mobile}}
+          <span v-if="index !=row.emergencyList.length - 1">、</span>
+        </span>
+      </template>
+      <template slot="customerCategoryList" slot-scope="{row}">
+        <span v-for="(item, index) in row.customerCategoryList" :key="index">
+          {{item}}
+          <span v-if="index !=row.emergencyList.length - 1">、</span>
+        </span>
+      </template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
@@ -59,31 +88,25 @@ export default {
   data () {
     return {
       searchRefresh: true,
-      searchData: {},
+      searchData: { activityId: this.activityId },
       tableColumns: [
-        { label: '姓名', slot: 'activityName', minWidth: 150 },
-        { label: '紧急联系人电话', prop: 'activityTime', minWidth: 260 },
+        { label: '姓名', slot: 'serviceCustomerName', minWidth: 150 },
+        { label: '紧急联系人电话', slot: 'emergencyList', minWidth: 260 },
         {
           label: '老人类别',
-          prop: 'orgName',
+          slot: 'customerCategoryList',
           minWidth: 100
         },
         {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 240
+          minWidth: 60
         }
-      ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      selectActivity: []
+      ]
     }
   },
+  props: ['activityId'],
   created () {},
   methods: {
     rowsForamtter (rows) {

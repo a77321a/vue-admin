@@ -7,10 +7,10 @@
  */
 const config = {
   activityStatus: [
-    // { dictionaryValue: 0, dictionaryLabel: '即将开始' },
-    // { dictionaryValue: 1, dictionaryLabel: '进行中' },
-    // { dictionaryValue: 2, dictionaryLabel: '已结束' },
-    // { dictionaryValue: 3, dictionaryLabel: '已总结' }
+    { dictionaryValue: 0, dictionaryLabel: '即将开始' },
+    { dictionaryValue: 1, dictionaryLabel: '进行中' },
+    { dictionaryValue: 2, dictionaryLabel: '已结束' },
+    { dictionaryValue: 3, dictionaryLabel: '已总结' }
   ],
   seasonStatus: [
     { dictionaryValue: 'spring', dictionaryLabel: '春季' },

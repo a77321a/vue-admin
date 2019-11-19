@@ -1,9 +1,9 @@
 <!--
- * @Descripttion:新增、编辑活动
+ * @Descripttion:活动总结
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-19 18:14:59
+ * @LastEditTime: 2019-11-19 18:22:11
  -->
 <template>
   <div id="edit-event">
@@ -13,16 +13,11 @@
       ref="formInfo"
       :rules="rules"
       :model="formInfo"
-      label-width="80px"
+      label-width="100px"
       size="medium"
     >
       <el-form-item label="活动名称" prop="activityName">
-        <el-input
-          placeholder="请输入活动名称，最多不超过50个字"
-          show-word-limit
-          :maxlength="50"
-          v-model="formInfo.activityName"
-        ></el-input>
+        <span>{{formInfo.activityName}}</span>
       </el-form-item>
       <el-form-item label="活动封面" prop="activityIndexPic">
         <div style="display:flex;align-items:center;">
@@ -31,79 +26,33 @@
               :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.activityIndexPic"
               alt
             />
-            <Input
-              v-model="$store.state.config.systemConfig[0].dictionaryValue+formInfo.activityIndexPic"
-              style="display:none"
-            />
           </div>
-          <el-upload
-            action="apii/public/img"
-            :show-file-list="false"
-            :before-upload="uploadImg"
-            accept="image/*"
-          >
-            <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
         </div>
       </el-form-item>
       <el-form-item label="活动时间" prop="eventTime">
-        <el-date-picker
-          v-model="formInfo.eventTime"
-          type="datetimerange"
-          range-separator="至"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
+        <span>{{formInfo.eventTime.join('~')}}</span>
       </el-form-item>
       <el-form-item label="活动地点" prop="activityAddress">
-        <el-input
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入活动地点，最多不超过68个字"
-          v-model="formInfo.activityAddress"
-        ></el-input>
+        <span>{{formInfo.activityAddress}}</span>
       </el-form-item>
       <el-form-item label="活动详情">
-        <UEditor v-model="formInfo.activityDesc"></UEditor>
+        <span v-html="formInfo.activityDesc"></span>
       </el-form-item>
-      <div class="title">活动信息</div>
       <el-form-item label="所属机构" prop="orgId">
-        <el-cascader
-          clearable
-          :props="{value:'orgId',label:'orgName'}"
-          :options="orgTree"
-          v-model="formInfo.orgId"
-        ></el-cascader>
+        <span>{{formInfo.orgName}}</span>
       </el-form-item>
       <el-form-item label="活动室" prop="activityRoomId">
-        <el-select clearable v-model="formInfo.activityRoomId" placeholder="请选择">
-          <el-option
-            v-for="(item, index) in eventRoomList"
-            :key="index"
-            :label="item.activityRoomName"
-            :value="item.activityRoomId"
-          ></el-option>
-        </el-select>
+        <span>{{formInfo.activityRoomName}}</span>
       </el-form-item>
       <el-form-item label="服务产品" prop="orgServiceProductIdList">
-        <el-select
-          clearable
-          multiple
-          collapse-tags
-          v-model="formInfo.orgServiceProductIdList"
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="(item, index) in productList"
-            :key="index"
-            :label="item.orgServiceProductName"
-            :value="item.orgServiceProductId"
-          ></el-option>
-        </el-select>
-        <!-- <el-select clearable v-model="formInfo.serviceProductId" placeholder="请选择"></el-select> -->
+        <span v-for="(item, index) in formInfo.orgServiceProductList" :key="index">
+          {{item.orgServiceProductName}}
+          <span
+            v-if="index !=formInfo.orgServiceProductList.length - 1"
+          >、</span>
+        </span>
       </el-form-item>
+      <div class="title">活动总结</div>
       <el-form-item label="服务人员" prop="serviceProvider">
         <el-button
           :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
@@ -113,8 +62,8 @@
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
-            @close="formInfo.orgServiceProviderList.splice(index,1)"
-            v-for="(item, index) in formInfo.orgServiceProviderList"
+            @close="formInfo.actualOrgServiceProviderList.splice(index,1)"
+            v-for="(item, index) in formInfo.actualOrgServiceProviderList"
             :key="index"
             closable
           >
@@ -132,8 +81,8 @@
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
-            @close="formInfo.serviceCustomerList.splice(index,1)"
-            v-for="(item, index) in formInfo.serviceCustomerList"
+            @close="formInfo.actualServiceCustomerList.splice(index,1)"
+            v-for="(item, index) in formInfo.actualServiceCustomerList"
             :key="index"
             closable
           >
@@ -146,8 +95,38 @@
           </el-tag>
         </el-card>
       </el-form-item>
+      <el-form-item label="活动照片" prop="activityPicList">
+        <div style="display:flex;align-items:center;">
+          <div
+            style="position:relative"
+            v-for="(item, index) in formInfo.activityPicList"
+            :key="index"
+            v-show="formInfo.activityPicList.length > 0"
+            class="avatar"
+          >
+            <i size="24" @click="handleRemove(index)" class="el-icon-circle-close delete-img"></i>
+            <img :src="$store.state.config.systemConfig[0].dictionaryValue+item" alt />
+          </div>
+          <el-upload
+            action="apii/public/img"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button
+              :disabled="formInfo.activityPicList.length > 8"
+              type="primary"
+              icon="ios-cloud-upload-outline"
+            >选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF格式，小于5M，最多可添加9张</div>
+          </el-upload>
+        </div>
+      </el-form-item>
+      <el-form-item label="活动内容总结">
+        <UEditor v-model="formInfo.activitySummary"></UEditor>
+      </el-form-item>
       <el-form-item size="large">
-        <el-button @click="handleSave" type="primary">立即创建</el-button>
+        <el-button @click="handleSave" type="primary">保存</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
@@ -158,7 +137,10 @@
       title="选择服务对象"
       :visible.sync="dialogServiceObject"
     >
-      <selectServiceObject :isSelected="formInfo.serviceCustomerList" @selectObject="selectObject"></selectServiceObject>
+      <selectServiceObject
+        :isSelected="formInfo.actualServiceCustomerList"
+        @selectObject="selectObject"
+      ></selectServiceObject>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogServiceObject = false;selectObjectList = []">取 消</el-button>
         <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
@@ -172,7 +154,7 @@
       :visible.sync="dialogServiceUser"
     >
       <selectServiceUser
-        :isSelected="formInfo.orgServiceProviderList"
+        :isSelected="formInfo.actualOrgServiceProviderList"
         @selectUser="selectUser"
         :orgId="formInfo.orgId"
       ></selectServiceUser>
@@ -193,7 +175,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data () {
+  data() {
     return {
       formInfo: {
         orgId: [],
@@ -204,34 +186,28 @@ export default {
         activityAddress: '',
         orgServiceProductIdList: [],
         orgServiceProviderList: [],
-        serviceCustomerList: []
+        serviceCustomerList: [],
+        actualServiceCustomerList: [],
+        activityPicList: []
       },
       rules: {
-        activityName: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' }
+        activitySummary: [
+          { required: true, message: '请输入活动总结', trigger: 'blur' }
         ],
-        eventTime: [
-          { required: true, message: '请选择活动时间', trigger: 'change' }
+        activityPicList: [
+          { required: true, message: '请上传活动图片', trigger: 'change' }
         ],
-        activityAddress: [
-          { required: true, message: '请输入活动地点', trigger: 'change' }
-        ],
-        activityIndexPic: [
-          { required: true, message: '请上传活动封面', trigger: 'change' }
-        ],
-        orgId: [
-          { required: true, message: '请选择所属机构', trigger: 'change' }
-        ],
-        activityRoomId: [
-          { required: true, message: '请选择活动室', trigger: 'change' }
-        ],
-        orgServiceProductIdList: [
-          { required: true, message: '请选择服务产品', trigger: 'change' }
-        ],
-        orgServiceProviderList: [
+        actualServiceCustomerList: [
           {
             required: true,
-            message: '请选择服务人员',
+            message: '请选择实际服务人员',
+            trigger: 'change'
+          }
+        ],
+        actualOrgServiceProviderList: [
+          {
+            required: true,
+            message: '请选择实际参加人员',
             trigger: 'change'
           }
         ]
@@ -245,7 +221,7 @@ export default {
       selectObjectList: []
     }
   },
-  created () {
+  created() {
     // if (this.$route.query.aid) {
     //   this.getActivityInfo()
     // }
@@ -254,19 +230,15 @@ export default {
     this.getProductList()
   },
   methods: {
-    arrSplice (arr, index) {
-      arr.splice(index, 1)
-      console.log(this.formInfo)
-    },
     /**
      * @descripttion: 选择服务对象
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject () {
+    handleSaveSelectObject() {
       this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
         this.selectObjectList
       )
@@ -278,17 +250,17 @@ export default {
      * @param {type}
      * @return:
      */
-    selectUser (data) {
+    selectUser(data) {
       this.selectUserList = data
     },
-    handleSaveSelectUser () {
+    handleSaveSelectUser() {
       this.formInfo.orgServiceProviderList = this.formInfo.orgServiceProviderList.concat(
         this.selectUserList
       )
       this.selectUserList = []
       this.dialogServiceUser = false
     },
-    getProductList () {
+    getProductList() {
       this.$http
         .post('/org/service/product/pageSearch', {
           pageSize: MAXSIZE,
@@ -298,7 +270,7 @@ export default {
           this.productList = res.payload.records
         })
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (this.$route.query.aid) {
           this.getActivityInfo()
@@ -315,14 +287,14 @@ export default {
         }
       })
     },
-    getEventRoomList () {
+    getEventRoomList() {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    getActivityInfo () {
+    getActivityInfo() {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
@@ -335,6 +307,9 @@ export default {
             this.formInfo.serviceCustomerList = this.formInfo
               .serviceCustomerList
               ? this.formInfo.serviceCustomerList
+              : []
+            this.formInfo.activityPicList = this.formInfo.activityPicList
+              ? this.formInfo.activityPicList
               : []
             if (Array.isArray(this.orgTree)) {
               this.orgTree.forEach(i => {
@@ -359,30 +334,40 @@ export default {
         })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let provider = []
         let proObject = []
-        this.formInfo.serviceCustomerList.forEach(i => {
+        this.formInfo.actualServiceCustomerList.forEach(i => {
           proObject.push(i.serviceCustomerId)
         })
-        this.formInfo.orgServiceProviderList.forEach(i => {
+        this.formInfo.actualOrgServiceProviderList.forEach(i => {
           provider.push(i.orgServiceProviderId)
         })
-        this.formInfo.orgServiceProviderIdList = provider
-        this.formInfo.serviceCustomerIdList = proObject
+        this.formInfo.actualOrgServiceProviderIdList = provider
+        this.formInfo.actualServiceCustomerIdList = proObject
         let form = JSON.parse(JSON.stringify(this.formInfo))
         form.orgId = this.formInfo.orgId[this.formInfo.orgId.length - 1]
         if (this.$route.query.aid) {
-          this.$http.post('/activity/update', form).then(res => {
-            if (res.code === SUCCESS) {
-              this.$message.success('操作成功')
-              this.$router.go(-1)
-            }
-          })
+          this.$http
+            .post('/activity/summary', {
+              activityId: this.$route.query.aid,
+              activityPicList: this.formInfo.activityPicList,
+              activitySummary: this.formInfo.activitySummary,
+              actualOrgServiceProviderIdList: this.formInfo
+                .actualOrgServiceProviderIdList,
+              actualServiceCustomerIdList: this.formInfo
+                .actualServiceCustomerIdList
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.$router.go(-1)
+              }
+            })
         } else {
-          this.$http.post('/activity/add', form).then(res => {
+          this.$http.post('/activity/summary', form).then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.$router.go(-1)
@@ -391,15 +376,18 @@ export default {
         }
       })
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
-          this.formInfo.activityIndexPic = res.payload
+          this.formInfo.activityPicList.push(res.payload)
         }
       })
       return false
+    },
+    handleRemove(index) {
+      this.formInfo.activityPicList.splice(index, 1)
     }
   }
 }
@@ -407,5 +395,12 @@ export default {
 <style lang="scss">
 /deep/ .el-cascader-node__prefix {
   top: 10px !important;
+}
+.delete-img {
+  cursor: pointer;
+  position: absolute;
+  font-size: 18px;
+  right: -8px;
+  top: -8px;
 }
 </style>

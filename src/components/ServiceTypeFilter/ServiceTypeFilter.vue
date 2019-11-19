@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-16 18:41:35
  * @LastEditors:
- * @LastEditTime: 2019-11-18 18:29:52
+ * @LastEditTime: 2019-11-18 21:45:21
  -->
 <template>
   <el-col
@@ -23,7 +23,7 @@
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
         <div class="checked">
-          {{checkedOrg.orgName||'所有类型'}}
+          {{checkType.pensionServiceTypeName||'所有类型'}}
           <i
             @click="filterOrg (null, true)"
             style="float:right"
@@ -31,13 +31,13 @@
           ></i>
         </div>
         <div>
-          <!-- <div
-                :class="son.orgId == checkedOrg.orgId"
-                class="son-list"
-                @click="filterOrg(son)"
-                v-for="(son, index) in typeList"
-                :key="index"
-          >{{son.orgName}}</div>-->
+          <div
+            :class="son.pensionServiceTypeId == checkType.pensionServiceTypeId ? 'isCheck':''"
+            class="son-list"
+            @click="filterOrg(son)"
+            v-for="(son, index) in serviceTypeList"
+            :key="index"
+          >{{son.pensionServiceTypeName}}</div>
         </div>
       </div>
     </transition>
@@ -54,10 +54,10 @@ export default {
       activeNames: '',
       toggleShow: true,
       orgName: '',
-      orgList: [],
-      checkedOrg: {
-        orgId: '',
-        orgName: ''
+      serviceTypeList: [],
+      checkType: {
+        pensionServiceTypeId: '',
+        pensionServiceTypeName: ''
       }
     }
   },
@@ -67,28 +67,33 @@ export default {
   methods: {
     filterOrg (son, reset) {
       if (reset) {
-        this.checkedOrg = {
-          orgId: '',
-          orgName: ''
+        this.checkType = {
+          pensionServiceTypeId: '',
+          pensionServiceTypeName: ''
         }
       } else {
-        this.checkedOrg = son
+        this.checkType = son
       }
-      this.$emit('filterOrg', this.checkedOrg.orgId)
+      this.$emit('filterOrg', this.checkType.pensionServiceTypeName)
     },
     getServiceTypeList () {
-      this.$http.post('').then(res => {
-        if (res.code === SUCCESS) {
-          this.orgList = res.payload
-          this.orgList.forEach(i => {
-            if (i.children.length > 0) {
-              i.children.forEach(j => {
-                delete j.children
-              })
-            }
-          })
-        }
-      })
+      this.$http
+        .post('/pension/service/type/pageSerach', {
+          pageSize: MAXSIZE,
+          pageNum: 1
+        })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.serviceTypeList = res.payload.records
+            // this.orgList.forEach(i => {
+            //   if (i.children.length > 0) {
+            //     i.children.forEach(j => {
+            //       delete j.children
+            //     })
+            //   }
+            // })
+          }
+        })
     },
     changeToggleShow () {
       this.toggleShow = !this.toggleShow
@@ -114,8 +119,6 @@ export default {
 }
 .moveL-enter {
   transform: translateX(-100%);
-}
-.moveL-leave-to {
 }
 #org-tree-list-aside {
   position: relative;
@@ -172,6 +175,9 @@ export default {
         transition: color 0.1s ease-out;
       }
     }
+  }
+  .isCheck {
+    color: #409eff;
   }
   .toggle-span {
     cursor: pointer;

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-18 18:31:40
+ * @LastEditTime: 2019-11-19 11:45:12
  -->
 <template>
   <div class="event-room">
@@ -14,7 +14,7 @@
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="90px" size="small">
             <el-form-item label="产品名称">
-              <el-input placeholder="请输入产品名称关键字" v-model="searchData.activityRoomCode"></el-input>
+              <el-input placeholder="请输入产品名称关键字" v-model="searchData.pensionServiceProductName"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -27,19 +27,28 @@
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editEventRoom'})"
+            @click="$router.push({name:'editPensionProduct'})"
             style="margin-bottom:15px"
             size="small"
             type="primary"
-          >新增活动室</el-button>
+          >新增产品</el-button>
           <!-- 列表 -->
           <Table
             :searchRefresh="searchRefresh"
             :searchObj="searchData"
             :columns="tableColumns"
-            api="/activity/room/pageSearch"
+            api="/pension/service/product/pageSearch "
             method="post"
           >
+            <template slot="pensionServiceProductName" slot-scope="{row}">
+              <div class="flex-t-l">
+                <img class="course-avatar" :src="row.indexPic" alt />
+                <div class="flex-column-t">
+                  <span class="f-title">{{row.pensionServiceProductName}}</span>
+                  <p class="sm-title">￥{{row.pensionPrice}}</p>
+                </div>
+              </div>
+            </template>
             <template slot-scope="{row}" slot="action">
               <el-button
                 @click="$router.push({name:'pensionProductInfo',query:{aid:row.activityRoomId}})"
@@ -71,17 +80,22 @@ export default {
   components: {
     ServiceTypeFilter
   },
-  data () {
+  data() {
     return {
       toggleWidth: 18,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动室名称', prop: 'activityRoomName', minWidth: 200 },
-        { label: '所属机构', prop: 'orgName', minWidth: 100 },
+        { label: '产品名称', slot: 'pensionServiceProductName', minWidth: 200 },
+        { label: '服务类型', prop: 'pensionServiceTypeName', minWidth: 100 },
         {
-          label: '更新时间',
-          prop: 'updateTime',
+          label: '创建人',
+          prop: 'createUser',
+          minWidth: 100
+        },
+        {
+          label: '创建时间',
+          prop: 'createTime',
           minWidth: 140
         },
         {
@@ -95,16 +109,16 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    filterOrg (val) {
-      this.searchData.orgId = val
+    filterOrg(val) {
+      this.searchData.pensionServiceProductName = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.activityRoomId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

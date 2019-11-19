@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-13 15:13:19
+ * @LastEditTime: 2019-11-19 16:50:30
  */
 export default [
   {
@@ -58,6 +58,15 @@ export default [
     meta: {
       title: '活动室详情',
       parent: 'eventRoom'
+    }
+  },
+  {
+    path: 'editActivitySummary',
+    name: 'editActivitySummary',
+    component: () => import('@/views/ServiceHall/EventManage/editActivitySummary.vue'),
+    meta: {
+      title: '活动总结',
+      parent: 'eventCenter'
     }
   }
 ]

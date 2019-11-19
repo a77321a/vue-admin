@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-18 14:35:11
+ * @LastEditTime: 2019-11-19 15:37:50
  -->
 <template>
   <div>
@@ -25,6 +25,7 @@
       <slot name="empty"></slot>
       <!--选择-->
       <el-table-column
+        :selectable="selectable"
         :reserve-selection="false"
         align="center"
         v-if="selection"
@@ -102,6 +103,7 @@ export default {
     }
   },
   props: {
+    selectable: { type: Function },
     treeProps: {
       type: Object
     },
@@ -202,7 +204,7 @@ export default {
       }
       if (this.searchObj.orgId) {
         this.searchObj.orgId = Array.isArray(this.searchObj.orgId)
-          ? this.searchObj.orgId[this.searchObj.orgId.length - 1]
+          ? this.searchObj.orgId[this.searchObj.orgId.length - 1] + ''
           : this.searchObj.orgId
       }
       this.$http[this.method](

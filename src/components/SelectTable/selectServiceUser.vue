@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-16 18:38:32
+ * @LastEditTime: 2019-11-19 15:40:40
  -->
 <template>
   <div id="select-service-object">
@@ -27,6 +27,7 @@
       </el-form>
     </el-form>
     <Table
+      :selectable="selectable"
       @commitSelection="commitSelection"
       :height="$store.state.dialogHeight-100"
       :searchRefresh="searchRefresh"
@@ -54,7 +55,7 @@ export default {
       selectData: [],
       searchData: {
         orgId: Array.isArray(this.orgId)
-          ? Number(this.orgId[this.orgId.length - 1])
+          ? this.orgId[this.orgId.length - 1]
           : this.orgId
       },
       tableColumns: [
@@ -64,10 +65,36 @@ export default {
     }
   },
 
-  props: ['orgId'],
+  props: {
+    orgId: {
+      type: Array
+    },
+    isSelected: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    }
+  },
   methods: {
+    selectable (row, index) {
+      if (this.isSelected.length === 0) {
+        return 1
+      }
+      for (let i in this.isSelected) {
+        console.log(row)
+        if (
+          this.isSelected[i].orgServiceProviderId === row.orgServiceProviderId
+        ) {
+          return 0
+        } else {
+          return 1
+        }
+      }
+    },
     commitSelection (data) {
       this.selectData = data
+      this.$emit('selectUser', data)
     },
     rowsForamtter (row) {}
   }

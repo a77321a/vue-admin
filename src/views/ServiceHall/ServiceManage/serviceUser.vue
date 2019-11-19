@@ -3,13 +3,13 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-17 22:34:11
+ * @LastEditTime: 2019-11-19 15:31:32
  -->
 <template>
   <div class="service-user">
     <!-- 筛选 -->
     <el-row class="row-span" :gutter="40">
-      <OrgTreeList @toggleChange="toggleChange"></OrgTreeList>
+      <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
       <el-col :span="toggleWidth">
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="80px" size="small">
@@ -104,6 +104,10 @@ export default {
   },
   created () {},
   methods: {
+    filterOrg (val) {
+      this.searchData.orgId = val
+      this.searchRefresh = !this.searchRefresh
+    },
     toggleChange (val) {
       this.toggleWidth = val
     },

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-16 20:12:13
+ * @LastEditTime: 2019-11-19 15:40:30
  -->
 <template>
   <div id="select-service-object">
@@ -24,6 +24,7 @@
       </el-form>
     </el-form>
     <Table
+      :selectable="selectable"
       @commitSelection="commitSelection"
       :height="$store.state.dialogHeight -100"
       :searchRefresh="searchRefresh"
@@ -56,9 +57,33 @@ export default {
       ]
     }
   },
-
+  props: {
+    orgId: {
+      type: Array
+    },
+    isSelected: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    }
+  },
   methods: {
+    selectable (row, index) {
+      if (this.isSelected.length === 0) {
+        return 1
+      }
+      for (let i in this.isSelected) {
+        console.log(row)
+        if (this.isSelected[i].serviceCustomerId === row.serviceCustomerId) {
+          return 0
+        } else {
+          return 1
+        }
+      }
+    },
     commitSelection (data) {
+      this.$emit('selectObject', data)
       this.selectData = data
     },
     rowsForamtter (row) {}

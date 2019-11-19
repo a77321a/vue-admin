@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 14:52:54
  * @LastEditors:
- * @LastEditTime: 2019-11-18 15:04:45
+ * @LastEditTime: 2019-11-18 21:02:03
  -->
 <template>
   <div id="edit-dictionary">
@@ -30,13 +30,13 @@
       <el-form-item label="字典值" prop="dictionaryValue">
         <el-input placeholder="请输入字典值" v-model="formInfo.dictionaryValue"></el-input>
       </el-form-item>
-      <el-form-item label="字典类型" prop="status">
+      <!-- <el-form-item label="字典类型" prop="status">
         <el-select clearable v-model="formInfo.status" style="width:220px" placeholder="请选择">
           <el-option label="全部" :value="-1"></el-option>
           <el-option label="启用" :value="1"></el-option>
           <el-option label="禁用" :value="0"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>
@@ -59,10 +59,10 @@ export default {
         ],
         dictionaryValue: [
           { required: true, message: '请输入字典值', trigger: 'blur' }
-        ],
-        status: [
-          { required: true, message: '请选择字典类型', trigger: 'change' }
         ]
+        // status: [
+        //   { required: true, message: '请选择字典类型', trigger: 'change' }
+        // ]
       }
     }
   },
