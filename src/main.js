@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-18 21:36:31
+ * @LastEditTime: 2019-11-19 21:27:44
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -19,11 +19,14 @@ import Table from './components/Table/Table.vue'
 import UEditor from './components/UEditor/UEditor.vue'
 
 import axios from './common/js/axios'
+import func from './common/js/utils'
 // 配置NProgress进度条选项  —— 动画效果
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 // 高德地图
 import VueAMap from 'vue-amap'
+
+Vue.prototype.$func = func
 NProgress.configure({ showSpinner: false })
 Vue.use(VueAMap)
 // VueAMap.initAMapApiLoader({

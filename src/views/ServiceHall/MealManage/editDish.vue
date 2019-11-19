@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 15:21:28
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:13:45
+ * @LastEditTime: 2019-11-19 21:34:44
  -->
 <template>
   <div id="edit-dish">
@@ -35,39 +35,52 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="菜品封面" prop="indexPic">
-        <el-upload action="#" list-type="picture-card" :before-upload="uploadImg">
-          <i slot="default" class="el-icon-plus"></i>
-          <div slot="file" slot-scope="{file}">
-            <img class="el-upload-list__item-thumbnail" :src="formInfo.indexPic" alt />
-            <span class="el-upload-list__item-actions">
-              <span class="el-upload-list__item-delete" @click="handleRemove(file)">
-                <i class="el-icon-delete"></i>
-              </span>
-            </span>
+        <div style="display:flex;align-items:center;">
+          <div v-show="formInfo.indexPic" class="avatar">
+            <img :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic" alt />
+            <Input
+              v-model="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic"
+              style="display:none"
+            />
           </div>
-        </el-upload>
+          <el-upload
+            action="apii/public/img"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">900*900像素或1:1，支持PNG、JPG、GIF格式，小于5M</div>
+          </el-upload>
+        </div>
       </el-form-item>
       <div class="title">上架信息</div>
       <el-form-item label="所属机构" prop="orgId">
         <el-cascader
           clearable
           :props="{value:'orgId',label:'orgName'}"
-          :options="orgList"
+          :options="orgTree"
           v-model="formInfo.orgId"
         ></el-cascader>
       </el-form-item>
       <el-form-item label="菜品类型" prop="foodType">
         <el-select clearable v-model="formInfo.foodType" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+          <el-option
+            v-for="(item, index) in $store.state.config.foodType"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="适应季节" prop="season">
         <el-select clearable v-model="formInfo.season" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+          <el-option
+            v-for="(item, index) in $store.state.config.seasonStatus"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="价格" prop="price">
@@ -126,21 +139,21 @@ export default {
           { required: true, message: '请选择所属机构', trigger: 'change' }
         ]
       },
-      orgList: []
+      orgTree: []
     }
   },
   created () {
-    if (this.$route.query.fid) {
-      this.getFoodInfo()
-    }
     this.getOrgList()
   },
   methods: {
     getOrgList () {
       this.$http.post('/org/tree').then(res => {
+        if (this.$route.query.fid) {
+          this.getFoodInfo()
+        }
         if (res.code === SUCCESS) {
-          this.orgList = res.payload
-          this.orgList.forEach(i => {
+          this.orgTree = res.payload
+          this.orgTree.forEach(i => {
             if (i.children.length > 0) {
               i.children.forEach(j => {
                 delete j.children
@@ -155,7 +168,7 @@ export default {
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
-          this.formInfo.indexPic = `http://118.24.54.72:8061/${res.payload}`
+          this.formInfo.indexPic = res.payload
         }
       })
       return false
@@ -187,6 +200,20 @@ export default {
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
+            if (Array.isArray(this.orgTree)) {
+              this.orgTree.forEach(i => {
+                if (Array.isArray(i.children)) {
+                  i.children.forEach(j => {
+                    if (j.orgId === this.formInfo.orgId) {
+                      this.$set(this.formInfo, 'orgId', [
+                        j.parentOrgId,
+                        j.orgId
+                      ])
+                    }
+                  })
+                }
+              })
+            }
           }
         })
     }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-11-19 16:32:39
+ * @LastEditTime: 2019-11-19 20:49:52
  -->
 <template>
   <div id="event-info">
@@ -49,7 +49,7 @@
         <ServicePerson></ServicePerson>
       </el-tab-pane>
       <el-tab-pane label="活动总结" name="third">
-        <ActivitySummary></ActivitySummary>
+        <ActivitySummary :htmlStr="eventInfo.activitySummary"></ActivitySummary>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -65,18 +65,18 @@ export default {
     ServicePerson,
     ActivitySummary
   },
-  data() {
+  data () {
     return {
       eventInfo: {
         cover: ''
       }
     }
   },
-  created() {
+  created () {
     this.getActivityInfo()
   },
   methods: {
-    getActivityInfo() {
+    getActivityInfo () {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {

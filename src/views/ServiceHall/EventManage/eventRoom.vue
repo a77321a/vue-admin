@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-17 21:58:15
+ * @LastEditTime: 2019-11-19 21:01:45
  -->
 <template>
   <div class="event-room">
@@ -43,6 +43,10 @@
             api="/activity/room/pageSearch"
             method="post"
           >
+            <template
+              slot="activityRoomName"
+              slot-scope="{row}"
+            >{{row.activityRoomName}}（{{row.activityRoomCode}}）</template>
             <template slot-scope="{row}" slot="action">
               <el-button
                 @click="$router.push({name:'eventRoomInfo',query:{aid:row.activityRoomId}})"
@@ -80,7 +84,7 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '活动室名称', prop: 'activityRoomName', minWidth: 200 },
+        { label: '活动室名称', slot: 'activityRoomName', minWidth: 200 },
         { label: '所属机构', prop: 'orgName', minWidth: 100 },
         {
           label: '更新时间',

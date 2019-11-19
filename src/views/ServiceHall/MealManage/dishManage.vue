@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-17 22:12:11
+ * @LastEditTime: 2019-11-19 21:33:14
  -->
 <template>
   <div class="dish-manage">
@@ -15,16 +15,22 @@
         <el-form inline ref="form" label-width="80px" size="small">
           <el-form-item label="菜品类型">
             <el-select clearable v-model="searchData.foodType" placeholder="请选择">
-              <el-option label="全部" value="-1"></el-option>
-              <el-option label="启用" value="1"></el-option>
-              <el-option label="禁用" value="0"></el-option>
+              <el-option
+                v-for="(item, index) in $store.state.config.foodType"
+                :key="index"
+                :label="item.dictionaryLabel"
+                :value="item.dictionaryValue"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="适用季节">
             <el-select clearable v-model="searchData.season" placeholder="请选择用户状态">
-              <el-option label="全部" value="-1"></el-option>
-              <el-option label="启用" value="1"></el-option>
-              <el-option label="禁用" value="0"></el-option>
+              <el-option
+                v-for="(item, index) in $store.state.config.seasonStatus"
+                :key="index"
+                :label="item.dictionaryLabel"
+                :value="item.dictionaryValue"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="菜品名称">
@@ -65,6 +71,14 @@
               </div>
             </div>
           </template>
+          <template
+            slot="foodType"
+            slot-scope="{row}"
+          >{{$func.transLabel($store.state.config.foodType,row.foodType)}}</template>
+          <template
+            slot="season"
+            slot-scope="{row}"
+          >{{$func.transLabel($store.state.config.seasonStatus,row.season)}}</template>
           <template slot-scope="{row}" slot="action">
             <el-button
               @click="$router.push({name:'editDish',query:{fid:row.foodId}})"
@@ -97,27 +111,27 @@ export default {
       searchData: {},
       tableColumns: [
         { label: '菜品名称', slot: 'foodName', minWidth: 200 },
-        { label: '菜品类型', prop: 'foodType', minWidth: 150 },
+        { label: '菜品类型', slot: 'foodType', minWidth: 150 },
         {
           label: '适用季节',
-          prop: 'season',
+          slot: 'season',
           minWidth: 100
         },
         {
           label: '创建人',
-          prop: '',
+          prop: 'createUserName',
           minWidth: 150
         },
         {
           label: '创建时间',
-          prop: '',
+          prop: 'createTime',
           minWidth: 150
         },
         {
           label: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 200
+          minWidth: 90
         }
       ],
       selectFood: []
