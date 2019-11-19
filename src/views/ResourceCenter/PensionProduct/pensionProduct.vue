@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-18 18:30:25
+ * @LastEditTime: 2019-11-18 18:31:40
  -->
 <template>
   <div class="event-room">
@@ -71,7 +71,7 @@ export default {
   components: {
     ServiceTypeFilter
   },
-  data() {
+  data () {
     return {
       toggleWidth: 18,
       searchRefresh: true,
@@ -95,16 +95,16 @@ export default {
       selectActivity: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.activityRoomId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

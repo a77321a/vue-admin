@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:03:46
+ * @LastEditTime: 2019-11-19 10:57:55
  -->
 <template>
   <div class="user-manage">
@@ -61,7 +61,11 @@
     >
       <template slot-scope="{row}" slot="activityName">
         <div class="flex-t-l">
-          <img class="course-avatar" :src="row.activityIndexPic" alt />
+          <img
+            class="course-avatar"
+            :src="$store.state.config.systemConfig[0].dictionaryValue+row.activityIndexPic"
+            alt
+          />
           <div class="flex-column-t">
             <span class="f-title">{{row.activityName}}</span>
           </div>
@@ -100,7 +104,7 @@
 <script>
 export default {
   name: 'userManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -143,14 +147,16 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created() {
+    // this.$store.dispatch('getDictionaryManagement')
+  },
   methods: {
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime (date) {
+    handlTime(date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -159,14 +165,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.activityId)
       })
       this.selectActivity = arr
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
@@ -183,7 +189,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity (row) {
+    handleCloseActivity(row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {

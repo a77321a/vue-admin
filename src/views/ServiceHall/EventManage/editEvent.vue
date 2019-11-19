@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-16 18:33:06
+ * @LastEditTime: 2019-11-19 11:42:02
  -->
 <template>
   <div id="edit-event">
@@ -25,17 +25,27 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="活动封面" prop="activityIndexPic">
-        <el-upload
-          list-type="picture-card"
-          :show-file-list="false"
-          class="upload-demo"
-          action="api/dw"
-          :before-upload="uploadImg"
-        >
-          <img v-if="formInfo.activityIndexPic" :src="formInfo.activityIndexPic" class="avatar" />
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
+        <div style="display:flex;align-items:center;">
+          <div v-show="formInfo.activityIndexPic" class="avatar">
+            <img
+              :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.activityIndexPic"
+              alt
+            />
+            <Input
+              v-model="$store.state.config.systemConfig[0].dictionaryValue+formInfo.activityIndexPic"
+              style="display:none"
+            />
+          </div>
+          <el-upload
+            action="apii/public/img"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </div>
       </el-form-item>
       <el-form-item label="活动时间" prop="eventTime">
         <el-date-picker
@@ -145,12 +155,17 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data() {
+  data () {
     return {
       formInfo: {
         orgId: [],
         eventTime: [],
-        activityRoomId: ''
+        activityRoomId: '',
+        activityIndexPic: '',
+        activityName: '',
+        activityAddress: '',
+        serviceProductId: '',
+        serviceProvider: []
       },
       rules: {
         activityName: [
@@ -188,7 +203,7 @@ export default {
       orgList: []
     }
   },
-  created() {
+  created () {
     if (this.$route.query.aid) {
       this.getActivityInfo()
     }
@@ -196,7 +211,7 @@ export default {
     this.getOrgList()
   },
   methods: {
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -210,14 +225,14 @@ export default {
         }
       })
     },
-    getEventRoomList() {
+    getEventRoomList () {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    getActivityInfo() {
+    getActivityInfo () {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
@@ -232,9 +247,8 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
-        console.log(valid)
         if (!valid) return
         if (this.$route.query.aid) {
           this.$http.post('/activity/update', this.formInfo).then(res => {
@@ -253,12 +267,17 @@ export default {
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
-          this.formInfo.imageUrl = `http://118.24.54.72:8061/${res.payload}`
+          this.formInfo.activityIndexPic = res.payload
+
+          console.log(
+            this.$store.state.config.systemConfig[0].dictionaryValue +
+              this.formInfo.activityIndexPic
+          )
         }
       })
       return false

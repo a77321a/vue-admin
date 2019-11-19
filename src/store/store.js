@@ -3,13 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:18:26
+ * @LastEditTime: 2019-11-19 10:52:19
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
+import http from '@/common/js/axios'
+import config from '../config/config'
 
 Vue.use(Vuex)
-
 export default new Vuex.Store({
   state: {
     userInfo: localStorage.userInfo ? JSON.parse(localStorage.userInfo) : {},
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     navList: sessionStorage.navList ? JSON.parse(sessionStorage.navList) : [],
     breadList: sessionStorage.breadList ? JSON.parse(sessionStorage.breadList) : [],
     opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
-    dialogHeight: `${(document.documentElement.clientHeight) - 330}`
+    dialogHeight: `${(document.documentElement.clientHeight) - 330}`,
+    config: config
   },
   mutations: {
     setBreadList (state, breadList) {
@@ -66,6 +68,15 @@ export default new Vuex.Store({
     // 获取用户信息
     get_menu (context, { id, router }) {
 
+    },
+    getDictionaryManagement (context) {
+      http.get('/dictionary/getDictByCatalogKey', {
+        dictCatalogKey: 'ACTIVITY_STATUS'
+      }).then((res) => {
+        console.log(context.state.config)
+        config.activityStatus = res.payload
+        console.log(context.state.config)
+      })
     }
   }
 })
