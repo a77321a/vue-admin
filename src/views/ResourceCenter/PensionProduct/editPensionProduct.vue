@@ -3,52 +3,82 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-18 22:12:38
+ * @LastEditTime: 2019-11-20 16:11:27
  -->
 <template>
   <div id="edit-event">
     <div class="title">基本信息</div>
-    <el-form style="width:700px" ref="form" :model="formInfo" label-width="80px" size="medium">
-      <el-form-item label="产品名称">
-        <el-input v-model="formInfo.name"></el-input>
+    <el-form
+      style="width:700px"
+      ref="formInfo"
+      :rules="rules"
+      :model="formInfo"
+      label-width="80px"
+      size="medium"
+    >
+      <el-form-item label="产品名称" prop="pensionServiceProductName">
+        <el-input v-model="formInfo.pensionServiceProductName"></el-input>
       </el-form-item>
-      <el-form-item label="产品简介">
-        <el-input type="textarea" v-model="formInfo.name"></el-input>
+      <el-form-item label="产品简介" prop="description">
+        <el-input type="textarea" v-model="formInfo.description"></el-input>
       </el-form-item>
-      <el-form-item label="产品封面">
-        <el-upload
-          :show-file-list="false"
-          class="upload-demo"
-          action="api/dw"
-          :before-upload="uploadImg"
-        >
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
+      <el-form-item label="产品封面" prop="indexPic">
+        <div style="display:flex;align-items:center;">
+          <div v-show="formInfo.indexPic" class="avatar">
+            <img :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic" alt />
+          </div>
+          <el-upload
+            action="apii/public/img"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </div>
       </el-form-item>
-      <el-form-item label="产品详情">
-        <UEditor v-model="formInfo.content"></UEditor>
+      <el-form-item label="产品详情" prop="detail">
+        <UEditor v-model="formInfo.detail"></UEditor>
       </el-form-item>
       <div class="title">价格/类型</div>
-      <el-form-item label="服务类型">
-        <el-select clearable v-model="formInfo.content" style="width:220px" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+      <el-form-item label="服务类型" prop="pensionServiceTypeId">
+        <el-select
+          clearable
+          v-model="formInfo.pensionServiceTypeId"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in $store.state.config.serviceType"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="价目表">
         <el-button>新增价目规则</el-button>
       </el-form-item>
-      <el-form-item label="服务人员">
-        <el-input-number :precision="0" v-model="formInfo.num" controls-position="right" :min="1"></el-input-number>
+      <el-form-item label="价格" prop="pensionPrice">
+        <el-input-number
+          :precision="2"
+          v-model="formInfo.pensionPrice"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
       </el-form-item>
-      <el-form-item label="服务对象">
-        <el-input-number :precision="0" v-model="formInfo.num" controls-position="right" :min="1"></el-input-number>
+      <el-form-item label="划线价" prop="pensionPlineationPrice">
+        <el-input-number
+          :precision="2"
+          v-model="formInfo.pensionPlineationPrice"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
       </el-form-item>
       <el-form-item size="large">
-        <el-button type="primary">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="handleSave" type="primary">立即创建</el-button>
+        <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -59,17 +89,94 @@ export default {
   data () {
     return {
       formInfo: {
-        content: ''
+        pensionServiceProductName: '',
+        description: '',
+        indexPic: '',
+        detail: '',
+        pensionPrice: 0,
+        pensionPlineationPrice: 0,
+        pensionServiceTypeId: '',
+        pensionServiceProductPrice: {}
+      },
+      rules: {
+        pensionServiceProductName: [
+          { required: true, message: '请输入产品名称', trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: '请输入产品介绍', trigger: 'blur' }
+        ],
+        indexPic: [
+          { required: true, message: '请上传产品封面', trigger: 'blur' }
+        ],
+        detail: [
+          { required: true, message: '请输入产品详情', trigger: 'blur' }
+        ],
+        pensionPrice: [
+          { required: true, message: '请输入产品价格', trigger: 'blur' }
+        ],
+        pensionServiceTypeId: [
+          { required: true, message: '请选择产品服务类型', trigger: 'change' }
+        ]
       }
     }
   },
+  created () {
+    if (this.$route.query.pid) {
+      this.getProductInfo()
+    }
+  },
   methods: {
+    /**
+     * @descripttion: 获取信息
+     * @return: 信息
+     */
+    getProductInfo () {
+      this.$http
+        .get(
+          '/pension/service/product/detail?pensionServiceTypeId=' +
+            this.$route.query.pid
+        )
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.formInfo = res.payload
+            // if (Array.isArray(this.orgTree)) {
+            //   this.orgTree.forEach(i => {
+            //     if (Array.isArray(i.children)) {
+            //       i.children.forEach(j => {
+            //         if (j.orgId === this.formInfo.orgId) {
+            //           this.$set(this.formInfo, 'orgId', [
+            //             j.parentOrgId,
+            //             j.orgId
+            //           ])
+            //         }
+            //       })
+            //     }
+            //   })
+            // }
+          }
+        })
+    },
+    // 保存按钮
+    handleSave () {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        let url = this.$route.query.pid
+          ? '/pension/service/product/update'
+          : '/pension/service/product/add'
+        this.$http.post(url, this.formInfo).then(res => {
+          if (res.code === SUCCESS) {
+            this.$message.success('操作成功')
+            this.$router.go(-1)
+          }
+        })
+      })
+    },
     uploadImg (file) {
       let formdata = new FormData()
-      formdata.append('file', this.file)
-      this.$http.postForm('', formdata).then(res => {
-        if (res.code === 200) {
-          this.formInfo.cover = res.data.path
+      formdata.append('file', file)
+      this.$http.postForm('/file/upload', formdata).then(res => {
+        if (res.code === SUCCESS) {
+          this.formInfo.indexPic = res.payload
         }
       })
       return false

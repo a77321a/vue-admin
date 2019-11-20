@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-18 20:58:59
+ * @LastEditTime: 2019-11-20 15:47:21
  -->
 <template>
   <div id="edit-event">
@@ -113,7 +113,7 @@ export default {
       return false
     },
     /**
-     * @descripttion: 获取服务人员信息
+     * @descripttion: 获取信息
      * @return: 信息
      */
     getEventRoomInfo () {

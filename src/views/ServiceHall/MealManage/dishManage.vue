@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 21:33:14
+ * @LastEditTime: 2019-11-20 15:21:48
  -->
 <template>
   <div class="dish-manage">
@@ -104,9 +104,9 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
-      toggleWidth: 18,
+      toggleWidth: 20,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
@@ -137,23 +137,23 @@ export default {
       selectFood: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.foodId)
       })
       this.selectFood = arr
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.foodId] : this.selectFood
       this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

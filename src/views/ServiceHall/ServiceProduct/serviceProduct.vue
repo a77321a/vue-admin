@@ -82,7 +82,7 @@ export default {
   },
   data () {
     return {
-      toggleWidth: 18,
+      toggleWidth: 20,
       searchRefresh: true,
       searchData: {},
       tableColumns: [

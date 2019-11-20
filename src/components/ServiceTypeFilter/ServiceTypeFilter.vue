@@ -3,13 +3,13 @@
  * @Author:
  * @Date: 2019-11-16 18:41:35
  * @LastEditors:
- * @LastEditTime: 2019-11-18 21:45:21
+ * @LastEditTime: 2019-11-20 15:34:25
  -->
 <template>
   <el-col
     id="org-tree-list-aside"
     :class="toggleShow?'border':'no-padding'"
-    :span="toggleShow ? 6 :1"
+    :span="toggleShow ? 4 :1"
   >
     <transition name="moveL">
       <div class="trans" v-show="toggleShow">
@@ -20,7 +20,7 @@
           v-model="orgName"
           class="input-with-select"
         >
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button @click="getServiceTypeList" slot="append" icon="el-icon-search"></el-button>
         </el-input>
         <div class="checked">
           {{checkType.pensionServiceTypeName||'所有类型'}}
@@ -74,7 +74,7 @@ export default {
       } else {
         this.checkType = son
       }
-      this.$emit('filterOrg', this.checkType.pensionServiceTypeName)
+      this.$emit('filterOrg', this.checkType.pensionServiceTypeId)
     },
     getServiceTypeList () {
       this.$http
@@ -97,7 +97,7 @@ export default {
     },
     changeToggleShow () {
       this.toggleShow = !this.toggleShow
-      this.$emit('toggleChange', this.toggleShow ? 18 : 23)
+      this.$emit('toggleChange', this.toggleShow ? 20 : 23)
     }
   }
 }
@@ -134,6 +134,9 @@ export default {
     padding: 0;
   }
   .son-list {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     cursor: pointer;
     height: 32px;
     line-height: 32px;
@@ -180,20 +183,38 @@ export default {
     color: #409eff;
   }
   .toggle-span {
-    cursor: pointer;
     position: absolute;
-    right: -19px;
-    border-radius: 30px;
-    top: 25%;
-    height: 32px;
-    width: 16px;
-    display: inline-block;
-    background-color: #e4e7ed;
-    color: #409eff;
-    text-align: center;
-    line-height: 30px;
+    top: 0;
+    right: -17px;
+    bottom: 0;
+    width: 12px;
+    cursor: pointer;
+    background: 0;
+    border-radius: 5px;
+    -webkit-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      transition: background-color 0.2s;
+    }
     i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 30px;
+      margin-top: -10px;
+      line-height: 30px;
+      color: #fff;
+      text-align: center;
+      background: #79cdfb;
+      border-radius: 6px;
       display: inline-block;
+      &::before {
+        position: absolute;
+        left: -1px;
+      }
     }
   }
   .center {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 11:45:12
+ * @LastEditTime: 2019-11-20 16:16:57
  -->
 <template>
   <div class="event-room">
@@ -23,7 +23,10 @@
                 @click="searchRefresh = !searchRefresh"
                 icon="el-icon-search"
               >搜索</el-button>
-              <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+              <el-button
+                @click="searchData = {pensionServiceTypeId:searchData.pensionServiceTypeId};searchRefresh = !searchRefresh"
+                size="small"
+              >重置</el-button>
             </el-form-item>
           </el-form>
           <el-button
@@ -51,13 +54,7 @@
             </template>
             <template slot-scope="{row}" slot="action">
               <el-button
-                @click="$router.push({name:'pensionProductInfo',query:{aid:row.activityRoomId}})"
-                type="text"
-                size="small"
-              >查看</el-button>
-              <span>-</span>
-              <el-button
-                @click="$router.push({name:'editEventRoom',query:{aid:row.activityRoomId}})"
+                @click="$router.push({name:'editPensionProduct',query:{pid:row.pensionServiceProductId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
@@ -80,9 +77,9 @@ export default {
   components: {
     ServiceTypeFilter
   },
-  data() {
+  data () {
     return {
-      toggleWidth: 18,
+      toggleWidth: 20,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
@@ -102,23 +99,23 @@ export default {
           label: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 100
+          minWidth: 80
         }
       ],
       activeNames: '',
       selectActivity: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    filterOrg(val) {
-      this.searchData.pensionServiceProductName = val
+    filterOrg (val) {
+      this.searchData.pensionServiceTypeId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.activityRoomId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

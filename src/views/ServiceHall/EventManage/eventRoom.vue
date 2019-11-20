@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 21:01:45
+ * @LastEditTime: 2019-11-20 15:32:01
  -->
 <template>
   <div class="event-room">
@@ -26,7 +26,10 @@
                 @click="searchRefresh = !searchRefresh"
                 icon="el-icon-search"
               >搜索</el-button>
-              <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+              <el-button
+                @click="searchData = {orgId:searchData.orgId};searchRefresh = !searchRefresh"
+                size="small"
+              >重置</el-button>
             </el-form-item>
           </el-form>
           <el-button
@@ -80,7 +83,7 @@ export default {
   },
   data () {
     return {
-      toggleWidth: 18,
+      toggleWidth: 20,
       searchRefresh: true,
       searchData: {},
       tableColumns: [

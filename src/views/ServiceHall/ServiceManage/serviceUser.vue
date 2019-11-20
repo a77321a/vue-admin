@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 15:31:32
+ * @LastEditTime: 2019-11-20 15:22:04
  -->
 <template>
   <div class="service-user">
@@ -81,7 +81,7 @@ export default {
   },
   data () {
     return {
-      toggleWidth: 18,
+      toggleWidth: 20,
       searchRefresh: true,
       searchData: {},
       tableColumns: [

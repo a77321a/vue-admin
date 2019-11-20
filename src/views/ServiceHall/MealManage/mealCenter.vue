@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-17 22:11:08
+ * @LastEditTime: 2019-11-20 15:21:57
  -->
 <template>
   <div class="meal-center">
@@ -82,9 +82,9 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
-      toggleWidth: 18,
+      toggleWidth: 20,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
@@ -106,16 +106,16 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.activityRoomId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
