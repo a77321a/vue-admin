@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 14:00:46
+ * @LastEditTime: 2019-11-20 20:06:53
  -->
 <template>
   <div class="event-room">
@@ -76,7 +76,7 @@
 <script>
 import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
 export default {
-  name: 'eventRoom',
+  name: 'serviceProduct',
   components: {
     OrgTreeList
   },

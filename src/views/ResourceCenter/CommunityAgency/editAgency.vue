@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-18 18:15:30
+ * @LastEditTime: 2019-11-20 20:48:04
  -->
 <template>
   <div id="edit-agency">
@@ -34,22 +34,31 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="照片" prop="orgPicList">
-        <el-upload action="#" list-type="picture-card" :before-upload="uploadImg">
-          <i slot="default" class="el-icon-plus"></i>
+        <div>
           <div
+            style="position:relative"
             v-for="(item, index) in formInfo.orgPicList"
             :key="index"
-            slot="file"
-            slot-scope="{ file }"
+            v-show="formInfo.orgPicList.length > 0"
+            class="avatar"
           >
-            <img class="el-upload-list__item-thumbnail" :src="item" alt />
-            <span class="el-upload-list__item-actions">
-              <span class="el-upload-list__item-delete" @click="handleRemove(file)">
-                <i class="el-icon-delete"></i>
-              </span>
-            </span>
+            <i size="24" @click="handleRemove(index)" class="el-icon-circle-close delete-img"></i>
+            <img :src="$store.state.config.systemConfig[0].dictionaryValue+item" alt />
           </div>
-        </el-upload>
+          <el-upload
+            action="apii/public/img"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button
+              :disabled="formInfo.orgPicList.length > 8"
+              type="primary"
+              icon="ios-cloud-upload-outline"
+            >选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF格式，小于5M，最多可添加9张</div>
+          </el-upload>
+        </div>
       </el-form-item>
       <el-form-item label="机构类型" prop="orgType">
         <el-select clearable v-model="formInfo.orgType" style="width:220px" placeholder="请选择">
@@ -235,7 +244,7 @@ export default {
             }
           })
         } else {
-          this.$http.post('/ord/add', this.formInfo).then(res => {
+          this.$http.post('/org/add', this.formInfo).then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.$router.go(-1)
@@ -246,15 +255,26 @@ export default {
     },
     uploadImg (file) {
       let formdata = new FormData()
-      formdata.append('file', this.file)
-      this.$http.postForm('', formdata).then(res => {
-        if (res.code === 200) {
-          this.formInfo.cover = res.data.path
+      formdata.append('file', file)
+      this.$http.postForm('/file/upload', formdata).then(res => {
+        if (res.code === SUCCESS) {
+          this.formInfo.orgPicList.push(res.payload)
         }
       })
       return false
+    },
+    handleRemove (index) {
+      this.formInfo.orgPicList.splice(index, 1)
     }
   }
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.delete-img {
+  cursor: pointer;
+  position: absolute;
+  font-size: 18px;
+  right: -8px;
+  top: -8px;
+}
+</style>

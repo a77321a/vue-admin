@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-18 17:25:15
  * @LastEditors:
- * @LastEditTime: 2019-11-18 17:57:38
+ * @LastEditTime: 2019-11-20 21:46:10
  -->
 <template>
   <div style="position:relative" :style="{height:`${$store.state.dialogHeight}px`}">
@@ -82,8 +82,14 @@ export default {
             if (status === 'complete' && result.info === 'OK') {
               if (result && result.regeocode) {
                 self.address = result.regeocode.formattedAddress
-                console.log(result)
-                self.open(self.address, { lng, lat })
+                let component = result.regeocode.addressComponent
+                self.open(self.address, {
+                  lng,
+                  lat,
+                  component,
+                  result,
+                  address: self.address
+                })
                 self.$nextTick()
               }
             }

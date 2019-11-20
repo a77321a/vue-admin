@@ -3,37 +3,18 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:48:10
+ * @LastEditTime: 2019-11-20 20:38:35
  -->
 <template>
   <div class="service-product">
     <el-row :gutter="20">
-      <el-col style="background:#f9f9f9;height:calc(100vh - 140px)" :span="6">
-        <div class="checked">和康养老机构1部</div>
-        <el-collapse v-model="activeNames">
-          <el-collapse-item title="禾康养老机构总部" name="1">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部1" name="2">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部2" name="3">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-          <el-collapse-item title="禾康养老机构总部3" name="4">
-            <div>和康养老机构1部</div>
-            <div>和康养老机构2部</div>
-          </el-collapse-item>
-        </el-collapse>
-      </el-col>
+      <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
+
       <!-- 筛选 -->
-      <el-col :span="18">
+      <el-col :span="toggleWidth">
         <el-form inline ref="form" label-width="80px" size="small">
-          <el-form-item label="类目名称">
-            <el-input placeholder="请输入类目名称关键字" v-model="searchData.mobile"></el-input>
+          <el-form-item label="类型名称">
+            <el-input placeholder="请输入类型名称关键字" v-model="searchData.orgServiceTypeName"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button
@@ -42,66 +23,192 @@
               @click="searchRefresh = !searchRefresh"
               icon="el-icon-search"
             >搜索</el-button>
-            <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+            <el-button
+              @click="searchData = {orgId:searchData.orgId };searchRefresh = !searchRefresh"
+              size="small"
+            >重置</el-button>
           </el-form-item>
         </el-form>
-        <el-button style="margin-bottom:15px" size="small" type="primary">新增类型</el-button>
+        <el-button
+          @click="dialogFormVisible = true"
+          style="margin-bottom:15px"
+          size="small"
+          type="primary"
+        >新增类型</el-button>
 
         <!-- 列表 -->
         <Table
-          @commitSelection="commitSelection"
           :searchRefresh="searchRefresh"
           :searchObj="searchData"
           :columns="tableColumns"
-          api="/org/service/type/pageSearch "
+          api="/org/service/type/pageSearch"
           method="post"
         >
           <template slot-scope="{row}" slot="action">
-            <el-button @click="diglogVisiable = true" type="text" size="small">编辑</el-button>
+            <el-button @click="handleEdit(row)" type="text" size="small">编辑</el-button>
             <span>-</span>
             <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
           </template>
         </Table>
       </el-col>
     </el-row>
+    <el-dialog
+      :title="formInfo.orgServiceTypeId ? '编辑目录' :'新增目录'"
+      :visible.sync="dialogFormVisible"
+    >
+      <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
+        <el-form-item label="所属机构" prop="orgId">
+          <el-cascader
+            clearable
+            :props="{value:'orgId',label:'orgName'}"
+            :options="orgTree"
+            v-model="formInfo.orgId"
+          ></el-cascader>
+        </el-form-item>
+        <el-form-item label="目录标识" prop="orgServiceTypeName">
+          <el-input
+            placeholder="分类名称最多可输入20个字"
+            show-word-limit
+            v-model="formInfo.orgServiceTypeName"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSaveForm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
+import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
+
 export default {
-  name: 'serviceCenter',
+  name: 'serviceType',
+  components: {
+    OrgTreeList
+  },
   data () {
     return {
+      toggleWidth: 20,
       searchRefresh: true,
       searchData: {},
-      diglogVisiable: false,
+      dialogFormVisible: false,
       tableColumns: [
         { label: '类型名称', prop: 'orgServiceTypeName', minWidth: 200 },
-        { label: '服务产品数量', prop: 'productNum', minWidth: 150 },
+        { label: '服务产品数量', prop: 'productNum', minWidth: 100 },
         {
           label: '操作',
           slot: 'action',
           fixed: 'right',
           width: 100
         }
-      ]
+      ],
+      formInfo: {},
+      rules: {
+        orgId: [
+          { required: true, message: '请选择所属机构', trigger: 'change' }
+        ],
+        orgServiceTypeName: [
+          { required: true, message: '请输入类型名称', trigger: 'blur' }
+        ]
+      },
+      orgTree: []
     }
   },
-  created () {},
+  created () {
+    this.getOrgList()
+  },
   methods: {
+    getOrgList () {
+      this.$http.post('/org/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.orgTree = res.payload
+          this.orgTree.forEach(i => {
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                delete j.children
+              })
+            }
+          })
+        }
+      })
+    },
+    handleEdit (row) {
+      this.formInfo = { orgId: 1 }
+      this.$http
+        .get(
+          '/org/service/type/detail?orgServiceTypeId=' + row.orgServiceTypeId
+        )
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.formInfo = res.payload
+            if (Array.isArray(this.orgTree)) {
+              this.orgTree.forEach(i => {
+                if (Array.isArray(i.children)) {
+                  i.children.forEach(j => {
+                    if (j.orgId === res.payload.orgDetail.orgId) {
+                      this.$set(this.formInfo, 'orgId', [
+                        j.parentOrgId,
+                        j.orgId
+                      ])
+                    }
+                  })
+                }
+              })
+            }
+          }
+        })
+
+      this.dialogFormVisible = true
+    },
+    handleSaveForm () {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        let url = this.formInfo.orgServiceTypeId
+          ? '/org/service/type/update'
+          : '/org/service/type/add'
+        this.$http
+          .post(url, {
+            orgServiceTypeId: this.formInfo.orgServiceTypeId,
+            orgId: this.formInfo.orgId[this.formInfo.orgId.length - 1],
+            orgServiceTypeName: this.formInfo.orgServiceTypeName
+          })
+          .then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.dialogFormVisible = false
+              this.formInfo = {}
+              this.searchRefresh = !this.searchRefresh
+            }
+          })
+      })
+    },
+    filterOrg (val) {
+      this.searchData.orgId = val
+      this.searchRefresh = !this.searchRefresh
+    },
+    toggleChange (val) {
+      this.toggleWidth = val
+    },
     handleDelete (row) {
-      let id = row ? [row.serviceTypeId] : ''
+      console.log(row)
+      let id = row ? [row.orgServiceTypeId] : ''
       this.$confirm('确定要删除该分类吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/activity/delete', id).then(res => {
-            if (res.code === 200) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
+          this.$http
+            .post('/org/service/type/delete', { orgServiceTypeIds: id })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     }
