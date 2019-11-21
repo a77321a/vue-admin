@@ -3,11 +3,12 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-09 11:21:22
+ * @LastEditTime: 2019-11-21 17:51:10
  */
 import CommunityAgencyRoute from './CommunityAgency'
 import SpaceResource from './SpaceResource'
 import PensionProduct from './PensionProduct'
+import EquipmentResource from './EquipmentResource'
 export default [
   {
     path: 'ResourceCenter',
@@ -15,7 +16,8 @@ export default [
     children: [
       ...CommunityAgencyRoute,
       ...SpaceResource,
-      ...PensionProduct
+      ...PensionProduct,
+      ...EquipmentResource
     ]
   }
 ]

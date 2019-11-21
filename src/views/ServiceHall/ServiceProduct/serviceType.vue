@@ -3,13 +3,12 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-20 20:38:35
+ * @LastEditTime: 2019-11-21 15:53:00
  -->
 <template>
   <div class="service-product">
     <el-row :gutter="20">
       <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
-
       <!-- 筛选 -->
       <el-col :span="toggleWidth">
         <el-form inline ref="form" label-width="80px" size="small">
@@ -57,7 +56,7 @@
       :visible.sync="dialogFormVisible"
     >
       <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
-        <el-form-item label="所属机构" prop="orgId">
+        <el-form-item label="所属机构" v-if="!formInfo.orgServiceTypeId" prop="orgId">
           <el-cascader
             clearable
             :props="{value:'orgId',label:'orgName'}"
@@ -89,7 +88,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
       toggleWidth: 20,
       searchRefresh: true,
@@ -117,11 +116,11 @@ export default {
       orgTree: []
     }
   },
-  created () {
+  created() {
     this.getOrgList()
   },
   methods: {
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -135,35 +134,11 @@ export default {
         }
       })
     },
-    handleEdit (row) {
-      this.formInfo = { orgId: 1 }
-      this.$http
-        .get(
-          '/org/service/type/detail?orgServiceTypeId=' + row.orgServiceTypeId
-        )
-        .then(res => {
-          if (res.code === SUCCESS) {
-            this.formInfo = res.payload
-            if (Array.isArray(this.orgTree)) {
-              this.orgTree.forEach(i => {
-                if (Array.isArray(i.children)) {
-                  i.children.forEach(j => {
-                    if (j.orgId === res.payload.orgDetail.orgId) {
-                      this.$set(this.formInfo, 'orgId', [
-                        j.parentOrgId,
-                        j.orgId
-                      ])
-                    }
-                  })
-                }
-              })
-            }
-          }
-        })
-
+    handleEdit(row) {
+      this.formInfo = row
       this.dialogFormVisible = true
     },
-    handleSaveForm () {
+    handleSaveForm() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.formInfo.orgServiceTypeId
@@ -185,14 +160,14 @@ export default {
           })
       })
     },
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
+    handleDelete(row) {
       console.log(row)
       let id = row ? [row.orgServiceTypeId] : ''
       this.$confirm('确定要删除该分类吗？', '提示', {

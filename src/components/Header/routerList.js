@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 16:05:09
  * @LastEditors:
- * @LastEditTime: 2019-11-09 22:05:49
+ * @LastEditTime: 2019-11-21 17:58:45
  */
 export default [
   {
@@ -114,6 +114,26 @@ export default [
       },
       {
         url: '',
+        name: '设备资源',
+        icon: '',
+        children: [
+          {
+            url: 'monitoringEquipment',
+            name: '监控设备'
+          },
+          {
+            url: 'countingEquipment',
+            name: '计数设备'
+          },
+          {
+            url: 'mealEquipment',
+            name: '助餐设备'
+          }
+
+        ]
+      },
+      {
+        url: '',
         name: '养老产品',
         icon: '',
         children: [
@@ -214,6 +234,22 @@ export default [
           {
             url: 'accountSetting',
             name: '账号设置'
+          }
+
+        ]
+      },
+      {
+        url: '',
+        name: '数据同步日志',
+        icon: '',
+        children: [
+          {
+            url: 'syncLog',
+            name: '同步日志'
+          },
+          {
+            url: 'operationLog',
+            name: '操作日志'
           }
 
         ]

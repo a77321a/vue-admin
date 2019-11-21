@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-20 20:48:04
+ * @LastEditTime: 2019-11-21 17:10:59
  -->
 <template>
   <div id="edit-agency">
@@ -90,17 +90,13 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="服务范围" prop="districtRegionId">
-        <el-select
+      <el-form-item label="服务范围" prop="addressList">
+        <el-cascader
           clearable
-          v-model="formInfo.districtRegionId"
-          style="width:220px"
-          placeholder="请选择"
-        >
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
+          :props="{value:'regionId',label:'addressName'}"
+          :options="spaceTree"
+          v-model="formInfo.addressList"
+        ></el-cascader>
       </el-form-item>
 
       <div class="title">其他信息</div>
@@ -153,7 +149,9 @@ export default {
         orgName: '',
         latitude: '',
         longitude: '',
-        contact: ''
+        contact: '',
+        addressList: [],
+        operationMode: ''
       },
       rules: {
         orgName: [
@@ -174,7 +172,7 @@ export default {
         serviceType: [
           { required: true, message: '请选择服务类型', trigger: 'change' }
         ],
-        districtRegionId: [
+        addressList: [
           { required: true, message: '请选择服务范围', trigger: 'change' }
         ],
         latitude: [
@@ -191,23 +189,58 @@ export default {
       orgTypeList: [],
       serviceTypeList: [],
       operationModeList: [],
-      mapShow: false
+      mapShow: false,
+      spaceTree: []
     }
   },
   created () {
     this.getOrgType()
     this.getServiceType()
     this.getOperationMode()
+    this.getTree()
+    if (this.$route.query.oid) {
+      this.getOrgInfo()
+    }
   },
   methods: {
     openMap () {
       this.mapShow = true
+    },
+    getOrgInfo () {
+      this.$http.get('/org/get?orgId=' + this.$route.query.oid).then(res => {
+        if (res.code === SUCCESS) {
+          this.formInfo = res.payload
+          this.$set(
+            this.formInfo,
+            'latLong',
+            `${res.payload.longitude}，${res.payload.latitude}`
+          )
+          this.$set(this.formInfo, 'addressList', [
+            res.payload.cityRegionId,
+            res.payload.districtRegionId,
+            res.payload.communityRegionId,
+            res.payload.streetRegionId
+          ])
+        }
+      })
     },
     selectArea (row) {
       this.formInfo.latitude = row.lat
       this.formInfo.longitude = row.lng
       this.formInfo.latLong = `${row.lng}，${row.lat}`
       this.mapShow = false
+    },
+    getTree () {
+      this.$http.post('/address/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.spaceTree = res.payload
+          for (let i in this.spaceTree) {
+            if (this.spaceTree[i].depth == 0) {
+              this.spaceTree.splice(i, 1)
+            }
+          }
+        }
+      })
     },
     getOperationMode () {
       this.$http.get('/org/operationMode').then(res => {
@@ -236,21 +269,32 @@ export default {
       this.$refs['formInfo'].validate(valid => {
         console.log(valid)
         if (!valid) return
-        if (this.$route.query.aid) {
-          this.$http.post('/org/update', this.formInfo).then(res => {
+        let url = this.$route.query.oid ? '/org/update' : '/org/add'
+        this.$http
+          .post(url, {
+            cityRegionId: this.formInfo.addressList[0],
+            districtRegionId: this.formInfo.addressList[1],
+            communityRegionId: this.formInfo.addressList[2],
+            streetRegionId: this.formInfo.addressList[3],
+            contact: this.formInfo.contact,
+            latitude: this.formInfo.latitude,
+            longitude: this.formInfo.longitude,
+            operationMode: this.formInfo.operationMode,
+            orgAddress: this.formInfo.orgAddress,
+            orgName: this.formInfo.orgName,
+            orgPicList: this.formInfo.orgPicList,
+            orgType: this.formInfo.orgType,
+            parentOrgId: this.$route.query.parent,
+            serviceType: this.formInfo.serviceType,
+            tel: this.formInfo.tel,
+            orgId: this.$route.query.oid
+          })
+          .then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.$router.go(-1)
             }
           })
-        } else {
-          this.$http.post('/org/add', this.formInfo).then(res => {
-            if (res.code === SUCCESS) {
-              this.$message.success('操作成功')
-              this.$router.go(-1)
-            }
-          })
-        }
       })
     },
     uploadImg (file) {

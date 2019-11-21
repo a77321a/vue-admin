@@ -67,7 +67,7 @@
 </template>
 <script>
 export default {
-  name: 'userManage',
+  name: 'productType',
   data () {
     return {
       searchRefresh: true,

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-18 16:02:55
+ * @LastEditTime: 2019-11-21 17:20:04
  -->
 <template>
   <div class="angecy-manage">
@@ -73,8 +73,22 @@
       api="/org/tree"
       method="post"
     >
+      <template
+        slot="orgType"
+        slot-scope="{row}"
+      >{{$func.transLabel($store.state.config.orgType,row.orgType)}}</template>
+      <template
+        slot="serviceType"
+        slot-scope="{row}"
+      >{{$func.transLabel($store.state.config.serviceType,row.serviceType)}}</template>
+      <template slot="status" slot-scope="{row}">{{row.status == 1 ?'正常运营':'已注销'}}</template>
       <template slot="handleColumn" slot-scope="{ row }">
-        <el-button v-if="row.parentOrgId == 0" type="text" size="small">新增分部</el-button>
+        <el-button
+          @click="handleAppend(row)"
+          v-if="row.parentOrgId == 0"
+          type="text"
+          size="small"
+        >新增分部</el-button>
         <el-button v-else type="text" size="small">{{row.status == 1?'注销机构':'重新入网'}}</el-button>
         <el-button
           @click="handleStatus(row)"
@@ -86,7 +100,7 @@
         <el-button
           type="text"
           size="small"
-          @click="$router.push({ name: 'editAgency', query: { oid: row.orgId }})"
+          @click="$router.push({ name: 'editAgency', query: { oid: row.orgId,parent:row.parentOrgId == 0 ? '' :row.parentOrgId }})"
         >编辑</el-button>
         <span>-</span>
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
@@ -103,20 +117,20 @@ export default {
       searchData: {},
       tableColumns: [
         { label: '机构名称', prop: 'orgName', minWidth: 200 },
-        { label: '服务范围', prop: 'orgAddress', minWidth: 150 },
+        { label: '服务范围', slot: 'orgAddress', minWidth: 150 },
         {
           label: '机构类型',
-          prop: 'orgType',
+          slot: 'orgType',
           minWidth: 100
         },
         {
           label: '服务类型',
-          prop: 'serviceType',
+          slot: 'serviceType',
           minWidth: 150
         },
         {
           label: '机构状态',
-          prop: 'status',
+          slot: 'status',
           minWidth: 150
         },
         {
@@ -137,6 +151,14 @@ export default {
     this.getOperationMode()
   },
   methods: {
+    handleAppend (row) {
+      this.$router.push({
+        name: 'editAgency',
+        query: {
+          parent: row.orgId
+        }
+      })
+    },
     getServiceType () {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
@@ -158,15 +180,7 @@ export default {
         }
       })
     },
-    clickInfo (row) {
-      console.log(row)
-    },
-    commitSelection (data) {
-      console.log(data)
-    },
-    // getAgencyInfo(){
 
-    // },
     handleStatus (row) {
       let content =
         row.status === 1
@@ -178,7 +192,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
+          this.$http.post('/api/user/status', { id: row.orgId }).then(res => {
             if (res.code === 200) {
               this.$message({
                 type: 'success',
