@@ -279,6 +279,11 @@ export default {
         let url = this.$route.query.sid
           ? '/service/record/update'
           : '/service/record/add'
+          let arr = []
+          this.formInfo.serviceCustomerList.forEach(i=>{
+            arr.push(i.serviceCustomerId)
+          })
+          this.formInfo.serviceCustomerIdList = arr
         this.$http.post(url, this.formInfo).then(res => {
           if (res.code === SUCCESS) {
             this.$message.success('操作成功')

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 14:51:53
+ * @LastEditTime: 2019-11-22 22:41:43
  -->
 <template>
   <div class="Participants">
@@ -28,9 +28,21 @@
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :columns="tableColumns"
-      api
+      api="/activity/provider/pageSearch"
       method="post"
     >
+      <template slot="orgServiceProviderName" slot-scope="{row}">
+        <div class="flex-t-u">
+          <el-avatar class="avatar" size="medium" :src="row.indexPic"></el-avatar>
+          <span class="f-title">{{row.orgServiceProviderName}}</span>
+        </div>
+      </template>
+      <template slot="orgServiceProductList" slot-scope="{row}">
+        <span :key="index" v-for="(item,index) in row.orgServiceProductList">
+          {{item.orgServiceProductName}}
+          <span v-if="index != row.orgServiceProductList.length - 1">、</span>
+        </span>
+      </template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button type="text" size="small">查看</el-button>
       </template>
@@ -39,19 +51,21 @@
 </template>
 <script>
 export default {
-  name: 'Participants',
+  name: 'ServicePerson',
   data () {
     return {
       searchRefresh: true,
-      searchData: {},
+      searchData: { activityId: this.activityId },
       tableColumns: [
-        { label: '姓名', slot: 'activityName', minWidth: 150 },
-        { label: '紧急联系人电话', prop: 'activityTime', minWidth: 260 },
-        { label: '老人类别', prop: 'orgName', minWidth: 100 },
+        { label: '姓名', slot: 'orgServiceProviderName', minWidth: 150 },
+        { label: '联系人电话', prop: 'telephoneNum', minWidth: 100 },
+        { label: '服务产品', slot: 'orgServiceProductList', minWidth: 200 },
         { label: '操作', slot: 'handleColumn', fixed: 'right', minWidth: 240 }
       ]
     }
   },
+  props: ['activityId'],
+
   created () {},
   methods: {
     rowsForamtter (rows) {

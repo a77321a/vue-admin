@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 10:59:38
+ * @LastEditTime: 2019-11-22 22:19:42
  */
 const config = {
   activityStatus: [
@@ -27,7 +27,7 @@ const config = {
     { dictionaryValue: 'cooked_wheaten', dictionaryLabel: '面食' },
     { dictionaryValue: 'soup', dictionaryLabel: '汤' }
   ],
-  jobList: [
+  position: [
     { dictionaryValue: 'cook', dictionaryLabel: '厨师' },
     { dictionaryValue: 'master', dictionaryLabel: '负责人' }
   ],

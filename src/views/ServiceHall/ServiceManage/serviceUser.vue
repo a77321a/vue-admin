@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-20 15:22:04
+ * @LastEditTime: 2019-11-22 22:11:52
  -->
 <template>
   <div class="service-user">
@@ -51,11 +51,16 @@
                 <span class="f-title">{{row.orgServiceProviderName}}</span>
               </div>
             </template>
+            <template slot="sex" slot-scope="{row}">{{row.sex == 1 ?'男':'女'}}</template>
             <template slot-scope="{row}" slot="action">
-              <el-button @click="$router.push({name:'serviceUserInfo'})" type="text" size="small">详情</el-button>
+              <el-button
+                @click="$router.push({name:'serviceUserInfo',query:{uid:row.orgServiceProviderId}})"
+                type="text"
+                size="small"
+              >详情</el-button>
               <span>-</span>
               <el-button
-                @click="$router.push({name:'editServiceUser',query:{sid:row.serviceProviderId}})"
+                @click="$router.push({name:'editServiceUser',query:{uid:row.orgServiceProviderId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
@@ -86,7 +91,7 @@ export default {
       searchData: {},
       tableColumns: [
         { label: '姓名', slot: 'orgServiceProviderName', minWidth: 140 },
-        { label: '性别', prop: 'sex', minWidth: 100 },
+        { label: '性别', slot: 'sex', minWidth: 100 },
         { label: '手机号', prop: 'telephoneNum', minWidth: 100 },
         { label: '所属机构', prop: 'orgName', minWidth: 100 },
         { label: '创建人', prop: '', minWidth: 100 },

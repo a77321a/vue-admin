@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 20:58:50
+ * @LastEditTime: 2019-11-22 22:05:05
  -->
 <template>
   <div class="event-center">
@@ -198,8 +198,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/activity/delete', id).then(res => {
-            if (res.code === 200) {
+          this.$http.post('/activity/delete', { activityIds: id }).then(res => {
+            if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.searchRefresh = !this.searchRefresh
             }

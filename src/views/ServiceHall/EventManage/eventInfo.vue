@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-11-19 20:49:52
+ * @LastEditTime: 2019-11-22 22:31:46
  -->
 <template>
   <div id="event-info">
@@ -46,7 +46,7 @@
         <Participants :activityId="$route.query.aid"></Participants>
       </el-tab-pane>
       <el-tab-pane label="服务人员" name="second">
-        <ServicePerson></ServicePerson>
+        <ServicePerson :activityId="$route.query.aid"></ServicePerson>
       </el-tab-pane>
       <el-tab-pane label="活动总结" name="third">
         <ActivitySummary :htmlStr="eventInfo.activitySummary"></ActivitySummary>

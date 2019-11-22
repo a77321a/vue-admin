@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-16 20:26:25
+ * @LastEditTime: 2019-11-22 22:26:08
  -->
 <template>
   <div id="edit-service-user">
@@ -16,12 +16,12 @@
       label-width="80px"
       size="medium"
     >
-      <el-form-item label="姓名" prop="serviceProviderName">
+      <el-form-item label="姓名" prop="orgServiceProviderName">
         <el-input
           show-word-limit
           placeholder="请输入服务人员姓名，最多不超过10个字"
           :maxlength="10"
-          v-model="formInfo.serviceProviderName"
+          v-model="formInfo.orgServiceProviderName"
         ></el-input>
       </el-form-item>
       <el-form-item label="手机号" prop="telephoneNum">
@@ -33,18 +33,20 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="头像" prop="indexPic">
-        <el-upload action="#" list-type="picture-card" :before-upload="uploadImg">
-          <i slot="default" class="el-icon-plus"></i>
-          <div slot="file" slot-scope="{file}">
-            <img class="el-upload-list__item-thumbnail" :src="formInfo.indexPic" alt />
-            <span class="el-upload-list__item-actions">
-              <span class="el-upload-list__item-delete" @click="handleRemove(file)">
-                <i class="el-icon-delete"></i>
-              </span>
-            </span>
+        <div style="display:flex;align-items:center;">
+          <div v-show="formInfo.indexPic" class="avatar">
+            <img :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic" alt />
           </div>
-          <div slot="tip" class="el-upload__tip">480*480像素或1:1，支持PNG、JPG、GIF格式，小于5M</div>
-        </el-upload>
+          <el-upload
+            action="apii/public/img"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </div>
       </el-form-item>
       <el-form-item label="身份证" prop="identityCard">
         <el-input
@@ -63,60 +65,55 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="职位" prop="position">
-        <el-select clearable v-model="formInfo.position" style="width:220px" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+        <el-select clearable v-model="formInfo.position" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in $store.state.config.position"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="性别" prop="sex">
-        <el-select clearable v-model="formInfo.sex" style="width:220px" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+        <el-select clearable v-model="formInfo.sex" placeholder="请选择">
+          <el-option label="男" :value="1"></el-option>
+          <el-option label="女" :value="2"></el-option>
         </el-select>
       </el-form-item>
       <div class="title">服务范围</div>
       <el-form-item label="服务范围" prop="serviceScope">
-        <el-select clearable v-model="formInfo.serviceScope" style="width:220px" placeholder="请选择">
+        <el-select clearable v-model="formInfo.serviceScope" placeholder="请选择">
           <el-option label="全部" value="-1"></el-option>
           <el-option label="启用" value="1"></el-option>
           <el-option label="禁用" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="所属机构" prop="orgId">
-        <el-select clearable v-model="formInfo.orgId" style="width:220px" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
+        <el-cascader
+          clearable
+          :props="{value:'orgId',label:'orgName',emitPath:false}"
+          :options="orgTree"
+          v-model="formInfo.orgId"
+        ></el-cascader>
       </el-form-item>
       <el-form-item label="服务类型" prop="serviceTypeIds">
-        <el-select
-          multiple
-          clearable
-          collapse-tags
-          v-model="formInfo.serviceTypeIds"
-          style="width:220px"
-          placeholder="请选择"
-        >
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+        <el-select multiple clearable v-model="formInfo.serviceTypeIds" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in serviceTypeList"
+            :key="index"
+            :label="item.orgServiceTypeName"
+            :value="item.orgServiceTypeId"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="服务产品" prop="serviceProductIds">
-        <el-select
-          multiple
-          clearable
-          collapse-tags
-          v-model="formInfo.serviceProductIds"
-          style="width:220px"
-          placeholder="请选择"
-        >
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+        <el-select multiple clearable v-model="formInfo.serviceTypeIds" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in serviceTypeList"
+            :key="index"
+            :label="item.orgServiceTypeName"
+            :value="item.orgServiceTypeId"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item size="large">
@@ -148,7 +145,7 @@ export default {
         orgId: '',
         position: '',
         serviceProductIds: [],
-        serviceProviderName: '',
+        orgServiceProviderName: '',
         serviceScope: '',
         serviceTypeIds: [],
         sex: '',
@@ -200,15 +197,45 @@ export default {
             type: 'array'
           }
         ]
-      }
+      },
+      serviceTypeList: [],
+      orgTree: []
     }
   },
   created () {
-    if (this.$route.query.sid) {
+    if (this.$route.query.uid) {
       this.getServiceUserInfo()
     }
+    this.getOrgList()
+    this.getServiceTypeList()
   },
   methods: {
+    getOrgList () {
+      this.$http.post('/org/tree').then(res => {
+        if (this.$route.query.fid) {
+          this.getFoodInfo()
+        }
+        if (res.code === SUCCESS) {
+          this.orgTree = res.payload
+          this.orgTree.forEach(i => {
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                delete j.children
+              })
+            }
+          })
+        }
+      })
+    },
+    getServiceTypeList () {
+      this.$http
+        .post('/org/service/type/pageSearch', { pageSize: MAXSIZE })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.serviceTypeList = res.payload.records
+          }
+        })
+    },
     /**
      * @descripttion: 图片自定义上传 同所有单照片表单
      * @param {type}   file
@@ -218,7 +245,7 @@ export default {
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
-          this.formInfo.indexPic = `http://118.24.54.72:8061/${res.payload}`
+          this.formInfo.indexPic = res.payload
         }
       })
       return false
@@ -231,8 +258,8 @@ export default {
     getServiceUserInfo () {
       this.$http
         .get(
-          '/org/service/provider/detai?serviceProviderId=' +
-            this.$route.query.sid
+          '/org/service/provider/detail?serviceProviderId=' +
+            this.$route.query.uid
         )
         .then(res => {
           if (res.code === SUCCESS) {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-22 18:09:16
+ * @LastEditTime: 2019-11-22 22:06:57
  -->
 <template>
   <div class="service-center">
@@ -57,7 +57,7 @@
               type="text"
             >编辑</el-button>
             <span>-</span>
-            <el-button type="text">删除</el-button>
+            <el-button @click="handleDelete(row)" type="text">删除</el-button>
           </template>
         </Table>
       </el-col>
@@ -123,45 +123,22 @@ export default {
     toggleChange (val) {
       this.toggleWidth = val
     },
-    commitSelection (data) {
-      console.log(data)
-    },
-    handleStatus (row) {
-      let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
+    handleDelete (row) {
+      let id = row ? [row.serviceRecordId] : []
+      this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
-        })
-        .catch(() => {})
-    },
-    resetPassword (id) {
-      let content = '您确定给该用户重置密码？默认密码为123456'
-      this.$confirm(content, '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http.post('/api/user/repwd', { id: id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
+          this.$http
+            .post('/service/record/delete', { serviceRecordIdList: id })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     }
