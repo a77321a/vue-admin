@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-16 21:33:54
+ * @LastEditTime: 2019-11-22 18:22:16
  -->
 <template>
   <div id="editServiceCenter">
@@ -25,23 +25,31 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="图片" prop="serviceRecordPicList">
-        <el-upload action="#" list-type="picture-card" :before-upload="uploadImg">
-          <i slot="default" class="el-icon-plus"></i>
+        <div>
           <div
+            style="position:relative"
             v-for="(item, index) in formInfo.serviceRecordPicList"
             :key="index"
-            slot="file"
-            slot-scope="{file}"
+            v-show="formInfo.serviceRecordPicList.length > 0"
+            class="avatar"
           >
-            <img class="el-upload-list__item-thumbnail" :src="item" alt />
-            <span class="el-upload-list__item-actions">
-              <span class="el-upload-list__item-delete" @click="handleRemove(index)">
-                <i class="el-icon-delete"></i>
-              </span>
-            </span>
+            <i size="24" @click="handleRemove(index)" class="el-icon-circle-close delete-img"></i>
+            <img :src="$store.state.config.systemConfig[0].dictionaryValue+item" alt />
           </div>
-          <div slot="tip" class="el-upload__tip">480*480像素或1:1，支持PNG、JPG、GIF格式，小于5M</div>
-        </el-upload>
+          <el-upload
+            action="apii/public/img"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button
+              :disabled="formInfo.serviceRecordPicList.length > 8"
+              type="primary"
+              icon="ios-cloud-upload-outline"
+            >选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF格式，小于5M，最多可添加9张</div>
+          </el-upload>
+        </div>
       </el-form-item>
       <el-form-item label="服务时间" prop="serviceTime">
         <el-date-picker
@@ -61,7 +69,7 @@
       <el-form-item label="所属机构" prop="orgId">
         <el-cascader
           clearable
-          :props="{value:'orgId',label:'orgName'}"
+          :props="{value:'orgId',label:'orgName',emitPath:false}"
           :options="orgList"
           v-model="formInfo.orgId"
         ></el-cascader>
@@ -76,11 +84,11 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="服务对象" prop="serviceCustomerIdList">
+      <el-form-item label="服务对象" prop="serviceCustomerList">
         <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
-            @close="handleClose(item)"
+            @close="formInfo.serviceCustomerList.splice(index,1)"
             v-for="(item, index) in formInfo.serviceCustomerList"
             :key="index"
             closable
@@ -115,7 +123,14 @@
       title="选择服务对象"
       :visible.sync="dialogServiceObject"
     >
-      <selectServiceObject @selectObject="selectObject"></selectServiceObject>
+      <selectServiceObject
+        :isSelected="formInfo.actualServiceCustomerList"
+        @selectObject="selectObject"
+      ></selectServiceObject>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogServiceObject = false;selectObjectList = []">取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -135,6 +150,7 @@ export default {
         serviceCustomerIdList: [],
         serviceRecordName: '',
         serviceRecordPicList: [],
+        serviceCustomerList: [],
         serviceSummary: '',
         startTime: '',
         serviceTime: []
@@ -161,7 +177,7 @@ export default {
         serviceSummary: [
           { required: true, message: '请输入服务总结', trigger: 'blur' }
         ],
-        serviceCustomerIdList: [
+        serviceCustomerList: [
           { required: true, message: '请选择服务对象', trigger: 'change' }
         ],
         serviceTime: [
@@ -170,7 +186,8 @@ export default {
       },
       orgList: [],
       eventRoomList: [],
-      tempObjectList: []
+      tempObjectList: [],
+      selectObjectList: []
     }
   },
   created () {
@@ -181,8 +198,20 @@ export default {
     this.getOrgList()
   },
   methods: {
+    /**
+     * @descripttion: 选择服务对象
+     * @param {type}
+     * @return:
+     */
     selectObject (data) {
-      this.tempObjectList = data
+      this.selectObjectList = data
+    },
+    handleSaveSelectObject () {
+      this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
+        this.selectObjectList
+      )
+      this.selectObjectList = []
+      this.dialogServiceObject = false
     },
     selectTime (date) {
       this.formInfo.startTime = date ? date[0] : ''
@@ -223,7 +252,9 @@ export default {
       })
       return false
     },
-    handleRemove () {},
+    handleRemove (index) {
+      this.formInfo.serviceRecordPicList.splice(index, 1)
+    },
     /**
      * @descripttion: 获取服务人员信息
      * @return: 信息
@@ -245,33 +276,26 @@ export default {
     handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
-        let form = JSON.parse(JSON.stringify(this.formInfo))
-        form.orgId = Array.isArray(form.orgId)
-          ? this.formInfo.orgId[this.formInfo.orgId.length - 1]
-          : form.orgId
-        if (this.$route.query.fid) {
-          this.$http
-            .post('/org/service/provider/update', this.formInfo)
-            .then(res => {
-              if (res.code === SUCCESS) {
-                this.$message.success('操作成功')
-                this.$router.go(-1)
-              }
-            })
-        } else {
-          this.$http
-            .post('/org/service/provider/add', this.formInfo)
-            .then(res => {
-              if (res.code === SUCCESS) {
-                this.$message.success('操作成功')
-                this.$router.go(-1)
-              }
-            })
-        }
+        let url = this.$route.query.sid
+          ? '/service/record/update'
+          : '/service/record/add'
+        this.$http.post(url, this.formInfo).then(res => {
+          if (res.code === SUCCESS) {
+            this.$message.success('操作成功')
+            this.$router.go(-1)
+          }
+        })
       })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+.delete-img {
+  cursor: pointer;
+  position: absolute;
+  font-size: 18px;
+  right: -8px;
+  top: -8px;
+}
 </style>

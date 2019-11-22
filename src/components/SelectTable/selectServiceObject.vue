@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-19 15:40:30
+ * @LastEditTime: 2019-11-22 16:37:39
  -->
 <template>
   <div id="select-service-object">
@@ -50,7 +50,7 @@ export default {
       name: '',
       searchRefresh: true,
       selectData: [],
-      searchData: {},
+      searchData: { orgId: this.orgId },
       tableColumns: [
         { label: '服务人员', slot: 'userInfo', align: 'left', minWidth: 100 },
         { label: '所在区域', prop: 'activityTime', minWidth: 150 }
@@ -58,9 +58,7 @@ export default {
     }
   },
   props: {
-    orgId: {
-      type: Array
-    },
+    orgId: {},
     isSelected: {
       type: Array,
       default: function () {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-19 18:14:59
+ * @LastEditTime: 2019-11-22 16:32:55
  -->
 <template>
   <div id="edit-event">
@@ -72,7 +72,7 @@
       <el-form-item label="所属机构" prop="orgId">
         <el-cascader
           clearable
-          :props="{value:'orgId',label:'orgName'}"
+          :props="{value:'orgId',label:'orgName',emitPath:false}"
           :options="orgTree"
           v-model="formInfo.orgId"
         ></el-cascader>
@@ -373,7 +373,6 @@ export default {
         this.formInfo.orgServiceProviderIdList = provider
         this.formInfo.serviceCustomerIdList = proObject
         let form = JSON.parse(JSON.stringify(this.formInfo))
-        form.orgId = this.formInfo.orgId[this.formInfo.orgId.length - 1]
         if (this.$route.query.aid) {
           this.$http.post('/activity/update', form).then(res => {
             if (res.code === SUCCESS) {

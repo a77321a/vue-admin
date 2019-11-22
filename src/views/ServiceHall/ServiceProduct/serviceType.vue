@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-21 15:53:00
+ * @LastEditTime: 2019-11-22 16:36:26
  -->
 <template>
   <div class="service-product">
@@ -59,7 +59,7 @@
         <el-form-item label="所属机构" v-if="!formInfo.orgServiceTypeId" prop="orgId">
           <el-cascader
             clearable
-            :props="{value:'orgId',label:'orgName'}"
+            :props="{value:'orgId',label:'orgName',emitPath:false}"
             :options="orgTree"
             v-model="formInfo.orgId"
           ></el-cascader>
@@ -88,7 +88,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 20,
       searchRefresh: true,
@@ -116,11 +116,11 @@ export default {
       orgTree: []
     }
   },
-  created() {
+  created () {
     this.getOrgList()
   },
   methods: {
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -134,11 +134,11 @@ export default {
         }
       })
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.formInfo = row
       this.dialogFormVisible = true
     },
-    handleSaveForm() {
+    handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.formInfo.orgServiceTypeId
@@ -147,7 +147,7 @@ export default {
         this.$http
           .post(url, {
             orgServiceTypeId: this.formInfo.orgServiceTypeId,
-            orgId: this.formInfo.orgId[this.formInfo.orgId.length - 1],
+            orgId: this.formInfo.orgId,
             orgServiceTypeName: this.formInfo.orgServiceTypeName
           })
           .then(res => {
@@ -160,14 +160,14 @@ export default {
           })
       })
     },
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       console.log(row)
       let id = row ? [row.orgServiceTypeId] : ''
       this.$confirm('确定要删除该分类吗？', '提示', {

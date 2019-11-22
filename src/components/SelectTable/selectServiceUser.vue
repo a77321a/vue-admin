@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-19 15:40:40
+ * @LastEditTime: 2019-11-22 16:37:50
  -->
 <template>
   <div id="select-service-object">
@@ -66,9 +66,7 @@ export default {
   },
 
   props: {
-    orgId: {
-      type: Array
-    },
+    orgId: {},
     isSelected: {
       type: Array,
       default: function () {

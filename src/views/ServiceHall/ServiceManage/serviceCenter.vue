@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-17 22:08:16
+ * @LastEditTime: 2019-11-22 18:09:16
  -->
 <template>
   <div class="service-center">
@@ -35,14 +35,19 @@
             <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
           </el-form-item>
         </el-form>
-        <el-button style="margin-bottom:15px" size="small" type="primary">新增产品</el-button>
+        <el-button
+          @click="$router.push({name:'editServiceCenter'})"
+          style="margin-bottom:15px"
+          size="small"
+          type="primary"
+        >新增产品</el-button>
 
         <!-- 列表 -->
         <Table
           :searchRefresh="searchRefresh"
           :searchObj="searchData"
           :columns="tableColumns"
-          api="/service/record/pageSearch "
+          api="/service/record/pageSearch"
           method="post"
         >
           <template slot="customerNum" slot-scope="{row}">{{row.customerNum}}人</template>
@@ -67,7 +72,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 20,
       searchRefresh: true,
@@ -100,28 +105,28 @@ export default {
       eventRoomList: []
     }
   },
-  created() {
+  created () {
     this.getEventRoomList()
   },
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    getEventRoomList() {
+    getEventRoomList () {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    commitSelection(data) {
+    commitSelection (data) {
       console.log(data)
     },
-    handleStatus(row) {
+    handleStatus (row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -141,7 +146,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetPassword(id) {
+    resetPassword (id) {
       let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-11 18:16:41
+ * @LastEditTime: 2019-11-22 16:24:05
  -->
 <template>
   <div class="account-setting">
@@ -32,7 +32,7 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editRole'})"
+      @click="$router.push({name:'editAccount'})"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -49,10 +49,10 @@
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button @click="$router.push({name:'editAccount'})" type="text" size="small">查看</el-button>
+        <el-button type="text" size="small">查看</el-button>
         <span>-</span>
         <el-button
-          @click="$router.push({name:'editAccount',query:{id:row.roleId}})"
+          @click="$router.push({name:'editAccount',query:{uid:row.userId}})"
           type="text"
           size="small"
         >编辑</el-button>
@@ -67,7 +67,7 @@
 </template>
 <script>
 export default {
-  name: 'userManage',
+  name: 'accountSetting',
   data () {
     return {
       searchRefresh: true,
@@ -78,6 +78,11 @@ export default {
         {
           label: '人员类型',
           prop: 'accountType',
+          minWidth: 120
+        },
+        {
+          label: '管理范围',
+          prop: 'superAdmin',
           minWidth: 120
         },
         {
@@ -105,7 +110,7 @@ export default {
   methods: {
     rowsForamtter (rows) {
       rows.forEach(row => {
-        row.accountType = row.superAdmin ? '超级管理员' : '--'
+        row.superAdmin = row.superAdmin ? '超级管理员' : '--'
       })
     },
     commitSelection (data) {

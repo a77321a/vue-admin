@@ -96,7 +96,7 @@
         </el-card>
       </el-form-item>
       <el-form-item label="活动照片" prop="activityPicList">
-        <div style="display:flex;align-items:center;">
+        <div>
           <div
             style="position:relative"
             v-for="(item, index) in formInfo.activityPicList"
@@ -175,7 +175,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data() {
+  data () {
     return {
       formInfo: {
         orgId: [],
@@ -221,7 +221,7 @@ export default {
       selectObjectList: []
     }
   },
-  created() {
+  created () {
     // if (this.$route.query.aid) {
     //   this.getActivityInfo()
     // }
@@ -235,10 +235,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
         this.selectObjectList
       )
@@ -250,17 +250,17 @@ export default {
      * @param {type}
      * @return:
      */
-    selectUser(data) {
+    selectUser (data) {
       this.selectUserList = data
     },
-    handleSaveSelectUser() {
+    handleSaveSelectUser () {
       this.formInfo.orgServiceProviderList = this.formInfo.orgServiceProviderList.concat(
         this.selectUserList
       )
       this.selectUserList = []
       this.dialogServiceUser = false
     },
-    getProductList() {
+    getProductList () {
       this.$http
         .post('/org/service/product/pageSearch', {
           pageSize: MAXSIZE,
@@ -270,7 +270,7 @@ export default {
           this.productList = res.payload.records
         })
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (this.$route.query.aid) {
           this.getActivityInfo()
@@ -287,14 +287,14 @@ export default {
         }
       })
     },
-    getEventRoomList() {
+    getEventRoomList () {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    getActivityInfo() {
+    getActivityInfo () {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
@@ -334,7 +334,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let provider = []
@@ -376,7 +376,7 @@ export default {
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -386,7 +386,7 @@ export default {
       })
       return false
     },
-    handleRemove(index) {
+    handleRemove (index) {
       this.formInfo.activityPicList.splice(index, 1)
     }
   }

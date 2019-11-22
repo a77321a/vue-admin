@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 15:21:28
  * @LastEditors:
- * @LastEditTime: 2019-11-19 21:34:44
+ * @LastEditTime: 2019-11-22 16:35:04
  -->
 <template>
   <div id="edit-dish">
@@ -58,7 +58,7 @@
       <el-form-item label="所属机构" prop="orgId">
         <el-cascader
           clearable
-          :props="{value:'orgId',label:'orgName'}"
+          :props="{value:'orgId',label:'orgName',emitPath:false}"
           :options="orgTree"
           v-model="formInfo.orgId"
         ></el-cascader>
@@ -200,20 +200,6 @@ export default {
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
-            if (Array.isArray(this.orgTree)) {
-              this.orgTree.forEach(i => {
-                if (Array.isArray(i.children)) {
-                  i.children.forEach(j => {
-                    if (j.orgId === this.formInfo.orgId) {
-                      this.$set(this.formInfo, 'orgId', [
-                        j.parentOrgId,
-                        j.orgId
-                      ])
-                    }
-                  })
-                }
-              })
-            }
           }
         })
     }

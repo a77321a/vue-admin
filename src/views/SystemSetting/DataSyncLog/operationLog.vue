@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-21 18:25:18
+ * @LastEditTime: 2019-11-22 09:53:23
  -->
 <template>
   <div class="event-center">
@@ -57,50 +57,15 @@
     >新增活动</el-button>
     <!-- 列表 -->
     <Table
-      @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
-      :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
-      :selection="true"
+      :selection="false"
       :columns="tableColumns"
       api="/opertionLog/pageSearch "
       method="post"
     >
       <template slot-scope="{row}" slot="operUserName">{{row.operUserName}}</template>
-      <template
-        slot="activityStatus"
-        slot-scope="{row}"
-      >{{$store.state.config.activityStatus[row.activityStatus].dictionaryLabel}}</template>
-      <template slot="joinUser" slot-scope="{row}">{{row.actualCustomerNum}}/{{row.customerNum}}</template>
-      <template slot-scope="{row}" slot="handleColumn">
-        <el-button
-          @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
-          type="text"
-          size="small"
-        >查看</el-button>
-        <span>-</span>
-        <el-button
-          @click="$router.push({name:'editEvent',query:{aid:row.activityId}})"
-          type="text"
-          size="small"
-        >编辑</el-button>
-        <span>-</span>
-        <el-button
-          v-if="row.activityStatus == 1"
-          @click="handleCloseActivity(row)"
-          type="text"
-          size="small"
-        >结束活动</el-button>
-        <span v-if="row.activityStatus==1">-</span>
-        <el-button
-          @click="$router.push({name:'editActivitySummary',query:{aid:row.activityId}})"
-          v-if="row.activityStatus > 1"
-          type="text"
-          size="small"
-        >总结活动</el-button>
-        <span v-if="row.activityStatus > 1">-</span>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
-      </template>
+
       <template slot="footer-left">
         <el-button @click="handleCloseActivity(null)" type="text">结束活动</el-button>
         <el-button @click="handleDelete(null)" type="text">删除</el-button>
@@ -110,7 +75,7 @@
 </template>
 <script>
 export default {
-  name: 'userManage',
+  name: 'operationLog',
   data () {
     return {
       searchRefresh: true,
@@ -143,15 +108,8 @@ export default {
       selectActivity: []
     }
   },
-  created () {
-    // this.$store.dispatch('getDictionaryManagement')
-  },
+  created () {},
   methods: {
-    rowsForamtter (rows) {
-      rows.forEach(row => {
-        row.activityTime = row.startTime + '~' + row.endTime
-      })
-    },
     handlTime (date) {
       if (date) {
         this.searchData.startTime = date[0]
@@ -160,54 +118,6 @@ export default {
         this.searchData.startTime = ''
         this.searchData.endTime = ''
       }
-    },
-    commitSelection (data) {
-      let arr = []
-      data.forEach(i => {
-        arr.push(i.activityId)
-      })
-      this.selectActivity = arr
-    },
-    handleDelete (row) {
-      let id = row ? [row.activityId] : this.selectActivity
-      this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http.post('/activity/delete', id).then(res => {
-            if (res.code === 200) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
-        })
-        .catch(() => {})
-    },
-    handleCloseActivity (row) {
-      let id = row ? row.activityId : this.selectActivity.join(',')
-      let content = '是否要提前结束活动？'
-      this.$confirm(content, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http
-            .post(`/activity/close?activityIdList=${id}`, {
-              activityIdList: id
-            })
-            .then(res => {
-              if (res.code === SUCCESS) {
-                this.$message({
-                  type: 'success',
-                  message: '操作成功!'
-                })
-              }
-            })
-        })
-        .catch(() => {})
     }
   }
 }

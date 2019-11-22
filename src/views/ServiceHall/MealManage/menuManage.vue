@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:31:37
+ * @LastEditTime: 2019-11-22 16:35:24
  -->
 <template>
   <div class="meal-center">
@@ -12,7 +12,7 @@
       <el-form-item label="所属机构">
         <el-cascader
           clearable
-          :props="{value:'orgId',label:'orgName'}"
+          :props="{value:'orgId',label:'orgName',emitPath:false}"
           :options="orgList"
           v-model="searchData.orgId"
         ></el-cascader>
@@ -64,7 +64,7 @@
 
 export default {
   name: 'mealCenter',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -108,11 +108,11 @@ export default {
       rowNum: 0
     }
   },
-  created () {
+  created() {
     this.getOrgList()
   },
   methods: {
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -126,7 +126,7 @@ export default {
         }
       })
     },
-    cellMerge ({ row, column, rowIndex, columnIndex }) {
+    cellMerge({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex]
         const _col = _row ? 1 : 0
@@ -140,7 +140,7 @@ export default {
         }
       }
     },
-    getSpanArr (data) {
+    getSpanArr(data) {
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           this.spanArr.push(1)
@@ -158,10 +158,10 @@ export default {
       }
       console.log(this.spanArr)
     },
-    commitSelection (data) {
+    commitSelection(data) {
       console.log(data)
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -181,7 +181,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetPassword (id) {
+    resetPassword(id) {
       let content = '您确定给该用户重置密码？默认密码为123456'
       this.$confirm(content, '温馨提示', {
         confirmButtonText: '确定',
