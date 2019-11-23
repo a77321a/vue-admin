@@ -3,23 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-20 16:22:42
+ * @LastEditTime: 2019-11-23 19:56:49
  -->
 <template>
   <div class="account-setting">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="人员类型">
-        <el-select clearable v-model="searchData.status" placeholder="请选择">
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="昵称">
-        <el-input placeholder="请输入昵称关键字" v-model="searchData.roleName"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号">
-        <el-input placeholder="请输入手机号" v-model="searchData.roleName"></el-input>
+      <el-form-item label="类型名称">
+        <el-input placeholder="请输入类型名称关键字" v-model="searchData.pensionServiceTypeName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -32,37 +23,41 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editRole'})"
+      @click="formInfo = {};dialogFormVisible = true"
       style="margin-bottom:15px"
       size="small"
       type="primary"
-    >新增角色</el-button>
+    >新增类型</el-button>
     <!-- 列表 -->
     <Table
-      :rowsForamtter="rowsForamtter"
-      @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
-      :selection="true"
+      :selection="false"
       :columns="tableColumns"
-      api="/user/pageSearch"
+      api="/pension/service/type/pageSerach"
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button @click="$router.push({name:'editAccount'})" type="text" size="small">查看</el-button>
-        <span>-</span>
-        <el-button
-          @click="$router.push({name:'editAccount',query:{id:row.roleId}})"
-          type="text"
-          size="small"
-        >编辑</el-button>
+        <el-button @click="formInfo = row;dialogFormVisible = true" type="text" size="small">编辑</el-button>
         <span>-</span>
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
-      <template slot="footer-left">
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
-      </template>
+      <template slot="footer-left"></template>
     </Table>
+    <el-dialog
+      :title="formInfo.pensionServiceTypeId ? '编辑目录' :'新增目录'"
+      :visible.sync="dialogFormVisible"
+    >
+      <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
+        <el-form-item label="类型名称" prop="pensionServiceTypeName">
+          <el-input v-model="formInfo.pensionServiceTypeName" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSaveForm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -73,83 +68,73 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '昵称', prop: 'nickName', minWidth: 200 },
-        { label: '角色', prop: 'account', minWidth: 200 },
-        {
-          label: '人员类型',
-          prop: 'accountType',
-          minWidth: 120
-        },
-        {
-          label: '更新时间',
-          prop: 'updateTime',
-          minWidth: 140
-        },
+        { label: '类型名称', prop: 'pensionServiceTypeName', minWidth: 200 },
+        { label: '服务产品数量', prop: 'productNum', minWidth: 200 },
+
         {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 200
+          minWidth: 100
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      selectAccount: []
+      rules: {
+        pensionServiceTypeName: [
+          { required: true, message: '请输入目录名称', trigger: 'blur' }
+        ]
+      },
+      formInfo: {},
+      dialogFormVisible: false
     }
   },
   created () {},
   methods: {
+    handleSaveForm () {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        let url = this.formInfo.pensionServiceTypeId
+          ? '/pension/service/type/update'
+          : '/pension/service/type/add'
+        this.$http
+          .post(url, {
+            pensionServiceTypeId: this.formInfo.pensionServiceTypeId,
+            pensionServiceTypeName: this.formInfo.pensionServiceTypeName
+          })
+          .then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.dialogFormVisible = false
+              this.searchRefresh = !this.searchRefresh
+            }
+          })
+      })
+    },
     rowsForamtter (rows) {
       rows.forEach(row => {
         row.accountType = row.superAdmin ? '超级管理员' : '--'
       })
     },
-    commitSelection (data) {
-      let arr = []
-      data.forEach(i => {
-        arr.push(i.roleId)
-      })
-      this.selectAccount = arr
-    },
-    handleStatus (row) {
-      let content =
-        row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$http.post('/api/user/status', { id: row.id }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
-        })
-        .catch(() => {})
-    },
     handleDelete (row) {
-      let id = row ? row.roleId : this.selectAccount.join(',')
-      let content = '删除后，该手机号将无法登录后台，是否确定？'
+      if (row.productNum > 0) {
+        this.$message.error('当前分类下含有产品，无法删除')
+        return
+      }
+      let id = row ? [row.pensionServiceTypeId] : this.selectAccount.join(',')
+      let content = '确定要删除该分类吗？'
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.todelete('/user/delete?roleId=' + id).then(res => {
-            if (res.code === SUCCESS) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
+          this.$http
+            .post('/pension/service/type/delete', { pensionServiceTypeIds: id })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     }

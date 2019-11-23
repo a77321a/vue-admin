@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-22 16:32:55
+ * @LastEditTime: 2019-11-23 22:37:53
  -->
 <template>
   <div id="edit-event">
@@ -50,6 +50,7 @@
       <el-form-item label="活动时间" prop="eventTime">
         <el-date-picker
           v-model="formInfo.eventTime"
+          @change="handleTime"
           type="datetimerange"
           range-separator="至"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -60,7 +61,7 @@
       <el-form-item label="活动地点" prop="activityAddress">
         <el-input
           type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
+          :autosize="{ minRows: 2, maxRows: 5}"
           placeholder="请输入活动地点，最多不超过68个字"
           v-model="formInfo.activityAddress"
         ></el-input>
@@ -204,7 +205,9 @@ export default {
         activityAddress: '',
         orgServiceProductIdList: [],
         orgServiceProviderList: [],
-        serviceCustomerList: []
+        serviceCustomerList: [],
+        startTime: '',
+        endTime: ''
       },
       rules: {
         activityName: [
@@ -254,6 +257,10 @@ export default {
     this.getProductList()
   },
   methods: {
+    handleTime (date) {
+      this.formInfo.startTime = date ? date[0] : ''
+      this.formInfo.endTime = date ? date[1] : ''
+    },
     arrSplice (arr, index) {
       arr.splice(index, 1)
       console.log(this.formInfo)
@@ -336,20 +343,20 @@ export default {
               .serviceCustomerList
               ? this.formInfo.serviceCustomerList
               : []
-            if (Array.isArray(this.orgTree)) {
-              this.orgTree.forEach(i => {
-                if (Array.isArray(i.children)) {
-                  i.children.forEach(j => {
-                    if (j.orgId === this.formInfo.orgId) {
-                      this.$set(this.formInfo, 'orgId', [
-                        j.parentOrgId,
-                        j.orgId
-                      ])
-                    }
-                  })
-                }
-              })
-            }
+            // if (Array.isArray(this.orgTree)) {
+            //   this.orgTree.forEach(i => {
+            //     if (Array.isArray(i.children)) {
+            //       i.children.forEach(j => {
+            //         if (j.orgId === this.formInfo.orgId) {
+            //           this.$set(this.formInfo, 'orgId', [
+            //             j.parentOrgId,
+            //             j.orgId
+            //           ])
+            //         }
+            //       })
+            //     }
+            //   })
+            // }
             console.log(this.formInfo.orgId)
             this.$set(this.formInfo, 'eventTime', [
               res.payload.startTime,

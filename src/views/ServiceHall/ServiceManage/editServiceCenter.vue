@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-22 18:22:16
+ * @LastEditTime: 2019-11-23 22:34:56
  -->
 <template>
   <div id="editServiceCenter">
@@ -107,6 +107,7 @@
           type="textarea"
           :maxlength="1000"
           placeholder="请输入服务总结，最多不超过1000个字"
+          :autosize="{ minRows: 5, maxRows: 10}"
           show-word-limit
           v-model="formInfo.serviceSummary"
         ></el-input>
@@ -279,11 +280,11 @@ export default {
         let url = this.$route.query.sid
           ? '/service/record/update'
           : '/service/record/add'
-          let arr = []
-          this.formInfo.serviceCustomerList.forEach(i=>{
-            arr.push(i.serviceCustomerId)
-          })
-          this.formInfo.serviceCustomerIdList = arr
+        let arr = []
+        this.formInfo.serviceCustomerList.forEach(i => {
+          arr.push(i.serviceCustomerId)
+        })
+        this.formInfo.serviceCustomerIdList = arr
         this.$http.post(url, this.formInfo).then(res => {
           if (res.code === SUCCESS) {
             this.$message.success('操作成功')

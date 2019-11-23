@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 16:47:09
+ * @LastEditTime: 2019-11-23 22:41:38
  -->
 <template>
   <div class="Participants">
@@ -38,7 +38,10 @@
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
         >搜索</el-button>
-        <el-button @click="searchData = {activityId};searchRefresh = !searchRefresh" size="small">重置</el-button>
+        <el-button
+          @click="searchData = {activityId:searchData.activityId};searchRefresh = !searchRefresh"
+          size="small"
+        >重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 列表 -->

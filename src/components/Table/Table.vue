@@ -3,11 +3,13 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-19 15:37:50
+ * @LastEditTime: 2019-11-23 15:08:11
  -->
 <template>
   <div>
     <el-table
+      :highlight-current-row="highlightCurrentRow"
+      @current-change="currentChange"
       :row-key="rowKey"
       v-loading="loading"
       default-expand-all
@@ -17,7 +19,7 @@
       :tree-props="treeProps"
       :size="size"
       :border="border"
-      stripe
+      :stripe="stripe"
       :header-cell-style="headerCellStyle"
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -88,7 +90,6 @@ export default {
     return {
       loading: false,
       resizable: false,
-      dataSource: [],
       selectionArr: [],
       headerCellStyle: {
         background: '#f8f8f9'
@@ -99,10 +100,30 @@ export default {
       rowList: [],
       spanArr: [],
       position: 0,
-      listData: []
+      listData: [],
+      dataList: this.dataArray
     }
   },
   props: {
+    dataArray: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    stripe: {
+      type: Boolean,
+      default: function () {
+        return false
+      }
+    },
+    currentChange: {
+      type: Function,
+      default: function () {
+        return function () {}
+      }
+    },
+    highlightCurrentRow: { type: Boolean },
     selectable: { type: Function },
     treeProps: {
       type: Object
@@ -123,16 +144,14 @@ export default {
       type: Function
     },
     searchRefresh: {
-      type: Boolean,
-      required: true
+      type: Boolean
     },
     // 请求api
     api: {
       type: String,
       default: function () {
         return ''
-      },
-      required: true
+      }
     },
     // 表格尺寸
     size: {
@@ -189,7 +208,22 @@ export default {
     }
   },
   created () {
-    this.getList()
+    if (this.api) {
+      this.getList()
+    }
+  },
+  computed: {
+    dataSource: {
+      get () {
+        if (this.dataArray && this.dataArray.length > 0) {
+          return this.dataArray
+        }
+        return this.dataList
+      },
+      set (arr) {
+        this.dataList = arr
+      }
+    }
   },
   methods: {
     /**

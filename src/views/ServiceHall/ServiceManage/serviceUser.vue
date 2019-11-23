@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-22 22:11:52
+ * @LastEditTime: 2019-11-23 22:30:22
  -->
 <template>
   <div class="service-user">
@@ -47,7 +47,11 @@
           >
             <template slot-scope="{row}" slot="orgServiceProviderName">
               <div class="flex-t-u">
-                <el-avatar class="avatar" size="medium" :src="row.indexPic"></el-avatar>
+                <el-avatar
+                  class="avatar"
+                  size="medium"
+                  :src="$store.state.config.systemConfig[0].dictionaryValue+row.indexPic"
+                ></el-avatar>
                 <span class="f-title">{{row.orgServiceProviderName}}</span>
               </div>
             </template>
@@ -120,25 +124,27 @@ export default {
     commitSelection (data) {
       let arr = []
       data.forEach(i => {
-        arr.push(i.serviceProviderId)
+        arr.push(i.orgServiceProviderId)
       })
       this.selectServiceUser = arr
     },
     // 删除
     handleDelete (row) {
-      let id = row ? [row.serviceProviderId] : this.selectServiceUser
+      let id = row ? [row.orgServiceProviderId] : this.selectServiceUser
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/org/service/provider/delete', id).then(res => {
-            if (res.code === 200) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
+          this.$http
+            .post('/org/service/provider/delete', { orgServiceProviderIds: id })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     }

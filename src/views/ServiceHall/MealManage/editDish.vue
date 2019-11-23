@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 15:21:28
  * @LastEditors:
- * @LastEditTime: 2019-11-22 16:35:04
+ * @LastEditTime: 2019-11-23 11:42:13
  -->
 <template>
   <div id="edit-dish">
@@ -28,7 +28,7 @@
         <el-input
           type="textarea"
           show-word-limit
-          :autosize="{ minRows: 2, maxRows: 4}"
+          :autosize="{ minRows: 2, maxRows: 5}"
           placeholder="请输入菜品介绍，最多不超过68个字"
           :maxlength="69"
           v-model="formInfo.foodDescription"
@@ -200,6 +200,7 @@ export default {
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
+            this.$set(this.formInfo, 'orgId', res.payload.orgDetail.orgId)
           }
         })
     }

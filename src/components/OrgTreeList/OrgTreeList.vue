@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-16 18:41:35
  * @LastEditors:
- * @LastEditTime: 2019-11-20 15:22:32
+ * @LastEditTime: 2019-11-23 16:31:15
  -->
 <template>
   <el-col
@@ -39,7 +39,7 @@
               :name="index"
             >
               <div
-                :class="son.orgId == checkedOrg.orgId"
+                :class="son.orgId == checkedOrg.orgId ? 'select' :''"
                 class="son-list"
                 @click="filterOrg(son)"
                 v-for="(son, index) in item.children"
@@ -111,6 +111,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.select {
+  color: #409eff;
+}
 .no-padding {
   padding: 0 !important;
   width: 1%;

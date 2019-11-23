@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-22 16:36:26
+ * @LastEditTime: 2019-11-23 20:10:02
  -->
 <template>
   <div class="service-product">
@@ -52,7 +52,7 @@
       </el-col>
     </el-row>
     <el-dialog
-      :title="formInfo.orgServiceTypeId ? '编辑目录' :'新增目录'"
+      :title="formInfo.orgServiceTypeId ? '编辑分类' :'新增分类'"
       :visible.sync="dialogFormVisible"
     >
       <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
@@ -64,7 +64,7 @@
             v-model="formInfo.orgId"
           ></el-cascader>
         </el-form-item>
-        <el-form-item label="目录标识" prop="orgServiceTypeName">
+        <el-form-item label="分类名称" prop="orgServiceTypeName">
           <el-input
             placeholder="分类名称最多可输入20个字"
             show-word-limit

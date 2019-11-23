@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-20 15:21:57
+ * @LastEditTime: 2019-11-23 16:33:31
  -->
 <template>
   <div class="meal-center">
@@ -13,18 +13,24 @@
       <el-col class="col-span" :span="toggleWidth">
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="80px" size="small">
-            <el-form-item label="所属机构">
-              <el-select clearable v-model="searchData.status" placeholder="请选择所属机构">
-                <el-option label="全部" value="-1"></el-option>
-                <el-option label="启用" value="1"></el-option>
-                <el-option label="禁用" value="0"></el-option>
-              </el-select>
+            <el-form-item label="助餐时间">
+              <el-date-picker
+                v-model="searchData.rangeTime"
+                style="width:360px;"
+                type="datetimerange"
+                range-separator="至"
+                @change="handlTime"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd HH:mm:ss"
+              ></el-date-picker>
             </el-form-item>
-            <el-form-item label="菜品名称">
-              <el-input placeholder="请输入菜品名称关键字" v-model="searchData.mobile"></el-input>
-            </el-form-item>
-            <el-form-item label="活动室">
-              <el-input placeholder="请输入活动室编号关键字" v-model="searchData.mobile"></el-input>
+            <el-form-item label="姓名">
+              <el-input
+                style="width:200px"
+                placeholder="请输入姓名关键字"
+                v-model="searchData.customerName"
+              ></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -33,45 +39,82 @@
                 @click="searchRefresh = !searchRefresh"
                 icon="el-icon-search"
               >搜索</el-button>
-              <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+              <el-button
+                @click="searchData = {orgId:searchData.orgId};searchRefresh = !searchRefresh"
+                size="small"
+              >重置</el-button>
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editEventRoom'})"
+            @click="$router.push({name:'editMealRecord'})"
             style="margin-bottom:15px"
             size="small"
             type="primary"
-          >新增活动室</el-button>
+          >新增助餐记录</el-button>
           <!-- 列表 -->
           <Table
+            :rowsForamtter="rowsForamtter"
             :searchRefresh="searchRefresh"
             :searchObj="searchData"
             :columns="tableColumns"
-            api="/activity/room/pageSearch"
+            api="/service/customerDinnerRecord/pageSearch"
             method="post"
           >
+            <template slot="customerName" slot-scope="{row}">
+              <div class="flex-t-u">
+                <span class="f-title">{{row.customerName}}</span>
+              </div>
+            </template>
+            <template slot="foodSnapshotList" slot-scope="{row}">
+              <span v-for="(item, index) in row.foodSnapshotList" :key="index">
+                {{item.foodName}}
+                <span v-if="index !=row.foodSnapshotList.length - 1">、</span>
+              </span>
+            </template>
             <template slot-scope="{row}" slot="action">
-              <el-button
-                @click="$router.push({name:'eventRoomInfo',query:{aid:row.activityRoomId}})"
-                type="text"
-                size="small"
-              >查看</el-button>
+              <el-button @click="handlePreview(row)" type="text" size="small">查看</el-button>
               <span>-</span>
               <el-button
-                @click="$router.push({name:'editEventRoom',query:{aid:row.activityRoomId}})"
+                @click="$router.push({name:'editMealRecord',query:{mid:row.recordId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
               <span>-</span>
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
-            <template slot="footer-left">
-              <el-button @click="handleDelete(null)" type="text">删除</el-button>
-            </template>
+            <template slot="footer-left"></template>
           </Table>
         </div>
       </el-col>
     </el-row>
+    <el-dialog title="查看助餐明细" :visible.sync="dialogFormVisible">
+      <el-form ref="formInfo" label-width="80px" :model="formInfo">
+        <el-form-item label="助餐人：">
+          <div class="flex-t-u">
+            <span class="f-title">{{formInfo.customerName}}</span>
+          </div>
+        </el-form-item>
+        <el-form-item label="助餐时间">{{formInfo.dinnerTime}}</el-form-item>
+        <el-form-item label="助餐详情">
+          <el-timeline>
+            <el-timeline-item v-for="(item, index) in formInfo.foodSnapshotList" :key="index">
+              <div class="flex-t-l">
+                <img
+                  class="course-avatar"
+                  :src="$store.state.config.systemConfig[0].dictionaryValue+item.indexPic"
+                  alt
+                />
+                <div style="line-height:20px;" class="flex-column-t">
+                  <span class="f-title">{{item.foodName}}</span>
+                  <p class="sm-title">￥{{item.price}}</p>
+                </div>
+              </div>
+            </el-timeline-item>
+          </el-timeline>
+        </el-form-item>
+        <el-form-item label="共计消费">￥{{formInfo.priceSum}}</el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -82,17 +125,20 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 20,
       searchRefresh: true,
+      formInfo: {},
+      dialogFormVisible: false,
       searchData: {},
       tableColumns: [
-        { label: '活动室名称', prop: 'activityRoomName', minWidth: 200 },
-        { label: '所属机构', prop: 'orgName', minWidth: 100 },
+        { label: '助餐人员', slot: 'customerName', minWidth: 200 },
+        { label: '助餐明细', slot: 'foodSnapshotList', minWidth: 100 },
+        { label: '助餐金额', prop: 'priceSum', minWidth: 100 },
         {
-          label: '更新时间',
-          prop: 'updateTime',
+          label: '助餐时间',
+          prop: 'dinnerTime',
           minWidth: 140
         },
         {
@@ -106,29 +152,55 @@ export default {
       selectActivity: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    filterOrg(val) {
+    handlePreview (row) {
+      this.formInfo = row
+      this.dialogFormVisible = true
+    },
+    rowsForamtter (row) {
+      row.forEach(i => {
+        if (i.foodSnapshotList && i.foodSnapshotList.length > 0) {
+          let sum = 0
+          i.foodSnapshotList.forEach(j => {
+            sum += j.price
+          })
+          i.priceSum = '￥' + sum.toFixed(2)
+        }
+      })
+    },
+    handlTime (date) {
+      if (date) {
+        this.searchData.startTime = date[0]
+        this.searchData.endTime = date[1]
+      } else {
+        this.searchData.startTime = ''
+        this.searchData.endTime = ''
+      }
+    },
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
-      let id = row ? [row.activityRoomId] : this.selectActivity
-      this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
+    handleDelete (row) {
+      let id = row ? [row.recordId] : []
+      this.$confirm('删除后，该数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/activity/room/delete', id).then(res => {
-            if (res.code === 200) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
+          this.$http
+            .post('/service/customerDinnerRecord/delete', { recordIds: id })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     }

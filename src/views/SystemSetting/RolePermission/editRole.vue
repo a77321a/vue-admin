@@ -30,7 +30,7 @@
           show-word-limit
           placeholder="请输入角色描述，最多不超过50个字"
           type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
+          :autosize="{ minRows: 2, maxRows: 5}"
           v-model="formInfo.roleDesc"
         ></el-input>
       </el-form-item>

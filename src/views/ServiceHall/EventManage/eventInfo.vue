@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-11-22 22:31:46
+ * @LastEditTime: 2019-11-23 22:40:33
  -->
 <template>
   <div id="event-info">
@@ -11,7 +11,7 @@
       <div class="flex-t-l">
         <img :src="eventInfo.activityIndexPic" alt />
         <div class="flex-column-t">
-          <h4>{{eventInfo.activityName}}</h4>
+          <h4 style="margin-bottom:10px;margin-top:5px">{{eventInfo.activityName}}</h4>
           <el-form label-position="left" ref="form" :model="eventInfo" label-width="100px">
             <el-form-item>
               <template slot="label">

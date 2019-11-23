@@ -1,16 +1,16 @@
 <!--
- * @Descripttion:选择服务人员
+ * @Descripttion:选择养老产品
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:39:16
+ * @LastEditTime: 2019-11-23 19:20:24
  -->
 <template>
   <div id="select-service-object">
     <el-form>
       <el-form inline ref="form" label-width="80px" size="small">
         <el-form-item label="名称">
-          <el-input placeholder="请输入服务人员名称" v-model="searchData.orgServiceProviderName"></el-input>
+          <el-input placeholder="请输入服务对象名字" v-model="name"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -19,33 +19,31 @@
             @click="searchRefresh = !searchRefresh"
             icon="el-icon-search"
           >搜索</el-button>
-          <el-button
-            @click="searchData.orgServiceProviderName = '';searchRefresh = !searchRefresh"
-            size="small"
-          >重置</el-button>
+          <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
         </el-form-item>
       </el-form>
     </el-form>
     <Table
       :selectable="selectable"
+      :highlightCurrentRow="single"
       @commitSelection="commitSelection"
-      :height="$store.state.dialogHeight-100"
+      :height="$store.state.dialogHeight -100"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
-      :selection="true"
+      :selection="single ? false : true"
       :columns="tableColumns"
-      api="/org/service/provider/pageSearch"
+      :currentChange="singleSelect"
+      api="/pension/service/product/pageSearch "
       method="post"
     >
-      <template slot="userInfo" slot-scope="{row}">
-        <div class="flex-t-u">
-          <el-avatar
-            class="avatar"
-            size="medium"
-            :src="$store.state.config.systemConfig[0].dictionaryValue+row.indexPic"
-          ></el-avatar>
-          <span class="f-title">{{row.orgServiceProviderName}}</span>
+      <template slot="pensionServiceProductName" slot-scope="{row}">
+        <div class="flex-t-l">
+          <img class="course-avatar" :src="row.indexPic" alt />
+          <div class="flex-column-t">
+            <span class="f-title">{{row.pensionServiceProductName}}</span>
+            <p class="sm-title">￥{{row.pensionPrice}}</p>
+          </div>
         </div>
       </template>
     </Table>
@@ -59,20 +57,21 @@ export default {
       name: '',
       searchRefresh: true,
       selectData: [],
-      searchData: {
-        orgId: Array.isArray(this.orgId)
-          ? this.orgId[this.orgId.length - 1]
-          : this.orgId
-      },
+      searchData: { pageSize: MAXSIZE },
       tableColumns: [
-        { label: '服务人员', slot: 'userInfo', minWidth: 200 },
-        { label: '所属机构', prop: 'orgName', minWidth: 150 }
+        { label: '产品名称', slot: 'pensionServiceProductName', minWidth: 200 },
+        { label: '服务类型', prop: 'pensionServiceTypeName', minWidth: 100 }
       ]
     }
   },
-
   props: {
     orgId: {},
+    single: {
+      type: Boolean,
+      default: function () {
+        return false
+      }
+    },
     isSelected: {
       type: Array,
       default: function () {
@@ -87,9 +86,7 @@ export default {
       }
       for (let i in this.isSelected) {
         console.log(row)
-        if (
-          this.isSelected[i].orgServiceProviderId === row.orgServiceProviderId
-        ) {
+        if (this.isSelected[i].serviceCustomerId === row.serviceCustomerId) {
           return 0
         } else {
           return 1
@@ -97,8 +94,10 @@ export default {
       }
     },
     commitSelection (data) {
-      this.selectData = data
-      this.$emit('selectUser', data)
+      this.$emit('selectObject', data)
+    },
+    singleSelect (row, orow) {
+      this.$emit('selectObject', row)
     },
     rowsForamtter (row) {}
   }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-20 20:06:53
+ * @LastEditTime: 2019-11-23 22:17:03
  -->
 <template>
   <div class="event-room">
@@ -30,7 +30,7 @@
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editEventRoom'})"
+            @click="$router.push({name:'editServiceProduct'})"
             style="margin-bottom:15px"
             size="small"
             type="primary"
@@ -57,15 +57,12 @@
             </template>
             <template slot-scope="{row}" slot="action">
               <el-button
-                @click="$router.push({name:'editServiceProduct',query:{sid:row.orgServiceProductId}})"
+                @click="$router.push({name:'editServiceProduct',query:{pid:row.orgServiceProductId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
               <span>-</span>
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
-            </template>
-            <template slot="footer-left">
-              <el-button @click="handleDelete(null)" type="text">删除</el-button>
             </template>
           </Table>
         </div>
@@ -119,8 +116,8 @@ export default {
       this.toggleWidth = val
     },
     handleDelete (row) {
-      let id = row ? [row.orgServiceProductId] : this.selectActivity
-      this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
+      let id = row ? [row.orgServiceProductId] : []
+      this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

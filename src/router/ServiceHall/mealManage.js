@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-11 15:22:54
+ * @LastEditTime: 2019-11-23 16:32:43
  */
 export default [
   {
@@ -38,7 +38,8 @@ export default [
     name: 'editMealRecord',
     component: () => import('@/views/ServiceHall/MealManage/editMealRecord.vue'),
     meta: {
-      title: '新增/编辑助餐记录'
+      title: '新增/编辑助餐记录',
+      parent: 'mealCenter'
     }
   },
   {

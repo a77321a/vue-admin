@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-20 16:11:27
+ * @LastEditTime: 2019-11-23 20:00:55
  -->
 <template>
   <div id="edit-event">
@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item label="产品封面" prop="indexPic">
         <div style="display:flex;align-items:center;">
-          <div v-show="formInfo.indexPic" class="avatar">
+          <div v-show="formInfo.indexPic !=''" class="avatar">
             <img :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic" alt />
           </div>
           <el-upload
@@ -50,10 +50,10 @@
           placeholder="请选择"
         >
           <el-option
-            v-for="(item, index) in $store.state.config.serviceType"
+            v-for="(item, index) in serviceTypeList"
             :key="index"
-            :label="item.dictionaryLabel"
-            :value="item.dictionaryValue"
+            :label="item.pensionServiceTypeName"
+            :value="item.pensionServiceTypeId"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -117,15 +117,24 @@ export default {
         pensionServiceTypeId: [
           { required: true, message: '请选择产品服务类型', trigger: 'change' }
         ]
-      }
+      },
+      serviceTypeList: []
     }
   },
   created () {
     if (this.$route.query.pid) {
       this.getProductInfo()
     }
+    this.getServiceType()
   },
   methods: {
+    getServiceType () {
+      this.$http
+        .post('/pension/service/type/pageSerach', { pageSize: MAXSIZE })
+        .then(res => {
+          this.serviceTypeList = res.payload.records
+        })
+    },
     /**
      * @descripttion: 获取信息
      * @return: 信息
@@ -133,7 +142,7 @@ export default {
     getProductInfo () {
       this.$http
         .get(
-          '/pension/service/product/detail?pensionServiceTypeId=' +
+          '/pension/service/product/detail?pensionServiceProductId=' +
             this.$route.query.pid
         )
         .then(res => {
@@ -163,12 +172,25 @@ export default {
         let url = this.$route.query.pid
           ? '/pension/service/product/update'
           : '/pension/service/product/add'
-        this.$http.post(url, this.formInfo).then(res => {
-          if (res.code === SUCCESS) {
-            this.$message.success('操作成功')
-            this.$router.go(-1)
-          }
-        })
+        this.$http
+          .post(url, {
+            pensionServiceProductId: this.formInfo.pensionServiceProductId,
+            description: this.formInfo.description,
+            detail: this.formInfo.detail,
+            indexPic: this.formInfo.indexPic,
+            pensionPlineationPrice: this.formInfo.pensionPlineationPrice,
+            pensionPrice: this.formInfo.pensionPrice,
+            pensionServiceProductName: this.formInfo.pensionServiceProductName,
+            pensionServiceProductPrice: this.formInfo
+              .pensionServiceProductPrice,
+            pensionServiceTypeId: this.formInfo.pensionServiceTypeId
+          })
+          .then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
       })
     },
     uploadImg (file) {
@@ -177,6 +199,7 @@ export default {
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo.indexPic = res.payload
+          console.log(this.formInfo.indexPic)
         }
       })
       return false

@@ -37,7 +37,7 @@
           :maxlength="68"
           show-word-limit
           type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
+          :autosize="{ minRows: 2, maxRows: 5}"
           placeholder="请输入活动室介绍，最多不超过68个字"
           v-model="formInfo.activityRoomDesc"
         ></el-input>
@@ -144,7 +144,6 @@ export default {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let form = JSON.parse(JSON.stringify(this.formInfo))
-        form.orgId = this.formInfo.orgId[this.formInfo.orgId.length - 1]
         if (this.$route.query.aid) {
           this.$http.post('/activity/room/update', form).then(res => {
             if (res.code === SUCCESS) {

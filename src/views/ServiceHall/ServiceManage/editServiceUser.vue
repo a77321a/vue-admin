@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-22 22:26:08
+ * @LastEditTime: 2019-11-23 22:31:05
  -->
 <template>
   <div id="edit-service-user">
@@ -51,18 +51,13 @@
       <el-form-item label="身份证" prop="identityCard">
         <el-input
           show-word-limit
-          placeholder="请输入服务人员姓名，最多不超过10个字"
-          :maxlength="10"
+          placeholder="请输入正确的身份证号"
+          :maxlength="18"
           v-model="formInfo.identityCard"
         ></el-input>
       </el-form-item>
       <el-form-item label="员工编号" prop="employeeNum">
-        <el-input
-          show-word-limit
-          placeholder="请输入服务人员姓名，最多不超过10个字"
-          :maxlength="10"
-          v-model="formInfo.employeeNum"
-        ></el-input>
+        <el-input placeholder="请输入请输入员工编号" v-model="formInfo.employeeNum"></el-input>
       </el-form-item>
       <el-form-item label="职位" prop="position">
         <el-select clearable v-model="formInfo.position" placeholder="请选择">
@@ -80,24 +75,41 @@
           <el-option label="女" :value="2"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="出生日期" prop="birthday">
+        <el-date-picker
+          v-model="formInfo.birthday"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="选择日期"
+        ></el-date-picker>
+      </el-form-item>
       <div class="title">服务范围</div>
       <el-form-item label="服务范围" prop="serviceScope">
-        <el-select clearable v-model="formInfo.serviceScope" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
-        </el-select>
+        <el-cascader
+          clearable
+          :props="{value:'regionId',label:'addressName',emitPath:false}"
+          :options="spaceTree"
+          v-model="formInfo.serviceScope"
+        ></el-cascader>
       </el-form-item>
       <el-form-item label="所属机构" prop="orgId">
         <el-cascader
           clearable
+          @change="changeOrg"
           :props="{value:'orgId',label:'orgName',emitPath:false}"
           :options="orgTree"
           v-model="formInfo.orgId"
         ></el-cascader>
       </el-form-item>
-      <el-form-item label="服务类型" prop="serviceTypeIds">
-        <el-select multiple clearable v-model="formInfo.serviceTypeIds" placeholder="请选择">
+      <el-form-item label="服务类型" prop="orgServiceTypeIds">
+        <el-select
+          :disabled="!formInfo.orgId"
+          @change="changeType"
+          multiple
+          clearable
+          v-model="formInfo.orgServiceTypeIds"
+          placeholder="请选择"
+        >
           <el-option
             v-for="(item, index) in serviceTypeList"
             :key="index"
@@ -106,13 +118,19 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="服务产品" prop="serviceProductIds">
-        <el-select multiple clearable v-model="formInfo.serviceTypeIds" placeholder="请选择">
+      <el-form-item label="服务产品" prop="orgServiceProductIds">
+        <el-select
+          :disabled="formInfo.orgServiceTypeIds.length == 0 || !formInfo.orgId"
+          multiple
+          clearable
+          v-model="formInfo.orgServiceProductIds"
+          placeholder="请选择"
+        >
           <el-option
-            v-for="(item, index) in serviceTypeList"
+            v-for="(item, index) in serviceProductList"
             :key="index"
-            :label="item.orgServiceTypeName"
-            :value="item.orgServiceTypeId"
+            :label="item.orgServiceProductName"
+            :value="item.orgServiceProductId"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -144,20 +162,18 @@ export default {
         indexPic: '',
         orgId: '',
         position: '',
-        serviceProductIds: [],
         orgServiceProviderName: '',
         serviceScope: '',
-        serviceTypeIds: [],
+        orgServiceTypeIds: [],
+        orgServiceProductIds: [],
         sex: '',
         telephoneNum: ''
       },
       rules: {
-        serviceProviderName: [
+        orgServiceProviderName: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
         ],
-        telephoneNum: [
-          { required: true, message: '请输入手机号', validator: validMobile }
-        ],
+        telephoneNum: [{ required: true, validator: validMobile }],
         indexPic: [
           { required: true, message: '请输入头像', trigger: 'change' }
         ],
@@ -171,6 +187,9 @@ export default {
           { required: true, message: '请选择职位', trigger: 'change' }
         ],
         sex: [{ required: true, message: '请选择性别', trigger: 'change' }],
+        birthday: [
+          { required: true, message: '请选择出生日期', trigger: 'change' }
+        ],
         serviceScope: [
           {
             required: true,
@@ -181,7 +200,7 @@ export default {
         orgId: [
           { required: true, message: '请选择所属机构', trigger: 'change' }
         ],
-        serviceTypeIds: [
+        orgServiceTypeIds: [
           {
             required: true,
             message: '请选择服务类型',
@@ -189,7 +208,7 @@ export default {
             type: 'array'
           }
         ],
-        serviceProductIds: [
+        orgServiceProductIds: [
           {
             required: true,
             message: '请选择服务产品',
@@ -199,7 +218,9 @@ export default {
         ]
       },
       serviceTypeList: [],
-      orgTree: []
+      orgTree: [],
+      spaceTree: [],
+      serviceProductList: []
     }
   },
   created () {
@@ -207,14 +228,44 @@ export default {
       this.getServiceUserInfo()
     }
     this.getOrgList()
-    this.getServiceTypeList()
+    this.getTree()
   },
   methods: {
+    changeOrg () {
+      this.formInfo.orgServiceTypeIds = []
+      this.formInfo.orgServiceProductIds = []
+      this.getServiceTypeList()
+    },
+    changeType () {
+      this.formInfo.orgServiceProductIds = []
+      this.getServiceProductList()
+    },
+    getServiceProductList () {
+      this.$http
+        .post('/org/service/product/pageSearch', {
+          pageSize: MAXSIZE,
+          orgServiceTypeIds: this.formInfo.orgServiceTypeIds
+        })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.serviceProductList = res.payload.records
+          }
+        })
+    },
+    getTree () {
+      this.$http.post('/address/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.spaceTree = res.payload
+          for (let i in this.spaceTree) {
+            if (this.spaceTree[i].depth == 0) {
+              this.spaceTree.splice(i, 1)
+            }
+          }
+        }
+      })
+    },
     getOrgList () {
       this.$http.post('/org/tree').then(res => {
-        if (this.$route.query.fid) {
-          this.getFoodInfo()
-        }
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
           this.orgTree.forEach(i => {
@@ -264,6 +315,20 @@ export default {
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
+            this.$set(this.formInfo, 'orgId', res.payload.orgDetail.orgId)
+            // this.$set(this.formInfo,'orgServiceTypeIds',[])
+            let arr = []
+            let arr1 = []
+            res.payload.orgServiceTypes.forEach(i => {
+              arr.push(i.orgServiceTypeId)
+            })
+            res.payload.orgServiceProducts.forEach(i => {
+              arr1.push(i.orgServiceProductId)
+            })
+            this.$set(this.formInfo, 'orgServiceTypeIds', arr)
+            this.$set(this.formInfo, 'orgServiceProductIds', arr1)
+            this.getServiceTypeList()
+            this.getServiceProductList()
           }
         })
     },
@@ -271,7 +336,7 @@ export default {
     handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
-        if (this.$route.query.fid) {
+        if (this.$route.query.uid) {
           this.$http
             .post('/org/service/provider/update', this.formInfo)
             .then(res => {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-16 20:06:27
+ * @LastEditTime: 2019-11-23 20:12:29
  */
 export default [
   {
@@ -22,6 +22,15 @@ export default [
     meta: {
       title: '服务人员',
       root: true
+    }
+  },
+  {
+    path: 'serviceUserInfo',
+    name: 'serviceUserInfo',
+    component: () => import('@/views/ServiceHall/ServiceManage/serviceUserInfo.vue'),
+    meta: {
+      title: '服务人员详情',
+      parent: 'serviceUser'
     }
   },
   {

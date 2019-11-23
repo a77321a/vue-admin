@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-11-20 21:46:02
+ * @LastEditTime: 2019-11-23 22:49:00
  -->
 <template>
   <div id="space-resource">
@@ -59,7 +59,8 @@ export default {
       } else if (this.tempObj.depth === 3) {
         this.addressName = row.address.split(row.component.township)[1]
       }
-      console.log(this.addressName)
+      console.log(row)
+
       this.mapShow = false
     },
     getTree () {

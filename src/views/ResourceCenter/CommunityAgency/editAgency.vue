@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-21 17:10:59
+ * @LastEditTime: 2019-11-23 22:46:27
  -->
 <template>
   <div id="edit-agency">
@@ -283,8 +283,9 @@ export default {
             orgAddress: this.formInfo.orgAddress,
             orgName: this.formInfo.orgName,
             orgPicList: this.formInfo.orgPicList,
+            orgDesc: this.formInfo.orgDesc,
             orgType: this.formInfo.orgType,
-            parentOrgId: this.$route.query.parent,
+            parentOrgId: this.$route.query.parent || 0,
             serviceType: this.formInfo.serviceType,
             tel: this.formInfo.tel,
             orgId: this.$route.query.oid

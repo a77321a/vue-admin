@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-22 16:37:39
+ * @LastEditTime: 2019-11-23 13:29:35
  -->
 <template>
   <div id="select-service-object">
@@ -25,19 +25,27 @@
     </el-form>
     <Table
       :selectable="selectable"
+      :highlightCurrentRow="single"
       @commitSelection="commitSelection"
       :height="$store.state.dialogHeight -100"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
-      :selection="true"
+      :selection="single ? false : true"
       :columns="tableColumns"
+      :currentChange="singleSelect"
       api="/service/customer/pageSearch "
       method="post"
     >
       <template slot="userInfo" slot-scope="{row}">
-        <el-avatar size="medium" :src="row.avatar"></el-avatar>
-        {{row.serviceCustomerName}}
+        <div class="flex-t-u">
+          <el-avatar
+            class="avatar"
+            size="medium"
+            :src="$store.state.config.systemConfig[0].dictionaryValue+row.avatar"
+          ></el-avatar>
+          <span class="f-title">{{row.serviceCustomerName}}</span>
+        </div>
       </template>
     </Table>
   </div>
@@ -53,12 +61,18 @@ export default {
       searchData: { orgId: this.orgId },
       tableColumns: [
         { label: '服务人员', slot: 'userInfo', align: 'left', minWidth: 100 },
-        { label: '所在区域', prop: 'activityTime', minWidth: 150 }
+        { label: '所在区域', prop: 'streetName', minWidth: 150 }
       ]
     }
   },
   props: {
     orgId: {},
+    single: {
+      type: Boolean,
+      default: function () {
+        return false
+      }
+    },
     isSelected: {
       type: Array,
       default: function () {
@@ -82,7 +96,9 @@ export default {
     },
     commitSelection (data) {
       this.$emit('selectObject', data)
-      this.selectData = data
+    },
+    singleSelect (row, orow) {
+      this.$emit('selectObject', row)
     },
     rowsForamtter (row) {}
   }
