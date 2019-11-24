@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-22 17:07:10
+ * @LastEditTime: 2019-11-24 20:18:52
  -->
 <template>
   <div id="edit-role">
@@ -17,30 +17,34 @@
       size="medium"
     >
       <el-form-item label="人员类型">
-        <el-radio-group v-model="formInfo.userType">
-          <el-radio-button style="box-shadow: none;" :label="1">内部服务人员</el-radio-button>
-          <el-radio-button style="box-shadow: none;" :label="2">外部人员</el-radio-button>
+        <el-radio-group v-model="formInfo.accountType">
+          <el-radio-button style="box-shadow: none;" :label="0">内部服务人员</el-radio-button>
+          <el-radio-button style="box-shadow: none;" :label="1">外部人员</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="昵称" prop="nickName">
+      <el-form-item label="昵称" prop="nickname">
         <el-input
+          :disabled="formInfo.accountType == 0"
+          style="width:300px;margin-right:10px"
           maxlength="10"
           show-word-limit
           placeholder="请输入用户昵称，最多不超过10个字"
-          v-model="formInfo.roleName"
+          v-model="formInfo.nickname"
         ></el-input>
+        <el-button size="small" @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
       </el-form-item>
-      <el-form-item label="手机号">
+      <el-form-item label="手机号" prop="mobile">
         <el-input
+          :disabled="formInfo.accountType == 0"
           maxlength="11"
           show-word-limit
           placeholder="请输入手机号，可用于登录管理平台"
           type="text"
-          v-model="formInfo.roleDesc"
+          v-model="formInfo.mobile"
         ></el-input>
       </el-form-item>
-      <el-form-item label="登录密码">
-        <el-input placeholder="请输入密码" type="text" v-model="formInfo.roleDesc"></el-input>
+      <el-form-item label="登录密码" :prop="$route.query.uid ? '':'password'">
+        <el-input type="text" placeholder="请输入密码" v-model="formInfo.password"></el-input>
       </el-form-item>
       <div class="title">资源设置</div>
       <el-form-item label="管理范围">
@@ -62,58 +66,129 @@
           </div>
           <div class="vert-radio">
             <el-radio :label="3">机构</el-radio>
-            <el-cascader
+            <el-select
               v-if="formInfo.limit == 3"
-              style="vertical-align:sub"
               clearable
-              :props="{value:'orgId',label:'orgName',emitPath:false}"
-              :options="orgTree"
-              v-model="formInfo.orgId"
-            ></el-cascader>
+              multiple
+              v-model="formInfo.orgIds"
+              placeholder="请选择用户状态"
+            >
+              <el-option
+                v-for="(item, index) in orgList"
+                :key="index"
+                :label="item.orgName"
+                :value="item.orgId"
+              ></el-option>
+            </el-select>
           </div>
         </el-radio-group>
       </el-form-item>
+      <el-form-item v-if="formInfo.limit !== 1" label="角色" prop="roleIds">
+        <el-checkbox-group v-model="formInfo.roleIds">
+          <el-checkbox
+            v-for="(item, index) in roleList"
+            :key="index"
+            :label="item.roleId"
+          >{{item.roleName}}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">保 存</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog
+      width="60%"
+      lock-scroll
+      destroy-on-close
+      title="选择服务对象"
+      :visible.sync="dialogServiceObject"
+    >
+      <selectServiceUser :single="true" @selectObject="selectObject"></selectServiceUser>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogServiceObject = false;checkedObject={}">取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
+import selectServiceUser from '../../../components/SelectTable/selectServiceUser.vue'
+
 export default {
   name: 'editEvent',
+  components: {
+    selectServiceUser
+  },
   data () {
     return {
+      dialogServiceObject: false,
       formInfo: {
-        userType: 1,
-        limit: 2
+        account: '',
+        accountType: 0,
+        limit: 2,
+        roleIds: []
       },
+      roleList: [],
       rules: {
-        roleName: [
-          { required: true, message: '请输入角色名称', trigger: 'blur' }
+        nickname: [{ required: true, message: '请输入账号昵称' }],
+        mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        password: [
+          { required: true, message: '请输入账号密码', trigger: 'blur' }
         ],
-        roleDesc: [
-          { required: true, message: '请选择角色描述', trigger: 'blur' }
-        ]
+        roleIds: [{ required: true, message: '请选择角色', trigger: 'change' }]
       },
       spaceTree: [],
-      orgTree: []
+      orgList: [],
+      templateObj: {}
     }
   },
   created () {
     if (this.$route.query.uid) {
-      // this.getAccountInfo()
+      this.getAccountInfo()
     }
     this.getTree()
-    this.getOrgList()
+    this.getOrg()
+    this.getRole()
   },
   methods: {
+    getOrg () {
+      this.$http
+        .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.orgList = res.payload.records
+          }
+        })
+    },
+    getRole () {
+      this.$http.post('/role/pageSearch', { pageSize: MAXSIZE }).then(res => {
+        if (res.code === SUCCESS) {
+          this.roleList = res.payload.records
+        }
+      })
+    },
+    /**
+     * @descripttion: 选择服务对象
+     * @param {type}
+     * @return:
+     */
+    selectObject (data) {
+      this.templateObj = data
+    },
+    handleSaveSelectObject () {
+      if (!this.templateObj.orgServiceProviderId) {
+        this.$message.error('请选择一条记录')
+        return
+      }
+      this.formInfo.account = this.templateObj.orgServiceProviderId
+      this.formInfo.nickname = this.templateObj.orgServiceProviderName
+      this.formInfo.mobile = this.templateObj.telephoneNum
+      this.dialogServiceObject = false
+    },
     getOrgList () {
       this.$http.post('/org/tree').then(res => {
-        if (this.$route.query.aid) {
-          this.getActivityInfo()
-        }
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
           this.orgTree.forEach(i => {
@@ -142,9 +217,16 @@ export default {
       this.$http.get('/user/get?userId=' + this.$route.query.uid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
-          // delete this.formInfo.isVisible
-          // delete this.formInfo.createTime
-          // delete this.formInfo.updateTime
+          this.$set(
+            this.formInfo,
+            'limit',
+            res.payload.superAdmin ? 1 : res.payload.orgIds ? 2 : 3
+          )
+          this.$set(
+            this.formInfo,
+            'roleIds',
+            this.formInfo.roleIds ? this.formInfo.roleIds : []
+          )
         }
       })
     },
@@ -152,12 +234,29 @@ export default {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.uid ? '/user/update' : '/user/add'
-        this.$http.post(url, this.formInfo).then(res => {
-          if (res.code === SUCCESS) {
-            this.$message.success('操作成功')
-            this.$router.go(-1)
-          }
-        })
+        this.$http
+          .post(url, {
+            userId: this.$route.query.uid,
+            account: this.formInfo.account,
+            accountType: this.formInfo.accountType,
+            mobile: this.formInfo.mobile,
+            nickname: this.formInfo.nickname,
+            orgIds: this.limit === 3 ? this.formInfo.orgIds : undefined,
+            password: this.formInfo.password,
+            roleIds: this.formInfo.roleIds,
+            scopeDepth:
+              this.limit === 2
+                ? this.formInfo.addressList.join('-')
+                : undefined,
+            superAdmin: this.limit === 1,
+            userStatus: 1
+          })
+          .then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
       })
     }
   }

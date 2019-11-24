@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-22 22:05:05
+ * @LastEditTime: 2019-11-24 21:31:03
  -->
 <template>
   <div class="event-center">
@@ -89,27 +89,23 @@
           type="text"
           size="small"
         >查看</el-button>
-        <span>-</span>
         <el-button
           @click="$router.push({name:'editEvent',query:{aid:row.activityId}})"
           type="text"
           size="small"
         >编辑</el-button>
-        <span>-</span>
         <el-button
           v-if="row.activityStatus == 1"
           @click="handleCloseActivity(row)"
           type="text"
           size="small"
         >结束活动</el-button>
-        <span v-if="row.activityStatus==1">-</span>
         <el-button
           @click="$router.push({name:'editActivitySummary',query:{aid:row.activityId}})"
           v-if="row.activityStatus > 1"
           type="text"
           size="small"
         >总结活动</el-button>
-        <span v-if="row.activityStatus > 1">-</span>
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
@@ -153,7 +149,7 @@ export default {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 240
+          minWidth: 220
         }
       ],
       userList: [],

@@ -56,7 +56,7 @@
               @click="$router.push({name:'editServiceCenter',query:{sid:row.serviceRecordId}})"
               type="text"
             >编辑</el-button>
-            <span>-</span>
+            
             <el-button @click="handleDelete(row)" type="text">删除</el-button>
           </template>
         </Table>
@@ -74,7 +74,7 @@ export default {
   },
   data () {
     return {
-      toggleWidth: 20,
+      toggleWidth: 19,
       searchRefresh: true,
       searchData: {},
       tableColumns: [

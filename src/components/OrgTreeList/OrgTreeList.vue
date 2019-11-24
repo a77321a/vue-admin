@@ -3,13 +3,13 @@
  * @Author:
  * @Date: 2019-11-16 18:41:35
  * @LastEditors:
- * @LastEditTime: 2019-11-23 16:31:15
+ * @LastEditTime: 2019-11-24 13:15:06
  -->
 <template>
   <el-col
     id="org-tree-list-aside"
     :class="toggleShow?'border':'no-padding'"
-    :span="toggleShow ? 4 :1"
+    :span="toggleShow ? 5 :1"
   >
     <transition name="moveL">
       <div class="trans" v-show="toggleShow">
@@ -105,7 +105,7 @@ export default {
     },
     changeToggleShow () {
       this.toggleShow = !this.toggleShow
-      this.$emit('toggleChange', this.toggleShow ? 20 : 23)
+      this.$emit('toggleChange', this.toggleShow ? 19 : 23)
     }
   }
 }

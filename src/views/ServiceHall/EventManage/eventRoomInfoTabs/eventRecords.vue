@@ -81,13 +81,13 @@
           type="text"
           size="small"
         >查看</el-button>
-        <span>-</span>
+        
         <el-button
           @click="$router.push({name:'editEvent',query:{aid:row.activityId}})"
           type="text"
           size="small"
         >编辑</el-button>
-        <span>-</span>
+        
         <el-button
           v-if="row.activityStatus == 1"
           @click="handleCloseActivity(row)"

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-23 20:00:55
+ * @LastEditTime: 2019-11-24 13:21:39
  -->
 <template>
   <div id="edit-event">
@@ -148,20 +148,11 @@ export default {
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
-            // if (Array.isArray(this.orgTree)) {
-            //   this.orgTree.forEach(i => {
-            //     if (Array.isArray(i.children)) {
-            //       i.children.forEach(j => {
-            //         if (j.orgId === this.formInfo.orgId) {
-            //           this.$set(this.formInfo, 'orgId', [
-            //             j.parentOrgId,
-            //             j.orgId
-            //           ])
-            //         }
-            //       })
-            //     }
-            //   })
-            // }
+            this.$set(
+              this.formInfo,
+              'pensionServiceTypeId',
+              res.payload.pensionServiceTypeDetail.pensionServiceTypeId
+            )
           }
         })
     },

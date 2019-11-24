@@ -59,7 +59,7 @@
           type="text"
           size="small"
         >编辑</el-button>
-        <span>-</span>
+        
         <el-button
           @click="handleDelete(row,row.dictionaries?true:false)"
           type="text"

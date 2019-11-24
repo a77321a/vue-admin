@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-22 16:24:05
+ * @LastEditTime: 2019-11-24 20:20:31
  -->
 <template>
   <div class="account-setting">
@@ -50,13 +50,11 @@
     >
       <template slot-scope="{row}" slot="handleColumn">
         <el-button type="text" size="small">查看</el-button>
-        <span>-</span>
         <el-button
           @click="$router.push({name:'editAccount',query:{uid:row.userId}})"
           type="text"
           size="small"
         >编辑</el-button>
-        <span>-</span>
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
@@ -94,7 +92,7 @@ export default {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 200
+          minWidth: 130
         }
       ],
       userList: [],
@@ -116,7 +114,7 @@ export default {
     commitSelection (data) {
       let arr = []
       data.forEach(i => {
-        arr.push(i.roleId)
+        arr.push(i.userId)
       })
       this.selectAccount = arr
     },
@@ -141,7 +139,7 @@ export default {
         .catch(() => {})
     },
     handleDelete (row) {
-      let id = row ? row.roleId : this.selectAccount.join(',')
+      let id = row ? [row.userId] : this.selectAccount
       let content = '删除后，该手机号将无法登录后台，是否确定？'
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',
@@ -149,12 +147,16 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.todelete('/user/delete?roleId=' + id).then(res => {
-            if (res.code === SUCCESS) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
+          this.$http
+            .post('/user/delete', {
+              userIds: id
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     }

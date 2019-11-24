@@ -58,7 +58,7 @@
                 type="text"
                 size="small"
               >编辑</el-button>
-              <span>-</span>
+
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
             <template slot="footer-left">
@@ -77,9 +77,9 @@ export default {
   components: {
     ServiceTypeFilter
   },
-  data () {
+  data() {
     return {
-      toggleWidth: 20,
+      toggleWidth: 19,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
@@ -106,16 +106,16 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.pensionServiceTypeId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.activityRoomId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

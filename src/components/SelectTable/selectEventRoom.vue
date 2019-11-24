@@ -1,16 +1,21 @@
 <!--
- * @Descripttion:选择服务对象
+ * @Descripttion:选择机构
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-24 19:37:58
+ * @LastEditTime: 2019-11-24 13:12:17
  -->
 <template>
-  <div id="select-service-object">
+  <div id="select-org">
     <el-form>
       <el-form inline ref="form" label-width="80px" size="small">
-        <el-form-item label="名称">
-          <el-input placeholder="请输入服务对象名字" v-model="name"></el-input>
+        <el-form-item label="所属机构">
+          <el-cascader
+            clearable
+            :props="{value:'orgId',label:'orgName',emitPath:false}"
+            :options="orgTree"
+            v-model="searchData.orgId"
+          ></el-cascader>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -19,14 +24,13 @@
             @click="searchRefresh = !searchRefresh"
             icon="el-icon-search"
           >搜索</el-button>
-          <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+          <el-button @click="searchData = {level:2};searchRefresh = !searchRefresh" size="small">重置</el-button>
         </el-form-item>
       </el-form>
     </el-form>
     <Table
       :selectable="selectable"
       :highlightCurrentRow="single"
-      @commitSelection="commitSelection"
       :height="$store.state.dialogHeight - 200"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
@@ -34,81 +38,85 @@
       :selection="single ? false : true"
       :columns="tableColumns"
       :currentChange="singleSelect"
-      api="/service/customer/pageSearch "
+      api="/activity/room/pageSearch"
       method="post"
-    >
-      <template slot="userInfo" slot-scope="{row}">
-        <div class="flex-t-u">
-          <el-avatar
-            class="avatar"
-            size="medium"
-            :src="$store.state.config.systemConfig[0].dictionaryValue+row.avatar"
-          ></el-avatar>
-          <span class="f-title">{{row.serviceCustomerName}}</span>
-        </div>
-      </template>
-    </Table>
+    ></Table>
   </div>
 </template>
 <script>
 export default {
   name: 'selectServiceObject',
-  data() {
+  data () {
     return {
       name: '',
       searchRefresh: true,
       selectData: [],
-      searchData: { orgId: this.orgId },
+      spaceTree: [],
+      searchData: { level: 2 },
       tableColumns: [
-        { label: '服务人员', slot: 'userInfo', minWidth: 100 },
-        { label: '所在区域', prop: 'streetName', minWidth: 150 }
-      ]
+        {
+          label: '活动室名称',
+          prop: 'activityRoomName',
+          align: 'left',
+          minWidth: 100
+        },
+        { label: '所属机构', prop: 'orgName', minWidth: 150 }
+      ],
+      orgTree: []
     }
   },
   props: {
-    clearList: {},
-    orgId: {},
     single: {
       type: Boolean,
-      default: function() {
+      default: function () {
         return false
       }
     },
     isSelected: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     }
   },
-  watch: {
-    clearList() {
-      this.searchRefresh = !this.searchRefresh
-    }
+  created () {
+    this.getOrgTree()
   },
   methods: {
-    selectable(row, index) {
+    getOrgTree () {
+      this.$http.post('/org/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.orgTree = res.payload
+          this.orgTree.forEach(i => {
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                delete j.children
+              })
+            }
+          })
+        }
+      })
+    },
+    selectable (row, index) {
       if (this.isSelected.length === 0) {
         return 1
       }
       for (let i in this.isSelected) {
-        if (
-          this.isSelected[i].serviceCustomerId &&
-          this.isSelected[i].serviceCustomerId === row.serviceCustomerId
-        ) {
+        console.log(row)
+        if (this.isSelected[i].serviceCustomerId === row.serviceCustomerId) {
           return 0
         } else {
           return 1
         }
       }
     },
-    commitSelection(data) {
+    commitSelection (data) {
       this.$emit('selectObject', data)
     },
-    singleSelect(row, orow) {
+    singleSelect (row, orow) {
       this.$emit('selectObject', row)
     },
-    rowsForamtter(row) {}
+    rowsForamtter (row) {}
   }
 }
 </script>

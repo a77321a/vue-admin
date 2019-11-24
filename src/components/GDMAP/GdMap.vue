@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-18 17:25:15
  * @LastEditors:
- * @LastEditTime: 2019-11-20 21:46:10
+ * @LastEditTime: 2019-11-24 20:28:35
  -->
 <template>
   <div style="position:relative" :style="{height:`${$store.state.dialogHeight}px`}">
@@ -52,13 +52,14 @@ VueAMap.initAMapApiLoader({
 })
 export default {
   name: 'GdMap',
+  props: ['city'],
   data () {
     let self = this
     return {
       amapManager,
       map: {},
       searchOption: {
-        city: '南京',
+        city: this.city || '',
         citylimit: true
       },
       markers: [],

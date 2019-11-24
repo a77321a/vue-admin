@@ -3,15 +3,28 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 23:07:02
+ * @LastEditTime: 2019-11-24 12:55:51
  -->
 <template>
   <div class="event-center">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="活动状态">
+      <el-form-item>
         <el-input
           style="width:300px"
+          v-if="selectType == 1"
+          placeholder="请输入机构名称关键字"
+          v-model="searchData.orgName"
+          class="input-with-select"
+        >
+          <el-select style="width:100px" v-model="selectType" slot="prepend" placeholder="请选择">
+            <el-option label="机构" :value="1"></el-option>
+            <el-option label="活动室" :value="2"></el-option>
+          </el-select>
+        </el-input>
+        <el-input
+          style="width:300px"
+          v-if="selectType == 2"
           placeholder="请输入活动室名称关键字"
           v-model="searchData.activityRoomName"
           class="input-with-select"
@@ -33,11 +46,14 @@
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
         >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+        <el-button
+          @click="searchData = {deviceType:1};searchRefresh = !searchRefresh"
+          size="small"
+        >重置</el-button>
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editEvent'})"
+      @click="$router.push({name:'editMonitorEquipment',query:{deviceType:1}})"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -50,7 +66,7 @@
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
-      api="/device/list"
+      api="/device/pageSearch"
       method="post"
     >
       <template slot-scope="{row}" slot="activityName">
@@ -66,10 +82,14 @@
         </div>
       </template>
       <template slot-scope="{row}" slot="handleColumn">
+        <el-button
+          type="text"
+          @click="$router.push({name:'editMonitorEquipment',query:{deviceType:1,deviceId:row.deviceId}})"
+          size="small"
+        >编辑</el-button>
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleCloseActivity(null)" type="text">结束活动</el-button>
         <el-button @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
@@ -119,20 +139,20 @@ export default {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 60
+          minWidth: 100
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
       selectDevice: []
     }
   },
   created () {
     // this.$store.dispatch('getDictionaryManagement')
+  },
+  watch: {
+    selectType () {
+      this.searchData.orgName = ''
+      this.searchData.activityRoomName = ''
+    }
   },
   methods: {
     commitSelection (data) {
@@ -144,11 +164,15 @@ export default {
     },
     handleDelete (row) {
       let id = row ? [row.deviceId] : this.selectDevice
-      this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
+      this.$confirm(
+        '删除后，该设备下的监控视频将无法查看，是否确认？',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
         .then(() => {
           this.$http.post('/device/delete', { deviceIds: id }).then(res => {
             if (res.code === SUCCESS) {

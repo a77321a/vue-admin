@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 20:31:58
+ * @LastEditTime: 2019-11-24 15:37:42
  -->
 <template>
   <div class="user-manage">
@@ -45,7 +45,7 @@ export default {
           label: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 240
+          minWidth: 60
         }
       ],
       userList: [],

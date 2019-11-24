@@ -73,13 +73,13 @@
             </template>
             <template slot-scope="{row}" slot="action">
               <el-button @click="handlePreview(row)" type="text" size="small">查看</el-button>
-              <span>-</span>
+              
               <el-button
                 @click="$router.push({name:'editMealRecord',query:{mid:row.recordId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
-              <span>-</span>
+              
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
             <template slot="footer-left"></template>
@@ -127,7 +127,7 @@ export default {
   },
   data () {
     return {
-      toggleWidth: 20,
+      toggleWidth: 19,
       searchRefresh: true,
       formInfo: {},
       dialogFormVisible: false,

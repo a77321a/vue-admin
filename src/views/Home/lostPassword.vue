@@ -14,10 +14,10 @@
               autocomplete="off"
             />
           </el-form-item>
-          <el-form-item style="position:relative" prop="imgCode">
+          <el-form-item style="position:relative" prop="verifyCode">
             <el-input
               type="text"
-              v-model="form.imgCode"
+              v-model="form.verifyCode"
               prefix="ios-lock"
               size="large"
               placeholder="验证码"
@@ -25,9 +25,9 @@
             />
             <img @click="getIdentCode" class="img-code" :src="imgIndetCode" alt />
           </el-form-item>
-          <el-form-item style="position:relative" prop="code">
+          <el-form-item style="position:relative" prop="smsCode">
             <el-input
-              v-model="form.code"
+              v-model="form.smsCode"
               prefix="ios-person"
               size="large"
               placeholder="请输入验证码"
@@ -41,10 +41,10 @@
               type="text"
             >{{codeBtnInfo}}</el-button>
           </el-form-item>
-          <el-form-item prop="new_pass">
+          <el-form-item prop="newPassword">
             <el-input
               type="password"
-              v-model="form.new_pass"
+              v-model="form.newPassword"
               prefix="ios-lock"
               size="large"
               clearable
@@ -52,10 +52,10 @@
               autocomplete="off"
             />
           </el-form-item>
-          <el-form-item prop="confirm_new_pass">
+          <el-form-item prop="confirmPassword">
             <el-input
               type="password"
-              v-model="form.confirm_new_pass"
+              v-model="form.confirmPassword"
               prefix="ios-lock"
               size="large"
               placeholder="确认新密码"
@@ -79,7 +79,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     let validatePhone = (rule, value, callback) => {
       let reg = /^1\d{10}$/
       if (value === '') {
@@ -91,13 +91,13 @@ export default {
         // callback();
       }
     }
-    let validateCode = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入验证码'))
-      } else {
-        this.isMobile(callback)
-      }
-    }
+    // let validateCode = (rule, value, callback) => {
+    //   if (value === '') {
+    //     callback(new Error('请输入验证码'))
+    //   } else {
+    //     this.isMobile(callback)
+    //   }
+    // }
     var validateRePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
@@ -133,21 +133,21 @@ export default {
             trigger: 'blur'
           }
         ],
-        imgCode: [
+        verifyCode: [
           {
             required: true,
             message: '图片验证码必须填写',
             trigger: 'blur'
           }
         ],
-        code: [
+        smsCode: [
           {
             required: true,
-            validator: validateCode,
+            message: '验证码必须填写',
             trigger: 'blur'
           }
         ],
-        new_pass: [
+        newPassword: [
           {
             required: true,
             message: '请输入密码',
@@ -160,7 +160,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        confirm_new_pass: [
+        confirmPassword: [
           {
             required: true,
             validator: validateRePass,
@@ -170,28 +170,29 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.getIdentCode()
   },
   methods: {
-    getIdentCode() {
+    getIdentCode () {
       this.$http.get('/api/app/captcha').then(res => {
         this.imgIndetCode = res.data.img
         this.imgkey = res.data.key
       })
     },
-    submit() {
+    submit () {
       this.$refs['usernameLoginForm'].validate(valid => {
         if (!valid) return
         this.$http
           .post('/admin/resetPwd', {
             mobile: this.form.mobile,
-            new_pass: this.form.new_pass,
-            code: this.form.code,
-            admin: true
+            newPassword: this.form.newPassword,
+            smsCode: this.form.smsCode,
+            verifyCode: this.form.verifyCode,
+            confirmPassword: this.form.confirmPassword
           })
           .then(res => {
-            if (res.code === 200) {
+            if (res.code === SUCCESS) {
               this.$router.push({
                 name: 'login'
               })
@@ -201,7 +202,7 @@ export default {
           })
       })
     },
-    getSmsCode() {
+    getSmsCode () {
       this.$refs['usernameLoginForm'].validateField('mobile', valid => {
         if (valid === '') {
           this.$refs['usernameLoginForm'].validateField('imgCode', valid => {
@@ -240,7 +241,7 @@ export default {
         }
       })
     },
-    isMobile(callback) {
+    isMobile (callback) {
       this.$http
         .post('/api/app/isMobile', {
           mobile: this.form.mobile,
@@ -258,7 +259,7 @@ export default {
         })
     }
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 

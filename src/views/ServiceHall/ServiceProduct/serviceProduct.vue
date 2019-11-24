@@ -61,7 +61,7 @@
                 type="text"
                 size="small"
               >编辑</el-button>
-              <span>-</span>
+              
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
           </Table>
@@ -79,7 +79,7 @@ export default {
   },
   data () {
     return {
-      toggleWidth: 20,
+      toggleWidth: 19,
       searchRefresh: true,
       searchData: {},
       tableColumns: [

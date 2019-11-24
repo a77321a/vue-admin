@@ -62,13 +62,13 @@
                 type="text"
                 size="small"
               >详情</el-button>
-              <span>-</span>
+              
               <el-button
                 @click="$router.push({name:'editServiceUser',query:{uid:row.orgServiceProviderId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
-              <span>-</span>
+              
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
             <template slot="footer-left">
@@ -90,7 +90,7 @@ export default {
   },
   data () {
     return {
-      toggleWidth: 20,
+      toggleWidth: 19,
       searchRefresh: true,
       searchData: {},
       tableColumns: [

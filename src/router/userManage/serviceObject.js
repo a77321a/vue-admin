@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-09 11:58:07
+ * @LastEditTime: 2019-11-24 15:27:58
  */
 export default [
   {
@@ -21,6 +21,15 @@ export default [
     component: () => import('@/views/UserManage/ServiceObject/editObject.vue'),
     meta: {
       title: '新增/编辑服务对象',
+      parent: 'serviceObject'
+    }
+  },
+  {
+    path: 'serviceObjectInfo',
+    name: 'serviceObjectInfo',
+    component: () => import('@/views/UserManage/ServiceObject/serviceObjectInfo.vue'),
+    meta: {
+      title: '服务对象详情',
       parent: 'serviceObject'
     }
   }

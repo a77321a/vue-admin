@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-21 17:20:04
+ * @LastEditTime: 2019-11-24 09:44:21
  -->
 <template>
   <div class="angecy-manage">
@@ -96,13 +96,13 @@
           type="text"
           size="small"
         >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button>
-        <span>-</span>
+
         <el-button
           type="text"
           size="small"
           @click="$router.push({ name: 'editAgency', query: { oid: row.orgId,parent:row.parentOrgId == 0 ? '' :row.parentOrgId }})"
         >编辑</el-button>
-        <span>-</span>
+
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
     </Table>
@@ -111,13 +111,13 @@
 <script>
 export default {
   name: 'agencyManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
         { label: '机构名称', prop: 'orgName', minWidth: 200 },
-        { label: '服务范围', slot: 'orgAddress', minWidth: 150 },
+        { label: '服务范围', prop: 'serviceScopeName', minWidth: 150 },
         {
           label: '机构类型',
           slot: 'orgType',
@@ -145,13 +145,13 @@ export default {
       operationModeList: []
     }
   },
-  created () {
+  created() {
     this.getOrgType()
     this.getServiceType()
     this.getOperationMode()
   },
   methods: {
-    handleAppend (row) {
+    handleAppend(row) {
       this.$router.push({
         name: 'editAgency',
         query: {
@@ -159,21 +159,21 @@ export default {
         }
       })
     },
-    getServiceType () {
+    getServiceType() {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType () {
+    getOrgType() {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    getOperationMode () {
+    getOperationMode() {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
@@ -181,7 +181,7 @@ export default {
       })
     },
 
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1
           ? '注销后，与该机构管理的旧数据不受影响，新增数据时，将无法关联该机构，同时仅与该机构关联的管理员，将无法登录平台，是否确认？'
@@ -203,7 +203,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = [row.orgId]
       this.$confirm(
         '删除后，与该机构相关的数据将被取消关联，同时仅与该机构关联的管理员，将无法登录平台，是否确认？',

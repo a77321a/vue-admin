@@ -3,13 +3,16 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:40:33
+ * @LastEditTime: 2019-11-24 15:39:24
  -->
 <template>
   <div id="event-info">
     <el-card shadow="never" class="box-card">
       <div class="flex-t-l">
-        <img :src="eventInfo.activityIndexPic" alt />
+        <img
+          :src="$store.state.config.systemConfig[0].dictionaryValue+eventInfo.activityIndexPic"
+          alt
+        />
         <div class="flex-column-t">
           <h4 style="margin-bottom:10px;margin-top:5px">{{eventInfo.activityName}}</h4>
           <el-form label-position="left" ref="form" :model="eventInfo" label-width="100px">

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-23 15:08:11
+ * @LastEditTime: 2019-11-24 13:10:10
  -->
 <template>
   <div>
@@ -67,9 +67,10 @@
       <div style="float:left;margin-top:-5px">
         <slot name="footer-left"></slot>
       </div>
+      <!-- hide-on-single-page -->
+
       <el-pagination
         style="margin-top:5px;"
-        hide-on-single-page
         @current-change="handlePage"
         @size-change="handleSizeChange"
         :total="total"

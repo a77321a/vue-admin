@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-16 18:41:35
  * @LastEditors:
- * @LastEditTime: 2019-11-20 15:34:25
+ * @LastEditTime: 2019-11-24 13:20:17
  -->
 <template>
   <el-col
@@ -23,12 +23,8 @@
           <el-button @click="getServiceTypeList" slot="append" icon="el-icon-search"></el-button>
         </el-input>
         <div class="checked">
-          {{checkType.pensionServiceTypeName||'所有类型'}}
-          <i
-            @click="filterOrg (null, true)"
-            style="float:right"
-            class="el-icon-error closeFilter"
-          ></i>
+          <span>{{checkType.pensionServiceTypeName||'所有类型'}}</span>
+          <i @click="filterOrg (null, true)" style="float:right" class="el-icon-error closeFilter"></i>
         </div>
         <div>
           <div
@@ -134,12 +130,13 @@ export default {
     padding: 0;
   }
   .son-list {
-    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
     height: 32px;
     line-height: 32px;
+    font-size: 13px;
+    font-weight: 500;
     transition: background 0.2s ease-in;
     padding: 0 15px;
     &:hover {
@@ -151,12 +148,20 @@ export default {
     background-color: #f9f9f9;
 
     width: calc(100% - 30px);
+
     padding-left: 20px;
     height: 34px;
     line-height: 34px;
     margin: 10px 0;
     border-left: 5px solid #409eff;
     position: relative;
+    span {
+      display: inline-block;
+      width: calc(100% - 20px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     &::after {
       position: absolute;
       top: -1px;
