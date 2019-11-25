@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:43:04
+ * @LastEditTime: 2019-11-25 20:37:39
  -->
 <template>
   <div class="Participants">
@@ -22,12 +22,20 @@
           type="primary"
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
-        >搜索</el-button>
+          >搜索</el-button
+        >
         <el-button
-          @click="searchData = {activityId:searchData.activityId};searchRefresh = !searchRefresh"
+          @click="
+            searchData = { activityId: searchData.activityId };
+            searchRefresh = !searchRefresh;
+          "
           size="small"
-        >重置</el-button>
+          >重置</el-button
+        >
       </el-form-item>
+      <div style="float:right">
+        参与人员：{{}}
+      </div>
     </el-form>
     <!-- 列表 -->
     <Table
@@ -38,19 +46,23 @@
       api="/activity/provider/pageSearch"
       method="post"
     >
-      <template slot="orgServiceProviderName" slot-scope="{row}">
+      <template slot="orgServiceProviderName" slot-scope="{ row }">
         <div class="flex-t-u">
-          <el-avatar class="avatar" size="medium" :src="row.indexPic"></el-avatar>
-          <span class="f-title">{{row.orgServiceProviderName}}</span>
+          <el-avatar
+            class="avatar"
+            size="medium"
+            :src="row.indexPic"
+          ></el-avatar>
+          <span class="f-title">{{ row.orgServiceProviderName }}</span>
         </div>
       </template>
-      <template slot="orgServiceProductList" slot-scope="{row}">
-        <span :key="index" v-for="(item,index) in row.orgServiceProductList">
-          {{item.orgServiceProductName}}
+      <template slot="orgServiceProductList" slot-scope="{ row }">
+        <span :key="index" v-for="(item, index) in row.orgServiceProductList">
+          {{ item.orgServiceProductName }}
           <span v-if="index != row.orgServiceProductList.length - 1">、</span>
         </span>
       </template>
-      <template slot-scope="{row}" slot="handleColumn">
+      <template slot-scope="{ row }" slot="handleColumn">
         <el-button type="text" size="small">查看</el-button>
       </template>
     </Table>
@@ -58,30 +70,30 @@
 </template>
 <script>
 export default {
-  name: 'ServicePerson',
-  data () {
+  name: "ServicePerson",
+  data() {
     return {
       searchRefresh: true,
       searchData: { activityId: this.activityId },
       tableColumns: [
-        { label: '姓名', slot: 'orgServiceProviderName', minWidth: 150 },
-        { label: '联系人电话', prop: 'telephoneNum', minWidth: 100 },
-        { label: '服务产品', slot: 'orgServiceProductList', minWidth: 200 },
-        { label: '操作', slot: 'handleColumn', fixed: 'right', minWidth: 60 }
+        { label: "姓名", slot: "orgServiceProviderName", minWidth: 150 },
+        { label: "联系人电话", prop: "telephoneNum", minWidth: 100 },
+        { label: "服务产品", slot: "orgServiceProductList", minWidth: 200 },
+        { label: "操作", slot: "handleColumn", fixed: "right", minWidth: 60 }
       ]
-    }
+    };
   },
-  props: ['activityId'],
+  props: ["activityId"],
 
-  created () {},
+  created() {},
   methods: {
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
-        row.activityTime = row.startTime + '~' + row.endTime
-      })
+        row.activityTime = row.startTime + "~" + row.endTime;
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .Participants {

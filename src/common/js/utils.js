@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-19 21:09:55
  * @LastEditors:
- * @LastEditTime: 2019-11-22 21:24:14
+ * @LastEditTime: 2019-11-25 14:01:58
  */
 const func = {
   transLabel: (arr, str) => {
@@ -14,6 +14,16 @@ const func = {
       }
     }
     return '--'
+  },
+  getWeek: (dt) => {
+    let d1 = new Date(dt)
+    let d2 = new Date(dt)
+    d2.setMonth(0)
+    d2.setDate(1)
+    let rq = d1 - d2
+    let days = Math.ceil(rq / (24 * 60 * 60 * 1000))
+    let num = Math.ceil(days / 7)
+    return num
   }
 }
 

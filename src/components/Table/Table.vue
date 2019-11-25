@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-24 13:10:10
+ * @LastEditTime: 2019-11-25 17:35:59
  -->
 <template>
   <div>
@@ -41,7 +41,7 @@
         v-for="column in columns"
         :sortable="column.sortable"
         :key="column.index"
-        :header-align="column.headerAlign||'center'"
+        :header-align="column.headerAlign || 'center'"
         :prop="column.prop"
         :label="column.label"
         :min-width="column.minWidth"
@@ -55,9 +55,11 @@
           <slot
             v-if="column.slot"
             :row="scope.row"
+            :scope="scope"
             :index="scope.$index"
             :name="column.slot"
-          >{{ column.slot }}</slot>
+            >{{ column.slot }}</slot
+          >
           <span>{{ scope.row[column.prop] }}</span>
         </template>
       </el-table-column>
@@ -138,6 +140,9 @@ export default {
     rowKey: {
       type: String
     },
+    menuFor: {
+      type: Function
+    },
     rowsForamtter: {
       type: Function
     },
@@ -151,14 +156,14 @@ export default {
     api: {
       type: String,
       default: function () {
-        return ''
+        return '';
       }
     },
     // 表格尺寸
     size: {
       type: String,
       default: function () {
-        return 'small'
+        return 'small';
       }
     },
     // 是否可以选择
@@ -194,7 +199,7 @@ export default {
     method: {
       type: String,
       default: function () {
-        return 'get'
+        return 'get';
       }
     },
     // 请求参数
@@ -258,13 +263,16 @@ export default {
             this.dataSource = res.payload.records
               ? res.payload.records
               : res.payload
-
+            if (this.menuFor) {
+              this.dataSource = this.menuFor(this.dataSource)
+            }
             if (this.rowsForamtter) {
               this.rowsForamtter(this.dataSource)
             }
             if (this.getSpanArr) {
               this.getSpanArr(res.payload)
             }
+            console.log(this.dataSource)
             this.total = Number(res.payload.total)
           }
         })
