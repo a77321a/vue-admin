@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-25 18:00:12
+ * @LastEditTime: 2019-11-25 20:41:43
  -->
 <template>
   <div class="meal-center">
@@ -44,7 +44,7 @@
         >
         <el-button
           @click="
-            searchData = {};
+            searchData = { orgId: searchData.orgId };
             searchRefresh = !searchRefresh;
           "
           size="small"
@@ -153,37 +153,37 @@ export default {
       searchData: {},
       orgList: [],
       tableColumns: [
-        { label: '时段及日期', prop: 'type', minWidth: 200 },
-        { label: '星期一', slot: 'one', minWidth: 100 },
+        { label: '时段及日期', prop: 'type', fixed: 'left', minWidth: 100 },
+        { label: '星期一', slot: 'one', minWidth: 140 },
         {
           label: '星期二',
           slot: 'two',
-          minWidth: 100
+          minWidth: 140
         },
         {
           label: '星期三',
           slot: 'three',
-          minWidth: 100
+          minWidth: 140
         },
         {
           label: '星期四',
           slot: 'four',
-          minWidth: 100
+          minWidth: 140
         },
         {
           label: '星期五',
           slot: 'five',
-          minWidth: 100
+          minWidth: 140
         },
         {
           label: '星期六',
           slot: 'six',
-          minWidth: 100
+          minWidth: 140
         },
         {
           label: '星期天',
           slot: 'seven',
-          minWidth: 100
+          minWidth: 120
         }
       ],
       userList: [],
@@ -256,7 +256,7 @@ export default {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
       } else {
-        this.searchData.week = '';
+        this.searchData.week = ''
       }
     },
     getOrgList () {
@@ -275,8 +275,9 @@ export default {
               })
             }
           })
-          this.api = '/org/foodMenu/week';
-          this.$refs.search.click()
+          this.api = '/org/foodMenu/week'
+          this.searchRefresh = !this.searchRefresh
+          // this.$refs.search.click()
         }
       })
     },

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-25 17:35:59
+ * @LastEditTime: 2019-11-25 20:42:34
  -->
 <template>
   <div>
@@ -72,6 +72,7 @@
       <!-- hide-on-single-page -->
 
       <el-pagination
+        hide-on-single-page
         style="margin-top:5px;"
         @current-change="handlePage"
         @size-change="handleSizeChange"

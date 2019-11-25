@@ -70,30 +70,30 @@
 </template>
 <script>
 export default {
-  name: "ServicePerson",
-  data() {
+  name: 'ServicePerson',
+  data () {
     return {
       searchRefresh: true,
       searchData: { activityId: this.activityId },
       tableColumns: [
-        { label: "姓名", slot: "orgServiceProviderName", minWidth: 150 },
-        { label: "联系人电话", prop: "telephoneNum", minWidth: 100 },
-        { label: "服务产品", slot: "orgServiceProductList", minWidth: 200 },
-        { label: "操作", slot: "handleColumn", fixed: "right", minWidth: 60 }
+        { label: '姓名', slot: 'orgServiceProviderName', minWidth: 150 },
+        { label: '联系人电话', prop: 'telephoneNum', minWidth: 100 },
+        { label: '服务产品', slot: 'orgServiceProductList', minWidth: 200 },
+        { label: '操作', slot: 'handleColumn', fixed: 'right', minWidth: 60 }
       ]
-    };
+    }
   },
-  props: ["activityId"],
+  props: ['activityId'],
 
-  created() {},
+  created () {},
   methods: {
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
-        row.activityTime = row.startTime + "~" + row.endTime;
-      });
+        row.activityTime = row.startTime + '~' + row.endTime
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .Participants {
