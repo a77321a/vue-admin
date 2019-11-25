@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 16:05:09
  * @LastEditors:
- * @LastEditTime: 2019-11-21 17:58:45
+ * @LastEditTime: 2019-11-24 21:48:17
  */
 export default [
   {
@@ -227,6 +227,10 @@ export default [
         name: '角色权限',
         icon: '',
         children: [
+          {
+            url: 'permissionConfig',
+            name: '权限管理'
+          },
           {
             url: 'roleManage',
             name: '角色管理'

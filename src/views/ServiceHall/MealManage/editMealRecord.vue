@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-23 16:28:59
+ * @LastEditTime: 2019-11-25 22:32:59
  -->
 <template>
   <div id="edit-event">
@@ -107,7 +107,7 @@
     <el-dialog width="60%" lock-scroll destroy-on-close title="选择菜品" :visible.sync="dialogFood">
       <selectFood @selectFood="selectFood"></selectFood>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFood = false;checkedObject={}">取 消</el-button>
+        <el-button @click="dialogFood = false;selectFoodList={}">取 消</el-button>
         <el-button type="primary" @click="handleSaveSelectFood">确 定</el-button>
       </span>
     </el-dialog>

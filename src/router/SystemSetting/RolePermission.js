@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:49:05
+ * @LastEditTime: 2019-11-24 21:47:44
  */
 export default [
   {
@@ -21,6 +21,15 @@ export default [
     component: () => import('@/views/SystemSetting/RolePermission/accountSetting.vue'),
     meta: {
       title: '账号设置',
+      root: true
+    }
+  },
+  {
+    path: 'permissionConfig',
+    name: 'permissionConfig',
+    component: () => import('@/views/SystemSetting/RolePermission/permissionConfig.vue'),
+    meta: {
+      title: '权限管理',
       root: true
     }
   },

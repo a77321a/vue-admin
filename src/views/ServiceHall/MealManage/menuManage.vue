@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-25 20:41:43
+ * @LastEditTime: 2019-11-25 23:01:13
  -->
 <template>
   <div class="meal-center">
@@ -28,10 +28,7 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="姓名">
-        <el-input
-          placeholder="请输入姓名关键字"
-          v-model="searchData.mobile"
-        ></el-input>
+        <el-input placeholder="请输入姓名关键字" v-model="searchData.mobile"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -40,16 +37,14 @@
           ref="search"
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
-          >搜索</el-button
-        >
+        >搜索</el-button>
         <el-button
           @click="
             searchData = { orgId: searchData.orgId };
             searchRefresh = !searchRefresh;
           "
           size="small"
-          >重置</el-button
-        >
+        >重置</el-button>
       </el-form-item>
     </el-form>
     <!-- <el-button
@@ -59,10 +54,10 @@
       type="primary"
       >新增菜谱</el-button
     >
-    <el-button style="margin-bottom:15px" size="small">复制菜谱</el-button> -->
+    <el-button style="margin-bottom:15px" size="small">复制菜谱</el-button>-->
     <!-- 列表 -->
     <!-- :spanMethod="cellMerge"
-      :spanFilter="getSpanArr" -->
+    :spanFilter="getSpanArr"-->
     <Table
       :menuFor="rowsForamtter"
       :searchRefresh="searchRefresh"
@@ -74,119 +69,160 @@
     >
       <template slot="one" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.one" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
-            {{ item.foodName }}
-          </el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)"
-          >+ 新增菜品</el-button
-        >
+        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
       <template slot="two" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.two" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
-            {{ item.foodName }}
-          </el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)"
-          >+ 新增菜品</el-button
-        > </template
-      ><template slot="three" slot-scope="{ row, scope }">
+        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+      </template>
+      <template slot="three" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.three" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
-            {{ item.foodName }}
-          </el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)"
-          >+ 新增菜品</el-button
-        > </template
-      ><template slot="four" slot-scope="{ row, scope }">
+        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+      </template>
+      <template slot="four" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.four" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
-            {{ item.foodName }}
-          </el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)"
-          >+ 新增菜品</el-button
-        > </template
-      ><template slot="five" slot-scope="{ row, scope }">
+        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+      </template>
+      <template slot="five" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.five" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
-            {{ item.foodName }}
-          </el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)"
-          >+ 新增菜品</el-button
-        > </template
-      ><template slot="six" slot-scope="{ row, scope }">
+        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+      </template>
+      <template slot="six" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.six" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
-            {{ item.foodName }}
-          </el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)"
-          >+ 新增菜品</el-button
-        > </template
-      ><template slot="seven" slot-scope="{ row, scope }">
+        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+      </template>
+      <template slot="seven" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.seven" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
-            {{ item.foodName }}
-          </el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)"
-          >+ 新增菜品</el-button
-        >
+        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
     </Table>
+    <el-dialog title="添加菜品" :visible.sync="dialogFormVisible">
+      <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
+        <el-form-item label="所属机构" prop="orgIds">
+          <el-select clearable multiple v-model="formInfo.orgIds" placeholder="请选择用户状态">
+            <el-option
+              v-for="(item, index) in orgSelectList"
+              :key="index"
+              :label="item.orgName"
+              :value="item.orgId"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="菜品" required>
+          <el-tag
+            style="margin-right:5px"
+            :key="index"
+            v-for="(item,index) in formInfo.breakfast"
+            @close="formInfo.breakfast.splice(index,1)"
+            closable
+          >{{ item.foodName }}</el-tag>
+          <el-button type="text" @click="dialogFood = true">添加</el-button>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSaveForm">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog width="60%" lock-scroll destroy-on-close title="选择菜品" :visible.sync="dialogFood">
+      <selectFood @selectFood="selectFood"></selectFood>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFood = false;selectFoodList = []">取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectFood">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 // import MockData from '../../../components/Table/Mock'
+import selectFood from '../../../components/SelectTable/selectFood.vue'
 
 export default {
   name: 'mealCenter',
+  components: {
+    selectFood
+  },
   data () {
     return {
       api: '',
       week: new Date(),
       searchRefresh: true,
+      dialogFormVisible: false,
+      dialogFood: false,
+      rules: {
+        orgIds: [{ required: true, message: '请选择机构', trigger: 'change' }]
+      },
+      formInfo: {
+        breakfast: [],
+        dateTime: '',
+        orgIds: [],
+        lunch: [],
+        supper: []
+      },
       searchData: {},
       orgList: [],
       tableColumns: [
-        { label: '时段及日期', prop: 'type', fixed: 'left', minWidth: 100 },
-        { label: '星期一', slot: 'one', minWidth: 140 },
+        {
+          label: '时段及日期',
+          prop: 'type',
+          fixed: 'left',
+          minWidth: 100,
+          className: '',
+          columnKey: ''
+        },
+        { label: '星期一', slot: 'one', className: '', columnKey: '' },
         {
           label: '星期二',
           slot: 'two',
-          minWidth: 140
+          className: '',
+          columnKey: ''
         },
         {
           label: '星期三',
           slot: 'three',
-          minWidth: 140
+          className: '',
+          columnKey: ''
         },
         {
           label: '星期四',
           slot: 'four',
-          minWidth: 140
+          className: '',
+          columnKey: ''
         },
         {
           label: '星期五',
           slot: 'five',
-          minWidth: 140
+          className: '',
+          columnKey: ''
         },
         {
           label: '星期六',
           slot: 'six',
-          minWidth: 140
+          className: '',
+          columnKey: ''
         },
         {
           label: '星期天',
           slot: 'seven',
-          minWidth: 120
+          className: '',
+          columnKey: ''
         }
       ],
-      userList: [],
+      orgSelectList: [],
       limit: 10,
       limit2: 10,
       rowList: [],
@@ -194,31 +230,119 @@ export default {
       position: 0,
       listData: [],
       tempType: '',
-      rowNum: 0
+      rowNum: 0,
+      selectFoodList: [],
+      addType: ''
     }
   },
   created () {
     this.getOrgList()
+    this.getOrg()
   },
   methods: {
-    handleDelete (row) {
-      console.log(row)
+    selectFood (data) {
+      this.selectFoodList = data
     },
-    handleAddFood (row) {
-      console.log(row)
+    handleSaveForm () {
+      let arr = []
+      this.formInfo.breakfast.forEach(i => {
+        arr.push(i.foodId)
+      })
+      this.$http
+        .post('/org/foodMenu/replace', {
+          breakfast: this.addType === '早餐' ? arr : [],
+          lunch: this.addType === '午餐' ? arr : [],
+          supper: this.addType === '晚餐' ? arr : [],
+          dateTime: this.formInfo.dateTime,
+          orgIds: this.formInfo.orgIds
+        })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.$message.success('操作成功')
+            this.formInfo.orgIds = []
+            this.formInfo.breakfast = []
+            this.dialogFormVisible = false
+            this.searchRefresh = !this.searchRefresh
+          }
+        })
+    },
+    handleSaveSelectFood () {
+      this.formInfo.breakfast = this.formInfo.breakfast.concat(
+        this.selectFoodList
+      )
+
+      // let arr = []
+      // this.selectFoodList.forEach(i => {
+      //   arr.push(i.foodId)
+      // })
+      this.dialogFood = false
+    },
+    getOrg () {
+      this.$http
+        .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.orgSelectList = res.payload.records
+          }
+        })
+    },
+    handleDelete (scope, row) {
+      console.log(scope)
+      let content = '删除后，该菜品将不再该时段显示，是否确认？'
+      this.$confirm(content, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$http
+            .post('/user/delete', {
+              dateTime: scope.column.className,
+              orgId: scope.column.columnKey
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
+        })
+        .catch(() => {})
+    },
+    handleAddFood (scope) {
+      this.formInfo.dateTime = scope.column.className
+      this.addType = scope.row.type
+      this.dialogFormVisible = true
     },
     rowsForamtter (rows) {
-      if (rows.length < 7) {
-        let len = 7 - rows.length
-        for (let i = 0; i < len; i++) {
-          rows.push({})
-        }
-      }
+      // if (rows.length < 7) {
+      //   let len = 7 - rows.length
+      //   for (let i = 0; i < len; i++) {
+      //     rows.push({})
+      //   }
+      // }
       let mmap = ['one', 'two', 'three', 'four', 'five', 'six', 'seven']
+      let weekMap = [
+        '星期一',
+        '星期二',
+        '星期三',
+        '星期四',
+        '星期五',
+        '星期六',
+        '星期日'
+      ]
+
       let fast = {}
       let lunch = {}
       let dinner = {}
+
       for (let i in rows) {
+        let menuDate = new Date(rows[i].dateTime)
+        this.tableColumns[Number(i) + 1].className = rows[i].dateTime
+        this.tableColumns[Number(i) + 1].columnKey = rows[i].orgId
+        this.tableColumns[Number(i) + 1].label = `${
+          weekMap[i]
+        } ${menuDate.getMonth() + 1}-${menuDate.getDate()}`
         if (rows[i].breakfast && rows[i].breakfast.length > 0) {
           fast[mmap[i]] = rows[i].breakfast
         } else {
@@ -249,7 +373,6 @@ export default {
           ...dinner
         }
       ]
-      console.log(res)
       return res
     },
     transferWeek (date) {

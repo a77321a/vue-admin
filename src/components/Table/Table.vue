@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-25 20:42:34
+ * @LastEditTime: 2019-11-25 23:00:59
  -->
 <template>
   <div>
@@ -40,6 +40,8 @@
       <el-table-column
         v-for="column in columns"
         :sortable="column.sortable"
+        :class-name="column.className"
+        :column-key="columns.columnKey"
         :key="column.index"
         :header-align="column.headerAlign || 'center'"
         :prop="column.prop"
@@ -58,8 +60,7 @@
             :scope="scope"
             :index="scope.$index"
             :name="column.slot"
-            >{{ column.slot }}</slot
-          >
+          >{{ column.slot }}</slot>
           <span>{{ scope.row[column.prop] }}</span>
         </template>
       </el-table-column>
@@ -157,14 +158,14 @@ export default {
     api: {
       type: String,
       default: function () {
-        return '';
+        return ''
       }
     },
     // 表格尺寸
     size: {
       type: String,
       default: function () {
-        return 'small';
+        return 'small'
       }
     },
     // 是否可以选择
@@ -200,7 +201,7 @@ export default {
     method: {
       type: String,
       default: function () {
-        return 'get';
+        return 'get'
       }
     },
     // 请求参数
