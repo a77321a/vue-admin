@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-25 23:01:13
+ * @LastEditTime: 2019-11-26 14:38:59
  -->
 <template>
   <div class="meal-center">
@@ -69,43 +69,57 @@
     >
       <template slot="one" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.one" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>
+            <span class="food-name">{{ item.foodName }}</span>
+          </el-tag>
         </div>
         <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
       <template slot="two" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.two" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>
+            <span class="food-name">{{ item.foodName }}</span>
+          </el-tag>
         </div>
         <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
       <template slot="three" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.three" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>
+            <span class="food-name">{{ item.foodName }}</span>
+          </el-tag>
         </div>
         <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
       <template slot="four" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.four" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>
+            <span class="food-name">{{ item.foodName }}</span>
+          </el-tag>
         </div>
         <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
       <template slot="five" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.five" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>
+            <span class="food-name">{{ item.foodName }}</span>
+          </el-tag>
         </div>
         <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
       <template slot="six" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.six" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>
+            <span class="food-name">{{ item.foodName }}</span>
+          </el-tag>
         </div>
         <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
       <template slot="seven" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.seven" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>{{ item.foodName }}</el-tag>
+          <el-tag @close="handleDelete(scope, row)" closable>
+            <span class="food-name">{{ item.foodName }}</span>
+          </el-tag>
         </div>
         <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
       </template>
@@ -184,42 +198,54 @@ export default {
           className: '',
           columnKey: ''
         },
-        { label: '星期一', slot: 'one', className: '', columnKey: '' },
+        {
+          label: '星期一',
+          slot: 'one',
+          className: '',
+          columnKey: '',
+          minWidth: 140
+        },
         {
           label: '星期二',
           slot: 'two',
           className: '',
-          columnKey: ''
+          columnKey: '',
+          minWidth: 140
         },
         {
           label: '星期三',
           slot: 'three',
           className: '',
-          columnKey: ''
+          columnKey: '',
+          minWidth: 140
         },
         {
           label: '星期四',
           slot: 'four',
           className: '',
-          columnKey: ''
+          columnKey: '',
+          minWidth: 140
         },
         {
           label: '星期五',
           slot: 'five',
           className: '',
-          columnKey: ''
+          columnKey: '',
+          minWidth: 140
         },
         {
           label: '星期六',
           slot: 'six',
           className: '',
-          columnKey: ''
+          columnKey: '',
+          minWidth: 140
         },
         {
           label: '星期天',
           slot: 'seven',
           className: '',
-          columnKey: ''
+          columnKey: '',
+          minWidth: 140
         }
       ],
       orgSelectList: [],
@@ -296,9 +322,9 @@ export default {
       })
         .then(() => {
           this.$http
-            .post('/user/delete', {
+            .post('/org/foodMenu/delete', {
               dateTime: scope.column.className,
-              orgId: scope.column.columnKey
+              orgId: this.searchData.orgId
             })
             .then(res => {
               if (res.code === SUCCESS) {
@@ -439,6 +465,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.food-name {
+  display: inline-block;
+  max-width: 80px;
+  white-space: nowrap;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .meal-center {
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
