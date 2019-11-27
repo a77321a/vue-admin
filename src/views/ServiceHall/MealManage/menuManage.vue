@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-26 14:38:59
+ * @LastEditTime: 2019-11-27 23:07:57
  -->
 <template>
   <div class="meal-center">
@@ -53,8 +53,8 @@
       size="small"
       type="primary"
       >新增菜谱</el-button
-    >
-    <el-button style="margin-bottom:15px" size="small">复制菜谱</el-button>-->
+    >-->
+    <el-button style="margin-bottom:15px" size="small">复制本周菜谱</el-button>
     <!-- 列表 -->
     <!-- :spanMethod="cellMerge"
     :spanFilter="getSpanArr"-->
@@ -159,10 +159,26 @@
         <el-button type="primary" @click="handleSaveSelectFood">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog width="60%" lock-scroll destroy-on-close title="复制菜谱" :visible.sync="dialogFormMenu">
+      <el-form>
+        <el-form-item label="将本周菜谱设置为" required>
+          <el-date-picker
+            v-model="copyWeek"
+            :picker-options="{ firstDayOfWeek: 1 }"
+            type="week"
+            format="yyyy 第 WW 周"
+            placeholder="选择周"
+          ></el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormMenu = false;">取 消</el-button>
+        <el-button type="primary" @click="handleSaveCopyMenu">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-// import MockData from '../../../components/Table/Mock'
 import selectFood from '../../../components/SelectTable/selectFood.vue'
 
 export default {
@@ -170,10 +186,12 @@ export default {
   components: {
     selectFood
   },
-  data () {
+  data() {
     return {
+      dialogFormMenu: true,
       api: '',
       week: new Date(),
+      copyWeek: '',
       searchRefresh: true,
       dialogFormVisible: false,
       dialogFood: false,
@@ -261,15 +279,83 @@ export default {
       addType: ''
     }
   },
-  created () {
+  created() {
     this.getOrgList()
     this.getOrg()
   },
   methods: {
-    selectFood (data) {
+    handleSaveCopyMenu() {
+      if (!this.copyWeek) {
+        this.$message.error('请选择时间')
+        return false
+      }
+      this.$http
+        .post('/org/foodMenu/check', {
+          orgId: this.searchData.orgId,
+          week: this.$func.getWeek(new Date(this.copyWeek)) + 1,
+          year: new Date(this.copyWeek).getFullYear()
+        })
+        .then(res => {
+          if (res.payload) {
+            this.$confirm(
+              '设置周期已含有菜谱，如继续，则会在对应的周期时段上增加相应的菜品，是否确认？',
+              '提示',
+              {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }
+            ).then(() => {
+              this.$http
+                .post('/org/foodMenu/copy', {
+                  orgId: this.searchData.orgId ? this.searchData.orgId : '',
+                  sourceWeek: this.week
+                    ? this.$func.getWeek(this.week) + 1
+                    : this.$func.getWeek(new Date()) + 1,
+                  sourceYear: this.week
+                    ? this.week.getFullYear()
+                    : new Date().getFullYear(),
+                  targetWeek: this.$func.getWeek(this.copyWeek) + 1,
+                  targetYear: this.copyWeek.getFullYear()
+                })
+                .then(res => {
+                  if (res.code === SUCCESS) {
+                    this.$message.success('操作成功')
+                    this.dialogFormMenu = false
+                    this.searchRefresh = !this.searchRefresh
+                  }
+                })
+            })
+          } else {
+            this.$http
+              .post('/org/foodMenu/copy', {
+                orgId: this.searchData.orgId ? this.searchData.orgId : '',
+                sourceWeek: this.week
+                  ? this.$func.getWeek(this.week) + 1
+                  : this.$func.getWeek(new Date()) + 1,
+                sourceYear: this.week
+                  ? this.week.getFullYear()
+                  : new Date().getFullYear(),
+                targetWeek: this.$func.getWeek(this.copyWeek) + 1,
+                targetYear: this.copyWeek.getFullYear()
+              })
+              .then(res => {
+                if (res.code === SUCCESS) {
+                  this.$message.success('操作成功')
+                  this.dialogFormMenu = false
+
+                  this.searchRefresh = !this.searchRefresh
+                }
+              })
+          }
+        })
+    },
+    // 选择菜品
+    selectFood(data) {
       this.selectFoodList = data
     },
-    handleSaveForm () {
+    // 确定选择
+    handleSaveForm() {
       let arr = []
       this.formInfo.breakfast.forEach(i => {
         arr.push(i.foodId)
@@ -292,7 +378,7 @@ export default {
           }
         })
     },
-    handleSaveSelectFood () {
+    handleSaveSelectFood() {
       this.formInfo.breakfast = this.formInfo.breakfast.concat(
         this.selectFoodList
       )
@@ -303,7 +389,7 @@ export default {
       // })
       this.dialogFood = false
     },
-    getOrg () {
+    getOrg() {
       this.$http
         .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
         .then(res => {
@@ -312,7 +398,7 @@ export default {
           }
         })
     },
-    handleDelete (scope, row) {
+    handleDelete(scope, row) {
       console.log(scope)
       let content = '删除后，该菜品将不再该时段显示，是否确认？'
       this.$confirm(content, '提示', {
@@ -335,12 +421,12 @@ export default {
         })
         .catch(() => {})
     },
-    handleAddFood (scope) {
+    handleAddFood(scope) {
       this.formInfo.dateTime = scope.column.className
       this.addType = scope.row.type
       this.dialogFormVisible = true
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       // if (rows.length < 7) {
       //   let len = 7 - rows.length
       //   for (let i = 0; i < len; i++) {
@@ -401,14 +487,14 @@ export default {
       ]
       return res
     },
-    transferWeek (date) {
+    transferWeek(date) {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
       } else {
         this.searchData.week = ''
       }
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -430,7 +516,7 @@ export default {
         }
       })
     },
-    cellMerge ({ row, column, rowIndex, columnIndex }) {
+    cellMerge({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex]
         const _col = _row ? 1 : 0
@@ -444,7 +530,7 @@ export default {
         }
       }
     },
-    getSpanArr (data) {
+    getSpanArr(data) {
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           this.spanArr.push(1)

@@ -23,7 +23,7 @@
               placeholder="验证码"
               autocomplete="off"
             />
-            <img @click="getIdentCode" class="img-code" :src="imgIndetCode" alt />
+            <img @click="getIdentCode" class="img-code" :src="`${ctx}/sms/verifyCode?${query}`" alt />
           </el-form-item>
           <el-form-item style="position:relative" prop="smsCode">
             <el-input
@@ -87,8 +87,7 @@ export default {
       } else if (reg.test(value) === false) {
         callback(new Error('请输入正确的11位号码！'))
       } else {
-        this.isMobile(callback)
-        // callback();
+        callback()
       }
     }
     // let validateCode = (rule, value, callback) => {
@@ -108,6 +107,8 @@ export default {
       }
     }
     return {
+      ctx: window.ctx,
+      query: '',
       loginBg: require('@/assets/login_bg.png'),
       codeBtn: false, // 是否禁用获取手机验证码
       codeBtnInfo: '获取验证码', // 验证码倒计时信息
@@ -175,10 +176,8 @@ export default {
   },
   methods: {
     getIdentCode () {
-      this.$http.get('/api/app/captcha').then(res => {
-        this.imgIndetCode = res.data.img
-        this.imgkey = res.data.key
-      })
+      // this.$http.get('/sms/verifyCode').then(res => {})
+      this.query = Math.random()
     },
     submit () {
       this.$refs['usernameLoginForm'].validate(valid => {
