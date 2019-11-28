@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 09:44:21
+ * @LastEditTime: 2019-11-27 23:28:19
  -->
 <template>
   <div class="angecy-manage">
@@ -61,7 +61,7 @@
       size="small"
       type="primary"
     >新增机构</el-button>
-    <el-button style="margin-bottom:15px" size="small">导出数据</el-button>
+    <el-button @click="exportExcel" style="margin-bottom:15px" size="small">导出数据</el-button>
     <!-- 列表 -->
     <Table
       rowKey="orgId"
@@ -111,7 +111,7 @@
 <script>
 export default {
   name: 'agencyManage',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -145,13 +145,21 @@ export default {
       operationModeList: []
     }
   },
-  created() {
+  created () {
     this.getOrgType()
     this.getServiceType()
     this.getOperationMode()
   },
   methods: {
-    handleAppend(row) {
+    exportExcel () {
+      window.open(
+        `${ctx}/org/export?orgName=${this.searchData.orgName ||
+          ''}&orgType=${this.searchData.orgType || ''}&serviceType=${this
+          .searchData.serviceType || ''}&status=${this.searchData.status ||
+          ''}&token=${this.$store.state.token}`
+      )
+    },
+    handleAppend (row) {
       this.$router.push({
         name: 'editAgency',
         query: {
@@ -159,21 +167,21 @@ export default {
         }
       })
     },
-    getServiceType() {
+    getServiceType () {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType() {
+    getOrgType () {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    getOperationMode() {
+    getOperationMode () {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
@@ -181,7 +189,7 @@ export default {
       })
     },
 
-    handleStatus(row) {
+    handleStatus (row) {
       let content =
         row.status === 1
           ? '注销后，与该机构管理的旧数据不受影响，新增数据时，将无法关联该机构，同时仅与该机构关联的管理员，将无法登录平台，是否确认？'
@@ -203,7 +211,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = [row.orgId]
       this.$confirm(
         '删除后，与该机构相关的数据将被取消关联，同时仅与该机构关联的管理员，将无法登录平台，是否确认？',
