@@ -3,20 +3,247 @@
  * @Author:
  * @Date: 2019-11-06 22:31:31
  * @LastEditors:
- * @LastEditTime: 2019-11-09 14:40:51
+ * @LastEditTime: 2019-11-28 19:54:30
  -->
 <template>
   <div id="ServiceDevelopmentStatistics">
     <div class="title">活动概况</div>
+    <el-form inline ref="form" label-width="80px" size="small">
+      <el-form-item label="开展机构">
+        <el-cascader
+          clearable
+          :props="{ value: 'orgId', label: 'orgName', emitPath: false }"
+          :options="orgList"
+          v-model="searchData.orgId"
+        ></el-cascader>
+      </el-form-item>
+      <el-form-item label="开展时间">
+        <el-date-picker
+          v-model="searchData.rangeTime"
+          style="width:360px;"
+          type="datetimerange"
+          range-separator="至"
+          @change="handlTime"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd HH:mm:ss"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          size="small"
+          type="primary"
+          @click="searchRefresh = !searchRefresh"
+          icon="el-icon-search"
+          >搜索</el-button
+        >
+        <el-button
+          @click="
+            searchData = {};
+            searchRefresh = !searchRefresh;
+          "
+          size="small"
+          >重置</el-button
+        >
+      </el-form-item>
+    </el-form>
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="6">
+        <el-card class="box-card">
+          <H2
+            ><countTo
+              :startVal="0"
+              :endVal="activityInfo.activityNum"
+              :duration="1500"
+            ></countTo
+          ></H2>
+          <div>活动开展次数</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="box-card">
+          <H2
+            ><countTo
+              :startVal="0"
+              :endVal="activityInfo.serviceCustomerNum"
+              :duration="1500"
+            ></countTo
+          ></H2>
+          <div>参加活动老人数</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <div style="height:100%" id="activityPie"></div>
+      </el-col>
+    </el-row>
     <div class="title">服务概况</div>
   </div>
 </template>
 <script>
+import countTo from 'vue-count-to';
+import echarts from 'echarts';
 export default {
-  name: 'PensionScaleStatistics'
+  name: 'PensionScaleStatistics',
+  components: {
+    countTo
+  },
+  data () {
+    return {
+      searchData: {},
+      searchRefresh: false,
+      orgList: [],
+      activityPieChart: null,
+      activityInfo: {
+        activityNum: 0,
+        activityNumCarriedOut: 0,
+        activityNumCarriedOutPercent: '',
+        activityNumToBeCarriedOut: 0,
+        activityNumToBeCarriedOutPercent: '',
+        serviceCustomerNum: 0
+      }
+    }
+  },
+  created () {
+    this.getOrgList()
+  },
+  mounted () {
+    this.getStaInfo()
+  },
+  methods: {
+    handlTime (date) {
+      if (date) {
+        this.searchData.startTime = date[0]
+        this.searchData.endTime = date[1]
+      } else {
+        this.searchData.startTime = '';
+        this.searchData.endTime = '';
+      }
+    },
+    getStaInfo () {
+      this.$http
+        .post('/stats/serviceActivityStats', {
+          orgId: this.searchData.orgId,
+          startTime: this.searchData.startTime,
+          endTime: this.searchData.endTime
+        })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.activityInfo = res.payload
+            this.activityPieChart = echarts.init(
+              document.getElementById('activityPie')
+            )
+
+            let option = {
+              title: {
+                show: true,
+                text: '活动开展情况',
+                left: 'center',
+                textStyle: {
+                  fontSize: '18px'
+                }
+              },
+              tooltip: {
+                trigger: 'item',
+                formatter: function (param) {
+                  return (
+                    '<div>' +
+                    param.name +
+                    '</div><div>' +
+                    param.data.value +
+                    '个 &nbsp;&nbsp;&nbsp;占比' +
+                    param.percent +
+                    '%</div>'
+                  )
+                },
+                backgroundColor: 'rgba(255,255,255,.6)',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                textStyle: {
+                  color: '#333'
+                },
+                extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
+              },
+              legend: {
+                orient: 'vertical',
+                top: 'middle',
+                itemWidth: 15,
+                left: 0
+              },
+              series: [
+                {
+                  name: '访问来源',
+                  type: 'pie',
+                  radius: ['30%', '60%'],
+                  center: ['70%', '50%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                    normal: {
+                      show: false,
+                      position: 'center'
+                    },
+                    emphasis: {
+                      show: false,
+                      textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                      }
+                    }
+                  },
+                  labelLine: {
+                    normal: {
+                      show: false
+                    }
+                  },
+                  data: [
+                    {
+                      value: res.payload.activityNumCarriedOut,
+                      name: '已开展次数'
+                    },
+                    {
+                      value: res.payload.activityNumToBeCarriedOut,
+                      name: '未开展次数'
+                    }
+                  ]
+                }
+              ]
+            }
+            this.activityPieChart.clear()
+            this.activityPieChart.setOption(option)
+            window.onresize = () => {
+              this.activityPieChart.resize()
+            };
+          }
+        })
+    },
+    getOrgList () {
+      this.$http.post('/org/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.orgList = res.payload
+          if (this.orgList.length > 0) {
+            if (this.orgList[0].children.length > 0) {
+              this.searchData.orgId = this.orgList[0].children[0].orgId
+            }
+          }
+        }
+      })
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
+@import "~@/common/css/variable.scss";
+
 #ServiceDevelopmentStatistics {
+  .row-bg {
+    margin-bottom: 10px;
+  }
+  .box-card {
+    text-align: center;
+    h2 {
+      font-size: 30px;
+      font-weight: 700;
+      color: $theme-color;
+    }
+  }
 }
 </style>

@@ -28,11 +28,17 @@
         <div style="display:flex;align-items:center;">
           <div v-show="formInfo.activityIndexPic" class="avatar">
             <img
-              :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.activityIndexPic"
+              :src="
+                $store.state.config.systemConfig[0].dictionaryValue +
+                  formInfo.activityIndexPic
+              "
               alt
             />
             <Input
-              v-model="$store.state.config.systemConfig[0].dictionaryValue+formInfo.activityIndexPic"
+              v-model="
+                $store.state.config.systemConfig[0].dictionaryValue +
+                  formInfo.activityIndexPic
+              "
               style="display:none"
             />
           </div>
@@ -42,8 +48,12 @@
             :before-upload="uploadImg"
             accept="image/*"
           >
-            <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <el-button type="primary" icon="ios-cloud-upload-outline"
+              >选择文件</el-button
+            >
+            <div slot="tip" class="el-upload__tip">
+              只能上传jpg/png文件，且不超过500kb
+            </div>
           </el-upload>
         </div>
       </el-form-item>
@@ -61,7 +71,7 @@
       <el-form-item label="活动地点" prop="activityAddress">
         <el-input
           type="textarea"
-          :autosize="{ minRows: 2, maxRows: 5}"
+          :autosize="{ minRows: 2, maxRows: 5 }"
           placeholder="请输入活动地点，最多不超过68个字"
           v-model="formInfo.activityAddress"
         ></el-input>
@@ -73,13 +83,17 @@
       <el-form-item label="所属机构" prop="orgId">
         <el-cascader
           clearable
-          :props="{value:'orgId',label:'orgName',emitPath:false}"
+          :props="{ value: 'orgId', label: 'orgName', emitPath: false }"
           :options="orgTree"
           v-model="formInfo.orgId"
         ></el-cascader>
       </el-form-item>
       <el-form-item label="活动室" prop="activityRoomId">
-        <el-select clearable v-model="formInfo.activityRoomId" placeholder="请选择">
+        <el-select
+          clearable
+          v-model="formInfo.activityRoomId"
+          placeholder="请选择"
+        >
           <el-option
             v-for="(item, index) in eventRoomList"
             :key="index"
@@ -110,11 +124,12 @@
           :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
           @click="dialogServiceUser = true"
           icon="el-icon-plus"
-        >选择人员</el-button>
+          >选择人员</el-button
+        >
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
-            @close="formInfo.orgServiceProviderList.splice(index,1)"
+            @close="formInfo.orgServiceProviderList.splice(index, 1)"
             v-for="(item, index) in formInfo.orgServiceProviderList"
             :key="index"
             closable
@@ -124,16 +139,20 @@
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
             ></el-avatar>
-            <span style="vertical-align: middle;">{{item.orgServiceProviderName}}</span>
+            <span style="vertical-align: middle;">{{
+              item.orgServiceProviderName
+            }}</span>
           </el-tag>
         </el-card>
       </el-form-item>
       <el-form-item label="参加对象" prop="Object">
-        <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
+        <el-button @click="dialogServiceObject = true" icon="el-icon-plus"
+          >选择人员</el-button
+        >
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
-            @close="formInfo.serviceCustomerList.splice(index,1)"
+            @close="formInfo.serviceCustomerList.splice(index, 1)"
             v-for="(item, index) in formInfo.serviceCustomerList"
             :key="index"
             closable
@@ -143,7 +162,9 @@
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
             ></el-avatar>
-            <span style="vertical-align: middle;">{{item.serviceCustomerName}}</span>
+            <span style="vertical-align: middle;">{{
+              item.serviceCustomerName
+            }}</span>
           </el-tag>
         </el-card>
       </el-form-item>
@@ -159,10 +180,21 @@
       title="选择服务对象"
       :visible.sync="dialogServiceObject"
     >
-      <selectServiceObject :isSelected="formInfo.serviceCustomerList" @selectObject="selectObject"></selectServiceObject>
+      <selectServiceObject
+        :isSelected="formInfo.serviceCustomerList"
+        @selectObject="selectObject"
+      ></selectServiceObject>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogServiceObject = false;selectObjectList = []">取 消</el-button>
-        <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
+        <el-button
+          @click="
+            dialogServiceObject = false;
+            selectObjectList = [];
+          "
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="handleSaveSelectObject"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
     <el-dialog
@@ -178,15 +210,23 @@
         :orgId="formInfo.orgId"
       ></selectServiceUser>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogServiceUser = false;selectUserList = []">取 消</el-button>
-        <el-button type="primary" @click="handleSaveSelectUser">确 定</el-button>
+        <el-button
+          @click="
+            dialogServiceUser = false;
+            selectUserList = [];
+          "
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="handleSaveSelectUser"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue'
-import selectServiceUser from '../../../components/SelectTable/selectServiceUser.vue'
+import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue';
+import selectServiceUser from '../../../components/SelectTable/selectServiceUser.vue';
 
 export default {
   name: 'editEvent',
@@ -258,8 +298,8 @@ export default {
   },
   methods: {
     handleTime (date) {
-      this.formInfo.startTime = date ? date[0] : ''
-      this.formInfo.endTime = date ? date[1] : ''
+      this.formInfo.startTime = date ? date[0] : '';
+      this.formInfo.endTime = date ? date[1] : '';
     },
     arrSplice (arr, index) {
       arr.splice(index, 1)
@@ -274,6 +314,10 @@ export default {
       this.selectObjectList = data
     },
     handleSaveSelectObject () {
+      if (this.selectObjectList.length === 0) {
+        this.$message.error('请至少选择一个服务对象')
+        return false
+      }
       this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
         this.selectObjectList
       )
@@ -289,6 +333,10 @@ export default {
       this.selectUserList = data
     },
     handleSaveSelectUser () {
+      if (this.selectUserList.length === 0) {
+        this.$message.error('请至少选择一个服务人员')
+        return false
+      }
       this.formInfo.orgServiceProviderList = this.formInfo.orgServiceProviderList.concat(
         this.selectUserList
       )

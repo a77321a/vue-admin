@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 21:27:44
+ * @LastEditTime: 2019-11-28 15:04:04
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -18,6 +18,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import Table from './components/Table/Table.vue'
 import UEditor from './components/UEditor/UEditor.vue'
 
+import './common/css/variable.scss'
 import axios from './common/js/axios'
 import func from './common/js/utils'
 // 配置NProgress进度条选项  —— 动画效果

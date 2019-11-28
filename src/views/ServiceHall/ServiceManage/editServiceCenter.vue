@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:34:56
+ * @LastEditTime: 2019-11-28 20:07:10
  -->
 <template>
   <div id="editServiceCenter">
@@ -33,8 +33,15 @@
             v-show="formInfo.serviceRecordPicList.length > 0"
             class="avatar"
           >
-            <i size="24" @click="handleRemove(index)" class="el-icon-circle-close delete-img"></i>
-            <img :src="$store.state.config.systemConfig[0].dictionaryValue+item" alt />
+            <i
+              size="24"
+              @click="handleRemove(index)"
+              class="el-icon-circle-close delete-img"
+            ></i>
+            <img
+              :src="$store.state.config.systemConfig[0].dictionaryValue + item"
+              alt
+            />
           </div>
           <el-upload
             action="apii/public/img"
@@ -46,8 +53,11 @@
               :disabled="formInfo.serviceRecordPicList.length > 8"
               type="primary"
               icon="ios-cloud-upload-outline"
-            >选择文件</el-button>
-            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF格式，小于5M，最多可添加9张</div>
+              >选择文件</el-button
+            >
+            <div slot="tip" class="el-upload__tip">
+              支持PNG、JPG、GIF格式，小于5M，最多可添加9张
+            </div>
           </el-upload>
         </div>
       </el-form-item>
@@ -69,13 +79,17 @@
       <el-form-item label="所属机构" prop="orgId">
         <el-cascader
           clearable
-          :props="{value:'orgId',label:'orgName',emitPath:false}"
+          :props="{ value: 'orgId', label: 'orgName', emitPath: false }"
           :options="orgList"
           v-model="formInfo.orgId"
         ></el-cascader>
       </el-form-item>
       <el-form-item label="活动室" prop="activityRoomId">
-        <el-select clearable v-model="formInfo.activityRoomId" placeholder="请选择">
+        <el-select
+          clearable
+          v-model="formInfo.activityRoomId"
+          placeholder="请选择"
+        >
           <el-option
             v-for="(item, index) in eventRoomList"
             :key="index"
@@ -85,10 +99,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="服务对象" prop="serviceCustomerList">
-        <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
+        <el-button @click="dialogServiceObject = true" icon="el-icon-plus"
+          >选择人员</el-button
+        >
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
-            @close="formInfo.serviceCustomerList.splice(index,1)"
+            @close="formInfo.serviceCustomerList.splice(index, 1)"
             v-for="(item, index) in formInfo.serviceCustomerList"
             :key="index"
             closable
@@ -98,7 +114,9 @@
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
             ></el-avatar>
-            <span style="vertical-align: middle;">{{item.serviceCustomerName}}</span>
+            <span style="vertical-align: middle;">{{
+              item.serviceCustomerName
+            }}</span>
           </el-tag>
         </el-card>
       </el-form-item>
@@ -107,7 +125,7 @@
           type="textarea"
           :maxlength="1000"
           placeholder="请输入服务总结，最多不超过1000个字"
-          :autosize="{ minRows: 5, maxRows: 10}"
+          :autosize="{ minRows: 5, maxRows: 10 }"
           show-word-limit
           v-model="formInfo.serviceSummary"
         ></el-input>
@@ -129,14 +147,22 @@
         @selectObject="selectObject"
       ></selectServiceObject>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogServiceObject = false;selectObjectList = []">取 消</el-button>
-        <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
+        <el-button
+          @click="
+            dialogServiceObject = false;
+            selectObjectList = [];
+          "
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="handleSaveSelectObject"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue'
+import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue';
 
 export default {
   name: 'editServiceCenter',
@@ -208,6 +234,10 @@ export default {
       this.selectObjectList = data
     },
     handleSaveSelectObject () {
+      if (this.selectObjectList.length === 0) {
+        this.$message.error('请至少选择一个服务对象')
+        return false
+      }
       this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
         this.selectObjectList
       )
@@ -215,8 +245,8 @@ export default {
       this.dialogServiceObject = false
     },
     selectTime (date) {
-      this.formInfo.startTime = date ? date[0] : ''
-      this.formInfo.endTime = date ? date[1] : ''
+      this.formInfo.startTime = date ? date[0] : '';
+      this.formInfo.endTime = date ? date[1] : '';
     },
     getOrgList () {
       this.$http.post('/org/tree').then(res => {
@@ -279,7 +309,7 @@ export default {
         if (!valid) return
         let url = this.$route.query.sid
           ? '/service/record/update'
-          : '/service/record/add'
+          : '/service/record/add';
         let arr = []
         this.formInfo.serviceCustomerList.forEach(i => {
           arr.push(i.serviceCustomerId)

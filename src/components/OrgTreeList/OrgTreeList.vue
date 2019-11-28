@@ -3,13 +3,13 @@
  * @Author:
  * @Date: 2019-11-16 18:41:35
  * @LastEditors:
- * @LastEditTime: 2019-11-24 13:15:06
+ * @LastEditTime: 2019-11-28 15:09:15
  -->
 <template>
   <el-col
     id="org-tree-list-aside"
-    :class="toggleShow?'border':'no-padding'"
-    :span="toggleShow ? 5 :1"
+    :class="toggleShow ? 'border' : 'no-padding'"
+    :span="toggleShow ? 5 : 1"
   >
     <transition name="moveL">
       <div class="trans" v-show="toggleShow">
@@ -20,12 +20,16 @@
           v-model="orgName"
           class="input-with-select"
         >
-          <el-button @click="getOrgList" slot="append" icon="el-icon-search"></el-button>
+          <el-button
+            @click="getOrgList"
+            slot="append"
+            icon="el-icon-search"
+          ></el-button>
         </el-input>
         <div class="checked">
-          {{checkedOrg.orgName||'所有机构'}}
+          {{ checkedOrg.orgName || "所有机构" }}
           <i
-            @click="filterOrg (null, true)"
+            @click="filterOrg(null, true)"
             style="float:right"
             class="el-icon-error closeFilter"
           ></i>
@@ -34,24 +38,30 @@
           <el-collapse value="0">
             <el-collapse-item
               :key="index"
-              v-for="(item,index) in orgList"
+              v-for="(item, index) in orgList"
               :title="item.orgName"
               :name="index"
             >
               <div
-                :class="son.orgId == checkedOrg.orgId ? 'select' :''"
+                :class="son.orgId == checkedOrg.orgId ? 'select' : ''"
                 class="son-list"
                 @click="filterOrg(son)"
                 v-for="(son, index) in item.children"
                 :key="index"
-              >{{son.orgName}}</div>
+              >
+                {{ son.orgName }}
+              </div>
             </el-collapse-item>
           </el-collapse>
         </div>
       </div>
     </transition>
-    <span :class="!toggleShow? 'center' :''" @click="changeToggleShow" class="toggle-span">
-      <i :class="toggleShow ? 'el-icon-arrow-left':'el-icon-arrow-right'"></i>
+    <span
+      :class="!toggleShow ? 'center' : ''"
+      @click="changeToggleShow"
+      class="toggle-span"
+    >
+      <i :class="toggleShow ? 'el-icon-arrow-left' : 'el-icon-arrow-right'"></i>
     </span>
   </el-col>
 </template>
@@ -110,9 +120,11 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
+@import "~@/common/css/variable.scss";
 .select {
-  color: #409eff;
+  color: $theme-color;
 }
 .no-padding {
   padding: 0 !important;
@@ -165,7 +177,7 @@ export default {
     height: 34px;
     line-height: 34px;
     margin: 10px 0;
-    border-left: 5px solid #409eff;
+    border-left: 5px solid $theme-color;
     position: relative;
     &::after {
       position: absolute;
@@ -174,7 +186,7 @@ export default {
       display: block;
       width: 0;
       height: 0;
-      content: ' ';
+      content: " ";
       border-color: transparent transparent transparent #f9f9f9;
       border-style: solid;
       border-width: 18px 0 18px 8px;
@@ -184,7 +196,7 @@ export default {
       margin-top: 10px;
       transition: color 0.1s ease-out;
       &:hover {
-        color: #409eff;
+        color: $theme-color;
         transition: color 0.1s ease-out;
       }
     }

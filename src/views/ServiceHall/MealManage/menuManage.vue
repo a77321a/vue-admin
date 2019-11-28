@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-26 14:38:59
+ * @LastEditTime: 2019-11-28 20:06:48
  -->
 <template>
   <div class="meal-center">
@@ -28,7 +28,10 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="姓名">
-        <el-input placeholder="请输入姓名关键字" v-model="searchData.mobile"></el-input>
+        <el-input
+          placeholder="请输入姓名关键字"
+          v-model="searchData.mobile"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -37,14 +40,16 @@
           ref="search"
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
-        >搜索</el-button>
+          >搜索</el-button
+        >
         <el-button
           @click="
             searchData = { orgId: searchData.orgId };
             searchRefresh = !searchRefresh;
           "
           size="small"
-        >重置</el-button>
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
     <!-- <el-button
@@ -73,7 +78,9 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope)"
+          >+ 新增菜品</el-button
+        >
       </template>
       <template slot="two" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.two" :key="index">
@@ -81,7 +88,9 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope)"
+          >+ 新增菜品</el-button
+        >
       </template>
       <template slot="three" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.three" :key="index">
@@ -89,7 +98,9 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope)"
+          >+ 新增菜品</el-button
+        >
       </template>
       <template slot="four" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.four" :key="index">
@@ -97,7 +108,9 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope)"
+          >+ 新增菜品</el-button
+        >
       </template>
       <template slot="five" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.five" :key="index">
@@ -105,7 +118,9 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope)"
+          >+ 新增菜品</el-button
+        >
       </template>
       <template slot="six" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.six" :key="index">
@@ -113,7 +128,9 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope)"
+          >+ 新增菜品</el-button
+        >
       </template>
       <template slot="seven" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.seven" :key="index">
@@ -121,13 +138,25 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope)"
+          >+ 新增菜品</el-button
+        >
       </template>
     </Table>
     <el-dialog title="添加菜品" :visible.sync="dialogFormVisible">
-      <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
+      <el-form
+        :rules="rules"
+        ref="formInfo"
+        label-width="80px"
+        :model="formInfo"
+      >
         <el-form-item label="所属机构" prop="orgIds">
-          <el-select clearable multiple v-model="formInfo.orgIds" placeholder="请选择用户状态">
+          <el-select
+            clearable
+            multiple
+            v-model="formInfo.orgIds"
+            placeholder="请选择用户状态"
+          >
             <el-option
               v-for="(item, index) in orgSelectList"
               :key="index"
@@ -140,10 +169,11 @@
           <el-tag
             style="margin-right:5px"
             :key="index"
-            v-for="(item,index) in formInfo.breakfast"
-            @close="formInfo.breakfast.splice(index,1)"
+            v-for="(item, index) in formInfo.breakfast"
+            @close="formInfo.breakfast.splice(index, 1)"
             closable
-          >{{ item.foodName }}</el-tag>
+            >{{ item.foodName }}</el-tag
+          >
           <el-button type="text" @click="dialogFood = true">添加</el-button>
         </el-form-item>
       </el-form>
@@ -152,18 +182,32 @@
         <el-button type="primary" @click="handleSaveForm">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog width="60%" lock-scroll destroy-on-close title="选择菜品" :visible.sync="dialogFood">
+    <el-dialog
+      width="60%"
+      lock-scroll
+      destroy-on-close
+      title="选择菜品"
+      :visible.sync="dialogFood"
+    >
       <selectFood @selectFood="selectFood"></selectFood>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFood = false;selectFoodList = []">取 消</el-button>
-        <el-button type="primary" @click="handleSaveSelectFood">确 定</el-button>
+        <el-button
+          @click="
+            dialogFood = false;
+            selectFoodList = [];
+          "
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="handleSaveSelectFood"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 // import MockData from '../../../components/Table/Mock'
-import selectFood from '../../../components/SelectTable/selectFood.vue'
+import selectFood from '../../../components/SelectTable/selectFood.vue';
 
 export default {
   name: 'mealCenter',
@@ -293,6 +337,10 @@ export default {
         })
     },
     handleSaveSelectFood () {
+      if (this.selectFoodList.length === 0) {
+        this.$message.error('请至少选择一个菜品')
+        return false
+      }
       this.formInfo.breakfast = this.formInfo.breakfast.concat(
         this.selectFoodList
       )
@@ -314,7 +362,7 @@ export default {
     },
     handleDelete (scope, row) {
       console.log(scope)
-      let content = '删除后，该菜品将不再该时段显示，是否确认？'
+      let content = '删除后，该菜品将不再该时段显示，是否确认？';
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -405,7 +453,7 @@ export default {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
       } else {
-        this.searchData.week = ''
+        this.searchData.week = '';
       }
     },
     getOrgList () {
@@ -424,7 +472,7 @@ export default {
               })
             }
           })
-          this.api = '/org/foodMenu/week'
+          this.api = '/org/foodMenu/week';
           this.searchRefresh = !this.searchRefresh
           // this.$refs.search.click()
         }
