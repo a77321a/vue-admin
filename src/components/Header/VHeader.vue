@@ -77,6 +77,49 @@ export default {
       return this.$store.state.fullPath
     }
   },
+  watch: {
+    $route () {
+      let serviceHall = []
+      let statisticalAnalysis = []
+      let UserManage = []
+      let systemSetting = []
+      let resourceCenter = []
+      if (routerList && routerList.length > 0) {
+        routerList.forEach(i => {
+          if (i.name === '服务大厅') {
+            serviceHall = i.children
+          }
+          if (i.name === '资源中心') {
+            resourceCenter = i.children
+          }
+          if (i.name === '人员管理') {
+            UserManage = i.children
+          }
+          if (i.name === '统计分析') {
+            statisticalAnalysis = i.children
+          }
+          if (i.name === '系统设置') {
+            systemSetting = i.children
+          }
+        })
+      }
+      if (this.activeLink.indexOf('/serviceHall/') > -1) {
+        this.$store.commit('setNavList', serviceHall)
+      }
+      if (this.activeLink.indexOf('/ResourceCenter/') > -1) {
+        this.$store.commit('setNavList', resourceCenter)
+      }
+      if (this.activeLink.indexOf('/UserManage/') > -1) {
+        this.$store.commit('setNavList', UserManage)
+      }
+      if (this.activeLink.indexOf('/StatisticalAnalysis/') > -1) {
+        this.$store.commit('setNavList', statisticalAnalysis)
+      }
+      if (this.activeLink.indexOf('/SystemSetting/') > -1) {
+        this.$store.commit('setNavList', systemSetting)
+      }
+    }
+  },
   methods: {
     loginOut () {
       this.$http.post('/admin/logout').then(res => {})

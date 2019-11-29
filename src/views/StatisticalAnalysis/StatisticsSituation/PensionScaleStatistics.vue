@@ -11,25 +11,21 @@
     <el-row type="flex" class="row-bg" justify="space-around">
       <el-col :span="8">
         <el-card class="box-card">
-          <H2
-            ><countTo
-              :startVal="0"
-              :endVal="pensionScaleInfo.activityRoomNum"
-              :duration="1500"
-            ></countTo
-          ></H2>
+          <H2>
+            <countTo :startVal="0" :endVal="pensionScaleInfo.activityRoomNum" :duration="1500"></countTo>
+          </H2>
           <div>活动室</div>
         </el-card>
       </el-col>
       <el-col :span="8">
         <el-card class="box-card">
-          <H2
-            ><countTo
+          <H2>
+            <countTo
               :startVal="0"
               :endVal="pensionScaleInfo.orgServiceProviderNum"
               :duration="1500"
-            ></countTo
-          ></H2>
+            ></countTo>
+          </H2>
           <div>服务人员数</div>
         </el-card>
       </el-col>
@@ -38,37 +34,25 @@
     <el-row type="flex" class="row-bg" justify="space-around">
       <el-col :span="6">
         <el-card class="box-card">
-          <H2
-            ><countTo
-              :startVal="0"
-              :endVal="pensionScaleInfo.orgNum"
-              :duration="1500"
-            ></countTo
-          ></H2>
+          <H2>
+            <countTo :startVal="0" :endVal="pensionScaleInfo.orgNum" :duration="1500"></countTo>
+          </H2>
           <div>养老机构数</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card class="box-card">
-          <H2
-            ><countTo
-              :startVal="0"
-              :endVal="pensionScaleInfo.societyOrgNum"
-              :duration="1500"
-            ></countTo
-          ></H2>
+          <H2>
+            <countTo :startVal="0" :endVal="pensionScaleInfo.societyOrgNum" :duration="1500"></countTo>
+          </H2>
           <div>社会化运营机构数</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card class="box-card">
-          <H2
-            ><countTo
-              :startVal="0"
-              :endVal="pensionScaleInfo.relatedOrgNum"
-              :duration="1500"
-            ></countTo
-          ></H2>
+          <H2>
+            <countTo :startVal="0" :endVal="pensionScaleInfo.relatedOrgNum" :duration="1500"></countTo>
+          </H2>
           <div>涉老机构数</div>
         </el-card>
       </el-col>
@@ -76,7 +60,7 @@
   </div>
 </template>
 <script>
-import countTo from 'vue-count-to';
+import countTo from 'vue-count-to'
 export default {
   name: 'PensionScaleStatistics',
   components: {
@@ -108,7 +92,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "~@/common/css/variable.scss";
+@import '~@/common/css/variable.scss';
 #pension-scale {
   .row-bg {
     margin-bottom: 10px;
