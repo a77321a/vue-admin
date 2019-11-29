@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:31:31
  * @LastEditors:
- * @LastEditTime: 2019-11-28 19:54:30
+ * @LastEditTime: 2019-11-29 22:53:44
  -->
 <template>
   <div id="ServiceDevelopmentStatistics">
@@ -77,6 +77,72 @@
       </el-col>
     </el-row>
     <div class="title">服务概况</div>
+    <el-form inline ref="form" label-width="80px" size="small">
+      <el-form-item label="开展机构">
+        <el-cascader
+          clearable
+          :props="{ value: 'orgId', label: 'orgName', emitPath: false }"
+          :options="orgList"
+          v-model="serviceDataSearch.orgId"
+        ></el-cascader>
+      </el-form-item>
+      <el-form-item label="开展时间">
+        <el-date-picker
+          v-model="serviceDataSearch.startDate"
+          :picker-options="{ firstDayOfWeek: 1 }"
+          type="week"
+          format="yyyy 第 WW 周"
+          value-format="yyyy-MM-dd"
+          placeholder="选择周"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          size="small"
+          type="primary"
+          @click="searchServiceRefresh = !searchServiceRefresh"
+          icon="el-icon-search"
+          >搜索</el-button
+        >
+        <el-button
+          @click="
+            serviceDataSearch = {};
+            searchServiceRefresh = !searchServiceRefresh;
+          "
+          size="small"
+          >重置</el-button
+        >
+      </el-form-item>
+    </el-form>
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="6">
+        <el-card class="box-card">
+          <H2
+            ><countTo
+              :startVal="0"
+              :endVal="serviceInfo.customerDinnerNum"
+              :duration="1500"
+            ></countTo
+          ></H2>
+          <div>助餐人次</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="box-card">
+          <H2
+            ><countTo
+              :startVal="0"
+              :endVal="serviceInfo.serviceRecordCustomerNum"
+              :duration="1500"
+            ></countTo
+          ></H2>
+          <div>享受服务人次</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <div style="height:100%" id="servicePie"></div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -90,9 +156,12 @@ export default {
   data () {
     return {
       searchData: {},
+      serviceDataSearch: {},
+      searchServiceRefresh: false,
       searchRefresh: false,
       orgList: [],
       activityPieChart: null,
+      servicePieChart: null,
       activityInfo: {
         activityNum: 0,
         activityNumCarriedOut: 0,
@@ -100,6 +169,13 @@ export default {
         activityNumToBeCarriedOut: 0,
         activityNumToBeCarriedOutPercent: '',
         serviceCustomerNum: 0
+      },
+      serviceInfo: {
+        customerDinnerNum: 0,
+        customerDinnerNumList: [],
+        serviceCustomerPercent: '',
+        serviceRecordCustomerNum: 0,
+        serviceRecordCustomerNumList: []
       }
     }
   },
@@ -108,6 +184,7 @@ export default {
   },
   mounted () {
     this.getStaInfo()
+    this.getServiceStaInfo()
   },
   methods: {
     handlTime (date) {
@@ -123,8 +200,8 @@ export default {
       this.$http
         .post('/stats/serviceActivityStats', {
           orgId: this.searchData.orgId,
-          startTime: this.searchData.startTime,
-          endTime: this.searchData.endTime
+          startDate: this.searchData.startTime,
+          endDat: this.searchData.endTime
         })
         .then(res => {
           if (res.code === SUCCESS) {
@@ -137,6 +214,102 @@ export default {
               title: {
                 show: true,
                 text: '活动开展情况',
+                left: 'center',
+                textStyle: {
+                  fontSize: '18px'
+                }
+              },
+              tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)',
+                // formatter: function (param) {
+                //   return (
+                //     '<div>' +
+                //     param.name +
+                //     '</div><div>' +
+                //     param.data.value +
+                //     '个 &nbsp;&nbsp;&nbsp;占比' +
+                //     param.percent +
+                //     '%</div>'
+                //   )
+                // },
+                backgroundColor: 'rgba(255,255,255,.6)',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                textStyle: {
+                  color: '#333'
+                },
+                extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
+              },
+              legend: {
+                orient: 'vertical',
+                top: 'middle',
+                itemWidth: 15,
+                left: 0
+              },
+              series: [
+                {
+                  name: '访问来源',
+                  type: 'pie',
+                  radius: ['30%', '60%'],
+                  center: ['60%', '50%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                    normal: {
+                      show: false,
+                      position: 'center'
+                    },
+                    emphasis: {
+                      show: false,
+                      textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                      }
+                    }
+                  },
+                  labelLine: {
+                    normal: {
+                      show: false
+                    }
+                  },
+                  data: [
+                    {
+                      value: res.payload.activityNumCarriedOut,
+                      name: '已开展次数'
+                    },
+                    {
+                      value: res.payload.activityNumToBeCarriedOut,
+                      name: '未开展次数'
+                    }
+                  ]
+                }
+              ]
+            }
+            this.activityPieChart.clear()
+            this.activityPieChart.setOption(option)
+            window.onresize = () => {
+              this.activityPieChart.resize()
+            };
+          }
+        })
+    },
+    getServiceStaInfo () {
+      this.$http
+        .post('/stats/serviceRecordStats', {
+          orgId: this.serviceDataSearch.orgId,
+          startDate: this.serviceDataSearch.startDate
+        })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.serviceInfo = res.payload
+            this.servicePieChart = echarts.init(
+              document.getElementById('servicePie')
+            )
+
+            let option = {
+              title: {
+                show: true,
+                text: '老人占比情况',
                 left: 'center',
                 textStyle: {
                   fontSize: '18px'
@@ -196,21 +369,21 @@ export default {
                   },
                   data: [
                     {
-                      value: res.payload.activityNumCarriedOut,
-                      name: '已开展次数'
-                    },
-                    {
-                      value: res.payload.activityNumToBeCarriedOut,
-                      name: '未开展次数'
+                      value: res.payload.serviceCustomerPercent,
+                      name: '享受服务的老人数'
                     }
+                    // {
+                    //   value: res.payload.activityNumToBeCarriedOut,
+                    //   name: '未开展次数'
+                    // }
                   ]
                 }
               ]
             }
-            this.activityPieChart.clear()
-            this.activityPieChart.setOption(option)
+            this.servicePieChart.clear()
+            this.servicePieChart.setOption(option)
             window.onresize = () => {
-              this.activityPieChart.resize()
+              this.servicePieChart.resize()
             };
           }
         })
