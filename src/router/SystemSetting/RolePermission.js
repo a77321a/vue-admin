@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-24 21:47:44
+ * @LastEditTime: 2019-12-01 19:22:42
  */
 export default [
   {
@@ -13,6 +13,15 @@ export default [
     meta: {
       title: '角色管理',
       root: true
+    }
+  },
+  {
+    path: 'roleInfo',
+    name: 'roleInfo',
+    component: () => import('@/views/SystemSetting/RolePermission/roleInfo.vue'),
+    meta: {
+      title: '查看角色',
+      parent: 'roleManage'
     }
   },
   {

@@ -3,28 +3,33 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-22 09:53:23
+ * @LastEditTime: 2019-12-01 18:54:07
  -->
 <template>
   <div class="event-center">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="活动状态">
-        <el-select
-          style="width:200px"
-          clearable
-          v-model="searchData.activityStatus"
-          placeholder="请选择"
-        >
-          <el-option
+      <el-form-item label="操作人">
+        <el-select style="width:200px" clearable v-model="searchData.operUserId" placeholder="请选择">
+          <!-- <el-option
             v-for="(item, index) in $store.state.config.activityStatus"
             :key="index"
             :label="item.dictionaryLabel"
             :value="item.dictionaryValue"
-          ></el-option>
+          ></el-option>-->
         </el-select>
       </el-form-item>
-      <el-form-item label="活动时间">
+      <el-form-item label="操作模块">
+        <el-select style="width:200px" clearable v-model="searchData.operModule" placeholder="请选择">
+          <!-- <el-option
+            v-for="(item, index) in $store.state.config.activityStatus"
+            :key="index"
+            :label="item.dictionaryLabel"
+            :value="item.dictionaryValue"
+          ></el-option>-->
+        </el-select>
+      </el-form-item>
+      <el-form-item label="操作时间">
         <el-date-picker
           v-model="searchData.rangeTime"
           style="width:360px;"
@@ -49,12 +54,6 @@
         <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button
-      @click="$router.push({name:'editEvent'})"
-      style="margin-bottom:15px"
-      size="small"
-      type="primary"
-    >新增活动</el-button>
     <!-- 列表 -->
     <Table
       :searchRefresh="searchRefresh"
@@ -65,11 +64,7 @@
       method="post"
     >
       <template slot-scope="{row}" slot="operUserName">{{row.operUserName}}</template>
-
-      <template slot="footer-left">
-        <el-button @click="handleCloseActivity(null)" type="text">结束活动</el-button>
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
-      </template>
+      <template slot-scope="{row}" slot="operModule">{{row.operModule}}</template>
     </Table>
   </div>
 </template>
@@ -90,7 +85,7 @@ export default {
         { label: '操作时间', prop: 'createTime', minWidth: 140 },
         {
           label: '操作模块',
-          prop: 'operModule',
+          slot: 'operModule',
           minWidth: 100
         },
         {

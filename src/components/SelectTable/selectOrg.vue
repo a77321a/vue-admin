@@ -88,6 +88,17 @@ export default {
     console.log(1)
   },
   methods: {
+    getTree () {
+      this.$http
+        .post('/address/tree', {
+          addressName: this.searchData.addressName
+        })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.spaceTree = res.payload
+          }
+        })
+    },
     selectable (row, index) {
       if (this.isSelected.length === 0) {
         return 1

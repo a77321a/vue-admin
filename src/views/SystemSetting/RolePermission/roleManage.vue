@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 20:21:01
+ * @LastEditTime: 2019-12-01 19:23:09
  -->
 <template>
   <div class="role-manage">
@@ -39,14 +39,16 @@
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button @click="$router.push({name:'editRole'})" type="text" size="small">查看</el-button>
-
+        <el-button
+          @click="$router.push({name:'roleInfo',query:{rid:row.roleId}})"
+          type="text"
+          size="small"
+        >查看</el-button>
         <el-button
           @click="$router.push({name:'editRole',query:{id:row.roleId}})"
           type="text"
           size="small"
         >编辑</el-button>
-
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">

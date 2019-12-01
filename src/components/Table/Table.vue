@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-11-25 23:00:59
+ * @LastEditTime: 2019-12-01 19:35:03
  -->
 <template>
   <div>
@@ -47,6 +47,7 @@
         :prop="column.prop"
         :label="column.label"
         :min-width="column.minWidth"
+        :width="column.width"
         :fixed="column.fixed"
         :render-header="column.renderHeader"
         :show-overflow-tooltip="columns.showOverflowTooltip"
@@ -91,7 +92,7 @@
 // import MockData from './Mock'
 export default {
   name: 'Table',
-  data () {
+  data() {
     return {
       loading: false,
       resizable: false,
@@ -112,20 +113,20 @@ export default {
   props: {
     dataArray: {
       type: Array,
-      default: function () {
+      default: function() {
         return []
       }
     },
     stripe: {
       type: Boolean,
-      default: function () {
+      default: function() {
         return false
       }
     },
     currentChange: {
       type: Function,
-      default: function () {
-        return function () {}
+      default: function() {
+        return function() {}
       }
     },
     highlightCurrentRow: { type: Boolean },
@@ -157,35 +158,35 @@ export default {
     // 请求api
     api: {
       type: String,
-      default: function () {
+      default: function() {
         return ''
       }
     },
     // 表格尺寸
     size: {
       type: String,
-      default: function () {
+      default: function() {
         return 'small'
       }
     },
     // 是否可以选择
     selection: {
       type: Boolean,
-      default: function () {
+      default: function() {
         return false
       }
     },
     // 是否有序列项
     hasIndex: {
       type: Boolean,
-      default: function () {
+      default: function() {
         return false
       }
     },
     // 这是相应的字段展示
     columns: {
       type: Array,
-      default: function () {
+      default: function() {
         return []
       },
       required: true
@@ -193,21 +194,21 @@ export default {
     // 纵向边框
     border: {
       type: Boolean,
-      default: function () {
+      default: function() {
         return true
       }
     },
     // 请求方式
     method: {
       type: String,
-      default: function () {
+      default: function() {
         return 'get'
       }
     },
     // 请求参数
     searchObj: {
       type: Object,
-      default: function () {
+      default: function() {
         return {}
       }
     },
@@ -215,20 +216,20 @@ export default {
       type: Boolean
     }
   },
-  created () {
+  created() {
     if (this.api) {
       this.getList()
     }
   },
   computed: {
     dataSource: {
-      get () {
+      get() {
         if (this.dataArray && this.dataArray.length > 0) {
           return this.dataArray
         }
         return this.dataList
       },
-      set (arr) {
+      set(arr) {
         this.dataList = arr
       }
     }
@@ -239,7 +240,7 @@ export default {
      * @param {param} 是否重置分页
      * @return: list
      */
-    getList (param) {
+    getList(param) {
       this.loading = true
       if (param) {
         this.page = 1
@@ -283,7 +284,7 @@ export default {
         })
     },
     // 将选中的行发送到父组件
-    handleSelectionChange (val) {
+    handleSelectionChange(val) {
       this.selectionArr = []
       val.forEach(el => {
         this.selectionArr.push(el)
@@ -291,21 +292,21 @@ export default {
       this.$emit('commitSelection', this.selectionArr)
     },
     // 分页
-    handlePage (val) {
+    handlePage(val) {
       this.page = val
       this.getList()
     },
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.pageSize = val
       this.getList(true)
     }
   },
   watch: {
-    searchRefresh () {
+    searchRefresh() {
       // this.selectionArr = []
       this.getList(true)
     },
-    selectRefresh () {
+    selectRefresh() {
       this.selectionArr = []
       this.getList(true)
     }

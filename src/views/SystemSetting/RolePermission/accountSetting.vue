@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 20:20:31
+ * @LastEditTime: 2019-12-01 19:30:13
  -->
 <template>
   <div class="account-setting">
@@ -36,7 +36,7 @@
       style="margin-bottom:15px"
       size="small"
       type="primary"
-    >新增角色</el-button>
+    >新增账号</el-button>
     <!-- 列表 -->
     <Table
       :rowsForamtter="rowsForamtter"
