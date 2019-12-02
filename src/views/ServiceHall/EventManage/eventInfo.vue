@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-11-24 15:39:24
+ * @LastEditTime: 2019-12-02 16:33:27
  -->
 <template>
   <div id="event-info">
@@ -45,8 +45,12 @@
       </div>
     </el-card>
     <el-tabs value="first" style="margin-top:20px;">
-      <el-tab-pane label="参与人员" name="first">
-        <Participants :activityId="$route.query.aid"></Participants>
+      <el-tab-pane label="参与对象" name="first">
+        <Participants
+          :customerNum="eventInfo.customerNum"
+          :actualCustomerNum="eventInfo.actualCustomerNum"
+          :activityId="$route.query.aid"
+        ></Participants>
       </el-tab-pane>
       <el-tab-pane label="服务人员" name="second">
         <ServicePerson :activityId="$route.query.aid"></ServicePerson>
@@ -68,18 +72,18 @@ export default {
     ServicePerson,
     ActivitySummary
   },
-  data () {
+  data() {
     return {
       eventInfo: {
         cover: ''
       }
     }
   },
-  created () {
+  created() {
     this.getActivityInfo()
   },
   methods: {
-    getActivityInfo () {
+    getActivityInfo() {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {

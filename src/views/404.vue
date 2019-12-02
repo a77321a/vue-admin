@@ -3,17 +3,17 @@
  * @Author:
  * @Date: 2019-11-12 10:51:01
  * @LastEditors:
- * @LastEditTime: 2019-11-12 10:51:54
+ * @LastEditTime: 2019-12-02 14:59:05
  -->
 <template>
-  <div>
-    页面不见了
-    <el-button></el-button>
-  </div>
+  <div></div>
 </template>
 <script>
 export default {
-  name: '404'
+  name: '404',
+  created () {
+    this.$router.go(-1)
+  }
 }
 </script>
 <style lang="scss" scoped>

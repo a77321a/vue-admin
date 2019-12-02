@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-01 19:30:13
+ * @LastEditTime: 2019-12-02 16:21:01
  -->
 <template>
   <div class="account-setting">
@@ -49,7 +49,6 @@
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button type="text" size="small">查看</el-button>
         <el-button
           @click="$router.push({name:'editAccount',query:{uid:row.userId}})"
           type="text"

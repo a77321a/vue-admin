@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-29 14:21:21
+ * @LastEditTime: 2019-12-02 16:06:47
  -->
 <template>
   <div class="meal-center">
@@ -69,7 +69,7 @@
     >
       <template slot="one" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.one" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
+          <el-tag @close="handleDelete(row,item)" closable>
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
@@ -77,7 +77,7 @@
       </template>
       <template slot="two" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.two" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
+          <el-tag @close="handleDelete(row,item)" closable>
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
@@ -85,7 +85,7 @@
       </template>
       <template slot="three" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.three" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
+          <el-tag @close="handleDelete(row,item)" closable>
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
@@ -93,7 +93,7 @@
       </template>
       <template slot="four" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.four" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
+          <el-tag @close="handleDelete(row,item)" closable>
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
@@ -101,7 +101,7 @@
       </template>
       <template slot="five" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.five" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
+          <el-tag @close="handleDelete(row,item)" closable>
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
@@ -109,7 +109,7 @@
       </template>
       <template slot="six" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.six" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
+          <el-tag @close="handleDelete(row,item)" closable>
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
@@ -117,7 +117,7 @@
       </template>
       <template slot="seven" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.seven" :key="index">
-          <el-tag @close="handleDelete(scope, row)" closable>
+          <el-tag @close="handleDelete(row,item)" closable>
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
@@ -192,9 +192,9 @@ export default {
   components: {
     selectFood
   },
-  data() {
+  data () {
     return {
-      dialogFormMenu: true,
+      dialogFormMenu: false,
       api: '',
       week: new Date(),
       copyWeek: '',
@@ -285,12 +285,12 @@ export default {
       addType: ''
     }
   },
-  created() {
+  created () {
     this.getOrgList()
     this.getOrg()
   },
   methods: {
-    handleSaveCopyMenu() {
+    handleSaveCopyMenu () {
       if (!this.copyWeek) {
         this.$message.error('请选择时间')
         return false
@@ -357,11 +357,11 @@ export default {
         })
     },
     // 选择菜品
-    selectFood(data) {
+    selectFood (data) {
       this.selectFoodList = data
     },
     // 确定选择
-    handleSaveForm() {
+    handleSaveForm () {
       let arr = []
       this.formInfo.breakfast.forEach(i => {
         arr.push(i.foodId)
@@ -384,7 +384,7 @@ export default {
           }
         })
     },
-    handleSaveSelectFood() {
+    handleSaveSelectFood () {
       if (this.selectFoodList.length === 0) {
         this.$message.error('请至少选择一个菜品')
         return false
@@ -399,7 +399,7 @@ export default {
       // })
       this.dialogFood = false
     },
-    getOrg() {
+    getOrg () {
       this.$http
         .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
         .then(res => {
@@ -408,8 +408,8 @@ export default {
           }
         })
     },
-    handleDelete(scope, row) {
-      console.log(scope)
+    handleDelete (row, item) {
+      console.log(row)
       let content = '删除后，该菜品将不再该时段显示，是否确认？'
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',
@@ -418,9 +418,15 @@ export default {
       })
         .then(() => {
           this.$http
-            .post('/org/foodMenu/delete', {
-              dateTime: scope.column.className,
-              orgId: this.searchData.orgId
+            .post('/org/foodMenu/deleteFood', {
+              duration:
+                row.type === '早餐'
+                  ? 'breakfast'
+                  : row.type === '午餐'
+                    ? 'lunch'
+                    : 'supper',
+              foodId: item.foodId,
+              menuId: item.menuId
             })
             .then(res => {
               if (res.code === SUCCESS) {
@@ -431,12 +437,12 @@ export default {
         })
         .catch(() => {})
     },
-    handleAddFood(scope) {
+    handleAddFood (scope) {
       this.formInfo.dateTime = scope.column.className
       this.addType = scope.row.type
       this.dialogFormVisible = true
     },
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       // if (rows.length < 7) {
       //   let len = 7 - rows.length
       //   for (let i = 0; i < len; i++) {
@@ -466,16 +472,25 @@ export default {
           weekMap[i]
         } ${menuDate.getMonth() + 1}-${menuDate.getDate()}`
         if (rows[i].breakfast && rows[i].breakfast.length > 0) {
+          rows[i].breakfast.forEach(j => {
+            j.menuId = rows[i].menuId
+          })
           fast[mmap[i]] = rows[i].breakfast
         } else {
           fast[mmap[i]] = []
         }
         if (rows[i].lunch && rows[i].lunch.length > 0) {
+          rows[i].lunch.forEach(j => {
+            j.menuId = rows[i].menuId
+          })
           lunch[mmap[i]] = rows[i].lunch
         } else {
           lunch[mmap[i]] = []
         }
         if (rows[i].dinner && rows[i].dinner.length > 0) {
+          rows[i].dinner.forEach(j => {
+            j.menuId = rows[i].menuId
+          })
           dinner[mmap[i]] = rows[i].dinner
         } else {
           dinner[mmap[i]] = []
@@ -497,14 +512,14 @@ export default {
       ]
       return res
     },
-    transferWeek(date) {
+    transferWeek (date) {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
       } else {
         this.searchData.week = ''
       }
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -526,7 +541,7 @@ export default {
         }
       })
     },
-    cellMerge({ row, column, rowIndex, columnIndex }) {
+    cellMerge ({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex]
         const _col = _row ? 1 : 0
@@ -540,7 +555,7 @@ export default {
         }
       }
     },
-    getSpanArr(data) {
+    getSpanArr (data) {
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           this.spanArr.push(1)

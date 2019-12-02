@@ -63,16 +63,18 @@
   </div>
 </template>
 <script>
-import routerList from './routerList'
+// import routerList from './routerList'
 export default {
   name: 'vheader',
   data () {
     return {
-      routerList,
       infoBlock: false
     }
   },
   computed: {
+    routerList () {
+      return this.$store.state.routerList
+    },
     activeLink () {
       return this.$store.state.fullPath
     }
@@ -84,24 +86,27 @@ export default {
       let UserManage = []
       let systemSetting = []
       let resourceCenter = []
-      if (routerList && routerList.length > 0) {
-        routerList.forEach(i => {
-          if (i.name === '服务大厅') {
+      if (this.routerList && this.routerList.length > 0) {
+        this.routerList.forEach(i => {
+          if (i.url === 'serviceHall') {
             serviceHall = i.children
           }
-          if (i.name === '资源中心') {
+          if (i.url === 'ResourceCenter') {
             resourceCenter = i.children
           }
-          if (i.name === '人员管理') {
+          if (i.url === 'UserManage') {
             UserManage = i.children
           }
-          if (i.name === '统计分析') {
+          if (i.url === 'StatisticalAnalysis') {
             statisticalAnalysis = i.children
           }
-          if (i.name === '系统设置') {
+          if (i.url === 'SystemSetting') {
             systemSetting = i.children
           }
         })
+      }
+      if (this.activeLink.indexOf('/Home') > -1) {
+        this.$store.commit('setNavList', [])
       }
       if (this.activeLink.indexOf('/serviceHall/') > -1) {
         this.$store.commit('setNavList', serviceHall)
@@ -131,17 +136,16 @@ export default {
       this.infoBlock = false
     },
     setNavList (item) {
-      if (item.hasOwnProperty('children')) {
-        this.$router.push({
-          name: item.children[0].children[0].url
-        })
+      if (item.hasOwnProperty('children') && item.children.length > 0) {
         if (Array.isArray(item.children)) {
           this.$store.commit('setNavList', item.children)
-          console.log(item.children[0].name)
           this.$store.commit('setOpenName', item.children[0].name)
         } else {
           this.$store.commit('setNavList', [])
         }
+        this.$router.push({
+          name: item.children[0].children[0].url
+        })
       } else {
         this.$store.commit('setNavList', [])
         this.$router.push({

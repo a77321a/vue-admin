@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:41:38
+ * @LastEditTime: 2019-12-02 16:34:27
  -->
 <template>
   <div class="Participants">
@@ -42,6 +42,11 @@
           @click="searchData = {activityId:searchData.activityId};searchRefresh = !searchRefresh"
           size="small"
         >重置</el-button>
+        <span></span>
+      </el-form-item>
+      <el-form-item style="float:right">
+        <span>参加人员：{{actualCustomerNum}}/{{customerNum}}</span>
+        <el-button type="text" @click="exportExcel" size="small">导出数据</el-button>
       </el-form-item>
     </el-form>
     <!-- 列表 -->
@@ -64,7 +69,7 @@
         </div>
       </template>
       <template slot="emergencyList" slot-scope="{row}">
-        <span v-for="(item, index) in row.emergencyList" :key="index">
+        <span v-if="row.emergencyList" v-for="(item, index) in row.emergencyList" :key="index">
           {{item.mobile}}
           <span v-if="index !=row.emergencyList.length - 1">、</span>
         </span>
@@ -109,9 +114,17 @@ export default {
       ]
     }
   },
-  props: ['activityId'],
+  props: ['activityId', 'actualCustomerNum', 'customerNum'],
   created () {},
   methods: {
+    exportExcel () {
+      window.open(
+        `${ctx}/activity/customer/export?activityId=${this.searchData
+          .activityId || ''}&customerCategory=${this.searchData
+          .customerCategory || ''}&serviceCustomerName=${this.searchData
+          .serviceCustomerName || ''}&token=${this.$store.state.token}`
+      )
+    },
     rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime

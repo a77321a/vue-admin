@@ -2,7 +2,7 @@
  * @Descripttion: 登陆界面
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-11-11 15:32:09
+ * @LastEditTime: 2019-12-02 10:07:01
  -->
 <template>
   <el-row
@@ -105,6 +105,7 @@ export default {
           if (res.code === SUCCESS) {
             this.$store.commit('setToken', res.payload.token)
             this.$store.commit('setUserInfo', JSON.stringify(res.payload))
+            this.$store.dispatch('get_menu', { router: this.$router })
             this.$router.push({
               name: 'Home'
             })

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 10:52:19
+ * @LastEditTime: 2019-12-02 15:38:12
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -17,12 +17,17 @@ export default new Vuex.Store({
     token: localStorage.webToken || '', // token
     fullPath: '',
     navList: sessionStorage.navList ? JSON.parse(sessionStorage.navList) : [],
+    routerList: localStorage.routerList ? JSON.parse(localStorage.routerList) : [],
     breadList: sessionStorage.breadList ? JSON.parse(sessionStorage.breadList) : [],
     opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
     dialogHeight: `${(document.documentElement.clientHeight) - 330}`,
     config: config
   },
   mutations: {
+    setRouterList (state, data) {
+      state.routerList = data
+      localStorage.setItem('routerList', JSON.stringify(data))
+    },
     setBreadList (state, breadList) {
       state.breadList = breadList
       sessionStorage.setItem('breadList', JSON.stringify(breadList))
@@ -55,19 +60,29 @@ export default new Vuex.Store({
       sessionStorage.setItem('opens', JSON.stringify(newArr))
     },
     setOpenName (state, data) {
-      let arr = new Set(state.opens)
-      if (!arr.has(data)) {
-        arr.add(data)
-      }
-
-      let newArr = [...arr]
-      sessionStorage.setItem('opens', JSON.stringify(newArr))
+      // let arr = new Set(state.opens)
+      // if (!arr.has(data)) {
+      //   arr.add(data)
+      // }
+      let arr = state.opens
+      arr.push(data)
+      // let newArr = [...arr]
+      sessionStorage.setItem('opens', JSON.stringify(arr))
     }
   },
   actions: {
     // 获取用户信息
-    get_menu (context, { id, router }) {
-
+    get_menu (context, { router }) {
+      http.post('/menu/tree').then(res => {
+        if (res.code === SUCCESS) {
+          let arr = res.payload
+          arr.forEach(i => {
+            i.active = i.url
+          })
+          console.log(arr)
+          context.commit('setRouterList', res.payload)
+        }
+      })
     },
     getDictionaryManagement (context) {
       http.get('/dictionary/getDictByCatalogKey', {

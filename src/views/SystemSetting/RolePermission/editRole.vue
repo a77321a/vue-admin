@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-01 19:23:39
+ * @LastEditTime: 2019-12-02 14:42:31
  -->
 <template>
   <div id="edit-role">
@@ -34,10 +34,18 @@
           v-model="formInfo.roleDesc"
         ></el-input>
       </el-form-item>
-      <div class="title">活动信息</div>
-      <el-tree style="margin:20px;" show-checkbox :data="data" node-key="id" default-expand-all>
+      <div class="title">设置权限</div>
+      <el-tree
+        ref="permissionTree"
+        style="margin:20px;"
+        :default-checked-keys="defaultKey"
+        show-checkbox
+        :data="data"
+        node-key="permissionId"
+        default-expand-all
+      >
         <div class="custom-tree-node" slot-scope="{ node, data }">
-          <span>{{ node.label }}</span>
+          <span>{{ data.permissionName }}</span>
         </div>
       </el-tree>
       <el-form-item size="large">
@@ -49,7 +57,7 @@
 </template>
 <script>
 export default {
-  name: 'editEvent',
+  name: 'editRole',
   data () {
     return {
       formInfo: {
@@ -57,6 +65,7 @@ export default {
         roleDesc: '',
         permissionIds: []
       },
+      defaultKey: [],
       rules: {
         roleName: [
           { required: true, message: '请输入角色名称', trigger: 'blur' }
@@ -69,18 +78,46 @@ export default {
     }
   },
   created () {
-    if (this.$route.query.id) {
-      this.getRoleInfo()
-    }
+    this.getTree()
   },
   methods: {
+    getTree () {
+      this.$http.get('/permission/getTree', {}).then(res => {
+        if (res.code === SUCCESS) {
+          this.data = res.payload
+        }
+        if (this.$route.query.id) {
+          this.getRoleInfo()
+        }
+      })
+    },
     getRoleInfo () {
-      this.$http.get('/role/get?roleId=' + this.$route.query.id).then(res => {
+      this.$http.get('/role/edit?roleId=' + this.$route.query.id).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
+          let checked = (data, key, newArr) => {
+            data.forEach(i => {
+              if (i.permissionId === key) {
+                if (Array.isArray(i.children) && i.children.length == 0) {
+                  newArr.push(i.permissionId)
+                }
+              } else {
+                if (i.children.length !== 0) {
+                  checked(i.children, key, newArr)
+                }
+              }
+            })
+          }
+          let arr = []
+          this.formInfo.permissionsList.forEach(i => {
+            checked(this.data, i.permissionId, arr)
+          })
+
+          this.defaultKey = arr
           delete this.formInfo.isVisible
           delete this.formInfo.createTime
           delete this.formInfo.updateTime
+          delete this.formInfo.permissionsList
         }
       })
     },
@@ -95,6 +132,12 @@ export default {
       return false
     },
     handleSave () {
+      let nodeList = this.$refs['permissionTree'].getCheckedNodes(false, true)
+      let nodeKey = []
+      nodeList.forEach(i => {
+        nodeKey.push(i.permissionId)
+      })
+      this.formInfo.permissionIds = nodeKey
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         if (this.$route.query.id) {

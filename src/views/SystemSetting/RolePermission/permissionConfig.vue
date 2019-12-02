@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-01 22:18:04
+ * @LastEditTime: 2019-12-02 14:58:09
  -->
 <template>
   <div id="space-resource">
@@ -17,7 +17,7 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="dialogFormVisible = true"
+      @click="dialogFormVisible = true;dialogType = true"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -26,7 +26,6 @@
       <span class="left">权限名称</span>
       <span class="right">操作</span>
       <span style="float:right;margin-right:400px">权限类型</span>
-
       <span style="float:right;margin-right:244px">描述</span>
     </div>
     <el-tree :expand-on-click-node="false" :data="data" node-key="regionId" default-expand-all>
@@ -45,13 +44,14 @@
 
         <span
           class="desc"
+          :title="data.permissionDesc"
           style="float:right;margin-right:170px;width:100px;display:inline-block"
         >{{data.permissionDesc}}</span>
       </div>
     </el-tree>
-    <el-dialog title="添加权限" :visible.sync="dialogFormVisible" width="70%">
+    <el-dialog :title="dialogType ? '添加权限' :'修改权限'" :visible.sync="dialogFormVisible" width="70%">
       <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
-        <el-form-item label="菜单" prop="permissionList">
+        <el-form-item v-if="dialogType" label="菜单" prop="permissionList">
           <el-select
             style="width:200px"
             clearable
@@ -108,7 +108,7 @@ export default {
   components: {},
   data () {
     return {
-      city: '',
+      dialogType: true,
       data: [],
       searchData: {},
       tempObj: {},
@@ -132,34 +132,56 @@ export default {
       this.formInfo.permissionList = val
     },
     handleEdit (node, data) {
+      this.dialogType = false
       this.formInfo = data
       this.dialogFormVisible = true
     },
     handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
-        this.$http
-          .post('/permission/add', {
-            parentId: this.formInfo.permissionId
-              ? this.formInfo.permissionId
-              : 0,
-            permissionDepth: this.formInfo.permissionDepth
-              ? this.formInfo.permissionDepth + 1
-              : 0,
-            permissionDesc: this.formInfo.permissionDesc,
-            permissionName: this.formInfo.permissionList.name,
-            permissionType: this.formInfo.permissionDepth == 3 ? 3 : 2,
-            permissionUrl: this.formInfo.permissionList.url
-              ? this.formInfo.permissionList.url
-              : this.formInfo.permissionList.name
-          })
-          .then(res => {
-            if (res.code === SUCCESS) {
-              this.$message.success('操作成功')
-              this.dialogFormVisible = false
-              this.getTree()
-            }
-          })
+        // let url = this.dialogType ? '/permission/add':'/permission/update'
+        if (this.dialogType) {
+          this.$http
+            .post('/permission/add', {
+              parentId: this.formInfo.permissionId
+                ? this.formInfo.permissionId
+                : 0,
+              permissionDepth: this.formInfo.permissionDepth
+                ? this.formInfo.permissionDepth + 1
+                : 0,
+              permissionDesc: this.formInfo.permissionDesc,
+              permissionName: this.formInfo.permissionList.name,
+              permissionType: this.formInfo.permissionDepth == 3 ? 3 : 2,
+              permissionUrl: this.formInfo.permissionList.url
+                ? this.formInfo.permissionList.url
+                : this.formInfo.permissionList.name
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.dialogFormVisible = false
+                this.getTree()
+              }
+            })
+        } else {
+          this.$http
+            .post('/permission/update', {
+              permissionId: this.formInfo.permissionId,
+              parentId: this.formInfo.parentId,
+              permissionDepth: this.formInfo.permissionDepth,
+              permissionDesc: this.formInfo.permissionDesc,
+              permissionName: this.formInfo.permissionName,
+              permissionType: this.formInfo.permissionType,
+              permissionUrl: this.formInfo.permissionUrl
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.dialogFormVisible = false
+                this.getTree()
+              }
+            })
+        }
       })
     },
     getMenuTree () {

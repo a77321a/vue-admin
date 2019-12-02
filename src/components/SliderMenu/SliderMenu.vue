@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-13 15:58:29
+ * @LastEditTime: 2019-12-02 15:36:59
  -->
 <template>
   <div class="slider-menu">
@@ -53,7 +53,8 @@ export default {
   watch: {
     $route (val) {
       this.active = val.meta.parent ? val.meta.parent : val.name
-      this.opens = sessionStorage.opens ? JSON.parse(sessionStorage.opens) : ''
+      this.opens = this.$store.state.opens
+      this.$forceUpdate()
     }
   },
   methods: {

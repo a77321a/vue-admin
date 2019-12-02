@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-25 20:37:39
+ * @LastEditTime: 2019-12-02 16:44:21
  -->
 <template>
   <div class="Participants">
@@ -22,20 +22,18 @@
           type="primary"
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
-          >搜索</el-button
-        >
+        >搜索</el-button>
         <el-button
           @click="
             searchData = { activityId: searchData.activityId };
             searchRefresh = !searchRefresh;
           "
           size="small"
-          >重置</el-button
-        >
+        >重置</el-button>
       </el-form-item>
-      <div style="float:right">
-        参与人员：{{}}
-      </div>
+      <el-form-item style="float:right">
+        <el-button type="text" @click="exportExcel" size="small">导出数据</el-button>
+      </el-form-item>
     </el-form>
     <!-- 列表 -->
     <Table
@@ -48,18 +46,16 @@
     >
       <template slot="orgServiceProviderName" slot-scope="{ row }">
         <div class="flex-t-u">
-          <el-avatar
-            class="avatar"
-            size="medium"
-            :src="row.indexPic"
-          ></el-avatar>
+          <el-avatar class="avatar" size="medium" :src="row.indexPic"></el-avatar>
           <span class="f-title">{{ row.orgServiceProviderName }}</span>
         </div>
       </template>
       <template slot="orgServiceProductList" slot-scope="{ row }">
         <span :key="index" v-for="(item, index) in row.orgServiceProductList">
           {{ item.orgServiceProductName }}
-          <span v-if="index != row.orgServiceProductList.length - 1">、</span>
+          <span
+            v-if="index != row.orgServiceProductList.length - 1"
+          >、</span>
         </span>
       </template>
       <template slot-scope="{ row }" slot="handleColumn">
@@ -87,6 +83,13 @@ export default {
 
   created () {},
   methods: {
+    exportExcel () {
+      window.open(
+        `${ctx}/activity/provider/export?activityId=${this.searchData
+          .activityId || ''}&orgServiceProviderName=${this.searchData
+          .orgServiceProviderName || ''}&token=${this.$store.state.token}`
+      )
+    },
     rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime

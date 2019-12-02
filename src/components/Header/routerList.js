@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 16:05:09
  * @LastEditors:
- * @LastEditTime: 2019-11-24 21:48:17
+ * @LastEditTime: 2019-12-02 16:20:38
  */
 export default [
   {
@@ -152,7 +152,7 @@ export default [
   },
   {
     name: '人员管理',
-    url: 'courseCenter',
+    url: 'UserManage',
     active: 'UserManage',
     icon: 'fa-users',
     children: [
