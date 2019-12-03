@@ -3,12 +3,17 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-01 18:47:18
+ * @LastEditTime: 2019-12-03 15:08:14
  -->
 <template>
   <div id="space-resource">
     <div class="tree-title">
-      <span class="left">菜单名称</span>
+      <span class="left">
+        菜单名称
+        <span style="color:#ccc;font-size:14px;margin-left:5px;">
+          <i class="el-icon-info"></i>可对同级菜单进行拖动排序
+        </span>
+      </span>
       <span class="right">操作</span>
     </div>
     <el-tree

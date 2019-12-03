@@ -57,15 +57,15 @@ axios.interceptors.request.use(
     config.cancelToken = new CancelToken((cancel) => {
       sources[request] = cancel
     })
-    if (requestList.includes(request)) {
-      sources[request]('取消重复请求')
-    } else {
-      requestList.push(request)
-      if (config.loading) {
-        showFullScreenLoading()
-        NProgress.start()
-      };
-    }
+    // if (requestList.includes(request)) {
+    //   sources[request]('取消重复请求')
+    // } else {
+    requestList.push(request)
+    if (config.loading) {
+      showFullScreenLoading()
+      NProgress.start()
+    };
+    // }
     return config
   }, err => {
     return Promise.reject(err)

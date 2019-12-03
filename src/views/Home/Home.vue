@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-29 15:44:50
+ * @LastEditTime: 2019-12-03 13:59:36
  -->
 <template>
   <div class="Home">
@@ -323,7 +323,6 @@ export default {
         .then(res => {
           if (res.code === SUCCESS) {
             this.eventList = res.payload.records
-            console.log(this.eventList)
           }
         })
     }

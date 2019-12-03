@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:31:31
  * @LastEditors:
- * @LastEditTime: 2019-11-28 16:55:56
+ * @LastEditTime: 2019-12-03 14:44:04
  -->
 <template>
   <div id="pension-scale">
@@ -57,10 +57,12 @@
         </el-card>
       </el-col>
     </el-row>
+    <div style="min-height:240px" id="barChart"></div>
   </div>
 </template>
 <script>
 import countTo from 'vue-count-to'
+import echarts from 'echarts'
 export default {
   name: 'PensionScaleStatistics',
   components: {
@@ -74,10 +76,11 @@ export default {
         orgServiceProviderNum: 0,
         relatedOrgNum: 0,
         societyOrgNum: 0
-      }
+      },
+      barChart: null
     }
   },
-  created () {
+  mounted () {
     this.getPensionInfo()
   },
   methods: {
@@ -85,6 +88,54 @@ export default {
       this.$http.get('/stats/pension').then(res => {
         if (res.code === SUCCESS) {
           this.pensionScaleInfo = res.payload
+          this.barChart = echarts.init(document.getElementById('barChart'))
+          let option = {
+            color: ['#3398DB'],
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+              }
+            },
+            grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+            },
+            xAxis: [
+              {
+                type: 'category',
+                data: ['养老机构数', '社会化运营机构数', '涉老机构数'],
+                axisTick: {
+                  alignWithLabel: true
+                }
+              }
+            ],
+            yAxis: [
+              {
+                type: 'value'
+              }
+            ],
+            series: [
+              {
+                name: '数量',
+                type: 'bar',
+                barWidth: '60%',
+                data: [
+                  this.pensionScaleInfo.orgNum,
+                  this.pensionScaleInfo.societyOrgNum,
+                  this.pensionScaleInfo.relatedOrgNum
+                ]
+              }
+            ]
+          }
+          this.barChart.clear()
+          this.barChart.setOption(option)
+          window.onresize = () => {
+            this.barChart.resize()
+          }
         }
       })
     }

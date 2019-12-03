@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:31:31
  * @LastEditors:
- * @LastEditTime: 2019-11-29 22:53:44
+ * @LastEditTime: 2019-12-03 15:02:18
  -->
 <template>
   <div id="ServiceDevelopmentStatistics">
@@ -35,40 +35,30 @@
           type="primary"
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
-          >搜索</el-button
-        >
+        >搜索</el-button>
         <el-button
           @click="
             searchData = {};
             searchRefresh = !searchRefresh;
           "
           size="small"
-          >重置</el-button
-        >
+        >重置</el-button>
       </el-form-item>
     </el-form>
     <el-row type="flex" class="row-bg" justify="space-around">
       <el-col :span="6">
         <el-card class="box-card">
-          <H2
-            ><countTo
-              :startVal="0"
-              :endVal="activityInfo.activityNum"
-              :duration="1500"
-            ></countTo
-          ></H2>
+          <H2>
+            <countTo :startVal="0" :endVal="activityInfo.activityNum" :duration="1500"></countTo>
+          </H2>
           <div>活动开展次数</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card class="box-card">
-          <H2
-            ><countTo
-              :startVal="0"
-              :endVal="activityInfo.serviceCustomerNum"
-              :duration="1500"
-            ></countTo
-          ></H2>
+          <H2>
+            <countTo :startVal="0" :endVal="activityInfo.serviceCustomerNum" :duration="1500"></countTo>
+          </H2>
           <div>参加活动老人数</div>
         </el-card>
       </el-col>
@@ -102,40 +92,30 @@
           type="primary"
           @click="searchServiceRefresh = !searchServiceRefresh"
           icon="el-icon-search"
-          >搜索</el-button
-        >
+        >搜索</el-button>
         <el-button
           @click="
             serviceDataSearch = {};
             searchServiceRefresh = !searchServiceRefresh;
           "
           size="small"
-          >重置</el-button
-        >
+        >重置</el-button>
       </el-form-item>
     </el-form>
     <el-row type="flex" class="row-bg" justify="space-around">
       <el-col :span="6">
         <el-card class="box-card">
-          <H2
-            ><countTo
-              :startVal="0"
-              :endVal="serviceInfo.customerDinnerNum"
-              :duration="1500"
-            ></countTo
-          ></H2>
+          <H2>
+            <countTo :startVal="0" :endVal="serviceInfo.customerDinnerNum" :duration="1500"></countTo>
+          </H2>
           <div>助餐人次</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card class="box-card">
-          <H2
-            ><countTo
-              :startVal="0"
-              :endVal="serviceInfo.serviceRecordCustomerNum"
-              :duration="1500"
-            ></countTo
-          ></H2>
+          <H2>
+            <countTo :startVal="0" :endVal="serviceInfo.serviceRecordCustomerNum" :duration="1500"></countTo>
+          </H2>
           <div>享受服务人次</div>
         </el-card>
       </el-col>
@@ -146,8 +126,8 @@
   </div>
 </template>
 <script>
-import countTo from 'vue-count-to';
-import echarts from 'echarts';
+import countTo from 'vue-count-to'
+import echarts from 'echarts'
 export default {
   name: 'PensionScaleStatistics',
   components: {
@@ -192,8 +172,8 @@ export default {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
       } else {
-        this.searchData.startTime = '';
-        this.searchData.endTime = '';
+        this.searchData.startTime = ''
+        this.searchData.endTime = ''
       }
     },
     getStaInfo () {
@@ -289,7 +269,7 @@ export default {
             this.activityPieChart.setOption(option)
             window.onresize = () => {
               this.activityPieChart.resize()
-            };
+            }
           }
         })
     },
@@ -318,15 +298,16 @@ export default {
               tooltip: {
                 trigger: 'item',
                 formatter: function (param) {
-                  return (
-                    '<div>' +
-                    param.name +
-                    '</div><div>' +
-                    param.data.value +
-                    '个 &nbsp;&nbsp;&nbsp;占比' +
-                    param.percent +
-                    '%</div>'
-                  )
+                  if (param.name) {
+                    return (
+                      '<div>' +
+                      param.name +
+                      '</div><div>' +
+                      '&nbsp;&nbsp;&nbsp;占比' +
+                      param.data.value * 100 +
+                      '%</div>'
+                    )
+                  }
                 },
                 backgroundColor: 'rgba(255,255,255,.6)',
                 borderColor: '#ccc',
@@ -336,6 +317,7 @@ export default {
                 },
                 extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
               },
+              color: ['#409eff', '#ccc'],
               legend: {
                 orient: 'vertical',
                 top: 'middle',
@@ -369,13 +351,17 @@ export default {
                   },
                   data: [
                     {
-                      value: res.payload.serviceCustomerPercent,
-                      name: '享受服务的老人数'
+                      value:
+                        res.payload.serviceCustomerPercent.replace('%', '') /
+                        100,
+                      name: '享受服务的老人'
+                    },
+                    {
+                      value:
+                        1 -
+                        res.payload.serviceCustomerPercent.replace('%', '') /
+                          100
                     }
-                    // {
-                    //   value: res.payload.activityNumToBeCarriedOut,
-                    //   name: '未开展次数'
-                    // }
                   ]
                 }
               ]
@@ -384,7 +370,7 @@ export default {
             this.servicePieChart.setOption(option)
             window.onresize = () => {
               this.servicePieChart.resize()
-            };
+            }
           }
         })
     },
@@ -404,7 +390,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "~@/common/css/variable.scss";
+@import '~@/common/css/variable.scss';
 
 #ServiceDevelopmentStatistics {
   .row-bg {

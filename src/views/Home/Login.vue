@@ -106,6 +106,8 @@ export default {
             this.$store.commit('setToken', res.payload.token)
             this.$store.commit('setUserInfo', JSON.stringify(res.payload))
             this.$store.dispatch('get_menu', { router: this.$router })
+            this.$store.dispatch('getDictionaryManagement')
+
             this.$router.push({
               name: 'Home'
             })
