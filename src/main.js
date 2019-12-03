@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-28 15:04:04
+ * @LastEditTime: 2019-12-03 11:28:20
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -38,7 +38,7 @@ Vue.use(VueAMap)
 window.SUCCESS = '00000000'
 window.MAXSIZE = 999
 
-window.ctx = 'http://118.24.54.72:8061/'
+window.ctx = func.baseUrl
 window.docTitle = document.title
 Vue.component('Table', Table)
 Vue.component('UEditor', UEditor)

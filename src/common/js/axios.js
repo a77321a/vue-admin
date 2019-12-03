@@ -4,6 +4,7 @@ import { Message, Loading } from 'element-ui'
 import router from '@/router/router'
 import store from '@/store/store'
 import NProgress from 'nprogress'
+import func from './utils'
 NProgress.configure({ showSpinner: false })
 // 全局定义loading
 let loading
@@ -201,7 +202,7 @@ function todelete (url, params = {}) {
   })
 }
 axios.defaults.timeout = 0
-axios.defaults.baseURL = 'http://118.24.54.72:8061/' // 测试环境
+axios.defaults.baseURL = func.baseUrl // 测试环境
 axios.defaults.headers.Authorization = ''
 // axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 

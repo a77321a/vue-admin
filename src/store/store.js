@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-02 15:38:12
+ * @LastEditTime: 2019-12-03 11:24:56
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -85,12 +85,47 @@ export default new Vuex.Store({
       })
     },
     getDictionaryManagement (context) {
+      // 活动状态枚举值
       http.get('/dictionary/getDictByCatalogKey', {
         dictCatalogKey: 'ACTIVITY_STATUS'
       }).then((res) => {
-        console.log(context.state.config)
         config.activityStatus = res.payload
-        console.log(context.state.config)
+      })
+      // 活动状态枚举值
+      http.get('/dictionary/getDictByCatalogKey', {
+        dictCatalogKey: 'ACTIVITY_STATUS'
+      }).then((res) => {
+        config.activityStatus = res.payload
+      })
+      // 活动状态枚举值
+      http.get('/dictionary/getDictByCatalogKey', {
+        dictCatalogKey: 'ACTIVITY_STATUS'
+      }).then((res) => {
+        config.activityStatus = res.payload
+      })
+      // 活动状态枚举值
+      http.get('/dictionary/getDictByCatalogKey', {
+        dictCatalogKey: 'ACTIVITY_STATUS'
+      }).then((res) => {
+        config.activityStatus = res.payload
+      })
+      // 活动状态枚举值
+      http.get('/dictionary/getDictByCatalogKey', {
+        dictCatalogKey: 'ACTIVITY_STATUS'
+      }).then((res) => {
+        config.activityStatus = res.payload
+      })
+      // 活动状态枚举值
+      http.get('/dictionary/getDictByCatalogKey', {
+        dictCatalogKey: 'ACTIVITY_STATUS'
+      }).then((res) => {
+        config.activityStatus = res.payload
+      })
+      // 活动状态枚举值
+      http.get('/dictionary/getDictByCatalogKey', {
+        dictCatalogKey: 'ACTIVITY_STATUS'
+      }).then((res) => {
+        config.activityStatus = res.payload
       })
     }
   }

@@ -3,9 +3,10 @@
  * @Author:
  * @Date: 2019-11-19 21:09:55
  * @LastEditors:
- * @LastEditTime: 2019-11-25 14:01:58
+ * @LastEditTime: 2019-12-03 11:28:54
  */
 const func = {
+  baseUrl: 'http://118.24.54.72:8061/',
   transLabel: (arr, str) => {
     if (arr.length === 0) return
     for (let i in arr) {
