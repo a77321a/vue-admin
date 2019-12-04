@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-03 14:28:59
+ * @LastEditTime: 2019-12-04 23:02:25
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -58,6 +58,7 @@ const store = new Vuex.Store({
         arr.delete(data)
       }
       let newArr = [...arr]
+      state.opens = newArr
       sessionStorage.setItem('opens', JSON.stringify(newArr))
     },
     setOpenName (state, data) {
@@ -68,6 +69,7 @@ const store = new Vuex.Store({
       let arr = state.opens
       arr.push(data)
       // let newArr = [...arr]
+      state.opens = arr
       sessionStorage.setItem('opens', JSON.stringify(arr))
     },
     setDict (state, data) {

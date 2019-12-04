@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 21:31:03
+ * @LastEditTime: 2019-12-04 23:25:29
  -->
 <template>
   <div class="event-center">
@@ -37,7 +37,11 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="活动名称">
-        <el-input style="width:200px" placeholder="请输入活动名称关键字" v-model="searchData.activityName"></el-input>
+        <el-input
+          style="width:200px"
+          placeholder="请输入活动名称关键字"
+          v-model="searchData.activityName"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -45,16 +49,25 @@
           type="primary"
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
-        >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+          >搜索</el-button
+        >
+        <el-button
+          @click="
+            searchData = {};
+            searchRefresh = !searchRefresh;
+          "
+          size="small"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editEvent'})"
+      @click="$router.push({ name: 'editEvent' })"
       style="margin-bottom:15px"
       size="small"
       type="primary"
-    >新增活动</el-button>
+      >新增活动</el-button
+    >
     <!-- 列表 -->
     <Table
       @commitSelection="commitSelection"
@@ -66,50 +79,71 @@
       api="/activity/pageSearch"
       method="post"
     >
-      <template slot-scope="{row}" slot="activityName">
+      <template slot-scope="{ row }" slot="activityName">
         <div class="flex-t-l">
           <img
             class="course-avatar"
-            :src="$store.state.config.systemConfig[0].dictionaryValue+row.activityIndexPic"
+            :src="
+              $store.state.config.systemConfig[0].dictionaryValue +
+                row.activityIndexPic
+            "
             alt
           />
           <div class="flex-column-t">
-            <span class="f-title">{{row.activityName}}</span>
+            <span class="f-title">{{ row.activityName }}</span>
           </div>
         </div>
       </template>
-      <template
-        slot="activityStatus"
-        slot-scope="{row}"
-      >{{$store.state.config.activityStatus[row.activityStatus].dictionaryLabel}}</template>
-      <template slot="joinUser" slot-scope="{row}">{{row.actualCustomerNum}}/{{row.customerNum}}</template>
-      <template slot-scope="{row}" slot="handleColumn">
+      <template slot="activityStatus" slot-scope="{ row }">{{
+        $store.state.config.activityStatus[row.activityStatus].dictionaryLabel
+      }}</template>
+      <template slot="joinUser" slot-scope="{ row }"
+        >{{ row.actualCustomerNum }}/{{ row.customerNum }}</template
+      >
+      <template slot-scope="{ row }" slot="handleColumn">
         <el-button
-          @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
+          @click="
+            $router.push({ name: 'eventInfo', query: { aid: row.activityId } })
+          "
           type="text"
           size="small"
-        >查看</el-button>
+          >查看</el-button
+        >
         <el-button
-          @click="$router.push({name:'editEvent',query:{aid:row.activityId}})"
+          @click="
+            $router.push({ name: 'editEvent', query: { aid: row.activityId } })
+          "
           type="text"
           size="small"
-        >编辑</el-button>
+          >编辑</el-button
+        >
         <el-button
           v-if="row.activityStatus == 1"
           @click="handleCloseActivity(row)"
           type="text"
           size="small"
-        >结束活动</el-button>
+          >结束活动</el-button
+        >
         <el-button
-          @click="$router.push({name:'editActivitySummary',query:{aid:row.activityId}})"
+          @click="
+            $router.push({
+              name: 'editActivitySummary',
+              query: { aid: row.activityId }
+            })
+          "
           v-if="row.activityStatus > 1"
           type="text"
           size="small"
-        >总结活动</el-button>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+          >总结活动</el-button
+        >
+        <el-button @click="handleDelete(row)" type="text" size="small"
+          >删除</el-button
+        >
       </template>
       <template slot="footer-left">
-        <el-button @click="handleCloseActivity(null)" type="text">结束活动</el-button>
+        <el-button @click="handleCloseActivity(null)" type="text"
+          >结束活动</el-button
+        >
         <el-button @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
@@ -175,8 +209,8 @@ export default {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
       } else {
-        this.searchData.startTime = ''
-        this.searchData.endTime = ''
+        this.searchData.startTime = '';
+        this.searchData.endTime = '';
       }
     },
     commitSelection (data) {
@@ -194,18 +228,20 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/activity/delete', { activityIds: id }).then(res => {
-            if (res.code === SUCCESS) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
+          this.$http
+            .post('/activity/delete', { activityIdList: id })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     },
     handleCloseActivity (row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
-      let content = '是否要提前结束活动？'
+      let content = '是否要提前结束活动？';
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

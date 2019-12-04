@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-02 16:44:21
+ * @LastEditTime: 2019-12-04 22:21:08
  -->
 <template>
   <div class="Participants">
@@ -41,12 +41,13 @@
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :columns="tableColumns"
+      :emptyText="'活动尚未结束'"
       api="/activity/provider/pageSearch"
       method="post"
     >
       <template slot="orgServiceProviderName" slot-scope="{ row }">
         <div class="flex-t-u">
-          <el-avatar class="avatar" size="medium" :src="row.indexPic"></el-avatar>
+          <el-avatar class="avatars" size="medium" :src="row.indexPic"></el-avatar>
           <span class="f-title">{{ row.orgServiceProviderName }}</span>
         </div>
       </template>

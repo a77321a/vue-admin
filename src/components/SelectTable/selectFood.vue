@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-23 16:12:33
+ * @LastEditTime: 2019-12-04 22:55:01
  -->
 <template>
   <div id="select-service-object">
@@ -41,6 +41,7 @@
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
       :selection="true"
+      :height="$store.state.dialogHeight - 200"
       :columns="tableColumns"
       api="/food/pageSearch"
       method="post"
@@ -68,7 +69,7 @@
 <script>
 export default {
   name: 'selectFood',
-  data () {
+  data() {
     return {
       name: '',
       searchRefresh: true,
@@ -86,7 +87,7 @@ export default {
     }
   },
   methods: {
-    commitSelection (data) {
+    commitSelection(data) {
       this.$emit('selectFood', data)
     }
   }

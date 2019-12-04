@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:34:08
+ * @LastEditTime: 2019-12-04 22:11:14
  -->
 <template>
   <div id="edit-event">
@@ -37,7 +37,7 @@
       </el-form-item>
       <el-form-item label="产品封面" prop="indexPic">
         <div style="display:flex;align-items:center;">
-          <div v-show="formInfo.indexPic" class="avatar">
+          <div v-show="formInfo.indexPic" class="avatars">
             <img :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic" alt />
             <Input
               v-model="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic"

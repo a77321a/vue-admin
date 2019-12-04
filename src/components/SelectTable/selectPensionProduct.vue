@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-23 19:20:24
+ * @LastEditTime: 2019-12-04 22:55:11
  -->
 <template>
   <div id="select-service-object">
@@ -27,7 +27,7 @@
       :selectable="selectable"
       :highlightCurrentRow="single"
       @commitSelection="commitSelection"
-      :height="$store.state.dialogHeight -100"
+      :height="$store.state.dialogHeight - 200"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"

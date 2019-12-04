@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-02 15:36:59
+ * @LastEditTime: 2019-12-04 23:16:55
  -->
 <template>
   <div class="slider-menu">
@@ -14,17 +14,22 @@
       @open="handleOpen"
       @close="handleClose"
     >
-      <el-submenu v-for="(item, index) in routerList" :key="index" :index="item.name">
+      <el-submenu
+        v-for="(item, index) in routerList"
+        :key="index"
+        :index="item.name"
+      >
         <template slot="title">
-          <i :class="item.icon"></i>
-          <span>{{item.name}}</span>
+          <i style="margin-right:5px" class="fa" :class="'fa-' + item.icon"></i>
+          <span>{{ item.name }}</span>
         </template>
         <el-menu-item
           @click="handleClick(son)"
-          v-for="(son) in item.children"
+          v-for="son in item.children"
           :key="son.url"
           :index="son.url"
-        >{{son.name}}</el-menu-item>
+          >{{ son.name }}</el-menu-item
+        >
       </el-submenu>
     </el-menu>
   </div>
@@ -63,6 +68,7 @@ export default {
     },
     handleClose (key, keyPath) {
       this.$store.commit('delOpenName', key)
+      this.opens = this.$store.state.opens
     },
     handleClick (son) {
       this.$router.push({

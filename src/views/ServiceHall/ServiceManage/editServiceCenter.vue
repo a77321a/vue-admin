@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-28 20:07:10
+ * @LastEditTime: 2019-12-04 22:11:07
  -->
 <template>
   <div id="editServiceCenter">
@@ -31,17 +31,10 @@
             v-for="(item, index) in formInfo.serviceRecordPicList"
             :key="index"
             v-show="formInfo.serviceRecordPicList.length > 0"
-            class="avatar"
+            class="avatars"
           >
-            <i
-              size="24"
-              @click="handleRemove(index)"
-              class="el-icon-circle-close delete-img"
-            ></i>
-            <img
-              :src="$store.state.config.systemConfig[0].dictionaryValue + item"
-              alt
-            />
+            <i size="24" @click="handleRemove(index)" class="el-icon-circle-close delete-img"></i>
+            <img :src="$store.state.config.systemConfig[0].dictionaryValue + item" alt />
           </div>
           <el-upload
             action="apii/public/img"
@@ -53,11 +46,8 @@
               :disabled="formInfo.serviceRecordPicList.length > 8"
               type="primary"
               icon="ios-cloud-upload-outline"
-              >选择文件</el-button
-            >
-            <div slot="tip" class="el-upload__tip">
-              支持PNG、JPG、GIF格式，小于5M，最多可添加9张
-            </div>
+            >选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF格式，小于5M，最多可添加9张</div>
           </el-upload>
         </div>
       </el-form-item>
@@ -85,11 +75,7 @@
         ></el-cascader>
       </el-form-item>
       <el-form-item label="活动室" prop="activityRoomId">
-        <el-select
-          clearable
-          v-model="formInfo.activityRoomId"
-          placeholder="请选择"
-        >
+        <el-select clearable v-model="formInfo.activityRoomId" placeholder="请选择">
           <el-option
             v-for="(item, index) in eventRoomList"
             :key="index"
@@ -99,9 +85,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="服务对象" prop="serviceCustomerList">
-        <el-button @click="dialogServiceObject = true" icon="el-icon-plus"
-          >选择人员</el-button
-        >
+        <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             @close="formInfo.serviceCustomerList.splice(index, 1)"
@@ -114,9 +98,11 @@
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
             ></el-avatar>
-            <span style="vertical-align: middle;">{{
+            <span style="vertical-align: middle;">
+              {{
               item.serviceCustomerName
-            }}</span>
+              }}
+            </span>
           </el-tag>
         </el-card>
       </el-form-item>
@@ -152,17 +138,14 @@
             dialogServiceObject = false;
             selectObjectList = [];
           "
-          >取 消</el-button
-        >
-        <el-button type="primary" @click="handleSaveSelectObject"
-          >确 定</el-button
-        >
+        >取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue';
+import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue'
 
 export default {
   name: 'editServiceCenter',
@@ -245,8 +228,8 @@ export default {
       this.dialogServiceObject = false
     },
     selectTime (date) {
-      this.formInfo.startTime = date ? date[0] : '';
-      this.formInfo.endTime = date ? date[1] : '';
+      this.formInfo.startTime = date ? date[0] : ''
+      this.formInfo.endTime = date ? date[1] : ''
     },
     getOrgList () {
       this.$http.post('/org/tree').then(res => {
@@ -309,7 +292,7 @@ export default {
         if (!valid) return
         let url = this.$route.query.sid
           ? '/service/record/update'
-          : '/service/record/add';
+          : '/service/record/add'
         let arr = []
         this.formInfo.serviceCustomerList.forEach(i => {
           arr.push(i.serviceCustomerId)

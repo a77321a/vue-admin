@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-03 11:28:20
+ * @LastEditTime: 2019-12-04 23:13:32
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -17,7 +17,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 // 封装表格组件
 import Table from './components/Table/Table.vue'
 import UEditor from './components/UEditor/UEditor.vue'
-
+import 'font-awesome/css/font-awesome.css'
 import './common/css/variable.scss'
 import axios from './common/js/axios'
 import func from './common/js/utils'
@@ -49,6 +49,9 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   NProgress.start()
   store.commit('setPath', to.fullPath)
+  if (from.name == null && name !== 'Login') {
+    store.dispatch('setDict')
+  }
   if (!localStorage.webToken && to.name !== 'Login') {
     router.push({ name: 'Login' })
   }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-03 13:59:36
+ * @LastEditTime: 2019-12-04 22:56:15
  -->
 <template>
   <div class="Home">
@@ -305,6 +305,7 @@ export default {
   created () {
     this.getData()
     this.getEventList()
+    console.log(typeof (this.$store.state.dialogHeight - 200))
   },
   methods: {
     getData () {
@@ -315,16 +316,11 @@ export default {
       })
     },
     getEventList () {
-      this.$http
-        .post('/activity/pageSearch', {
-          pageSize: MAXSIZE,
-          page: 1
-        })
-        .then(res => {
-          if (res.code === SUCCESS) {
-            this.eventList = res.payload.records
-          }
-        })
+      this.$http.get('/activity/thisWeek').then(res => {
+        if (res.code === SUCCESS) {
+          this.eventList = res.payload
+        }
+      })
     }
   }
 }

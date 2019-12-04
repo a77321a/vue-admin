@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-02 16:06:47
+ * @LastEditTime: 2019-12-04 22:13:45
  -->
 <template>
   <div class="meal-center">
@@ -54,7 +54,7 @@
       type="primary"
       >新增菜谱</el-button
     >-->
-    <el-button style="margin-bottom:15px" size="small">复制本周菜谱</el-button>
+    <el-button @click="dialogFormMenu = true" style="margin-bottom:15px" size="small">复制本周菜谱</el-button>
     <!-- 列表 -->
     <!-- :spanMethod="cellMerge"
     :spanFilter="getSpanArr"-->

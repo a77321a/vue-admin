@@ -34,7 +34,7 @@
       </el-form-item>
       <el-form-item label="头像" prop="indexPic">
         <div style="display:flex;align-items:center;">
-          <div v-show="formInfo.indexPic" class="avatar">
+          <div v-show="formInfo.indexPic" class="avatars">
             <img :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic" alt />
           </div>
           <el-upload

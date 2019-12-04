@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-02 16:34:27
+ * @LastEditTime: 2019-12-04 22:24:47
  -->
 <template>
   <div class="Participants">
@@ -54,6 +54,7 @@
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
+      :emptyText="'活动尚未结束'"
       :columns="tableColumns"
       api="/activity/customer/pageSearch"
       method="post"
@@ -69,15 +70,17 @@
         </div>
       </template>
       <template slot="emergencyList" slot-scope="{row}">
-        <span v-if="row.emergencyList" v-for="(item, index) in row.emergencyList" :key="index">
-          {{item.mobile}}
-          <span v-if="index !=row.emergencyList.length - 1">、</span>
-        </span>
+        <div v-if="row.emergencyList">
+          <span v-for="(item, index) in row.emergencyList" :key="index">
+            {{item.mobile}}
+            <span v-if="index !=row.emergencyList.length - 1">、</span>
+          </span>
+        </div>
       </template>
       <template slot="customerCategoryList" slot-scope="{row}">
         <span v-for="(item, index) in row.customerCategoryList" :key="index">
           {{item}}
-          <span v-if="index !=row.emergencyList.length - 1">、</span>
+          <span v-if="index !=row.customerCategoryList.length - 1">、</span>
         </span>
       </template>
       <template slot-scope="{row}" slot="handleColumn">

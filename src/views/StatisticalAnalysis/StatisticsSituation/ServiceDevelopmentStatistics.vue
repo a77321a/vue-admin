@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:31:31
  * @LastEditors:
- * @LastEditTime: 2019-12-03 15:02:18
+ * @LastEditTime: 2019-12-04 22:59:51
  -->
 <template>
   <div id="ServiceDevelopmentStatistics">
@@ -165,6 +165,14 @@ export default {
   mounted () {
     this.getStaInfo()
     this.getServiceStaInfo()
+  },
+  watch: {
+    searchServiceRefresh () {
+      this.getServiceStaInfo()
+    },
+    searchRefresh () {
+      this.getStaInfo()
+    }
   },
   methods: {
     handlTime (date) {

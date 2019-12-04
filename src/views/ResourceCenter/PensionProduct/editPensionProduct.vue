@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-24 13:21:39
+ * @LastEditTime: 2019-12-04 22:10:36
  -->
 <template>
   <div id="edit-event">
@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item label="产品封面" prop="indexPic">
         <div style="display:flex;align-items:center;">
-          <div v-show="formInfo.indexPic !=''" class="avatar">
+          <div v-show="formInfo.indexPic !=''" class="avatars">
             <img :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.indexPic" alt />
           </div>
           <el-upload
@@ -58,7 +58,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="价目表">
-        <el-button>新增价目规则</el-button>
+        <sku ref="sku"></sku>
       </el-form-item>
       <el-form-item label="价格" prop="pensionPrice">
         <el-input-number
@@ -84,8 +84,12 @@
   </div>
 </template>
 <script>
+import sku from '@/components/SKU/sku.vue'
 export default {
   name: 'editEvent',
+  components: {
+    sku
+  },
   data () {
     return {
       formInfo: {
@@ -158,6 +162,9 @@ export default {
     },
     // 保存按钮
     handleSave () {
+      let priceList = this.$refs.sku.toConfirm()
+      console.log(priceList)
+      return
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.pid

@@ -3,15 +3,23 @@
  * @Author: 辛顺宁
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-11-24 19:20:45
+ * @LastEditTime: 2019-12-04 22:52:05
  -->
 <template>
   <div id="account-info">
     <el-card header="账号信息" class="box-card">
       <el-form label-width="90px">
         <el-form-item label="头像">
-          <el-avatar></el-avatar>
-          <el-button type="text" style="float:right;margin-right:20px">修改</el-button>
+          <el-avatar style="vertical-align: middle;"></el-avatar>
+          <el-upload
+            action="apii/public/img"
+            style="float:right;margin-right:20px;margin-top:5px"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button type="text">修改</el-button>
+          </el-upload>
         </el-form-item>
         <el-form-item label="昵称">{{userDetail.nickName}}</el-form-item>
 
@@ -19,14 +27,14 @@
         <el-form-item label="密码">
           *************
           <el-button
-            @click="dialogFormVisible = true"
+            @click="dialogFormVisible = true;formInfo = {}"
             type="text"
-            style="float:right;margin-right:20px"
+            style="float:right;margin-right:20px;margin-top:5px"
           >修改</el-button>
         </el-form-item>
       </el-form>
     </el-card>
-    <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
+    <el-dialog destroy-on-close title="修改密码" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="formInfo" label-width="100px" size="small" :model="formInfo">
         <el-form-item label="旧密码" prop="oldPassword">
           <el-input
@@ -36,7 +44,7 @@
             v-model="formInfo.oldPassword"
           ></el-input>
         </el-form-item>
-        <el-form-item label="新密码" prop="recordTime">
+        <el-form-item label="新密码" prop="newPassword">
           <el-input placeholder="请输入新密码" show-password v-model="formInfo.newPassword"></el-input>
         </el-form-item>
         <el-form-item label="确认新密码" prop="confirmNewPassword">
@@ -84,6 +92,9 @@ export default {
   },
   created () {
     this.getUserDetail()
+    this.$store.commit('setBreadList', [
+      { url: 'accountInfo', title: '账号设置' }
+    ])
   },
   computed: {
     userInfo () {
@@ -91,6 +102,26 @@ export default {
     }
   },
   methods: {
+    uploadImg (file) {
+      let formdata = new FormData()
+      formdata.append('file', file)
+      this.$http.postForm('/file/upload', formdata).then(res => {
+        if (res.code === SUCCESS) {
+          // this.formInfo.activityIndexPic = res.payload
+          this.$http
+            .post('/user/update/avatar', {
+              userId: this.userInfo.userId,
+              avatar: res.payload
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+              }
+            })
+        }
+      })
+      return false
+    },
     handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
@@ -125,7 +156,6 @@ export default {
   }
   /deep/ .el-card__body {
     padding: 0;
-    padding-top: 10px;
   }
   .box-card /deep/ .el-form-item {
     height: 50px;
@@ -133,6 +163,12 @@ export default {
     margin-bottom: 0;
     &:not(:last-child) {
       border-bottom: 1px solid #f5f5f5;
+    }
+    .el-form-item__label {
+      line-height: 50px;
+    }
+    .el-form-item__content {
+      line-height: 50px;
     }
   }
 }

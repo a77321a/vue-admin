@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-13 14:43:57
  * @LastEditors:
- * @LastEditTime: 2019-11-19 20:50:58
+ * @LastEditTime: 2019-12-04 22:27:04
  -->
 <template>
   <div id="active-summary">
@@ -11,7 +11,8 @@
       <el-button class="btn" type="text">重新编辑</el-button>
     </div>
     <div class="content">
-      <div v-html="htmlStr"></div>
+      <div v-if="htmlStr" v-html="htmlStr"></div>
+      <div style="width:200px;margin:0 auto">活动尚未开始</div>
     </div>
   </div>
 </template>

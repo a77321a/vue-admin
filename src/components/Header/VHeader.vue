@@ -10,10 +10,14 @@
         :data-src="item.active"
         :key="index"
         @click="setNavList(item)"
-        v-for="(item,index) in routerList"
+        v-for="(item, index) in routerList"
       >
-        <i style="vertical-align:middle" :class="item.icon"></i>
-        <span class="width-none">{{item.name}}</span>
+        <i
+          style="vertical-align:middle"
+          class="fa"
+          :class="'fa-' + item.icon"
+        ></i>
+        <span class="width-none">{{ item.name }}</span>
       </div>
     </div>
     <div class="tool-bar">
@@ -36,24 +40,40 @@
             <div v-show="infoBlock" class="tdui-user-body" id="userinfo">
               <div class="tdui-user-body-list tdui-user-body-list-first">
                 <div class="tdui-user-body-list-start">
-                  <el-button type="info" icon="el-icon-s-custom" circle></el-button>
+                  <el-button
+                    type="info"
+                    icon="el-icon-s-custom"
+                    circle
+                  ></el-button>
                 </div>
-                <div name="user-login-email" class="tdui-user-body-list-first-end">admin</div>
+                <div
+                  name="user-login-email"
+                  class="tdui-user-body-list-first-end"
+                >
+                  admin
+                </div>
               </div>
               <div
-                @click="$router.push({name:'accountInfo'});$store.commit('setNavList',[])"
+                @click="
+                  $router.push({ name: 'accountInfo' });
+                  $store.commit('setNavList', []);
+                "
                 class="tdui-user-body-list"
               >
                 <div class="tdui-user-body-list-start">
                   <i color="#aaa" size="20" class="el-icon-setting" />
                 </div>
-                <div class="tdui-user-body-list-end" name="account-setting">账号设置</div>
+                <div class="tdui-user-body-list-end" name="account-setting">
+                  账号设置
+                </div>
               </div>
               <div @click="loginOut" class="tdui-user-body-list">
                 <div class="tdui-user-body-list-start">
                   <i color="#aaa" size="20" class="el-icon-s-promotion" />
                 </div>
-                <div class="tdui-user-body-list-end" name="account-exit">退出登录</div>
+                <div class="tdui-user-body-list-end" name="account-exit">
+                  退出登录
+                </div>
               </div>
             </div>
           </transition>
@@ -230,7 +250,7 @@ export default {
       opacity: 1;
     }
     .active::after {
-      content: '';
+      content: "";
       display: block;
       width: 100%;
       height: 4px;
