@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-11-24 18:10:38
+ * @LastEditTime: 2019-12-06 14:19:36
  -->
 <template>
   <div id="service-object-info">
@@ -44,6 +44,7 @@
       <el-row :gutter="10">
         <el-col style="text-align:center" :span="4">
           <el-avatar :size="60" :src="serviceObjectInfo.avatar"></el-avatar>
+          <el-button @click="dialogVisible = true" style="width:100%;display:block" type="text">查看照片</el-button>
         </el-col>
         <el-col class="content-span" :span="20">
           <el-row :gutter="10" style="margin-bottom:20px">
@@ -142,6 +143,20 @@
         <healthRecords :serviceCustomerId="$route.query.sid"></healthRecords>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog title="照片" :visible.sync="dialogVisible" width="50%">
+      <el-carousel :autoplay="false" trigger="click" height="450px">
+        <el-carousel-item v-for="item in serviceObjectInfo.serviceCustomerPicList" :key="item">
+          <img
+            style="width:100%;height:100%;"
+            :src="$store.state.config.systemConfig[0].dictionaryValue+item"
+            alt
+          />
+        </el-carousel-item>
+      </el-carousel>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -157,19 +172,20 @@ export default {
     mealRecords,
     activityRecords
   },
-  data () {
+  data() {
     return {
+      dialogVisible: false,
       serviceObjectInfo: {
         emergencyList: [],
         avatar: ''
       }
     }
   },
-  created () {
+  created() {
     this.getObjectInfo()
   },
   methods: {
-    getObjectInfo () {
+    getObjectInfo() {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {

@@ -189,6 +189,16 @@ export default {
           minWidth: 150
         },
         {
+          label: '创建人',
+          prop: 'createUserName',
+          minWidth: 100
+        },
+        {
+          label: '创建时间',
+          prop: 'createTime',
+          minWidth: 150
+        },
+        {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',

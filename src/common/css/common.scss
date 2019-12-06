@@ -68,11 +68,22 @@
   height: 81px;
   display: inline-block;
   margin-right: 20px;
+  color: #bbb;
+  &:hover {
+    .delete-img {
+      display: block;
+    }
+  }
   img {
     width: 144px;
     height: 81px;
     padding: 0;
     margin: 0;
     border: 1px solid #dcdee2;
+    &:hover {
+      .delete-img {
+        display: block;
+      }
+    }
   }
 }

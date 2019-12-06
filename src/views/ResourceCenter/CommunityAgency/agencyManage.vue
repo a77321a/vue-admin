@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-27 23:28:19
+ * @LastEditTime: 2019-12-06 13:58:14
  -->
 <template>
   <div class="angecy-manage">
@@ -96,7 +96,11 @@
           type="text"
           size="small"
         >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button>
-
+        <el-button
+          type="text"
+          size="small"
+          @click="$router.push({ name: 'agencyInfo', query: { oid: row.orgId}})"
+        >详情</el-button>
         <el-button
           type="text"
           size="small"
@@ -212,6 +216,10 @@ export default {
         .catch(() => {})
     },
     handleDelete (row) {
+      if (row.parentOrgId == 0 && row.children.length > 0) {
+        this.$message.error('当前机构下含有分部站点，无法删除')
+        return
+      }
       let id = [row.orgId]
       this.$confirm(
         '删除后，与该机构相关的数据将被取消关联，同时仅与该机构关联的管理员，将无法登录平台，是否确认？',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:46:27
+ * @LastEditTime: 2019-12-06 14:11:00
  -->
 <template>
   <div id="edit-agency">
@@ -33,16 +33,21 @@
           v-model="formInfo.orgDesc"
         ></el-input>
       </el-form-item>
-      <el-form-item label="照片" prop="orgPicList">
+      <el-form-item label="机构图片" prop="orgPicList">
         <div>
           <div
             style="position:relative"
             v-for="(item, index) in formInfo.orgPicList"
             :key="index"
             v-show="formInfo.orgPicList.length > 0"
-            class="avatar"
+            class="avatars"
           >
-            <i size="24" @click="handleRemove(index)" class="el-icon-circle-close delete-img"></i>
+            <i
+              size="24"
+              @click="handleRemove(index)"
+              color="#ccc"
+              class="el-icon-circle-close delete-img"
+            ></i>
             <img :src="$store.state.config.systemConfig[0].dictionaryValue+item" alt />
           </div>
           <el-upload
@@ -113,9 +118,31 @@
       <el-form-item label="机构联系电话" prop="tel">
         <el-input v-model="formInfo.tel"></el-input>
       </el-form-item>
+      <el-form-item v-if="!$route.query.parent" label="机构平面图" prop="cad">
+        <div style="display:flex;align-items:center;">
+          <div v-show="formInfo.cad" class="avatars">
+            <img
+              :src="
+                $store.state.config.systemConfig[0].dictionaryValue +
+                  formInfo.cad
+              "
+              alt
+            />
+          </div>
+          <el-upload
+            action="apii/public/img"
+            :show-file-list="false"
+            :before-upload="uploadImgcad"
+            accept="image/*"
+          >
+            <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </div>
+      </el-form-item>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
     <el-dialog title="选择地点" :visible.sync="mapShow" width="70%">
@@ -151,7 +178,8 @@ export default {
         longitude: '',
         contact: '',
         addressList: [],
-        operationMode: ''
+        operationMode: '',
+        cad: ''
       },
       rules: {
         orgName: [
@@ -216,10 +244,10 @@ export default {
             `${res.payload.longitude}，${res.payload.latitude}`
           )
           this.$set(this.formInfo, 'addressList', [
-            res.payload.cityRegionId,
-            res.payload.districtRegionId,
-            res.payload.communityRegionId,
-            res.payload.streetRegionId
+            res.payload.cityRegionId ? res.payload.cityRegionId : '',
+            res.payload.districtRegionId ? res.payload.districtRegionId : '',
+            res.payload.communityRegionId ? res.payload.communityRegionId : '',
+            res.payload.streetRegionId ? res.payload.streetRegionId : ''
           ])
         }
       })
@@ -288,7 +316,8 @@ export default {
             parentOrgId: this.$route.query.parent || 0,
             serviceType: this.formInfo.serviceType,
             tel: this.formInfo.tel,
-            orgId: this.$route.query.oid
+            orgId: this.$route.query.oid,
+            cad: this.formInfo.cad
           })
           .then(res => {
             if (res.code === SUCCESS) {
@@ -297,6 +326,16 @@ export default {
             }
           })
       })
+    },
+    uploadImgcad (file) {
+      let formdata = new FormData()
+      formdata.append('file', file)
+      this.$http.postForm('/file/upload', formdata).then(res => {
+        if (res.code === SUCCESS) {
+          this.formInfo.cad = res.payload
+        }
+      })
+      return false
     },
     uploadImg (file) {
       let formdata = new FormData()
@@ -316,6 +355,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .delete-img {
+  display: none;
   cursor: pointer;
   position: absolute;
   font-size: 18px;

@@ -150,7 +150,7 @@ import selectServiceObject from '../../../components/SelectTable/selectServiceOb
 export default {
   name: 'editServiceCenter',
   components: { selectServiceObject },
-  data () {
+  data() {
     return {
       formInfo: {
         activityRoomId: '',
@@ -200,7 +200,7 @@ export default {
       selectObjectList: []
     }
   },
-  created () {
+  created() {
     if (this.$route.query.sid) {
       this.getServiceInfo()
     }
@@ -213,10 +213,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject () {
+    handleSaveSelectObject() {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
@@ -227,11 +227,11 @@ export default {
       this.selectObjectList = []
       this.dialogServiceObject = false
     },
-    selectTime (date) {
+    selectTime(date) {
       this.formInfo.startTime = date ? date[0] : ''
       this.formInfo.endTime = date ? date[1] : ''
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -245,7 +245,7 @@ export default {
         }
       })
     },
-    getEventRoomList () {
+    getEventRoomList() {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
@@ -256,7 +256,7 @@ export default {
      * @descripttion: 图片自定义上传 同所有单照片表单
      * @param {type}   file
      */
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -266,14 +266,14 @@ export default {
       })
       return false
     },
-    handleRemove (index) {
+    handleRemove(index) {
       this.formInfo.serviceRecordPicList.splice(index, 1)
     },
     /**
      * @descripttion: 获取服务人员信息
      * @return: 信息
      */
-    getServiceInfo () {
+    getServiceInfo() {
       this.$http
         .get('/service/record/get?serviceRecordId=' + this.$route.query.sid)
         .then(res => {
@@ -287,7 +287,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.sid
@@ -311,6 +311,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .delete-img {
+  display: none;
   cursor: pointer;
   position: absolute;
   font-size: 18px;

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:10:45
+ * @LastEditTime: 2019-12-06 14:20:30
  -->
 <template>
   <div id="edit-event">
@@ -426,6 +426,7 @@ export default {
   top: 10px !important;
 }
 .delete-img {
+  display: none;
   cursor: pointer;
   position: absolute;
   font-size: 18px;

@@ -3,14 +3,17 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-24 19:37:49
+ * @LastEditTime: 2019-12-05 11:30:18
  -->
 <template>
   <div id="select-service-object">
     <el-form>
       <el-form inline ref="form" label-width="80px" size="small">
         <el-form-item label="名称">
-          <el-input placeholder="请输入服务人员名称" v-model="searchData.orgServiceProviderName"></el-input>
+          <el-input
+            placeholder="请输入服务人员名称"
+            v-model="searchData.orgServiceProviderName"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -18,11 +21,16 @@
             type="primary"
             @click="searchRefresh = !searchRefresh"
             icon="el-icon-search"
-          >搜索</el-button>
+            >搜索</el-button
+          >
           <el-button
-            @click="searchData.orgServiceProviderName = '';searchRefresh = !searchRefresh"
+            @click="
+              searchData.orgServiceProviderName = '';
+              searchRefresh = !searchRefresh;
+            "
             size="small"
-          >重置</el-button>
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </el-form>
@@ -40,14 +48,16 @@
       api="/org/service/provider/pageSearch"
       method="post"
     >
-      <template slot="userInfo" slot-scope="{row}">
+      <template slot="userInfo" slot-scope="{ row }">
         <div class="flex-t-u">
           <el-avatar
             class="avatar"
             size="medium"
-            :src="$store.state.config.systemConfig[0].dictionaryValue+row.indexPic"
+            :src="
+              $store.state.config.systemConfig[0].dictionaryValue + row.indexPic
+            "
           ></el-avatar>
-          <span class="f-title">{{row.orgServiceProviderName}}</span>
+          <span class="f-title">{{ row.orgServiceProviderName }}</span>
         </div>
       </template>
     </Table>
@@ -76,6 +86,10 @@ export default {
     clearList () {
       this.searchRefresh = !this.searchRefresh
       this.selectable()
+    },
+    orgId (val) {
+      this.searchData.orgId = val
+      this.searchRefresh = !this.searchRefresh
     }
   },
   props: {
@@ -121,5 +135,4 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

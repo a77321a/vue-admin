@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-04 23:02:25
+ * @LastEditTime: 2019-12-06 11:34:56
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -21,8 +21,8 @@ const store = new Vuex.Store({
     breadList: sessionStorage.breadList ? JSON.parse(sessionStorage.breadList) : [],
     opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
     dialogHeight: `${(document.documentElement.clientHeight) - 330}`,
-    // config: localStorage.config ? JSON.parse(localStorage.config) : {}
-    config: config
+    config: sessionStorage.config ? JSON.parse(sessionStorage.config) : {}
+    // config: config
   },
   mutations: {
     setRouterList (state, data) {
@@ -73,9 +73,8 @@ const store = new Vuex.Store({
       sessionStorage.setItem('opens', JSON.stringify(arr))
     },
     setDict (state, data) {
-      console.log(data)
       state.config = data
-      localStorage.setItem('config', JSON.stringify(data))
+      sessionStorage.setItem('config', JSON.stringify(data))
     }
   },
   actions: {

@@ -3,46 +3,18 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-06 11:05:10
+ * @LastEditTime: 2019-12-06 11:11:35
  -->
 <template>
   <div class="Participants">
     <!-- 筛选 -->
-    <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="人员姓名">
-        <el-input
-          style="width:200px"
-          placeholder="请输入人员姓名关键字"
-          v-model="searchData.orgServiceProviderName"
-        ></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          size="small"
-          type="primary"
-          @click="searchRefresh = !searchRefresh"
-          icon="el-icon-search"
-        >搜索</el-button>
-        <el-button
-          @click="
-            searchData = { activityId: searchData.activityId };
-            searchRefresh = !searchRefresh;
-          "
-          size="small"
-        >重置</el-button>
-      </el-form-item>
-      <el-form-item style="float:right">
-        <el-button type="text" @click="exportExcel" size="small">导出数据</el-button>
-      </el-form-item>
-    </el-form>
     <!-- 列表 -->
     <Table
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :columns="tableColumns"
-      :emptyText="'活动尚未结束'"
-      api="/activity/provider/pageSearch"
+      api="/org/service/provider/pageSearch "
       method="post"
     >
       <template slot="orgServiceProviderName" slot-scope="{ row }">
@@ -57,14 +29,7 @@
           <span class="f-title">{{ row.orgServiceProviderName }}</span>
         </div>
       </template>
-      <template slot="orgServiceProductList" slot-scope="{ row }">
-        <span :key="index" v-for="(item, index) in row.orgServiceProductList">
-          {{ item.orgServiceProductName }}
-          <span
-            v-if="index != row.orgServiceProductList.length - 1"
-          >、</span>
-        </span>
-      </template>
+      <template slot="sex" slot-scope="{ row }">{{row.sex == 0 ?'女':'男'}}</template>
       <template slot-scope="{ row }" slot="handleColumn">
         <el-button type="text" size="small">查看</el-button>
       </template>
@@ -77,24 +42,26 @@ export default {
   data () {
     return {
       searchRefresh: true,
-      searchData: { activityId: this.activityId },
+      searchData: { orgId: this.orgId },
       tableColumns: [
-        { label: '姓名', slot: 'orgServiceProviderName', minWidth: 150 },
+        { label: '人员姓名', slot: 'orgServiceProviderName', minWidth: 150 },
+        { label: '性别', slot: 'sex', minWidth: 50 },
+
         { label: '联系人电话', prop: 'telephoneNum', minWidth: 100 },
         { label: '服务产品', slot: 'orgServiceProductList', minWidth: 200 },
         { label: '操作', slot: 'handleColumn', fixed: 'right', minWidth: 60 }
       ]
     }
   },
-  props: ['activityId'],
+  props: ['orgId'],
 
   created () {},
   methods: {
     exportExcel () {
       window.open(
-        `${ctx}/activity/provider/export?activityId=${this.searchData
-          .activityId || ''}&orgServiceProviderName=${this.searchData
-          .orgServiceProviderName || ''}&token=${this.$store.state.token}`
+        `${ctx}/activity/provider/export?orgId=${this.searchData.orgId ||
+          ''}&orgServiceProviderName=${this.searchData.orgServiceProviderName ||
+          ''}&token=${this.$store.state.token}`
       )
     },
     rowsForamtter (rows) {

@@ -3,42 +3,63 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-02 16:33:27
+ * @LastEditTime: 2019-12-05 17:38:54
  -->
 <template>
   <div id="event-info">
     <el-card shadow="never" class="box-card">
+      <img
+        class="status-img"
+        :src="
+          eventInfo.activityStatus == 2
+            ? summary
+            : eventInfo.activityStatus == 1
+            ? going
+            : ''
+        "
+        alt=""
+      />
       <div class="flex-t-l">
         <img
-          :src="$store.state.config.systemConfig[0].dictionaryValue+eventInfo.activityIndexPic"
+          :src="
+            $store.state.config.systemConfig[0].dictionaryValue +
+              eventInfo.activityIndexPic
+          "
           alt
         />
         <div class="flex-column-t">
-          <h4 style="margin-bottom:10px;margin-top:5px">{{eventInfo.activityName}}</h4>
-          <el-form label-position="left" ref="form" :model="eventInfo" label-width="100px">
+          <h4 style="margin-bottom:10px;margin-top:5px">
+            {{ eventInfo.activityName }}
+          </h4>
+          <el-form
+            label-position="left"
+            ref="form"
+            :model="eventInfo"
+            label-width="100px"
+          >
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-alarm-clock"></i>活动时间：
               </template>
-              {{eventInfo.startTime}}~{{eventInfo.endTime}}
+              {{ eventInfo.startTime }}~{{ eventInfo.endTime }}
             </el-form-item>
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-location-outline"></i>活动地点：
               </template>
-              {{eventInfo.activityName}}
+              {{ eventInfo.activityName }}
             </el-form-item>
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-office-building"></i>所在机构：
               </template>
-              {{eventInfo.orgName}}
+              {{ eventInfo.orgName }}
             </el-form-item>
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-house"></i>活动室：
               </template>
-              {{eventInfo.activityRoomName}}
+              {{ eventInfo.activityRoomName }}
             </el-form-item>
           </el-form>
         </div>
@@ -62,9 +83,12 @@
   </div>
 </template>
 <script>
-import Participants from './eventInfoTabs/Participants'
-import ServicePerson from './eventInfoTabs/ServicePerson'
-import ActivitySummary from './eventInfoTabs/ActivitySummary'
+import Participants from './eventInfoTabs/Participants';
+import ServicePerson from './eventInfoTabs/ServicePerson';
+import ActivitySummary from './eventInfoTabs/ActivitySummary';
+import summary from '@/common/image/summary.png';
+import going from '@/common/image/going.png';
+
 export default {
   name: 'eventInfo',
   components: {
@@ -72,18 +96,20 @@ export default {
     ServicePerson,
     ActivitySummary
   },
-  data() {
+  data () {
     return {
+      summary,
+      going,
       eventInfo: {
         cover: ''
       }
     }
   },
-  created() {
+  created () {
     this.getActivityInfo()
   },
   methods: {
-    getActivityInfo() {
+    getActivityInfo () {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
@@ -102,6 +128,15 @@ export default {
   /deep/.el-form-item__content {
     height: 30px !important;
     line-height: 30px !important;
+  }
+}
+.box-card {
+  position: relative;
+  .status-img {
+    height: 100px;
+    position: absolute;
+    right: 30px;
+    top: 30px;
   }
 }
 /deep/ .box-card .flex-t-l {
