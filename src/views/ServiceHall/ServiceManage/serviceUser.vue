@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:30:22
+ * @LastEditTime: 2019-12-07 10:57:42
  -->
 <template>
   <div class="service-user">
@@ -62,13 +62,13 @@
                 type="text"
                 size="small"
               >详情</el-button>
-              
+
               <el-button
                 @click="$router.push({name:'editServiceUser',query:{uid:row.orgServiceProviderId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
-              
+
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
             <template slot="footer-left">
@@ -98,8 +98,8 @@ export default {
         { label: '性别', slot: 'sex', minWidth: 100 },
         { label: '手机号', prop: 'telephoneNum', minWidth: 100 },
         { label: '所属机构', prop: 'orgName', minWidth: 100 },
-        { label: '创建人', prop: '', minWidth: 100 },
-        { label: '创建时间', prop: '', minWidth: 100 },
+        { label: '创建人', prop: 'createUser', minWidth: 100 },
+        { label: '创建时间', prop: 'createTime', minWidth: 140 },
         {
           label: '操作',
           slot: 'action',

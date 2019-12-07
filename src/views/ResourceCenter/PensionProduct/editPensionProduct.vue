@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:10:36
+ * @LastEditTime: 2019-12-07 11:38:15
  -->
 <template>
   <div id="edit-event">
@@ -58,7 +58,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="价目表">
-        <sku ref="sku"></sku>
+        <sku :priceList="priceList" ref="sku"></sku>
       </el-form-item>
       <el-form-item label="价格" prop="pensionPrice">
         <el-input-number
@@ -102,6 +102,7 @@ export default {
         pensionServiceTypeId: '',
         pensionServiceProductPrice: {}
       },
+      priceList: [],
       rules: {
         pensionServiceProductName: [
           { required: true, message: '请输入产品名称', trigger: 'blur' }
@@ -152,6 +153,8 @@ export default {
         .then(res => {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
+            console.log(res.payload.pensionServiceProductPrice)
+            this.priceList = JSON.parse(res.payload.pensionServiceProductPrice)
             this.$set(
               this.formInfo,
               'pensionServiceTypeId',
@@ -163,8 +166,7 @@ export default {
     // 保存按钮
     handleSave () {
       let priceList = this.$refs.sku.toConfirm()
-      console.log(priceList)
-      return
+      this.formInfo.pensionServiceProductPrice = priceList
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.pid
@@ -197,7 +199,6 @@ export default {
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo.indexPic = res.payload
-          console.log(this.formInfo.indexPic)
         }
       })
       return false

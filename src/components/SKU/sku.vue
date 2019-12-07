@@ -77,10 +77,29 @@ export default {
     return {
       attrs: [],
       inputVisible: false,
-      inputValue: ''
+      inputValue: '',
+      tableList: []
     }
   },
-  mounted () {},
+  created () {
+    this.$nextTick(() => {
+      if (this.priceList.attrs) {
+        this.attrs = [...this.priceList]
+      }
+    })
+  },
+  watch: {
+    priceList (val) {
+      this.attrs = val.attrs
+      this.tableList = val.tableList
+    },
+    attrs () {
+      this.calculateTableList()
+    },
+    tableData () {
+      this.calculateTableList()
+    }
+  },
   filters: {
     getName: function (obj, index) {
       if (obj) {
@@ -91,6 +110,7 @@ export default {
       }
     }
   },
+  props: ['priceList'],
   computed: {
     tableData: function () {
       var attrs = this.attrs
@@ -148,21 +168,62 @@ export default {
         return tableData[0]['spec'].length
       }
       return rows
-    },
-    tableList: function () {
+    }
+    // tableList: {
+    //   get () {
+    //     if (!this.tableData) {
+    //       return
+    //     }
+    //     var rows = this.rows
+    //     var tList = []
+    //     var srcData = this.tableData
+    //     console.log(srcData)
+
+    //     for (var i = 0; i < rows; i++) {
+    //       var listItem = {}
+    //       // 构建动态项
+    //       for (var j = 0; j < srcData.length; j++) {
+    //         // 构造第一类目
+    //         var key = srcData[j]['pName']
+    //         var rowspan = srcData[j]['rowspan']
+    //         var len = srcData[j]['specLen']
+    //         if (!len) {
+    //           continue
+    //         }
+    //         var spec = srcData[j]['spec']
+    //         var index = parseInt(i / rowspan) % len
+    //         listItem[key] = spec[index]['cName']
+    //         // listItem['pName'] = pName
+    //         // listItem['pVal'] = spec[index]['cName']
+    //       }
+    //       // 构建固定项(price,number)
+
+    //       listItem['price'] = ''
+    //       listItem['number'] = ''
+    //       tList.push(listItem)
+    //     }
+    //     return tList
+    //   },
+    //   set () {}
+    // }
+  },
+  components: {},
+  methods: {
+    calculateTableList () {
       if (!this.tableData) {
         return
       }
       var rows = this.rows
       var tList = []
       var srcData = this.tableData
-      // console.log(srcData);
+      console.log(srcData)
+
       for (var i = 0; i < rows; i++) {
         var listItem = {}
         // 构建动态项
         for (var j = 0; j < srcData.length; j++) {
           // 构造第一类目
-          var pName = srcData[j]['pName']
+          var key = srcData[j]['pName']
           var rowspan = srcData[j]['rowspan']
           var len = srcData[j]['specLen']
           if (!len) {
@@ -170,19 +231,18 @@ export default {
           }
           var spec = srcData[j]['spec']
           var index = parseInt(i / rowspan) % len
-          listItem['pName'] = pName
-          listItem['pVal'] = spec[index]['cName']
+          listItem[key] = spec[index]['cName']
+          // listItem['pName'] = pName
+          // listItem['pVal'] = spec[index]['cName']
         }
         // 构建固定项(price,number)
+
         listItem['price'] = ''
         listItem['number'] = ''
         tList.push(listItem)
       }
-      return tList
-    }
-  },
-  components: {},
-  methods: {
+      this.tableList = tList
+    },
     addSize (data) {
       console.log(data)
       data.spec.push({ cName: '' })
@@ -203,7 +263,8 @@ export default {
       this.attrs.splice(index, 1)
     },
     toConfirm: function () {
-      return JSON.stringify(this.tableList)
+      console.log(this.tableList)
+      return JSON.stringify({ attrs: this.attrs, tableList: this.tableList })
       // return this.tableData
     }
   }

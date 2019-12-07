@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-06 11:34:56
+ * @LastEditTime: 2019-12-07 10:52:39
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -16,7 +16,7 @@ const store = new Vuex.Store({
     userInfo: localStorage.userInfo ? JSON.parse(localStorage.userInfo) : {},
     token: localStorage.webToken || '', // token
     fullPath: '',
-    navList: sessionStorage.navList ? JSON.parse(sessionStorage.navList) : [],
+    navList: localStorage.navList ? JSON.parse(localStorage.navList) : [],
     routerList: localStorage.routerList ? JSON.parse(localStorage.routerList) : [],
     breadList: sessionStorage.breadList ? JSON.parse(sessionStorage.breadList) : [],
     opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
@@ -46,7 +46,7 @@ const store = new Vuex.Store({
       localStorage.setItem('webToken', token)
     },
     setNavList (state, data) {
-      sessionStorage.setItem('navList', JSON.stringify(data))
+      localStorage.setItem('navList', JSON.stringify(data))
       state.navList = data
     },
     setPath (state, data) {

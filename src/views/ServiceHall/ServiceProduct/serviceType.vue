@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 20:10:02
+ * @LastEditTime: 2019-12-07 10:56:39
  -->
 <template>
   <div class="service-product">
@@ -45,7 +45,7 @@
         >
           <template slot-scope="{row}" slot="action">
             <el-button @click="handleEdit(row)" type="text" size="small">编辑</el-button>
-            
+
             <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
           </template>
         </Table>
@@ -68,6 +68,7 @@
           <el-input
             placeholder="分类名称最多可输入20个字"
             show-word-limit
+            :maxlength="20"
             v-model="formInfo.orgServiceTypeName"
             autocomplete="off"
           ></el-input>
@@ -88,7 +89,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -116,11 +117,11 @@ export default {
       orgTree: []
     }
   },
-  created () {
+  created() {
     this.getOrgList()
   },
   methods: {
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -134,11 +135,11 @@ export default {
         }
       })
     },
-    handleEdit (row) {
+    handleEdit(row) {
       this.formInfo = row
       this.dialogFormVisible = true
     },
-    handleSaveForm () {
+    handleSaveForm() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.formInfo.orgServiceTypeId
@@ -160,15 +161,18 @@ export default {
           })
       })
     },
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
-      console.log(row)
+    handleDelete(row) {
+      if (row.productNum > 0) {
+        this.$message.error('当前分类下含有产品，无法删除')
+        return
+      }
       let id = row ? [row.orgServiceTypeId] : ''
       this.$confirm('确定要删除该分类吗？', '提示', {
         confirmButtonText: '确定',

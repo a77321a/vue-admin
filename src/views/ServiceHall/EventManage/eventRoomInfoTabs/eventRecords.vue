@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-19 20:59:30
+ * @LastEditTime: 2019-12-07 11:01:56
  -->
 <template>
   <div class="user-manage">
@@ -65,7 +65,11 @@
     >
       <template slot-scope="{row}" slot="activityName">
         <div class="flex-t-l">
-          <img class="course-avatar" :src="row.activityIndexPic" alt />
+          <img
+            class="course-avatar"
+            :src="$store.state.config.systemConfig[0].dictionaryValue+row.activityIndexPic"
+            alt
+          />
           <div class="flex-column-t">
             <span class="f-title">{{row.activityName}}</span>
           </div>
@@ -81,13 +85,13 @@
           type="text"
           size="small"
         >查看</el-button>
-        
+
         <el-button
           @click="$router.push({name:'editEvent',query:{aid:row.activityId}})"
           type="text"
           size="small"
         >编辑</el-button>
-        
+
         <el-button
           v-if="row.activityStatus == 1"
           @click="handleCloseActivity(row)"

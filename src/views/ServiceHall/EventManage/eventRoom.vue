@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 13:14:48
+ * @LastEditTime: 2019-12-07 11:06:10
  -->
 <template>
   <div class="event-room">
@@ -56,13 +56,13 @@
                 type="text"
                 size="small"
               >查看</el-button>
-              
+
               <el-button
                 @click="$router.push({name:'editEventRoom',query:{aid:row.activityRoomId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
-              
+
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
             <template slot="footer-left">
@@ -81,7 +81,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -90,9 +90,14 @@ export default {
         { label: '活动室名称', slot: 'activityRoomName', minWidth: 200 },
         { label: '所属机构', prop: 'orgName', minWidth: 100 },
         {
-          label: '更新时间',
-          prop: 'updateTime',
-          minWidth: 140
+          label: '创建人',
+          prop: 'createUserName',
+          minWidth: 100
+        },
+        {
+          label: '创建时间',
+          prop: 'createTime',
+          minWidth: 100
         },
         {
           label: '操作',
@@ -105,16 +110,16 @@ export default {
       selectActivity: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.activityRoomId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
