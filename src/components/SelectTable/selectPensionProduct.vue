@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:55:11
+ * @LastEditTime: 2019-12-07 21:10:01
  -->
 <template>
   <div id="select-service-object">
@@ -39,7 +39,11 @@
     >
       <template slot="pensionServiceProductName" slot-scope="{row}">
         <div class="flex-t-l">
-          <img class="course-avatar" :src="row.indexPic" alt />
+          <img
+            class="course-avatar"
+            :src="$store.state.config.systemConfig[0].dictionaryValue+row.indexPic"
+            alt
+          />
           <div class="flex-column-t">
             <span class="f-title">{{row.pensionServiceProductName}}</span>
             <p class="sm-title">￥{{row.pensionPrice}}</p>

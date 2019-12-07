@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 10:52:39
+ * @LastEditTime: 2019-12-07 20:25:27
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     breadList: sessionStorage.breadList ? JSON.parse(sessionStorage.breadList) : [],
     opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
     dialogHeight: `${(document.documentElement.clientHeight) - 330}`,
-    config: sessionStorage.config ? JSON.parse(sessionStorage.config) : {}
+    config: localStorage.config ? JSON.parse(localStorage.config) : {}
     // config: config
   },
   mutations: {
@@ -74,7 +74,7 @@ const store = new Vuex.Store({
     },
     setDict (state, data) {
       state.config = data
-      sessionStorage.setItem('config', JSON.stringify(data))
+      localStorage.setItem('config', JSON.stringify(data))
     }
   },
   actions: {

@@ -49,9 +49,9 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   NProgress.start()
   store.commit('setPath', to.fullPath)
-  if (from.name == null && name !== 'Login') {
-    store.dispatch('getDictionaryManagement')
-  }
+  // if (from.name == null && name !== 'Login') {
+  //   store.dispatch('getDictionaryManagement')
+  // }
   if (!localStorage.webToken && to.name !== 'Login') {
     router.push({ name: 'Login' })
   }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:13:45
+ * @LastEditTime: 2019-12-07 22:22:35
  -->
 <template>
   <div class="meal-center">
@@ -27,9 +27,7 @@
           placeholder="选择周"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="姓名">
-        <el-input placeholder="请输入姓名关键字" v-model="searchData.mobile"></el-input>
-      </el-form-item>
+
       <el-form-item>
         <el-button
           size="small"
@@ -136,7 +134,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="菜品" required>
+        <el-form-item label="菜品" prop="breakfast">
           <el-tag
             style="margin-right:5px"
             :key="index"
@@ -192,7 +190,7 @@ export default {
   components: {
     selectFood
   },
-  data () {
+  data() {
     return {
       dialogFormMenu: false,
       api: '',
@@ -202,7 +200,10 @@ export default {
       dialogFormVisible: false,
       dialogFood: false,
       rules: {
-        orgIds: [{ required: true, message: '请选择机构', trigger: 'change' }]
+        orgIds: [{ required: true, message: '请选择机构', trigger: 'change' }],
+        breakfast: [
+          { required: true, message: '请选择菜品', trigger: 'change' }
+        ]
       },
       formInfo: {
         breakfast: [],
@@ -285,12 +286,12 @@ export default {
       addType: ''
     }
   },
-  created () {
+  created() {
     this.getOrgList()
     this.getOrg()
   },
   methods: {
-    handleSaveCopyMenu () {
+    handleSaveCopyMenu() {
       if (!this.copyWeek) {
         this.$message.error('请选择时间')
         return false
@@ -357,34 +358,37 @@ export default {
         })
     },
     // 选择菜品
-    selectFood (data) {
+    selectFood(data) {
       this.selectFoodList = data
     },
     // 确定选择
-    handleSaveForm () {
-      let arr = []
-      this.formInfo.breakfast.forEach(i => {
-        arr.push(i.foodId)
+    handleSaveForm() {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        let arr = []
+        this.formInfo.breakfast.forEach(i => {
+          arr.push(i.foodId)
+        })
+        this.$http
+          .post('/org/foodMenu/replace', {
+            breakfast: this.addType === '早餐' ? arr : [],
+            lunch: this.addType === '午餐' ? arr : [],
+            supper: this.addType === '晚餐' ? arr : [],
+            dateTime: this.formInfo.dateTime,
+            orgIds: this.formInfo.orgIds
+          })
+          .then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.formInfo.orgIds = []
+              this.formInfo.breakfast = []
+              this.dialogFormVisible = false
+              this.searchRefresh = !this.searchRefresh
+            }
+          })
       })
-      this.$http
-        .post('/org/foodMenu/replace', {
-          breakfast: this.addType === '早餐' ? arr : [],
-          lunch: this.addType === '午餐' ? arr : [],
-          supper: this.addType === '晚餐' ? arr : [],
-          dateTime: this.formInfo.dateTime,
-          orgIds: this.formInfo.orgIds
-        })
-        .then(res => {
-          if (res.code === SUCCESS) {
-            this.$message.success('操作成功')
-            this.formInfo.orgIds = []
-            this.formInfo.breakfast = []
-            this.dialogFormVisible = false
-            this.searchRefresh = !this.searchRefresh
-          }
-        })
     },
-    handleSaveSelectFood () {
+    handleSaveSelectFood() {
       if (this.selectFoodList.length === 0) {
         this.$message.error('请至少选择一个菜品')
         return false
@@ -399,7 +403,7 @@ export default {
       // })
       this.dialogFood = false
     },
-    getOrg () {
+    getOrg() {
       this.$http
         .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
         .then(res => {
@@ -408,7 +412,7 @@ export default {
           }
         })
     },
-    handleDelete (row, item) {
+    handleDelete(row, item) {
       console.log(row)
       let content = '删除后，该菜品将不再该时段显示，是否确认？'
       this.$confirm(content, '提示', {
@@ -423,8 +427,8 @@ export default {
                 row.type === '早餐'
                   ? 'breakfast'
                   : row.type === '午餐'
-                    ? 'lunch'
-                    : 'supper',
+                  ? 'lunch'
+                  : 'supper',
               foodId: item.foodId,
               menuId: item.menuId
             })
@@ -437,12 +441,12 @@ export default {
         })
         .catch(() => {})
     },
-    handleAddFood (scope) {
+    handleAddFood(scope) {
       this.formInfo.dateTime = scope.column.className
       this.addType = scope.row.type
       this.dialogFormVisible = true
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       // if (rows.length < 7) {
       //   let len = 7 - rows.length
       //   for (let i = 0; i < len; i++) {
@@ -512,14 +516,14 @@ export default {
       ]
       return res
     },
-    transferWeek (date) {
+    transferWeek(date) {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
       } else {
         this.searchData.week = ''
       }
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -541,7 +545,7 @@ export default {
         }
       })
     },
-    cellMerge ({ row, column, rowIndex, columnIndex }) {
+    cellMerge({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex]
         const _col = _row ? 1 : 0
@@ -555,7 +559,7 @@ export default {
         }
       }
     },
-    getSpanArr (data) {
+    getSpanArr(data) {
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           this.spanArr.push(1)

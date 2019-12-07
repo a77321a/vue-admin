@@ -3,12 +3,12 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-01 19:29:01
+ * @LastEditTime: 2019-12-07 21:48:02
  -->
 <template>
   <div id="event-room-info">
     <el-card shadow="never" class="box-card">
-      <H2>{{roleInfo.roleName}}</H2>
+      <H2 style="margin-bottom:15px">{{roleInfo.roleName}}</H2>
       <div>{{roleInfo.roleDesc}}</div>
     </el-card>
     <el-tabs value="first" style="margin-top:20px;">

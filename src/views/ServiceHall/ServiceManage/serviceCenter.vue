@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-22 22:06:57
+ * @LastEditTime: 2019-12-07 20:32:07
  -->
 <template>
   <div class="service-center">
@@ -32,7 +32,10 @@
               @click="searchRefresh = !searchRefresh"
               icon="el-icon-search"
             >搜索</el-button>
-            <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+            <el-button
+              @click="searchData = {orgIdList:searchData.orgIdList};searchRefresh = !searchRefresh"
+              size="small"
+            >重置</el-button>
           </el-form-item>
         </el-form>
         <el-button
@@ -56,7 +59,7 @@
               @click="$router.push({name:'editServiceCenter',query:{sid:row.serviceRecordId}})"
               type="text"
             >编辑</el-button>
-            
+
             <el-button @click="handleDelete(row)" type="text">删除</el-button>
           </template>
         </Table>
@@ -110,7 +113,7 @@ export default {
   },
   methods: {
     filterOrg (val) {
-      this.searchData.orgId = val
+      this.searchData.orgIdList = val ? [val] : undefined
       this.searchRefresh = !this.searchRefresh
     },
     getEventRoomList () {

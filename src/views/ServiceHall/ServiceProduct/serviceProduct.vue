@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:17:03
+ * @LastEditTime: 2019-12-07 20:33:21
  -->
 <template>
   <div class="event-room">
@@ -52,6 +52,7 @@
                 />
                 <div class="flex-column-t">
                   <span class="f-title">{{row.orgServiceProductName}}</span>
+                  <p class="sm-title">￥{{row.orgPrice}}</p>
                 </div>
               </div>
             </template>
@@ -61,7 +62,7 @@
                 type="text"
                 size="small"
               >编辑</el-button>
-              
+
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
           </Table>

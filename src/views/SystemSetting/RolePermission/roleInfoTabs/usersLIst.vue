@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-01 19:34:48
+ * @LastEditTime: 2019-12-07 21:47:11
  -->
 <template>
   <div class="account-setting">
@@ -32,9 +32,23 @@
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button @click="dialogFormVisible = true" type="text" size="small">重置密码</el-button>
       </template>
     </Table>
+    <el-dialog destroy-on-close title="修改密码" :visible.sync="dialogFormVisible">
+      <el-form :rules="rules" ref="formInfo" label-width="100px" :model="formInfo">
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input placeholder="请输入新密码" show-password v-model="formInfo.newPassword"></el-input>
+        </el-form-item>
+        <el-form-item label="确认新密码" prop="confirmNewPassword">
+          <el-input placeholder="确认新密码" show-password v-model="formInfo.confirmNewPassword"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSaveForm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -42,9 +56,22 @@ export default {
   name: 'accountSetting',
   props: ['userList'],
   data () {
+    const validPass = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入确认新密码'))
+      } else if (
+        this.formInfo.confirmNewPassword !== this.formInfo.newPassword
+      ) {
+        callback(new Error('两次输入的密码不一致'))
+      } else {
+        callback()
+      }
+    }
     return {
       searchRefresh: true,
       searchData: {},
+      dialogFormVisible: false,
+      formInfo: {},
       tableColumns: [
         { label: '昵称', prop: 'nickName', minWidth: 200 },
         {
@@ -59,11 +86,39 @@ export default {
           width: 100
         }
       ],
+      rules: {
+        oldPassword: [
+          { required: true, message: '请输入旧密码', trigger: 'blur' }
+        ],
+        newPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' }
+        ],
+        confirmNewPassword: [
+          { required: true, validator: validPass, trigger: 'blur' }
+        ]
+      },
       dialogVisible: false
     }
   },
   created () {},
-  methods: {}
+  methods: {
+    handleSaveForm () {
+      this.$refs['formInfo'].validate(valid => {
+        if (!valid) return
+        this.$http
+          .post('/user/changePwd', {
+            oldPassword: this.formInfo.oldPassword,
+            newPassword: this.formInfo.newPassword
+          })
+          .then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.dialogFormVisible = false
+            }
+          })
+      })
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

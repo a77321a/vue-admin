@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:55:01
+ * @LastEditTime: 2019-12-07 22:22:04
  -->
 <template>
   <div id="select-service-object">
@@ -60,6 +60,10 @@
         </div>
       </template>
       <template
+        slot="season"
+        slot-scope="{row}"
+      >{{$func.transLabel($store.state.config.seasonStatus,row.season)}}</template>
+      <template
         slot="foodType"
         slot-scope="{row}"
       >{{$func.transLabel($store.state.config.foodType,row.foodType)}}</template>
@@ -69,7 +73,7 @@
 <script>
 export default {
   name: 'selectFood',
-  data() {
+  data () {
     return {
       name: '',
       searchRefresh: true,
@@ -77,17 +81,18 @@ export default {
       searchData: {},
       tableColumns: [
         { label: '菜品名称', slot: 'foodName', minWidth: 200 },
+
+        { label: '菜品类型', slot: 'foodType', minWidth: 150 },
         {
-          label: '助餐时段',
+          label: '适用季节',
           slot: 'season',
           minWidth: 100
-        },
-        { label: '菜品类型', slot: 'foodType', minWidth: 150 }
+        }
       ]
     }
   },
   methods: {
-    commitSelection(data) {
+    commitSelection (data) {
       this.$emit('selectFood', data)
     }
   }

@@ -5,7 +5,13 @@
       <div class="form-group">
         <div class="form-item" v-for="(attr,index) in attrs" :key="`attr${index}`">
           <el-form-item label="规格类型">
-            <el-input style="width:130px" type="text" v-model="attr.pName" placeholder="规格名" />
+            <el-input
+              @input="calculateTableData"
+              style="width:130px"
+              type="text"
+              v-model="attr.pName"
+              placeholder="规格名"
+            />
             <span class="delete" @click="toDelete(index)">×</span>
           </el-form-item>
           <el-divider></el-divider>
@@ -17,6 +23,7 @@
               v-for="(item,index2) in attr.spec"
               class="spec-item"
               type="text"
+              @input="calculateTableData"
               v-model="item.cName"
             />
             <!-- </li> -->
@@ -25,7 +32,7 @@
           </el-form-item>
         </div>
         <el-button style="display:block;width:100%" @click="addItem">+ 添加规格项目</el-button>
-        <div class="form-table" v-show="tableData">
+        <div class="form-table" v-show="tableData.length">
           <table class="table-sku" border="1px solid #ccc">
             <thead>
               <tr style="background:#f5f5f5">
@@ -78,7 +85,9 @@ export default {
       attrs: [],
       inputVisible: false,
       inputValue: '',
-      tableList: []
+      tableList: [],
+      tableData: [],
+      rows: 0
     }
   },
   created () {
@@ -90,14 +99,17 @@ export default {
   },
   watch: {
     priceList (val) {
-      this.attrs = val.attrs
-      this.tableList = val.tableList
+      console.log(val)
+      if (val.attrs) {
+        this.attrs = val.attrs
+        this.tableList = val.tableList
+      }
     },
     attrs () {
-      this.calculateTableList()
+      this.calculateTableData()
     },
     tableData () {
-      this.calculateTableList()
+      // this.calculateTableList()
     }
   },
   filters: {
@@ -112,10 +124,125 @@ export default {
   },
   props: ['priceList'],
   computed: {
-    tableData: function () {
+    // tableData: function () {
+    //   var attrs = this.attrs
+    //   var len = attrs.length
+    //   if (len == 0) {
+    //     return
+    //   }
+    //   var tData = []
+    //   // 初始化tableData
+    //   for (var i = 0; i < len; i++) {
+    //     var row = {}
+    //     row['pName'] = attrs[i]['pName']
+    //     row['spec'] = []
+    //     row['price'] = {}
+    //     row['number'] = {}
+    //     var len2 = attrs[i]['spec'].length
+    //     var specLen = 0
+    //     for (var j = 0; j < len2; j++) {
+    //       var spe = {}
+    //       var cName = attrs[i]['spec'][j]['cName']
+    //       if (!cName) {
+    //         continue
+    //       }
+    //       ++specLen
+    //       spe['cName'] = cName
+    //       row['spec'].push(spe)
+    //     }
+    //     row['specLen'] = specLen
+    //     tData.push(row)
+    //   }
+    //   // 获取rowspan
+    //   for (var k = 0, len3 = tData.length; k < len3; k++) {
+    //     var rowspan = 1
+    //     for (var k1 = k + 1; k1 < len3; k1++) {
+    //       var kSpecLen = tData[k1]['specLen'] || 1
+    //       rowspan *= kSpecLen
+    //     }
+    //     tData[k]['rowspan'] = rowspan
+    //   }
+    //   return tData
+    // // },
+    // rows: function () {
+    //   if (!this.tableData) {
+    //     return
+    //   }
+    //   var rows = 1
+    //   var tableData = this.tableData
+    //   var len = tableData.length
+    //   for (var i = 0; i < len; i++) {
+    //     var specLen = tableData[i]['specLen'] || 1
+    //     rows *= specLen
+    //   }
+    //   // 每条rowspan都为1情况
+    //   if (rows == 1) {
+    //     return tableData[0]['spec'].length
+    //   }
+    //   return rows
+    // }
+    // tableList: {
+    //   get () {
+    //     if (!this.tableData) {
+    //       return
+    //     }
+    //     var rows = this.rows
+    //     var tList = []
+    //     var srcData = this.tableData
+    //     console.log(srcData)
+    //     for (var i = 0; i < rows; i++) {
+    //       var listItem = {}
+    //       // 构建动态项
+    //       for (var j = 0; j < srcData.length; j++) {
+    //         // 构造第一类目
+    //         var key = srcData[j]['pName']
+    //         var rowspan = srcData[j]['rowspan']
+    //         var len = srcData[j]['specLen']
+    //         if (!len) {
+    //           continue
+    //         }
+    //         var spec = srcData[j]['spec']
+    //         var index = parseInt(i / rowspan) % len
+    //         listItem[key] = spec[index]['cName']
+    //         // listItem['pName'] = pName
+    //         // listItem['pVal'] = spec[index]['cName']
+    //       }
+    //       // 构建固定项(price,number)
+    //       listItem['price'] = ''
+    //       listItem['number'] = ''
+    //       tList.push(listItem)
+    //     }
+    //     return tList
+    //   },
+    //   set () {}
+    // }
+  },
+  components: {},
+  methods: {
+    calculateRows () {
+      if (!this.tableData) {
+        return
+      }
+      var rows = 1
+      var tableData = this.tableData
+      var len = tableData.length
+      for (var i = 0; i < len; i++) {
+        var specLen = tableData[i]['specLen'] || 1
+        rows *= specLen
+      }
+      // 每条rowspan都为1情况
+      if (rows == 1) {
+        this.rows = tableData[0]['spec'].length
+      } else {
+        this.rows = rows
+      }
+      this.calculateTableList()
+    },
+    calculateTableData () {
       var attrs = this.attrs
       var len = attrs.length
       if (len == 0) {
+        this.tableData = []
         return
       }
       var tData = []
@@ -150,65 +277,9 @@ export default {
         }
         tData[k]['rowspan'] = rowspan
       }
-      return tData
+      this.tableData = tData
+      this.calculateRows()
     },
-    rows: function () {
-      if (!this.tableData) {
-        return
-      }
-      var rows = 1
-      var tableData = this.tableData
-      var len = tableData.length
-      for (var i = 0; i < len; i++) {
-        var specLen = tableData[i]['specLen'] || 1
-        rows *= specLen
-      }
-      // 每条rowspan都为1情况
-      if (rows == 1) {
-        return tableData[0]['spec'].length
-      }
-      return rows
-    }
-    // tableList: {
-    //   get () {
-    //     if (!this.tableData) {
-    //       return
-    //     }
-    //     var rows = this.rows
-    //     var tList = []
-    //     var srcData = this.tableData
-    //     console.log(srcData)
-
-    //     for (var i = 0; i < rows; i++) {
-    //       var listItem = {}
-    //       // 构建动态项
-    //       for (var j = 0; j < srcData.length; j++) {
-    //         // 构造第一类目
-    //         var key = srcData[j]['pName']
-    //         var rowspan = srcData[j]['rowspan']
-    //         var len = srcData[j]['specLen']
-    //         if (!len) {
-    //           continue
-    //         }
-    //         var spec = srcData[j]['spec']
-    //         var index = parseInt(i / rowspan) % len
-    //         listItem[key] = spec[index]['cName']
-    //         // listItem['pName'] = pName
-    //         // listItem['pVal'] = spec[index]['cName']
-    //       }
-    //       // 构建固定项(price,number)
-
-    //       listItem['price'] = ''
-    //       listItem['number'] = ''
-    //       tList.push(listItem)
-    //     }
-    //     return tList
-    //   },
-    //   set () {}
-    // }
-  },
-  components: {},
-  methods: {
     calculateTableList () {
       if (!this.tableData) {
         return
@@ -237,15 +308,15 @@ export default {
         }
         // 构建固定项(price,number)
 
-        listItem['price'] = ''
-        listItem['number'] = ''
+        listItem['price'] = this.tableList[i] ? this.tableList[i].price : ''
+        listItem['number'] = this.tableList[i] ? this.tableList[i].number : ''
         tList.push(listItem)
       }
       this.tableList = tList
     },
     addSize (data) {
-      console.log(data)
       data.spec.push({ cName: '' })
+      this.calculateTableData()
     },
     addItem: function () {
       var obj = {
@@ -253,14 +324,21 @@ export default {
         rowspan: 1,
         spec: [{ cName: '' }]
       }
-      if (this.attrs.length >= 3) {
+      if (this.attrs.length >= 4) {
+        this.$message.warn('无法添加更多规则')
         return
       }
       this.$set(this.attrs, this.attrs.length, obj)
+      this.calculateTableData()
       this.$forceUpdate()
     },
     toDelete: function (index) {
       this.attrs.splice(index, 1)
+      if (this.attrs.length == 0) {
+        this.tableData = []
+        this.rows = 0
+        this.tableList = []
+      }
     },
     toConfirm: function () {
       console.log(this.tableList)

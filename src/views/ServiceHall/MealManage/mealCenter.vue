@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 16:33:31
+ * @LastEditTime: 2019-12-07 20:22:39
  -->
 <template>
   <div class="meal-center">
@@ -29,7 +29,7 @@
               <el-input
                 style="width:200px"
                 placeholder="请输入姓名关键字"
-                v-model="searchData.customerName"
+                v-model="searchData.serviceCustomerName"
               ></el-input>
             </el-form-item>
             <el-form-item>
@@ -73,13 +73,13 @@
             </template>
             <template slot-scope="{row}" slot="action">
               <el-button @click="handlePreview(row)" type="text" size="small">查看</el-button>
-              
+
               <el-button
                 @click="$router.push({name:'editMealRecord',query:{mid:row.recordId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
-              
+
               <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
             </template>
             <template slot="footer-left"></template>
@@ -112,7 +112,7 @@
             </el-timeline-item>
           </el-timeline>
         </el-form-item>
-        <el-form-item label="共计消费">￥{{formInfo.priceSum}}</el-form-item>
+        <el-form-item label="共计消费">{{formInfo.priceSum}}</el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -145,7 +145,7 @@ export default {
           label: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 100
+          minWidth: 120
         }
       ],
       activeNames: '',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-07 10:59:49
+ * @LastEditTime: 2019-12-07 21:52:02
  -->
 <template>
   <div id="edit-event">
@@ -78,7 +78,9 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="产品价格" prop="orgServiceProductPrice"></el-form-item>
+      <el-form-item label="产品价格" prop="orgServiceProductPrice">
+        <sku :priceList="priceList" ref="sku"></sku>
+      </el-form-item>
       <el-form-item label="价格" prop="pensionPrice">
         <el-input-number
           :precision="2"
@@ -117,13 +119,15 @@
 </template>
 <script>
 import selectPensionProduct from '../../../components/SelectTable/selectPensionProduct.vue'
+import sku from '@/components/SKU/sku.vue'
 
 export default {
   name: 'editEvent',
   components: {
-    selectPensionProduct
+    selectPensionProduct,
+    sku
   },
-  data() {
+  data () {
     return {
       dialogServiceProduce: false,
       checkedObject: {},
@@ -153,10 +157,11 @@ export default {
       orgTree: [],
       productList: [],
       templateObj: [],
-      selectObjectList: []
+      selectObjectList: [],
+      priceList: []
     }
   },
-  created() {
+  created () {
     if (this.$route.query.pid) {
       this.getProductInfo()
     }
@@ -165,11 +170,11 @@ export default {
     this.getServiceTypeList()
   },
   methods: {
-    changeOrg() {
+    changeOrg () {
       this.formInfo.orgServiceTypeId = ''
       this.getServiceTypeList()
     },
-    getServiceTypeList() {
+    getServiceTypeList () {
       this.$http
         .post('/org/service/type/pageSearch', {
           pageSize: MAXSIZE,
@@ -186,11 +191,11 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.templateObj = data
       console.log(data)
     },
-    handleSaveSelectProduct() {
+    handleSaveSelectProduct () {
       // this.formInfo.pensionProductId = this.templateObj.pensionServiceProductId
       // this.formInfo.indexPic = this.templateObj.indexPic
       // this.formInfo.detail = this.templateObj.detail
@@ -206,14 +211,17 @@ export default {
             this.templateObj.pensionServiceProductId
         )
         .then(res => {
+          console.log(res.payload)
           this.formInfo = res.payload
+          this.priceList = JSON.parse(this.formInfo.pensionServiceProductPrice)
+
           this.$set(this.formInfo, 'orgServiceTypeId', '')
         })
       this.templateObj = {}
       this.dialogServiceProduce = false
       this.$forceUpdate()
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -227,7 +235,7 @@ export default {
         }
       })
     },
-    getProductInfo() {
+    getProductInfo () {
       this.$http
         .get(
           '/org/service/product/detail?orgServiceProductId=' +
@@ -247,6 +255,7 @@ export default {
               'pensionPlineationPrice',
               res.payload.orgPlineationPrice
             )
+            this.priceList = JSON.parse(this.formInfo.orgServiceProductPrice)
             this.$set(this.formInfo, 'pensionPrice', res.payload.orgPrice)
             this.formInfo.pensionServiceProductId =
               res.payload.pensionServiceProductDetail.pensionServiceProductId
@@ -257,7 +266,9 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
+      let priceList = this.$refs.sku.toConfirm()
+      this.formInfo.pensionServiceProductPrice = priceList
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.pid
@@ -285,7 +296,7 @@ export default {
           })
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {

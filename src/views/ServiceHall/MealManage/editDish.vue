@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 15:21:28
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:10:58
+ * @LastEditTime: 2019-12-07 20:24:13
  -->
 <template>
   <div id="edit-dish">
@@ -86,7 +86,7 @@
       <el-form-item label="价格" prop="price">
         <el-input-number v-model="formInfo.price" :precision="2" controls-position="right" :min="0"></el-input-number>
       </el-form-item>
-      <el-form-item label="划线价" prop="lineationPrice">
+      <el-form-item label="划线价">
         <el-input-number
           v-model="formInfo.lineationPrice"
           :precision="2"
@@ -113,7 +113,8 @@ export default {
         foodDescription: '',
         foodName: '',
         foodType: '',
-        season: ''
+        season: '',
+        lineationPrice: 0
       },
       rules: {
         foodName: [

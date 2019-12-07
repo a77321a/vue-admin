@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-24 20:18:52
+ * @LastEditTime: 2019-12-07 21:40:57
  -->
 <template>
   <div id="edit-role">
@@ -18,24 +18,24 @@
     >
       <el-form-item label="人员类型">
         <el-radio-group v-model="formInfo.accountType">
-          <el-radio-button style="box-shadow: none;" :label="0">内部服务人员</el-radio-button>
-          <el-radio-button style="box-shadow: none;" :label="1">外部人员</el-radio-button>
+          <el-radio-button style="box-shadow: none;" :label="1">内部服务人员</el-radio-button>
+          <el-radio-button style="box-shadow: none;" :label="2">外部人员</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="昵称" prop="nickname">
+      <el-form-item label="昵称" prop="nickName">
         <el-input
-          :disabled="formInfo.accountType == 0"
+          :disabled="formInfo.accountType == 1"
           style="width:300px;margin-right:10px"
           maxlength="10"
           show-word-limit
           placeholder="请输入用户昵称，最多不超过10个字"
-          v-model="formInfo.nickname"
+          v-model="formInfo.nickName"
         ></el-input>
         <el-button size="small" @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
       </el-form-item>
       <el-form-item label="手机号" prop="mobile">
         <el-input
-          :disabled="formInfo.accountType == 0"
+          :disabled="formInfo.accountType == 1"
           maxlength="11"
           show-word-limit
           placeholder="请输入手机号，可用于登录管理平台"
@@ -71,7 +71,7 @@
               clearable
               multiple
               v-model="formInfo.orgIds"
-              placeholder="请选择用户状态"
+              placeholder="请选择"
             >
               <el-option
                 v-for="(item, index) in orgList"
@@ -126,13 +126,15 @@ export default {
       dialogServiceObject: false,
       formInfo: {
         account: '',
-        accountType: 0,
+        accountType: 1,
         limit: 2,
         roleIds: []
       },
       roleList: [],
       rules: {
-        nickname: [{ required: true, message: '请输入账号昵称' }],
+        nickName: [
+          { required: true, message: '请输入账号昵称', trigger: 'blur' }
+        ],
         mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
         password: [
           { required: true, message: '请输入账号密码', trigger: 'blur' }
@@ -183,8 +185,9 @@ export default {
         return
       }
       this.formInfo.account = this.templateObj.orgServiceProviderId
-      this.formInfo.nickname = this.templateObj.orgServiceProviderName
+      this.formInfo.nickName = this.templateObj.orgServiceProviderName
       this.formInfo.mobile = this.templateObj.telephoneNum
+      console.log(this.formInfo.nickName)
       this.dialogServiceObject = false
     },
     getOrgList () {
@@ -217,6 +220,25 @@ export default {
       this.$http.get('/user/get?userId=' + this.$route.query.uid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
+          this.formInfo.roleIds = this.formInfo.roleIds
+            ? this.formInfo.roleIds
+            : []
+          this.formInfo.orgIds = this.formInfo.orgIds
+            ? this.formInfo.orgIds
+            : []
+          if (res.payload.orgEntites && res.payload.orgEntites.length > 0) {
+            res.payload.orgEntites.forEach(i => {
+              this.formInfo.orgIds.push(i.orgId)
+            })
+          }
+          if (
+            res.payload.roleInfo.roleList &&
+            res.payload.roleInfo.roleList.length > 0
+          ) {
+            res.payload.roleInfo.roleList.forEach(i => {
+              this.formInfo.roleIds.push(i.roleId)
+            })
+          }
           this.$set(
             this.formInfo,
             'limit',
@@ -240,15 +262,16 @@ export default {
             account: this.formInfo.account,
             accountType: this.formInfo.accountType,
             mobile: this.formInfo.mobile,
-            nickname: this.formInfo.nickname,
-            orgIds: this.limit === 3 ? this.formInfo.orgIds : undefined,
+            nickName: this.formInfo.nickName,
+            orgIds:
+              this.formInfo.limit === 3 ? this.formInfo.orgIds : undefined,
             password: this.formInfo.password,
             roleIds: this.formInfo.roleIds,
             scopeDepth:
-              this.limit === 2
+              this.formInfo.limit === 2
                 ? this.formInfo.addressList.join('-')
                 : undefined,
-            superAdmin: this.limit === 1,
+            superAdmin: this.formInfo.limit === 1,
             userStatus: 1
           })
           .then(res => {

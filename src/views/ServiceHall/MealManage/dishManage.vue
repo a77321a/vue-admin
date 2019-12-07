@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-20 15:21:48
+ * @LastEditTime: 2019-12-07 20:25:33
  -->
 <template>
   <div class="dish-manage">
@@ -64,7 +64,11 @@
         >
           <template slot-scope="{row}" slot="foodName">
             <div class="flex-t-l">
-              <img class="course-avatar" :src="row.indexPic" alt />
+              <img
+                class="course-avatar"
+                :src="$store.state.config.systemConfig[0].dictionaryValue+row.indexPic"
+                alt
+              />
               <div class="flex-column-t">
                 <span class="f-title">{{row.foodName}}</span>
                 <p class="sm-title">￥{{row.price}}</p>
@@ -85,7 +89,7 @@
               type="text"
               size="small"
             >编辑</el-button>
-            
+
             <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
           </template>
           <template slot="footer-left">
@@ -104,7 +108,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -137,23 +141,23 @@ export default {
       selectFood: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    commitSelection(data) {
+    commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.foodId)
       })
       this.selectFood = arr
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.foodId] : this.selectFood
       this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
