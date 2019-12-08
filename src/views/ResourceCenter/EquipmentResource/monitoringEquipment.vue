@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 12:55:51
+ * @LastEditTime: 2019-12-08 11:23:38
  -->
 <template>
   <div class="event-center">
@@ -62,7 +62,6 @@
     <Table
       @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
-      :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
@@ -150,8 +149,8 @@ export default {
   },
   watch: {
     selectType () {
-      this.searchData.orgName = ''
-      this.searchData.activityRoomName = ''
+      this.$set(this.searchData, 'orgName', '')
+      this.$set(this.searchData, 'activityRoomName', '')
     }
   },
   methods: {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:31:05
+ * @LastEditTime: 2019-12-08 12:04:05
  -->
 <template>
   <div id="edit-service-user">
@@ -87,7 +87,7 @@
       <el-form-item label="服务范围" prop="serviceScope">
         <el-cascader
           clearable
-          :props="{value:'regionId',label:'addressName',emitPath:false}"
+          :props="{value:'regionId',label:'addressName',}"
           :options="spaceTree"
           v-model="formInfo.serviceScope"
         ></el-cascader>
@@ -163,7 +163,7 @@ export default {
         orgId: '',
         position: '',
         orgServiceProviderName: '',
-        serviceScope: '',
+        serviceScope: [],
         orgServiceTypeIds: [],
         orgServiceProductIds: [],
         sex: '',
@@ -325,6 +325,12 @@ export default {
             res.payload.orgServiceProducts.forEach(i => {
               arr1.push(i.orgServiceProductId)
             })
+            this.$set(this.formInfo, 'serviceScope', [
+              res.payload.cityId ? res.payload.cityId : '',
+              res.payload.districtId ? res.payload.districtId : '',
+              res.payload.communityId ? res.payload.communityId : '',
+              res.payload.streetId ? res.payload.streetId : ''
+            ])
             this.$set(this.formInfo, 'orgServiceTypeIds', arr)
             this.$set(this.formInfo, 'orgServiceProductIds', arr1)
             this.getServiceTypeList()
@@ -336,25 +342,50 @@ export default {
     handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
-        if (this.$route.query.uid) {
-          this.$http
-            .post('/org/service/provider/update', this.formInfo)
-            .then(res => {
-              if (res.code === SUCCESS) {
-                this.$message.success('操作成功')
-                this.$router.go(-1)
-              }
-            })
-        } else {
-          this.$http
-            .post('/org/service/provider/add', this.formInfo)
-            .then(res => {
-              if (res.code === SUCCESS) {
-                this.$message.success('操作成功')
-                this.$router.go(-1)
-              }
-            })
-        }
+        let url = this.$route.query.uid
+          ? '/org/service/provider/update'
+          : '/org/service/provider/add'
+        this.$http
+          .post(url, {
+            orgServiceProviderId: this.$route.query.uid,
+            cityId: this.formInfo.serviceScope[0],
+            districtId: this.formInfo.serviceScope[1],
+            communityId: this.formInfo.serviceScope[2],
+            streetId: this.formInfo.serviceScope[3],
+            birthday: this.formInfo.birthday,
+            employeeNum: this.formInfo.employeeNum,
+            identityCard: this.formInfo.identityCard,
+            indexPic: this.formInfo.indexPic,
+            orgId: this.formInfo.orgId,
+            orgServiceProductIds: this.formInfo.orgServiceProductIds,
+            orgServiceProviderName: this.formInfo.orgServiceProviderName,
+            orgServiceTypeIds: this.formInfo.orgServiceTypeIds,
+            position: this.formInfo.position,
+            sex: this.formInfo.sex,
+            telephoneNum: this.formInfo.telephoneNum
+          })
+          .then(res => {
+            if (res.code === SUCCESS) {
+              this.$message.success('操作成功')
+              this.$router.go(-1)
+            }
+          })
+        // if (this.$route.query.uid) {
+        //   ;(this.formInfo.cityId = this.formInfo.serviceScope[0]),
+        //     (this.formInfo.districtId = this.formInfo.serviceScope[1]),
+        //     (this.formInfo.communityId = this.formInfo.serviceScope[2]),
+        //     (this.formInfo.streetId = this.formInfo.serviceScope[3]),
+
+        // } else {
+        //   this.$http
+        //     .post('/org/service/provider/add', this.formInfo)
+        //     .then(res => {
+        //       if (res.code === SUCCESS) {
+        //         this.$message.success('操作成功')
+        //         this.$router.go(-1)
+        //       }
+        //     })
+        // }
       })
     }
   }

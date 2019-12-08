@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-28 20:06:30
+ * @LastEditTime: 2019-12-08 11:01:04
  -->
 <template>
   <div id="edit-event">
@@ -17,32 +17,26 @@
       size="medium"
     >
       <el-form-item label="助餐人员" prop="customerId">
-        <el-tag
-          v-show="checkedObject.serviceCustomerId"
-          style="margin-right:10px"
-          closable
-        >
-          <el-avatar
+        <el-tag v-show="checkedObject.serviceCustomerId" style="margin-right:10px" closable>
+          <img
             :size="22"
-            style="vertical-align: middle;margin-right:5px"
-            icon="el-icon-user-solid"
+            style="vertical-align: middle;margin-right:5px;width:22px;height:22px;border-radius: 50%;"
             :src="
               $store.state.config.systemConfig[0].dictionaryValue +
                 checkedObject.avatar
             "
-          ></el-avatar>
-          <span style="vertical-align: middle;">{{
+          />
+          <span style="vertical-align: middle;">
+            {{
             checkedObject.serviceCustomerName
-          }}</span>
+            }}
+          </span>
         </el-tag>
-        <el-button
-          size="small"
-          @click="dialogServiceObject = true"
-          icon="el-icon-plus"
-          >{{
-            checkedObject.serviceCustomerId ? "重新选择人员" : "选择人员"
-          }}</el-button
-        >
+        <el-button size="small" @click="dialogServiceObject = true" icon="el-icon-plus">
+          {{
+          checkedObject.serviceCustomerId ? "重新选择人员" : "选择人员"
+          }}
+        </el-button>
       </el-form-item>
       <el-form-item label="助餐机构" prop="orgId">
         <el-cascader
@@ -62,25 +56,15 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期"
         ></el-date-picker>
-        <el-select
-          style="width:150px;"
-          v-model="formInfo.dinnerType"
-          placeholder="请选择助餐时段"
-        >
+        <el-select style="width:150px;" v-model="formInfo.dinnerType" placeholder="请选择助餐时段">
           <el-option label="早餐" :value="1"></el-option>
           <el-option label="中餐" :value="2"></el-option>
           <el-option label="晚餐" :value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="助餐详情" prop="foodSnapshotList">
-        <el-button @click="dialogFood = true" type="primary"
-          >新增助餐</el-button
-        >
-        <Table
-          style="margin:5px 0;"
-          :dataArray="formInfo.foodSnapshotList"
-          :columns="tableColumns"
-        >
+        <el-button @click="dialogFood = true" type="primary">新增助餐</el-button>
+        <Table style="margin:5px 0;" :dataArray="formInfo.foodSnapshotList" :columns="tableColumns">
           <template slot-scope="{ row }" slot="foodName">
             <div class="flex-t-l">
               <img
@@ -97,16 +81,16 @@
               </div>
             </div>
           </template>
-          <template slot="foodType" slot-scope="{ row }">{{
+          <template slot="foodType" slot-scope="{ row }">
+            {{
             $func.transLabel($store.state.config.foodType, row.foodType)
-          }}</template>
+            }}
+          </template>
           <template slot="action" slot-scope="{ row, index }">
             <el-button @click="handleRemove(index)" type="text">删除</el-button>
           </template>
         </Table>
-        <span v-if="formInfo.foodSnapshotList.length"
-          >共计消费：￥{{ this.priceSum.toFixed(2) }}</span
-        >
+        <span v-if="formInfo.foodSnapshotList.length">共计消费：￥{{ this.priceSum.toFixed(2) }}</span>
       </el-form-item>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
@@ -131,20 +115,11 @@
             dialogServiceObject = false;
             checkedObject = {};
           "
-          >取 消</el-button
-        >
-        <el-button type="primary" @click="handleSaveSelectObject"
-          >确 定</el-button
-        >
+        >取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog
-      width="60%"
-      lock-scroll
-      destroy-on-close
-      title="选择菜品"
-      :visible.sync="dialogFood"
-    >
+    <el-dialog width="60%" lock-scroll destroy-on-close title="选择菜品" :visible.sync="dialogFood">
       <selectFood @selectFood="selectFood"></selectFood>
       <span slot="footer" class="dialog-footer">
         <el-button
@@ -152,18 +127,15 @@
             dialogFood = false;
             selectFoodList = {};
           "
-          >取 消</el-button
-        >
-        <el-button type="primary" @click="handleSaveSelectFood"
-          >确 定</el-button
-        >
+        >取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectFood">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue';
-import selectFood from '../../../components/SelectTable/selectFood.vue';
+import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue'
+import selectFood from '../../../components/SelectTable/selectFood.vue'
 
 export default {
   name: 'editMealRecord',
@@ -171,7 +143,7 @@ export default {
     selectServiceObject,
     selectFood
   },
-  data () {
+  data() {
     const validatorTime = (rule, value, callback) => {
       if (this.formInfo.dinnerTime !== '' && this.formInfo.dinnerType === '') {
         callback(new Error('请选择助餐时段'))
@@ -217,14 +189,14 @@ export default {
       selectFoodList: []
     }
   },
-  created () {
+  created() {
     if (this.$route.query.mid) {
       this.getMealInfo()
     }
     this.getOrgList()
   },
   methods: {
-    getMealInfo () {
+    getMealInfo() {
       this.$http
         .get(
           '/service/customerDinnerRecord/get?recordId=' + this.$route.query.mid
@@ -243,7 +215,7 @@ export default {
           }
         })
     },
-    handleRemove (index) {
+    handleRemove(index) {
       this.formInfo.foodSnapshotList.splice(index, 1)
       this.priceSum = 0
       this.formInfo.foodSnapshotList.forEach(i => {
@@ -251,10 +223,10 @@ export default {
       })
       this.priceSum = this.priceSum / 10
     },
-    selectFood (data) {
+    selectFood(data) {
       this.selectFoodList = data
     },
-    handleSaveSelectFood () {
+    handleSaveSelectFood() {
       if (this.selectFoodList.length === 0) {
         this.$message.error('请至少选择一个菜品')
         return false
@@ -270,7 +242,7 @@ export default {
       this.dialogFood = false
       console.log(this.formInfo)
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -289,10 +261,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.templateObj = data
     },
-    handleSaveSelectObject () {
+    handleSaveSelectObject() {
       if (!this.templateObj.serviceCustomerId) {
         this.$message.error('请选择服务对象')
         return false
@@ -301,7 +273,7 @@ export default {
       this.formInfo.customerId = this.templateObj.serviceCustomerId
       this.dialogServiceObject = false
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -312,13 +284,13 @@ export default {
       return false
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let foodIds = []
         let url = this.$route.query.mid
           ? '/service/customerDinnerRecord/update'
-          : '/service/customerDinnerRecord/add';
+          : '/service/customerDinnerRecord/add'
         this.formInfo.foodSnapshotList.forEach(i => {
           foodIds.push(i.foodId)
         })

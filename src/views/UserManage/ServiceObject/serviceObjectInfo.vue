@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-06 14:19:36
+ * @LastEditTime: 2019-12-08 12:19:27
  -->
 <template>
   <div id="service-object-info">
@@ -44,18 +44,22 @@
       <el-row :gutter="10">
         <el-col style="text-align:center" :span="4">
           <el-avatar :size="60" :src="serviceObjectInfo.avatar"></el-avatar>
-          <el-button @click="dialogVisible = true" style="width:100%;display:block" type="text">查看照片</el-button>
+          <el-button
+            @click="dialogVisible = true"
+            style="width:100%;display:block"
+            type="text"
+          >查看生活照片</el-button>
         </el-col>
         <el-col class="content-span" :span="20">
           <el-row :gutter="10" style="margin-bottom:20px">
             <el-col :span="6">姓名：{{serviceObjectInfo.serviceCustomerName}}</el-col>
             <el-col :span="6">手机号：{{serviceObjectInfo.mobile}}</el-col>
-            <el-col :span="6">性别：</el-col>
+            <el-col :span="6">性别：{{serviceObjectInfo.gender == 0 ?'女':'男'}}</el-col>
             <el-col :span="6">民族：{{serviceObjectInfo.ethnic }}</el-col>
           </el-row>
           <el-row style="margin-bottom:20px" :gutter="10">
-            <el-col :span="6">婚姻状态：{{serviceObjectInfo.maritalStatus}}</el-col>
-            <el-col :span="6">老人居住状态：{{serviceObjectInfo.mobile}}</el-col>
+            <el-col :span="6">婚姻状态：{{maritalStatus[serviceObjectInfo.maritalStatus]}}</el-col>
+            <el-col :span="6">老人居住状态：{{liveStatus[serviceObjectInfo.liveStatus]}}</el-col>
             <el-col :span="6">身份证：{{serviceObjectInfo.idCard}}</el-col>
             <el-col :span="6">市民卡：{{serviceObjectInfo.citizenCard }}</el-col>
           </el-row>
@@ -63,11 +67,19 @@
             <el-col :span="12">
               紧急联系人：
               <span
-                v-for="(item, index) in serviceObjectInfo.emergencyList"
+                v-for="(item, index) in serviceObjectInfo.emergencySelectList"
                 :key="index"
-              >{{item.name}}({{item.mobile}})</span>
+              >
+                {{item.name}}/{{item.mobile}}
+                <el-divider
+                  v-if="index !=serviceObjectInfo.emergencySelectList.length - 1"
+                  direction="vertical"
+                ></el-divider>
+              </span>
             </el-col>
-            <el-col :span="6">所在地域：{{serviceObjectInfo.streetName}}</el-col>
+            <el-col
+              :span="6"
+            >所在地域：{{serviceObjectInfo.cityName}}{{serviceObjectInfo.districtName}}{{serviceObjectInfo.communityName}}{{serviceObjectInfo.streetName}}</el-col>
             <el-col :span="6">地址详情：{{serviceObjectInfo.address}}</el-col>
           </el-row>
         </el-col>
@@ -172,20 +184,22 @@ export default {
     mealRecords,
     activityRecords
   },
-  data() {
+  data () {
     return {
       dialogVisible: false,
+      maritalStatus: ['未婚', '已婚', '离异', '再婚', '丧偶'],
+      liveStatus: ['与子女同住', '独自居住', '配偶居住', '其他'],
       serviceObjectInfo: {
         emergencyList: [],
         avatar: ''
       }
     }
   },
-  created() {
+  created () {
     this.getObjectInfo()
   },
   methods: {
-    getObjectInfo() {
+    getObjectInfo () {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:24:47
+ * @LastEditTime: 2019-12-08 12:18:14
  -->
 <template>
   <div class="Participants">
@@ -79,13 +79,15 @@
       </template>
       <template slot="customerCategoryList" slot-scope="{row}">
         <span v-for="(item, index) in row.customerCategoryList" :key="index">
-          {{item}}
-          <span v-if="index !=row.customerCategoryList.length - 1">、</span>
+          {{$func.transLabel($store.state.config.pensionTypeList,item)}}
+          <span
+            v-if="index !=row.customerCategoryList.length - 1"
+          >、</span>
         </span>
       </template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
-          @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
+          @click="$router.push({name:'serviceObjectInfo',query:{sid:row.serviceCustomerId}})"
           type="text"
           size="small"
         >查看</el-button>

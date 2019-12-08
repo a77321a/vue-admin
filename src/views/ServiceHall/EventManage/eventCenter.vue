@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-06 09:49:17
+ * @LastEditTime: 2019-12-08 11:24:41
  -->
 <template>
   <div class="event-center">
@@ -160,11 +160,16 @@ export default {
         {
           label: '活动状态',
           slot: 'activityStatus',
-          minWidth: 150
+          minWidth: 120
         },
         {
           label: '创建人',
           prop: 'createUserName',
+          minWidth: 120
+        },
+        {
+          label: '创建时间',
+          prop: 'createTime',
           minWidth: 150
         },
         {

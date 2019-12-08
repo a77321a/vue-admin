@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 18:08:46
+ * @LastEditTime: 2019-12-08 12:22:50
  -->
 <template>
   <div class="user-manage">
@@ -32,13 +32,13 @@
       </template>
       <template slot-scope="{row}" slot="action">
         <el-button @click="handlePreview(row)" type="text" size="small">查看</el-button>
-        
+
         <el-button
           @click="$router.push({name:'editMealRecord',query:{mid:row.recordId}})"
           type="text"
           size="small"
         >编辑</el-button>
-        
+
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left"></template>
@@ -68,7 +68,7 @@
             </el-timeline-item>
           </el-timeline>
         </el-form-item>
-        <el-form-item label="共计消费">￥{{formInfo.priceSum}}</el-form-item>
+        <el-form-item label="共计消费">{{formInfo.priceSum}}</el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -105,9 +105,19 @@ export default {
   created () {},
   props: ['serviceCustomerId'],
   methods: {
-    rowsForamtter (rows) {
-      rows.forEach(row => {
-        row.activityTime = row.startTime + '~' + row.endTime
+    handlePreview (row) {
+      this.formInfo = row
+      this.dialogFormVisible = true
+    },
+    rowsForamtter (row) {
+      row.forEach(i => {
+        if (i.foodSnapshotList && i.foodSnapshotList.length > 0) {
+          let sum = 0
+          i.foodSnapshotList.forEach(j => {
+            sum += j.price
+          })
+          i.priceSum = '￥' + sum.toFixed(2)
+        }
       })
     }
   }

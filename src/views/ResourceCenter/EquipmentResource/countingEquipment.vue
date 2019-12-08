@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 13:04:44
+ * @LastEditTime: 2019-12-08 11:22:55
  -->
 <template>
   <div class="event-center">
@@ -11,8 +11,8 @@
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item>
         <el-input
-          style="width:300px"
           v-if="selectType == 1"
+          style="width:300px"
           placeholder="请输入机构名称关键字"
           v-model="searchData.orgName"
           class="input-with-select"
@@ -23,10 +23,11 @@
           </el-select>
         </el-input>
         <el-input
+          v-else
           style="width:300px"
-          v-if="selectType == 2"
           placeholder="请输入活动室名称关键字"
           v-model="searchData.activityRoomName"
+          @input="inputValue"
           class="input-with-select"
         >
           <el-select style="width:100px" v-model="selectType" slot="prepend" placeholder="请选择">
@@ -62,7 +63,6 @@
     <Table
       @commitSelection="commitSelection"
       :searchRefresh="searchRefresh"
-      :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :selection="true"
       :columns="tableColumns"
@@ -142,8 +142,11 @@ export default {
   },
   watch: {
     selectType () {
-      this.searchData.orgName = ''
-      this.searchData.activityRoomName = ''
+      this.$set(this.searchData, 'orgName', '')
+      this.$set(this.searchData, 'activityRoomName', '')
+
+      // this.searchData.orgName = ''
+      // this.searchData.activityRoomName = '123'
     }
   },
   methods: {
@@ -153,6 +156,9 @@ export default {
         arr.push(i.deviceId)
       })
       this.selectDevice = arr
+    },
+    inputValue (val) {
+      console.log(val)
     },
     handleDelete (row) {
       let id = row ? [row.deviceId] : this.selectDevice

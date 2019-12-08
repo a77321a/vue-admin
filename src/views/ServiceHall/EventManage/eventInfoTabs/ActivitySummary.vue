@@ -3,16 +3,20 @@
  * @Author:
  * @Date: 2019-11-13 14:43:57
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:27:04
+ * @LastEditTime: 2019-12-08 11:33:10
  -->
 <template>
   <div id="active-summary">
     <div class="header">
-      <el-button class="btn" type="text">重新编辑</el-button>
+      <el-button
+        @click="$router.push({name:'editActivitySummary',query:{aid:$route.query.aid}})"
+        class="btn"
+        type="text"
+      >重新编辑</el-button>
     </div>
     <div class="content">
       <div v-if="htmlStr" v-html="htmlStr"></div>
-      <div style="width:200px;margin:0 auto">活动尚未开始</div>
+      <div v-else style="width:200px;margin:0 auto">活动尚未总结</div>
     </div>
   </div>
 </template>
@@ -22,7 +26,7 @@ export default {
   data () {
     return {}
   },
-  props: ['htmlStr']
+  props: ['htmlStr', 'status']
 }
 </script>
 <style lang="scss" scoped>

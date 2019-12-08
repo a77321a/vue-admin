@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 15:37:35
+ * @LastEditTime: 2019-12-08 12:20:44
  -->
 <template>
   <div class="user-manage">
@@ -24,7 +24,10 @@
         slot-scope="{row}"
       >{{$store.state.config.activityStatus[row.activityStatus].dictionaryLabel}}</template>
       <template slot="action" slot-scope="{row}">
-        <el-button type="text">查看</el-button>
+        <el-button
+          @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
+          type="text"
+        >查看</el-button>
       </template>
     </Table>
   </div>

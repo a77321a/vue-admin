@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-05 17:38:54
+ * @LastEditTime: 2019-12-08 11:38:07
  -->
 <template>
   <div id="event-info">
@@ -17,7 +17,7 @@
             ? going
             : ''
         "
-        alt=""
+        alt
       />
       <div class="flex-t-l">
         <img
@@ -28,15 +28,8 @@
           alt
         />
         <div class="flex-column-t">
-          <h4 style="margin-bottom:10px;margin-top:5px">
-            {{ eventInfo.activityName }}
-          </h4>
-          <el-form
-            label-position="left"
-            ref="form"
-            :model="eventInfo"
-            label-width="100px"
-          >
+          <h4 style="margin-bottom:10px;margin-top:5px">{{ eventInfo.activityName }}</h4>
+          <el-form label-position="left" ref="form" :model="eventInfo" label-width="100px">
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-alarm-clock"></i>活动时间：
@@ -47,7 +40,7 @@
               <template slot="label">
                 <i class="el-icon-location-outline"></i>活动地点：
               </template>
-              {{ eventInfo.activityName }}
+              {{ eventInfo.activityAddress }}
             </el-form-item>
             <el-form-item>
               <template slot="label">
@@ -60,6 +53,15 @@
                 <i class="el-icon-house"></i>活动室：
               </template>
               {{ eventInfo.activityRoomName }}
+            </el-form-item>
+            <el-form-item>
+              <template slot="label">
+                <i class="el-icon-files"></i>服务产品：
+              </template>
+              <span v-for="(item, index) in eventInfo.orgServiceProductList" :key="index">
+                {{ item.orgServiceProductName }}
+                <el-divider direction="vertical"></el-divider>
+              </span>
             </el-form-item>
           </el-form>
         </div>
@@ -77,17 +79,17 @@
         <ServicePerson :activityId="$route.query.aid"></ServicePerson>
       </el-tab-pane>
       <el-tab-pane label="活动总结" name="third">
-        <ActivitySummary :htmlStr="eventInfo.activitySummary"></ActivitySummary>
+        <ActivitySummary :status="eventInfo.activityStatus" :htmlStr="eventInfo.activitySummary"></ActivitySummary>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-import Participants from './eventInfoTabs/Participants';
-import ServicePerson from './eventInfoTabs/ServicePerson';
-import ActivitySummary from './eventInfoTabs/ActivitySummary';
-import summary from '@/common/image/summary.png';
-import going from '@/common/image/going.png';
+import Participants from './eventInfoTabs/Participants'
+import ServicePerson from './eventInfoTabs/ServicePerson'
+import ActivitySummary from './eventInfoTabs/ActivitySummary'
+import summary from '@/common/image/summary.png'
+import going from '@/common/image/going.png'
 
 export default {
   name: 'eventInfo',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-11-28 20:02:39
+ * @LastEditTime: 2019-12-08 11:13:18
  -->
 <template>
   <div id="edit-agency">
@@ -40,21 +40,10 @@
           v-model="formInfo.model"
         ></el-input>
       </el-form-item>
-      <el-form-item
-        v-if="$route.query.deviceType != 1"
-        label="数据同步地址"
-        prop="dataSyncAddress"
-      >
-        <el-input
-          placeholder="请输入计数设备数据同步地址"
-          v-model="formInfo.dataSyncAddress"
-        ></el-input>
+      <el-form-item v-if="$route.query.deviceType != 1" label="数据同步地址" prop="dataSyncAddress">
+        <el-input placeholder="请输入计数设备数据同步地址" v-model="formInfo.dataSyncAddress"></el-input>
       </el-form-item>
-      <el-form-item
-        v-if="$route.query.deviceType == 1"
-        label="视频信息"
-        prop="type"
-      >
+      <el-form-item v-if="$route.query.deviceType == 1" label="视频信息" prop="type">
         <el-radio-group v-model="formInfo.type">
           <el-radio style="margin:10px 0;" :label="0">视频流地址</el-radio>
           <el-input
@@ -72,22 +61,15 @@
           </div>
         </el-radio-group>
       </el-form-item>
-      <el-form-item
-        v-if="$route.query.deviceType != 3"
-        label="所在区域"
-        prop="areaType"
-      >
+      <el-form-item v-if="$route.query.deviceType != 3" label="所在区域" prop="areaType">
         <el-radio-group v-model="formInfo.areaType">
           <div>
             <el-radio style="margin:10px;" :label="0">机构内</el-radio>
-            <el-button v-if="formInfo.areaType == 0" @click="dialogOrg = true"
-              >选择机构</el-button
-            >
+            <el-button v-if="formInfo.areaType == 0" @click="dialogOrg = true">选择机构</el-button>
             <span
               v-if="checkedObj.orgId && formInfo.areaType == 0"
               style="margin-left:5px;font-size:12px"
-              >已选：{{ checkedObj.orgName }}</span
-            >
+            >已选：{{ checkedObj.orgName }}</span>
           </div>
           <div>
             <el-radio style="margin:10px;" :label="1">活动室</el-radio>
@@ -97,13 +79,11 @@
                 dialogEventRoom = true;
                 templateObj = {};
               "
-              >选择活动室</el-button
-            >
+            >选择活动室</el-button>
             <span
               v-if="checkRoom.activityRoomId && formInfo.areaType == 1"
               style="margin-left:5px;font-size:12px"
-              >已选：{{ checkRoom.activityRoomName }}</span
-            >
+            >已选：{{ checkRoom.activityRoomName }}</span>
           </div>
         </el-radio-group>
       </el-form-item>
@@ -114,26 +94,18 @@
             dialogOrg = true;
             templateObj = {};
           "
-          >选择机构</el-button
-        >
+        >选择机构</el-button>
         <span
           v-if="checkedObj.orgId && formInfo.areaType == 0"
           style="margin-left:5px;font-size:12px"
-          >已选：{{ checkedObj.orgName }}</span
-        >
+        >已选：{{ checkedObj.orgName }}</span>
       </el-form-item>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
-    <el-dialog
-      width="60%"
-      destroy-on-close
-      lock-scroll
-      title="选择机构"
-      :visible.sync="dialogOrg"
-    >
+    <el-dialog width="60%" destroy-on-close lock-scroll title="选择机构" :visible.sync="dialogOrg">
       <selectOrg single @selectObject="selectObject"></selectOrg>
       <span slot="footer" class="dialog-footer">
         <el-button
@@ -141,8 +113,7 @@
             dialogOrg = false;
             templateObj = {};
           "
-          >取 消</el-button
-        >
+        >取 消</el-button>
         <el-button type="primary" @click="handleSaveSelectOrg">确 定</el-button>
       </span>
     </el-dialog>
@@ -153,28 +124,22 @@
       title="选择活动室"
       :visible.sync="dialogEventRoom"
     >
-      <selectEventRoom
-        single
-        @selectObject="selectObjectRoom"
-      ></selectEventRoom>
+      <selectEventRoom single @selectObject="selectObjectRoom"></selectEventRoom>
       <span slot="footer" class="dialog-footer">
         <el-button
           @click="
             dialogEventRoom = false;
             templateObj = {};
           "
-          >取 消</el-button
-        >
-        <el-button type="primary" @click="handleSaveSelectRoom"
-          >确 定</el-button
-        >
+        >取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectRoom">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import selectOrg from '../../../components/SelectTable/selectOrg.vue';
-import selectEventRoom from '../../../components/SelectTable/selectEventRoom.vue';
+import selectOrg from '../../../components/SelectTable/selectOrg.vue'
+import selectEventRoom from '../../../components/SelectTable/selectEventRoom.vue'
 
 export default {
   name: 'editMonitorEquipment',
@@ -182,7 +147,7 @@ export default {
     selectOrg,
     selectEventRoom
   },
-  data () {
+  data() {
     const checkAddress = (rule, value, callback) => {
       if (this.formInfo.type === 0) {
         if (!this.formInfo.videoStreamAddress) {
@@ -254,13 +219,13 @@ export default {
       checkRoom: {}
     }
   },
-  created () {
+  created() {
     if (this.$route.query.deviceId) {
       this.getDeviceInfo()
     }
   },
   methods: {
-    getDeviceInfo () {
+    getDeviceInfo() {
       this.$http
         .get('/device/get?deviceId=' + this.$route.query.deviceId)
         .then(res => {
@@ -283,10 +248,10 @@ export default {
           }
         })
     },
-    selectObject (data) {
+    selectObject(data) {
       this.templateObj = data
     },
-    handleSaveSelectOrg () {
+    handleSaveSelectOrg() {
       if (!this.templateObj.orgId) {
         this.$message.error('请选择一个机构')
         return false
@@ -296,10 +261,10 @@ export default {
       this.templateObj = {}
       this.dialogOrg = false
     },
-    selectObjectRoom (data) {
+    selectObjectRoom(data) {
       this.templateObj = data
     },
-    handleSaveSelectRoom () {
+    handleSaveSelectRoom() {
       if (!this.templateObj.activityRoomId) {
         this.$message.error('请选择一个活动室')
         return false
@@ -309,24 +274,23 @@ export default {
       this.templateObj = {}
       this.dialogEventRoom = false
     },
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
-        let url = this.$route.query.deviceId ? '/device/update' : '/device/add';
+        let url = this.$route.query.deviceId ? '/device/update' : '/device/add'
         this.$http
           .post(url, {
             deviceId: this.$route.query.deviceId,
             activityRoomId:
               this.formInfo.areaType === 0
-                ? undefined
+                ? null
                 : this.formInfo.activityRoomId,
             dataSyncAddress: this.formInfo.dataSyncAddress,
             deviceName: this.formInfo.deviceName,
             deviceType: this.$route.query.deviceType,
             factory: this.formInfo.factory,
             model: this.formInfo.model,
-            orgId:
-              this.formInfo.areaType === 0 ? this.formInfo.orgId : undefined,
+            orgId: this.formInfo.areaType === 0 ? this.formInfo.orgId : null,
             videoInterfaceAddress:
               this.formInfo.type === 1
                 ? this.formInfo.videoInterfaceAddress

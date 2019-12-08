@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 10:57:42
+ * @LastEditTime: 2019-12-08 12:08:30
  -->
 <template>
   <div class="service-user">
@@ -111,7 +111,9 @@ export default {
       selectServiceUser: []
     }
   },
-  created () {},
+  created () {
+    console.log(JSON.parse(localStorage.config))
+  },
   methods: {
     filterOrg (val) {
       this.searchData.orgId = val

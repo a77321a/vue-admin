@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 22:22:35
+ * @LastEditTime: 2019-12-08 11:01:43
  -->
 <template>
   <div class="meal-center">
@@ -125,7 +125,7 @@
     <el-dialog title="添加菜品" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
         <el-form-item label="所属机构" prop="orgIds">
-          <el-select clearable multiple v-model="formInfo.orgIds" placeholder="请选择用户状态">
+          <el-select clearable multiple v-model="formInfo.orgIds" placeholder="请选择">
             <el-option
               v-for="(item, index) in orgSelectList"
               :key="index"

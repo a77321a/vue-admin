@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-06 14:20:30
+ * @LastEditTime: 2019-12-08 11:28:23
  -->
 <template>
   <div id="edit-event">
@@ -13,7 +13,7 @@
       ref="formInfo"
       :rules="rules"
       :model="formInfo"
-      label-width="100px"
+      label-width="120px"
       size="medium"
     >
       <el-form-item label="活动名称" prop="activityName">
@@ -56,7 +56,7 @@
         </span>
       </el-form-item>
       <div class="title">活动总结</div>
-      <el-form-item label="服务人员" prop="serviceProvider">
+      <el-form-item label="服务人员" prop="actualOrgServiceProviderList">
         <el-button
           :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
           @click="dialogServiceUser = true"
@@ -83,7 +83,7 @@
           </el-tag>
         </el-card>
       </el-form-item>
-      <el-form-item label="参加对象" prop="Object">
+      <el-form-item label="参加对象" prop="actualServiceCustomerList">
         <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
@@ -106,7 +106,7 @@
           </el-tag>
         </el-card>
       </el-form-item>
-      <el-form-item label="活动照片" prop="activityPicList">
+      <el-form-item label="活动照片">
         <div>
           <div
             style="position:relative"
@@ -133,7 +133,7 @@
           </el-upload>
         </div>
       </el-form-item>
-      <el-form-item label="活动内容总结">
+      <el-form-item label="活动内容总结" prop="activitySummary">
         <UEditor v-model="formInfo.activitySummary"></UEditor>
       </el-form-item>
       <el-form-item size="large">

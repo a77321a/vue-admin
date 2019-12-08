@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 16:22:37
+ * @LastEditTime: 2019-12-08 12:24:07
  -->
 <template>
   <div class="user-manage">
@@ -40,7 +40,7 @@ export default {
         { label: '服务时间', prop: 'activityTime', minWidth: 260 },
         {
           label: '活动室',
-          prop: 'activityRoomName ',
+          prop: 'activityRoomName',
           minWidth: 60
         }
       ],
