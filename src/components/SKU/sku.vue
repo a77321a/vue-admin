@@ -341,8 +341,7 @@ export default {
       }
     },
     toConfirm: function () {
-      console.log(this.tableList)
-      return JSON.stringify({ attrs: this.attrs, tableList: this.tableList })
+      return { attrs: this.attrs, tableList: this.tableList }
       // return this.tableData
     }
   }

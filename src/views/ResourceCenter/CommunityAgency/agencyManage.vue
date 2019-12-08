@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-06 13:58:14
+ * @LastEditTime: 2019-12-08 21:27:27
  -->
 <template>
   <div class="angecy-manage">
@@ -89,13 +89,18 @@
           type="text"
           size="small"
         >新增分部</el-button>
-        <el-button v-else type="text" size="small">{{row.status == 1?'注销机构':'重新入网'}}</el-button>
         <el-button
+          @click="handleStatus(row)"
+          v-else
+          type="text"
+          size="small"
+        >{{row.status == 1?'注销机构':'重新入网'}}</el-button>
+        <!-- <el-button
           @click="handleStatus(row)"
           v-if="!row.children"
           type="text"
           size="small"
-        >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button>
+        >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button>-->
         <el-button
           type="text"
           size="small"
@@ -194,6 +199,7 @@ export default {
     },
 
     handleStatus (row) {
+      console.log(1)
       let content =
         row.status === 1
           ? '注销后，与该机构管理的旧数据不受影响，新增数据时，将无法关联该机构，同时仅与该机构关联的管理员，将无法登录平台，是否确认？'
@@ -204,14 +210,20 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/api/user/status', { id: row.orgId }).then(res => {
-            if (res.code === 200) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              })
-            }
-          })
+          this.$http
+            .post('/org/changStauts', {
+              orgId: row.orgId,
+              status: row.status === 1 ? 0 : 1
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.searchRefresh = !this.searchRefresh
+                this.$message({
+                  type: 'success',
+                  message: '操作成功!'
+                })
+              }
+            })
         })
         .catch(() => {})
     },
@@ -231,8 +243,8 @@ export default {
         }
       )
         .then(() => {
-          this.$http.post('/activity/delete', { orgIds: id }).then(res => {
-            if (res.code === 200) {
+          this.$http.post('/org/delete', { orgIds: id }).then(res => {
+            if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.searchRefresh = !this.searchRefresh
             }

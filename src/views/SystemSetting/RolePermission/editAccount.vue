@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-07 21:40:57
+ * @LastEditTime: 2019-12-08 20:58:49
  -->
 <template>
   <div id="edit-role">
@@ -121,7 +121,7 @@ export default {
   components: {
     selectServiceUser
   },
-  data () {
+  data() {
     return {
       dialogServiceObject: false,
       formInfo: {
@@ -146,7 +146,7 @@ export default {
       templateObj: {}
     }
   },
-  created () {
+  created() {
     if (this.$route.query.uid) {
       this.getAccountInfo()
     }
@@ -155,7 +155,7 @@ export default {
     this.getRole()
   },
   methods: {
-    getOrg () {
+    getOrg() {
       this.$http
         .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
         .then(res => {
@@ -164,7 +164,7 @@ export default {
           }
         })
     },
-    getRole () {
+    getRole() {
       this.$http.post('/role/pageSearch', { pageSize: MAXSIZE }).then(res => {
         if (res.code === SUCCESS) {
           this.roleList = res.payload.records
@@ -176,10 +176,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.templateObj = data
     },
-    handleSaveSelectObject () {
+    handleSaveSelectObject() {
       if (!this.templateObj.orgServiceProviderId) {
         this.$message.error('请选择一条记录')
         return
@@ -190,7 +190,7 @@ export default {
       console.log(this.formInfo.nickName)
       this.dialogServiceObject = false
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -204,7 +204,7 @@ export default {
         }
       })
     },
-    getTree () {
+    getTree() {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -216,21 +216,49 @@ export default {
         }
       })
     },
-    getAccountInfo () {
+    getAccountInfo() {
       this.$http.get('/user/get?userId=' + this.$route.query.uid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
+          this.formInfo.password = ''
           this.formInfo.roleIds = this.formInfo.roleIds
             ? this.formInfo.roleIds
             : []
-          this.formInfo.orgIds = this.formInfo.orgIds
-            ? this.formInfo.orgIds
-            : []
-          if (res.payload.orgEntites && res.payload.orgEntites.length > 0) {
-            res.payload.orgEntites.forEach(i => {
-              this.formInfo.orgIds.push(i.orgId)
-            })
+          // this.formInfo.orgIds = this.formInfo.orgIds
+          //   ? this.formInfo.orgIds
+          //   : []
+          // if (res.payload.orgEntites && res.payload.orgEntites.length > 0) {
+          //   res.payload.orgEntites.forEach(i => {
+          //     this.formInfo.orgIds.push(i.orgId)
+          //   })
+          // }
+          if (res.payload.scopeDepth) {
+            this.$set(
+              this.formInfo,
+              'addressList',
+              res.payload.scopeDepth.split('-')
+            )
           }
+          // console.log(this.formInfo.addressList)
+          // if (
+          //   Array.isArray(res.payload.scopeAddressEntities) &&
+          //   res.payload.scopeAddressEntities.length > 0
+          // ) {
+          //   this.$set(this.formInfo, 'addresslIst', [
+          //     res.payload.scopeAddressEntities[0]
+          //       ? res.payload.scopeAddressEntities[0].regionId
+          //       : '',
+          //     res.payload.scopeAddressEntities[1]
+          //       ? res.payload.scopeAddressEntities[1].regionId
+          //       : '',
+          //     res.payload.scopeAddressEntities[2]
+          //       ? res.payload.scopeAddressEntities[2].regionId
+          //       : '',
+          //     res.payload.scopeAddressEntities[3]
+          //       ? res.payload.scopeAddressEntities[3].regionId
+          //       : ''
+          //   ])
+          // }
           if (
             res.payload.roleInfo.roleList &&
             res.payload.roleInfo.roleList.length > 0
@@ -242,8 +270,9 @@ export default {
           this.$set(
             this.formInfo,
             'limit',
-            res.payload.superAdmin ? 1 : res.payload.orgIds ? 2 : 3
+            res.payload.superAdmin ? 1 : res.payload.orgIds ? 3 : 2
           )
+          console.log(this.formInfo.limit)
           this.$set(
             this.formInfo,
             'roleIds',
@@ -252,7 +281,7 @@ export default {
         }
       })
     },
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.uid ? '/user/update' : '/user/add'
@@ -263,14 +292,13 @@ export default {
             accountType: this.formInfo.accountType,
             mobile: this.formInfo.mobile,
             nickName: this.formInfo.nickName,
-            orgIds:
-              this.formInfo.limit === 3 ? this.formInfo.orgIds : undefined,
+            orgIds: this.formInfo.limit === 3 ? this.formInfo.orgIds : null,
             password: this.formInfo.password,
             roleIds: this.formInfo.roleIds,
             scopeDepth:
               this.formInfo.limit === 2
                 ? this.formInfo.addressList.join('-')
-                : undefined,
+                : null,
             superAdmin: this.formInfo.limit === 1,
             userStatus: 1
           })

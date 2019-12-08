@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 12:18:14
+ * @LastEditTime: 2019-12-08 20:00:38
  -->
 <template>
   <div class="Participants">
@@ -76,6 +76,7 @@
             <span v-if="index !=row.emergencyList.length - 1">、</span>
           </span>
         </div>
+        <div v-else>--</div>
       </template>
       <template slot="customerCategoryList" slot-scope="{row}">
         <span v-for="(item, index) in row.customerCategoryList" :key="index">

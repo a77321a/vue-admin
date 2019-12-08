@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-07 11:38:15
+ * @LastEditTime: 2019-12-08 15:12:16
  -->
 <template>
   <div id="edit-event">
@@ -154,7 +154,7 @@ export default {
           if (res.code === SUCCESS) {
             this.formInfo = res.payload
             console.log(res.payload.pensionServiceProductPrice)
-            this.priceList = JSON.parse(res.payload.pensionServiceProductPrice)
+            this.priceList = res.payload.pensionServiceProductPrice
             this.$set(
               this.formInfo,
               'pensionServiceTypeId',

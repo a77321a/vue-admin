@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 20:22:39
+ * @LastEditTime: 2019-12-08 21:29:27
  -->
 <template>
   <div class="meal-center">
@@ -62,7 +62,12 @@
           >
             <template slot="customerName" slot-scope="{row}">
               <div class="flex-t-u">
-                <span class="f-title">{{row.customerName}}</span>
+                <el-avatar
+                  class="avatar"
+                  size="medium"
+                  :src="$store.state.config.systemConfig[0].dictionaryValue + row.avatar"
+                ></el-avatar>
+                <span class="f-title">{{ row.customerName }}</span>
               </div>
             </template>
             <template slot="foodSnapshotList" slot-scope="{row}">
@@ -125,7 +130,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -152,13 +157,13 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    handlePreview (row) {
+    handlePreview(row) {
       this.formInfo = row
       this.dialogFormVisible = true
     },
-    rowsForamtter (row) {
+    rowsForamtter(row) {
       row.forEach(i => {
         if (i.foodSnapshotList && i.foodSnapshotList.length > 0) {
           let sum = 0
@@ -169,7 +174,7 @@ export default {
         }
       })
     },
-    handlTime (date) {
+    handlTime(date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -178,14 +183,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.recordId] : []
       this.$confirm('删除后，该数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-02 16:21:01
+ * @LastEditTime: 2019-12-08 13:43:59
  -->
 <template>
   <div class="account-setting">
@@ -48,6 +48,7 @@
       api="/user/pageSearch"
       method="post"
     >
+      <template slot-scope="{row}" slot="accountType">{{row.accountType == 1 ? '内部服务人员':'外部人员'}}</template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           @click="$router.push({name:'editAccount',query:{uid:row.userId}})"
@@ -74,7 +75,7 @@ export default {
         { label: '角色', prop: 'account', minWidth: 200 },
         {
           label: '人员类型',
-          prop: 'accountType',
+          slot: 'accountType',
           minWidth: 120
         },
         {

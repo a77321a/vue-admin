@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-07 21:52:02
+ * @LastEditTime: 2019-12-08 15:12:43
  -->
 <template>
   <div id="edit-event">
@@ -211,9 +211,8 @@ export default {
             this.templateObj.pensionServiceProductId
         )
         .then(res => {
-          console.log(res.payload)
           this.formInfo = res.payload
-          this.priceList = JSON.parse(this.formInfo.pensionServiceProductPrice)
+          this.priceList = this.formInfo.pensionServiceProductPrice
 
           this.$set(this.formInfo, 'orgServiceTypeId', '')
         })
@@ -255,7 +254,7 @@ export default {
               'pensionPlineationPrice',
               res.payload.orgPlineationPrice
             )
-            this.priceList = JSON.parse(this.formInfo.orgServiceProductPrice)
+            this.priceList = this.formInfo.orgServiceProductPrice
             this.$set(this.formInfo, 'pensionPrice', res.payload.orgPrice)
             this.formInfo.pensionServiceProductId =
               res.payload.pensionServiceProductDetail.pensionServiceProductId

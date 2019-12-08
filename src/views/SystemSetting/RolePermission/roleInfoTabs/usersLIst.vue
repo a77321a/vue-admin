@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 21:47:11
+ * @LastEditTime: 2019-12-08 21:23:04
  -->
 <template>
   <div class="account-setting">
@@ -32,7 +32,11 @@
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button @click="dialogFormVisible = true" type="text" size="small">重置密码</el-button>
+        <el-button
+          @click="dialogFormVisible = true;formInfo.userId = row.userId"
+          type="text"
+          size="small"
+        >重置密码</el-button>
       </template>
     </Table>
     <el-dialog destroy-on-close title="修改密码" :visible.sync="dialogFormVisible">
@@ -106,14 +110,15 @@ export default {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         this.$http
-          .post('/user/changePwd', {
-            oldPassword: this.formInfo.oldPassword,
-            newPassword: this.formInfo.newPassword
+          .post('/user/adminResetPwd', {
+            newPassword: this.formInfo.newPassword,
+            userId: this.formInfo.userId
           })
           .then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
               this.dialogFormVisible = false
+              this.formInfo = {}
             }
           })
       })

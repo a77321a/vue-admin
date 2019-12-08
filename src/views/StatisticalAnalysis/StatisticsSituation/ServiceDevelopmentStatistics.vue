@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:31:31
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:59:51
+ * @LastEditTime: 2019-12-08 19:57:41
  -->
 <template>
   <div id="ServiceDevelopmentStatistics">
@@ -386,11 +386,13 @@ export default {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
-          if (this.orgList.length > 0) {
-            if (this.orgList[0].children.length > 0) {
-              this.searchData.orgId = this.orgList[0].children[0].orgId
+          this.orgList.forEach(i => {
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                delete j.children
+              })
             }
-          }
+          })
         }
       })
     }

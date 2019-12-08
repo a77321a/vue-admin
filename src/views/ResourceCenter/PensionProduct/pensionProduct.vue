@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 11:17:03
+ * @LastEditTime: 2019-12-08 15:14:56
  -->
 <template>
   <div class="event-room">
@@ -81,7 +81,7 @@ export default {
   components: {
     ServiceTypeFilter
   },
-  data () {
+  data() {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -110,17 +110,17 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.pensionServiceTypeId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
-      let id = row ? [row.activityRoomId] : this.selectActivity
+    handleDelete(row) {
+      let id = row ? [row.pensionServiceProductId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -128,9 +128,11 @@ export default {
       })
         .then(() => {
           this.$http
-            .post('/activity/room/delete', { activityRoomIdList: id })
+            .post('/pension/service/product/delete', {
+              pensionServiceProductIds: id
+            })
             .then(res => {
-              if (res.code === 200) {
+              if (res.code === SUCCESS) {
                 this.$message.success('操作成功')
                 this.searchRefresh = !this.searchRefresh
               }
