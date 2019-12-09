@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 12:08:30
+ * @LastEditTime: 2019-12-09 15:38:08
  -->
 <template>
   <div class="service-user">
@@ -98,7 +98,7 @@ export default {
         { label: '性别', slot: 'sex', minWidth: 100 },
         { label: '手机号', prop: 'telephoneNum', minWidth: 100 },
         { label: '所属机构', prop: 'orgName', minWidth: 100 },
-        { label: '创建人', prop: 'createUser', minWidth: 100 },
+        { label: '创建人', prop: 'createUserName', minWidth: 100 },
         { label: '创建时间', prop: 'createTime', minWidth: 140 },
         {
           label: '操作',

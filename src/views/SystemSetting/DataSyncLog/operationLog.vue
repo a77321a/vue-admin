@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-01 18:54:07
+ * @LastEditTime: 2019-12-09 15:34:58
  -->
 <template>
   <div class="event-center">
@@ -11,22 +11,22 @@
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="操作人">
         <el-select style="width:200px" clearable v-model="searchData.operUserId" placeholder="请选择">
-          <!-- <el-option
-            v-for="(item, index) in $store.state.config.activityStatus"
+          <el-option
+            v-for="(item, index) in userList"
             :key="index"
-            :label="item.dictionaryLabel"
-            :value="item.dictionaryValue"
-          ></el-option>-->
+            :label="item.nickName"
+            :value="item.userId"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="操作模块">
         <el-select style="width:200px" clearable v-model="searchData.operModule" placeholder="请选择">
-          <!-- <el-option
-            v-for="(item, index) in $store.state.config.activityStatus"
+          <el-option
+            v-for="(item, index) in operaModule"
             :key="index"
-            :label="item.dictionaryLabel"
-            :value="item.dictionaryValue"
-          ></el-option>-->
+            :label="item.value"
+            :value="item.key"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="操作时间">
@@ -40,9 +40,6 @@
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd HH:mm:ss"
         ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="活动名称">
-        <el-input style="width:200px" placeholder="请输入活动名称关键字" v-model="searchData.activityName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -64,7 +61,9 @@
       method="post"
     >
       <template slot-scope="{row}" slot="operUserName">{{row.operUserName}}</template>
-      <template slot-scope="{row}" slot="operModule">{{row.operModule}}</template>
+      <template slot-scope="{row}" slot="operDesc">{{row.operDesc}}</template>
+
+      <template slot-scope="{row}" slot="operModule">{{transLabel(operaModule,row.operModule)}}</template>
     </Table>
   </div>
 </template>
@@ -95,16 +94,41 @@ export default {
         }
       ],
       userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
-      selectActivity: []
+      operaModule: []
     }
   },
-  created () {},
+  created () {
+    this.getUserList()
+    this.getOperaModule()
+  },
   methods: {
+    transLabel (arr, key) {
+      for (let i in arr) {
+        if (arr[i].key === key) {
+          return arr[i].value
+        }
+      }
+    },
+    getUserList () {
+      this.$http.post('/user/pageSearch', { pageSize: MAXSIZE }).then(res => {
+        if (res.code === SUCCESS) {
+          this.userList = res.payload.records
+        }
+      })
+    },
+    getOperaModule () {
+      this.$http.get('/opertionLog/logModules').then(res => {
+        if (res.code === SUCCESS) {
+          let module = res.payload.logModules
+          let keys = Object.keys(module)
+          let values = Object.values(module)
+          this.operaModule = []
+          for (let i = 0; i < keys.length; i++) {
+            this.operaModule.push({ key: keys[i], value: values[i] })
+          }
+        }
+      })
+    },
     handlTime (date) {
       if (date) {
         this.searchData.startTime = date[0]

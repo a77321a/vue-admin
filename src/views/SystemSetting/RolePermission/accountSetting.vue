@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 13:43:59
+ * @LastEditTime: 2019-12-09 15:20:45
  -->
 <template>
   <div class="account-setting">
@@ -66,13 +66,13 @@
 <script>
 export default {
   name: 'accountSetting',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
         { label: '昵称', prop: 'nickName', minWidth: 200 },
-        { label: '角色', prop: 'account', minWidth: 200 },
+        // { label: '角色', prop: 'account', minWidth: 200 },
         {
           label: '人员类型',
           slot: 'accountType',
@@ -104,21 +104,25 @@ export default {
       selectAccount: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
-        row.superAdmin = row.superAdmin ? '超级管理员' : '--'
+        row.superAdmin = row.superAdmin
+          ? '超级管理员'
+          : row.scopeDepth
+          ? '社区管理员'
+          : '机构管理员'
       })
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.userId)
       })
       this.selectAccount = arr
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '温馨提示', {
@@ -138,7 +142,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.userId] : this.selectAccount
       let content = '删除后，该手机号将无法登录后台，是否确定？'
       this.$confirm(content, '提示', {

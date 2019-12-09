@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 15:14:56
+ * @LastEditTime: 2019-12-09 15:36:32
  -->
 <template>
   <div class="event-room">
@@ -81,7 +81,7 @@ export default {
   components: {
     ServiceTypeFilter
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -91,7 +91,7 @@ export default {
         { label: '服务类型', prop: 'pensionServiceTypeName', minWidth: 100 },
         {
           label: '创建人',
-          prop: 'createUser',
+          prop: 'createUserName',
           minWidth: 100
         },
         {
@@ -110,16 +110,16 @@ export default {
       selectActivity: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.pensionServiceTypeId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.pensionServiceProductId] : this.selectActivity
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

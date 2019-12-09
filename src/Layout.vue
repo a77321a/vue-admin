@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-15 22:10:09
+ * @LastEditTime: 2019-12-09 15:18:53
  -->
 <template>
   <div class="layout">
@@ -43,7 +43,10 @@ export default {
   // }
   computed: {
     showSideNav () {
-      return this.$store.state.navList.length !== 0
+      console.log(this.$route.name)
+      return (
+        this.$store.state.navList.length !== 0 && this.$route.name !== 'Home'
+      )
     }
   }
 }

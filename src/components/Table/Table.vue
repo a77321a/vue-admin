@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:20:33
+ * @LastEditTime: 2019-12-09 15:33:19
  -->
 <template>
   <div>
@@ -81,6 +81,7 @@
         @size-change="handleSizeChange"
         :total="total"
         :page-size="pageSize"
+        :current-page="page"
         background
         layout="total,prev, pager, next,sizes,jumper"
         :page-sizes="[10, 20, 30, 40, 50]"
