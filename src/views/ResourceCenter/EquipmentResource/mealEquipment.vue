@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 11:23:23
+ * @LastEditTime: 2019-12-09 17:13:55
  -->
 <template>
   <div class="event-center">
@@ -122,7 +122,8 @@ export default {
           minWidth: 100
         }
       ],
-      selectDevice: []
+      selectDevice: [],
+      orgTree: []
     }
   },
   created () {
@@ -148,6 +149,7 @@ export default {
               })
             }
           })
+          console.log(this.orgTree)
         }
       })
     },

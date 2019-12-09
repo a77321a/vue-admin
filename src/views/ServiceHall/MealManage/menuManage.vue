@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 11:01:43
+ * @LastEditTime: 2019-12-09 17:44:21
  -->
 <template>
   <div class="meal-center">
@@ -71,7 +71,7 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope,row.one)">+ 新增菜品</el-button>
       </template>
       <template slot="two" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.two" :key="index">
@@ -79,7 +79,7 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope,row.two)">+ 新增菜品</el-button>
       </template>
       <template slot="three" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.three" :key="index">
@@ -87,7 +87,7 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope,row.three)">+ 新增菜品</el-button>
       </template>
       <template slot="four" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.four" :key="index">
@@ -95,7 +95,7 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope,row.four)">+ 新增菜品</el-button>
       </template>
       <template slot="five" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.five" :key="index">
@@ -103,7 +103,7 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope,row.five)">+ 新增菜品</el-button>
       </template>
       <template slot="six" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.six" :key="index">
@@ -111,7 +111,7 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope,row.six)">+ 新增菜品</el-button>
       </template>
       <template slot="seven" slot-scope="{ row, scope }">
         <div class="food-tag" v-for="(item, index) in row.seven" :key="index">
@@ -119,7 +119,7 @@
             <span class="food-name">{{ item.foodName }}</span>
           </el-tag>
         </div>
-        <el-button size="small" @click="handleAddFood(scope)">+ 新增菜品</el-button>
+        <el-button size="small" @click="handleAddFood(scope,row.seven)">+ 新增菜品</el-button>
       </template>
     </Table>
     <el-dialog title="添加菜品" :visible.sync="dialogFormVisible">
@@ -283,7 +283,8 @@ export default {
       tempType: '',
       rowNum: 0,
       selectFoodList: [],
-      addType: ''
+      addType: '',
+      tempFoodList: []
     }
   },
   created() {
@@ -366,7 +367,8 @@ export default {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let arr = []
-        this.formInfo.breakfast.forEach(i => {
+        let food = this.formInfo.breakfast.concat(this.tempFoodList)
+        food.forEach(i => {
           arr.push(i.foodId)
         })
         this.$http
@@ -441,7 +443,8 @@ export default {
         })
         .catch(() => {})
     },
-    handleAddFood(scope) {
+    handleAddFood(scope, foodList) {
+      this.tempFoodList = foodList
       this.formInfo.dateTime = scope.column.className
       this.addType = scope.row.type
       this.dialogFormVisible = true
@@ -466,7 +469,7 @@ export default {
 
       let fast = {}
       let lunch = {}
-      let dinner = {}
+      let supper = {}
 
       for (let i in rows) {
         let menuDate = new Date(rows[i].dateTime)
@@ -491,13 +494,13 @@ export default {
         } else {
           lunch[mmap[i]] = []
         }
-        if (rows[i].dinner && rows[i].dinner.length > 0) {
-          rows[i].dinner.forEach(j => {
+        if (rows[i].supper && rows[i].supper.length > 0) {
+          rows[i].supper.forEach(j => {
             j.menuId = rows[i].menuId
           })
-          dinner[mmap[i]] = rows[i].dinner
+          supper[mmap[i]] = rows[i].supper
         } else {
-          dinner[mmap[i]] = []
+          supper[mmap[i]] = []
         }
       }
       let res = [
@@ -511,7 +514,7 @@ export default {
         },
         {
           type: '晚餐',
-          ...dinner
+          ...supper
         }
       ]
       return res
