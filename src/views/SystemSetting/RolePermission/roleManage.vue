@@ -60,7 +60,7 @@
 <script>
 export default {
   name: 'userManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -88,22 +88,22 @@ export default {
       selectRole: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    clickInfo (row) {
+    clickInfo(row) {
       console.log(row)
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.roleId)
       })
       this.selectRole = arr
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
-      this.$confirm(content, '温馨提示', {
+      this.$confirm(content, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -120,7 +120,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? row.roleId : this.selectRole.join(',')
       let content = '删除后，该角色将无法恢复，是否确定？'
       this.$confirm(content, '提示', {
@@ -138,7 +138,7 @@ export default {
         })
         .catch(() => {})
     },
-    purchasedCourse (row) {
+    purchasedCourse(row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)

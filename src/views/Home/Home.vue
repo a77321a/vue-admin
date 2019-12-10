@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:56:15
+ * @LastEditTime: 2019-12-10 19:58:38
  -->
 <template>
   <div class="Home">
@@ -151,9 +151,9 @@
       </el-col>
     </el-row>
     <!-- 第二排统计 -->
-    <el-row style="margin-top:10px" type="flex" justify="space-around">
-      <el-col :span="16">
-        <el-row type="flex" style="margin-bottom:10px;" justify="space-around">
+    <el-row style="margin-top:10px" type="flex" justify="space-between">
+      <el-col :span="14">
+        <el-row type="flex" style="margin-bottom:10px;" justify="space-between">
           <el-col :span="7">
             <el-card>
               <el-row type="flex" class="row-bg" justify="center">
@@ -200,7 +200,7 @@
             </el-card>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="space-around">
+        <el-row type="flex" justify="space-between">
           <el-col :span="7">
             <el-card>
               <el-row type="flex" class="row-bg" justify="center">
@@ -248,7 +248,7 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="9">
         <el-card>
           <div slot="header">
             <span>本周活动</span>
@@ -258,20 +258,40 @@
               type="text"
             >更多</el-button>
           </div>
-          <el-carousel height="60px" direction="vertical" :interval="2000" :autoplay="true">
-            <el-carousel-item v-for="(item,index) in eventList" :key="index">
+          <el-carousel height="105px" direction="vertical" :interval="2000" :autoplay="true">
+            <el-carousel-item style="padding:10px 0" v-for="(item,index) in eventList" :key="index">
               <div class="flex-t-l">
                 <img
                   class="course-avatar"
+                  style="height:60px"
                   :src="$store.state.config.systemConfig[0].dictionaryValue+item.activityIndexPic"
                   alt
                 />
                 <div class="flex-column-t">
                   <span class="f-title">{{item.activityName}}</span>
+                  <p class="sm-title">活动时间：{{item.startTime}}-{{item.endTime}}</p>
                 </div>
               </div>
             </el-carousel-item>
           </el-carousel>
+        </el-card>
+      </el-col>
+    </el-row>
+    <!-- 视频 -->
+    <el-row
+      :gutter="20"
+      style="margin-top:10px;min-height:200px"
+      type="flex"
+      justify="space-between"
+    >
+      <el-col :span="12">
+        <el-card style="min-height:300px">
+          <div class="title">机构视频1</div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card style="min-height:300px">
+          <div class="title">机构视频2</div>
         </el-card>
       </el-col>
     </el-row>
@@ -361,5 +381,8 @@ export default {
   div {
     font-size: 12px;
   }
+}
+.sm-title {
+  font-size: 14px;
 }
 </style>

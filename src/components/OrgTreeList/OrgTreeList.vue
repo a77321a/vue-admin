@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-16 18:41:35
  * @LastEditors:
- * @LastEditTime: 2019-11-28 15:09:15
+ * @LastEditTime: 2019-12-10 20:15:28
  -->
 <template>
   <el-col
@@ -20,17 +20,14 @@
           v-model="orgName"
           class="input-with-select"
         >
-          <el-button
-            @click="getOrgList"
-            slot="append"
-            icon="el-icon-search"
-          ></el-button>
+          <el-button @click="getOrgList" slot="append" icon="el-icon-search"></el-button>
         </el-input>
         <div class="checked">
           {{ checkedOrg.orgName || "所有机构" }}
           <i
             @click="filterOrg(null, true)"
             style="float:right"
+            v-if="checkedOrg.orgId"
             class="el-icon-error closeFilter"
           ></i>
         </div>
@@ -48,19 +45,13 @@
                 @click="filterOrg(son)"
                 v-for="(son, index) in item.children"
                 :key="index"
-              >
-                {{ son.orgName }}
-              </div>
+              >{{ son.orgName }}</div>
             </el-collapse-item>
           </el-collapse>
         </div>
       </div>
     </transition>
-    <span
-      :class="!toggleShow ? 'center' : ''"
-      @click="changeToggleShow"
-      class="toggle-span"
-    >
+    <span :class="!toggleShow ? 'center' : ''" @click="changeToggleShow" class="toggle-span">
       <i :class="toggleShow ? 'el-icon-arrow-left' : 'el-icon-arrow-right'"></i>
     </span>
   </el-col>
@@ -68,7 +59,7 @@
 <script>
 export default {
   name: 'OrgTreeList',
-  data () {
+  data() {
     return {
       activeNames: '',
       toggleShow: true,
@@ -80,11 +71,11 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.getOrgList()
   },
   methods: {
-    filterOrg (son, reset) {
+    filterOrg(son, reset) {
       if (reset) {
         this.checkedOrg = {
           orgId: '',
@@ -95,7 +86,7 @@ export default {
       }
       this.$emit('filterOrg', this.checkedOrg.orgId)
     },
-    getOrgList () {
+    getOrgList() {
       this.$http
         .post('/org/tree', {
           orgName: this.orgName
@@ -113,7 +104,7 @@ export default {
           }
         })
     },
-    changeToggleShow () {
+    changeToggleShow() {
       this.toggleShow = !this.toggleShow
       this.$emit('toggleChange', this.toggleShow ? 19 : 23)
     }
@@ -122,7 +113,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/common/css/variable.scss";
+@import '~@/common/css/variable.scss';
 .select {
   color: $theme-color;
 }
@@ -186,7 +177,7 @@ export default {
       display: block;
       width: 0;
       height: 0;
-      content: " ";
+      content: ' ';
       border-color: transparent transparent transparent #f9f9f9;
       border-style: solid;
       border-width: 18px 0 18px 8px;

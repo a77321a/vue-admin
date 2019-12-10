@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-11-24 20:51:13
+ * @LastEditTime: 2019-12-10 20:38:56
  -->
 <template>
   <div id="space-resource">
@@ -16,12 +16,12 @@
         <el-button @click="searchData = {};getTree()" size="small">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button
+    <!-- <el-button
       @click="dialogVisible = true"
       style="margin-bottom:15px"
       size="small"
       type="primary"
-    >新增城市</el-button>
+    >新增城市</el-button>-->
     <div class="tree-title">
       <span class="left">名称</span>
       <span class="right">操作</span>

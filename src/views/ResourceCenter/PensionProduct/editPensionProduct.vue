@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-08 15:12:16
+ * @LastEditTime: 2019-12-10 20:24:12
  -->
 <template>
   <div id="edit-event">
@@ -17,10 +17,21 @@
       size="medium"
     >
       <el-form-item label="产品名称" prop="pensionServiceProductName">
-        <el-input v-model="formInfo.pensionServiceProductName"></el-input>
+        <el-input
+          :maxlength="28"
+          placeholder="请输入产品名称，最多不超过28个字"
+          show-word-limit
+          v-model="formInfo.pensionServiceProductName"
+        ></el-input>
       </el-form-item>
       <el-form-item label="产品简介" prop="description">
-        <el-input type="textarea" v-model="formInfo.description"></el-input>
+        <el-input
+          :maxlength="68"
+          placeholder="请输入产品简介，最多不超过68个字"
+          show-word-limit
+          type="textarea"
+          v-model="formInfo.description"
+        ></el-input>
       </el-form-item>
       <el-form-item label="产品封面" prop="indexPic">
         <div style="display:flex;align-items:center;">
@@ -38,7 +49,7 @@
           </el-upload>
         </div>
       </el-form-item>
-      <el-form-item label="产品详情" prop="detail">
+      <el-form-item label="产品详情">
         <UEditor v-model="formInfo.detail"></UEditor>
       </el-form-item>
       <div class="title">价格/类型</div>

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-24 10:35:48
+ * @LastEditTime: 2019-12-10 20:43:03
  -->
 <template>
   <div id="select-org">
@@ -86,6 +86,7 @@ export default {
   },
   created () {
     console.log(1)
+    this.getTree()
   },
   methods: {
     getTree () {

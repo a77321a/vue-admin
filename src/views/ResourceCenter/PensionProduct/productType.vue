@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-23 19:56:49
+ * @LastEditTime: 2019-12-10 20:50:00
  -->
 <template>
   <div class="account-setting">
@@ -39,18 +39,24 @@
     >
       <template slot-scope="{row}" slot="handleColumn">
         <el-button @click="formInfo = row;dialogFormVisible = true" type="text" size="small">编辑</el-button>
-        
+
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left"></template>
     </Table>
     <el-dialog
-      :title="formInfo.pensionServiceTypeId ? '编辑目录' :'新增目录'"
+      :title="formInfo.pensionServiceTypeId ? '编辑类型' :'新增类型'"
       :visible.sync="dialogFormVisible"
     >
       <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
         <el-form-item label="类型名称" prop="pensionServiceTypeName">
-          <el-input v-model="formInfo.pensionServiceTypeName" autocomplete="off"></el-input>
+          <el-input
+            placeholder="类型名称最多可输入20个字"
+            :maxlength="20"
+            show-word-limit
+            v-model="formInfo.pensionServiceTypeName"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -68,14 +74,14 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '类型名称', prop: 'pensionServiceTypeName', minWidth: 200 },
-        { label: '服务产品数量', prop: 'productNum', minWidth: 200 },
+        { label: '类型名称', prop: 'pensionServiceTypeName', minWidth: 400 },
+        { label: '服务产品数量', prop: 'productNum', minWidth: 100 },
 
         {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 100
+          minWidth: 60
         }
       ],
       rules: {

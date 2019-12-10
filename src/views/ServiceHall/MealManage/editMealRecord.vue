@@ -3,13 +3,13 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-08 11:01:04
+ * @LastEditTime: 2019-12-10 20:53:11
  -->
 <template>
   <div id="edit-event">
     <div class="title">基本信息</div>
     <el-form
-      style="width:700px"
+      style="width:900px"
       ref="formInfo"
       :rules="rules"
       :model="formInfo"
@@ -87,7 +87,7 @@
             }}
           </template>
           <template slot="action" slot-scope="{ row, index }">
-            <el-button @click="handleRemove(index)" type="text">删除</el-button>
+            <el-button size="small" @click="handleRemove(index)" type="text">删除</el-button>
           </template>
         </Table>
         <span v-if="formInfo.foodSnapshotList.length">共计消费：￥{{ this.priceSum.toFixed(2) }}</span>
@@ -143,7 +143,7 @@ export default {
     selectServiceObject,
     selectFood
   },
-  data() {
+  data () {
     const validatorTime = (rule, value, callback) => {
       if (this.formInfo.dinnerTime !== '' && this.formInfo.dinnerType === '') {
         callback(new Error('请选择助餐时段'))
@@ -155,10 +155,9 @@ export default {
     }
     return {
       tableColumns: [
-        { label: '菜品名称', slot: 'foodName', minWidth: 200 },
-
+        { label: '菜品名称', slot: 'foodName', minWidth: 300 },
         { label: '菜品类型', slot: 'foodType', minWidth: 150 },
-        { label: '操作', slot: 'action', minWidth: 80 }
+        { label: '操作', slot: 'action', minWidth: 60 }
       ],
       formInfo: {
         checkedObject: {},
@@ -189,14 +188,14 @@ export default {
       selectFoodList: []
     }
   },
-  created() {
+  created () {
     if (this.$route.query.mid) {
       this.getMealInfo()
     }
     this.getOrgList()
   },
   methods: {
-    getMealInfo() {
+    getMealInfo () {
       this.$http
         .get(
           '/service/customerDinnerRecord/get?recordId=' + this.$route.query.mid
@@ -215,7 +214,7 @@ export default {
           }
         })
     },
-    handleRemove(index) {
+    handleRemove (index) {
       this.formInfo.foodSnapshotList.splice(index, 1)
       this.priceSum = 0
       this.formInfo.foodSnapshotList.forEach(i => {
@@ -223,10 +222,10 @@ export default {
       })
       this.priceSum = this.priceSum / 10
     },
-    selectFood(data) {
+    selectFood (data) {
       this.selectFoodList = data
     },
-    handleSaveSelectFood() {
+    handleSaveSelectFood () {
       if (this.selectFoodList.length === 0) {
         this.$message.error('请至少选择一个菜品')
         return false
@@ -242,7 +241,7 @@ export default {
       this.dialogFood = false
       console.log(this.formInfo)
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -261,10 +260,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.templateObj = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (!this.templateObj.serviceCustomerId) {
         this.$message.error('请选择服务对象')
         return false
@@ -273,7 +272,7 @@ export default {
       this.formInfo.customerId = this.templateObj.serviceCustomerId
       this.dialogServiceObject = false
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -284,7 +283,7 @@ export default {
       return false
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let foodIds = []

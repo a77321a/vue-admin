@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-12-09 15:33:19
+ * @LastEditTime: 2019-12-10 20:05:24
  -->
 <template>
   <div>
@@ -44,7 +44,7 @@
         :class-name="column.className"
         :column-key="columns.columnKey"
         :key="column.index"
-        :header-align="column.headerAlign || 'center'"
+        :header-align="column.headerAlign || 'left'"
         :prop="column.prop"
         :label="column.label"
         :min-width="column.minWidth"
@@ -52,7 +52,7 @@
         :fixed="column.fixed"
         :render-header="column.renderHeader"
         :show-overflow-tooltip="columns.showOverflowTooltip"
-        :align="column.align || 'center'"
+        :align="column.align || 'left'"
         :resizable="resizable"
       >
         <template slot-scope="scope">

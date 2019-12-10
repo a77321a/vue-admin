@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-06 11:11:35
+ * @LastEditTime: 2019-12-10 20:31:12
  -->
 <template>
   <div class="Participants">
@@ -39,32 +39,31 @@
 <script>
 export default {
   name: 'ServicePerson',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: { orgId: this.orgId },
       tableColumns: [
-        { label: '人员姓名', slot: 'orgServiceProviderName', minWidth: 150 },
-        { label: '性别', slot: 'sex', minWidth: 50 },
-
+        { label: '人员姓名', slot: 'orgServiceProviderName', minWidth: 100 },
+        { label: '服务产品', slot: 'orgServiceProductList', minWidth: 300 },
+        { label: '性别', slot: 'sex', minWidth: 100 },
         { label: '联系人电话', prop: 'telephoneNum', minWidth: 100 },
-        { label: '服务产品', slot: 'orgServiceProductList', minWidth: 200 },
         { label: '操作', slot: 'handleColumn', fixed: 'right', minWidth: 60 }
       ]
     }
   },
   props: ['orgId'],
 
-  created () {},
+  created() {},
   methods: {
-    exportExcel () {
+    exportExcel() {
       window.open(
         `${ctx}/activity/provider/export?orgId=${this.searchData.orgId ||
           ''}&orgServiceProviderName=${this.searchData.orgServiceProviderName ||
           ''}&token=${this.$store.state.token}`
       )
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })

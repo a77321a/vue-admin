@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:44:57
+ * @LastEditTime: 2019-12-10 20:32:05
  -->
 <template>
   <div class="dictionare-config">
@@ -74,7 +74,12 @@
     >
       <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
         <el-form-item label="目录名称" prop="dictCatalogName">
-          <el-input v-model="formInfo.dictCatalogName" autocomplete="off"></el-input>
+          <el-input
+            :maxlength="20"
+            show-word-limit
+            v-model="formInfo.dictCatalogName"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
         <el-form-item label="目录标识" prop="dictCatalogKey">
           <el-input
@@ -94,7 +99,7 @@
 <script>
 export default {
   name: 'dictionaryConfig',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -140,9 +145,9 @@ export default {
       dialogFormVisible: false
     }
   },
-  created () {},
+  created() {},
   methods: {
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       let RowIndex = 1
       rows.forEach(row => {
         row.RowIndex = RowIndex
@@ -158,7 +163,7 @@ export default {
         }
       })
     },
-    handleSaveForm () {
+    handleSaveForm() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         if (this.formInfo.dictCatalogId) {
@@ -185,7 +190,7 @@ export default {
         }
       })
     },
-    handleDelete (row, parent) {
+    handleDelete(row, parent) {
       let id = parent ? [row.dictCatalogId] : [row.dictionaryId]
       if (parent && row.dictionaries.length > 0) {
         this.$message.error('当前目录下含有字典，无法删除')
@@ -223,7 +228,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity (row) {
+    handleCloseActivity(row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {

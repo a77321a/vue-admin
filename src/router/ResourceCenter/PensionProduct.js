@@ -29,7 +29,7 @@ export default [
     name: 'productType',
     component: () => import('@/views/ResourceCenter/PensionProduct/productType.vue'),
     meta: {
-      title: '产品目录',
+      title: '产品类型',
       root: true
     }
   }

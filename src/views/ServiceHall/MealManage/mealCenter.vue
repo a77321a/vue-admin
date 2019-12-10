@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 21:29:27
+ * @LastEditTime: 2019-12-10 20:58:27
  -->
 <template>
   <div class="meal-center">
@@ -93,29 +93,37 @@
       </el-col>
     </el-row>
     <el-dialog title="查看助餐明细" :visible.sync="dialogFormVisible">
-      <el-form ref="formInfo" label-width="80px" :model="formInfo">
-        <el-form-item label="助餐人：">
+      <el-form label-suffix="：" ref="formInfo" label-width="100px" :model="formInfo">
+        <el-form-item label="助餐人">
           <div class="flex-t-u">
-            <span class="f-title">{{formInfo.customerName}}</span>
+            <el-avatar
+              class="avatar"
+              size="medium"
+              :src="$store.state.config.systemConfig[0].dictionaryValue + formInfo.avatar"
+            ></el-avatar>
+            <span class="f-title">{{ formInfo.customerName }}</span>
           </div>
+          <!-- <div class="flex-t-u">
+            <span class="f-title">{{formInfo.customerName}}</span>
+          </div>-->
         </el-form-item>
         <el-form-item label="助餐时间">{{formInfo.dinnerTime}}</el-form-item>
         <el-form-item label="助餐详情">
-          <el-timeline>
-            <el-timeline-item v-for="(item, index) in formInfo.foodSnapshotList" :key="index">
-              <div class="flex-t-l">
-                <img
-                  class="course-avatar"
-                  :src="$store.state.config.systemConfig[0].dictionaryValue+item.indexPic"
-                  alt
-                />
-                <div style="line-height:20px;" class="flex-column-t">
-                  <span class="f-title">{{item.foodName}}</span>
-                  <p class="sm-title">￥{{item.price}}</p>
-                </div>
-              </div>
-            </el-timeline-item>
-          </el-timeline>
+          <!-- <el-timeline> -->
+          <!-- <el-timeline-item v-for="(item, index) in formInfo.foodSnapshotList" :key="index"> -->
+          <div v-for="(item, index) in formInfo.foodSnapshotList" :key="index" class="flex-t-l">
+            <img
+              class="course-avatar"
+              :src="$store.state.config.systemConfig[0].dictionaryValue+item.indexPic"
+              alt
+            />
+            <div style="line-height:20px;" class="flex-column-t">
+              <span class="f-title">{{item.foodName}}</span>
+              <p class="sm-title">￥{{item.price}}</p>
+            </div>
+          </div>
+          <!-- </el-timeline-item> -->
+          <!-- </el-timeline> -->
         </el-form-item>
         <el-form-item label="共计消费">{{formInfo.priceSum}}</el-form-item>
       </el-form>
@@ -130,7 +138,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -138,8 +146,8 @@ export default {
       dialogFormVisible: false,
       searchData: {},
       tableColumns: [
-        { label: '助餐人员', slot: 'customerName', minWidth: 200 },
-        { label: '助餐明细', slot: 'foodSnapshotList', minWidth: 100 },
+        { label: '助餐人员', slot: 'customerName', minWidth: 120 },
+        { label: '助餐明细', slot: 'foodSnapshotList', minWidth: 300 },
         { label: '助餐金额', prop: 'priceSum', minWidth: 100 },
         {
           label: '助餐时间',
@@ -157,13 +165,13 @@ export default {
       selectActivity: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    handlePreview(row) {
+    handlePreview (row) {
       this.formInfo = row
       this.dialogFormVisible = true
     },
-    rowsForamtter(row) {
+    rowsForamtter (row) {
       row.forEach(i => {
         if (i.foodSnapshotList && i.foodSnapshotList.length > 0) {
           let sum = 0
@@ -174,7 +182,7 @@ export default {
         }
       })
     },
-    handlTime(date) {
+    handlTime (date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -183,14 +191,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.recordId] : []
       this.$confirm('删除后，该数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-06 14:11:00
+ * @LastEditTime: 2019-12-10 15:45:35
  -->
 <template>
   <div id="edit-agency">
@@ -182,6 +182,9 @@ export default {
         cad: ''
       },
       rules: {
+        cad: [
+          { required: true, message: '请上传机构平面图', trigger: 'change' }
+        ],
         orgName: [
           { required: true, message: '请输入机构名称', trigger: 'blur' }
         ],
@@ -209,7 +212,9 @@ export default {
         orgAddress: [
           { required: true, message: '请输入机构详细地址', trigger: 'blur' }
         ],
-        tel: [{ required: true, validator: validMobile, trigger: 'blur' }],
+        tel: [
+          { required: true, message: '请输入机构联系电话', trigger: 'blur' }
+        ],
         contact: [
           { required: true, message: '请输入机构联系人姓名', trigger: 'blur' }
         ]

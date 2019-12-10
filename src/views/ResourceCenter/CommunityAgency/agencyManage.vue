@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 21:27:27
+ * @LastEditTime: 2019-12-10 20:19:13
  -->
 <template>
   <div class="angecy-manage">
@@ -120,27 +120,27 @@
 <script>
 export default {
   name: 'agencyManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '机构名称', prop: 'orgName', minWidth: 200 },
-        { label: '服务范围', prop: 'serviceScopeName', minWidth: 150 },
+        { label: '机构名称', prop: 'orgName', minWidth: 250 },
+        { label: '服务范围', prop: 'serviceScopeName', minWidth: 300 },
         {
           label: '机构类型',
           slot: 'orgType',
-          minWidth: 100
+          minWidth: 120
         },
         {
           label: '服务类型',
           slot: 'serviceType',
-          minWidth: 150
+          minWidth: 120
         },
         {
           label: '机构状态',
           slot: 'status',
-          minWidth: 150
+          minWidth: 100
         },
         {
           label: '操作',
@@ -154,13 +154,13 @@ export default {
       operationModeList: []
     }
   },
-  created () {
+  created() {
     this.getOrgType()
     this.getServiceType()
     this.getOperationMode()
   },
   methods: {
-    exportExcel () {
+    exportExcel() {
       window.open(
         `${ctx}/org/export?orgName=${this.searchData.orgName ||
           ''}&orgType=${this.searchData.orgType || ''}&serviceType=${this
@@ -168,7 +168,7 @@ export default {
           ''}&token=${this.$store.state.token}`
       )
     },
-    handleAppend (row) {
+    handleAppend(row) {
       this.$router.push({
         name: 'editAgency',
         query: {
@@ -176,21 +176,21 @@ export default {
         }
       })
     },
-    getServiceType () {
+    getServiceType() {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType () {
+    getOrgType() {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    getOperationMode () {
+    getOperationMode() {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
@@ -198,13 +198,13 @@ export default {
       })
     },
 
-    handleStatus (row) {
+    handleStatus(row) {
       console.log(1)
       let content =
         row.status === 1
           ? '注销后，与该机构管理的旧数据不受影响，新增数据时，将无法关联该机构，同时仅与该机构关联的管理员，将无法登录平台，是否确认？'
           : '确认要对该机构重新入网吗？'
-      this.$confirm(content, '温馨提示', {
+      this.$confirm(content, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -227,7 +227,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete (row) {
+    handleDelete(row) {
       if (row.parentOrgId == 0 && row.children.length > 0) {
         this.$message.error('当前机构下含有分部站点，无法删除')
         return

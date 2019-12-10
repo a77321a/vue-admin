@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 11:23:38
+ * @LastEditTime: 2019-12-10 20:43:49
  -->
 <template>
   <div class="event-center">
@@ -132,7 +132,7 @@ export default {
         {
           label: '创建时间',
           prop: 'createTime',
-          minWidth: 150
+          minWidth: 140
         },
         {
           label: '操作',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-12-07 22:22:04
+ * @LastEditTime: 2019-12-10 20:51:42
  -->
 <template>
   <div id="select-service-object">
@@ -73,16 +73,16 @@
 <script>
 export default {
   name: 'selectFood',
-  data () {
+  data() {
     return {
       name: '',
       searchRefresh: true,
       selectData: [],
       searchData: {},
       tableColumns: [
-        { label: '菜品名称', slot: 'foodName', minWidth: 200 },
+        { label: '菜品名称', slot: 'foodName', minWidth: 250 },
 
-        { label: '菜品类型', slot: 'foodType', minWidth: 150 },
+        { label: '菜品类型', slot: 'foodType', minWidth: 100 },
         {
           label: '适用季节',
           slot: 'season',
@@ -92,7 +92,7 @@ export default {
     }
   },
   methods: {
-    commitSelection (data) {
+    commitSelection(data) {
       this.$emit('selectFood', data)
     }
   }

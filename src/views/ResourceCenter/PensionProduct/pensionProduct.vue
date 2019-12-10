@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-09 15:36:32
+ * @LastEditTime: 2019-12-10 20:47:12
  -->
 <template>
   <div class="event-room">
@@ -37,9 +37,11 @@
           >新增产品</el-button>
           <!-- 列表 -->
           <Table
+            @commitSelection="commitSelection"
             :searchRefresh="searchRefresh"
             :searchObj="searchData"
             :columns="tableColumns"
+            :selection="true"
             api="/pension/service/product/pageSearch "
             method="post"
           >
@@ -118,6 +120,13 @@ export default {
     },
     toggleChange (val) {
       this.toggleWidth = val
+    },
+    commitSelection (data) {
+      let arr = []
+      data.forEach(i => {
+        arr.push(i.pensionServiceProductId)
+      })
+      this.selectActivity = arr
     },
     handleDelete (row) {
       let id = row ? [row.pensionServiceProductId] : this.selectActivity

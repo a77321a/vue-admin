@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 15:21:28
  * @LastEditors:
- * @LastEditTime: 2019-12-07 20:24:13
+ * @LastEditTime: 2019-12-10 19:29:35
  -->
 <template>
   <div id="edit-dish">
@@ -30,7 +30,7 @@
           show-word-limit
           :autosize="{ minRows: 2, maxRows: 5}"
           placeholder="请输入菜品介绍，最多不超过68个字"
-          :maxlength="69"
+          :maxlength="68"
           v-model="formInfo.foodDescription"
         ></el-input>
       </el-form-item>

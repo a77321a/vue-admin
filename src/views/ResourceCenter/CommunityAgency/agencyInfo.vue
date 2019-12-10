@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-06 11:36:08
+ * @LastEditTime: 2019-12-10 20:36:38
  -->
 <template>
   <div id="event-info">
@@ -33,7 +33,13 @@
               type="info"
             >{{$func.transLabel($store.state.config.serviceType,orgInfo.serviceType)}}</el-tag>
           </h4>
-          <el-form label-position="left" ref="form" :model="orgInfo" label-width="100px">
+          <el-form
+            label-suffix="："
+            label-position="left"
+            ref="form"
+            :model="orgInfo"
+            label-width="100px"
+          >
             <el-form-item label="服务范围">
               {{ orgInfo.cityRegionName }}
               {{ orgInfo.districtRegionName }}
@@ -42,7 +48,8 @@
             </el-form-item>
             <el-form-item label="机构联系人">
               {{ orgInfo.contact }}
-              <span style="margin:0 20px 0 30px">联系电话</span>
+              <span style="margin:0 20px 0 30px">联系电话：</span>
+              <!-- <el-form-item label="联系电话">{{ orgInfo.tel }}</el-form-item> -->
               {{ orgInfo.tel }}
             </el-form-item>
             <el-form-item label="机构地址">{{ orgInfo.orgAddress }}</el-form-item>
@@ -50,7 +57,7 @@
           </el-form>
         </div>
       </div>
-      <el-button @click="dialogVisible = true" style="margin-left:30px" type="text">查看照片</el-button>
+      <el-button @click="dialogVisible = true" style="margin-left:74px" type="text">查看照片</el-button>
     </el-card>
     <el-tabs value="first" style="margin-top:20px;">
       <el-tab-pane label="服务人员" name="first">
@@ -61,7 +68,13 @@
       </el-tab-pane>
     </el-tabs>
     <el-dialog title="机构照片" :visible.sync="dialogVisible" width="50%">
-      <el-carousel :autoplay="false" trigger="click" height="450px">
+      <el-carousel
+        arrow="always"
+        indicator-position="outside"
+        :autoplay="false"
+        trigger="click"
+        height="450px"
+      >
         <el-carousel-item v-for="item in orgInfo.orgPicList" :key="item">
           <img
             style="width:100%;height:100%;"
@@ -70,9 +83,6 @@
           />
         </el-carousel-item>
       </el-carousel>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>

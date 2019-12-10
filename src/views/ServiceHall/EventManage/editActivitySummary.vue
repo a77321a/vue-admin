@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-08 11:28:23
+ * @LastEditTime: 2019-12-10 15:48:26
  -->
 <template>
   <div id="edit-event">
@@ -221,14 +221,14 @@ export default {
         actualServiceCustomerList: [
           {
             required: true,
-            message: '请选择实际服务人员',
+            message: '请选择实际参加人员',
             trigger: 'change'
           }
         ],
         actualOrgServiceProviderList: [
           {
             required: true,
-            message: '请选择实际参加人员',
+            message: '请选择实际服务人员',
             trigger: 'change'
           }
         ]
