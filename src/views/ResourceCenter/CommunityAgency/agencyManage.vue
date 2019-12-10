@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:19:13
+ * @LastEditTime: 2019-12-10 22:42:21
  -->
 <template>
   <div class="angecy-manage">
@@ -11,9 +11,8 @@
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="机构状态">
         <el-select clearable v-model="searchData.status" placeholder="请选择">
-          <el-option label="全部" value="-1"></el-option>
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+          <el-option label="正常运营" value="1"></el-option>
+          <el-option label="已注销" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="机构类型">
@@ -27,9 +26,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="服务类型">
-        <el-select clearable v-model="searchData.operationMode" placeholder="请选择">
+        <el-select clearable v-model="searchData.serviceType" placeholder="请选择">
           <el-option
-            v-for="(item, index) in operationModeList"
+            v-for="(item, index) in $store.state.config.serviceType"
             :key="index"
             :label="item.dictionaryLabel"
             :value="item.dictionaryValue"
@@ -120,7 +119,7 @@
 <script>
 export default {
   name: 'agencyManage',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -154,13 +153,13 @@ export default {
       operationModeList: []
     }
   },
-  created() {
+  created () {
     this.getOrgType()
     this.getServiceType()
     this.getOperationMode()
   },
   methods: {
-    exportExcel() {
+    exportExcel () {
       window.open(
         `${ctx}/org/export?orgName=${this.searchData.orgName ||
           ''}&orgType=${this.searchData.orgType || ''}&serviceType=${this
@@ -168,7 +167,7 @@ export default {
           ''}&token=${this.$store.state.token}`
       )
     },
-    handleAppend(row) {
+    handleAppend (row) {
       this.$router.push({
         name: 'editAgency',
         query: {
@@ -176,21 +175,21 @@ export default {
         }
       })
     },
-    getServiceType() {
+    getServiceType () {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType() {
+    getOrgType () {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    getOperationMode() {
+    getOperationMode () {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
@@ -198,7 +197,7 @@ export default {
       })
     },
 
-    handleStatus(row) {
+    handleStatus (row) {
       console.log(1)
       let content =
         row.status === 1
@@ -227,7 +226,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete(row) {
+    handleDelete (row) {
       if (row.parentOrgId == 0 && row.children.length > 0) {
         this.$message.error('当前机构下含有分部站点，无法删除')
         return

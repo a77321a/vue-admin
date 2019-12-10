@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-08 12:19:27
+ * @LastEditTime: 2019-12-10 22:30:11
  -->
 <template>
   <div id="service-object-info">
@@ -156,7 +156,13 @@
       </el-tab-pane>
     </el-tabs>
     <el-dialog title="照片" :visible.sync="dialogVisible" width="50%">
-      <el-carousel :autoplay="false" trigger="click" height="450px">
+      <el-carousel
+        arrow="always"
+        indicator-position="outside"
+        :autoplay="false"
+        trigger="click"
+        height="450px"
+      >
         <el-carousel-item v-for="item in serviceObjectInfo.serviceCustomerPicList" :key="item">
           <img
             style="width:100%;height:100%;"
@@ -165,9 +171,6 @@
           />
         </el-carousel-item>
       </el-carousel>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>

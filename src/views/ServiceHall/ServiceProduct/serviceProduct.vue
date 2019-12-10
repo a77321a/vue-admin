@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 20:33:21
+ * @LastEditTime: 2019-12-10 22:33:05
  -->
 <template>
   <div class="event-room">
@@ -88,7 +88,7 @@ export default {
         { label: '服务类型', prop: 'orgServiceTypeName', minWidth: 100 },
         {
           label: '创建人',
-          prop: 'createUser',
+          prop: 'nickName',
           minWidth: 100
         },
         {

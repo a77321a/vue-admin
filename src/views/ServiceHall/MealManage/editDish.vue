@@ -50,7 +50,7 @@
             accept="image/*"
           >
             <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
-            <div slot="tip" class="el-upload__tip">900*900像素或1:1，支持PNG、JPG、GIF格式，小于5M</div>
+            <div slot="tip" class="el-upload__tip">900*900像素或1:1，支持PNG、JPG、GIF、JPEG格式，小于5M</div>
           </el-upload>
         </div>
       </el-form-item>

@@ -61,7 +61,7 @@
               type="primary"
               icon="ios-cloud-upload-outline"
             >选择文件</el-button>
-            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF格式，小于5M，最多可添加9张</div>
+            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF、JPEG格式，小于5M，最多可添加9张</div>
           </el-upload>
         </div>
       </el-form-item>
@@ -157,7 +157,7 @@ export default {
   components: {
     GdMap
   },
-  data () {
+  data() {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -226,7 +226,7 @@ export default {
       spaceTree: []
     }
   },
-  created () {
+  created() {
     this.getOrgType()
     this.getServiceType()
     this.getOperationMode()
@@ -236,10 +236,10 @@ export default {
     }
   },
   methods: {
-    openMap () {
+    openMap() {
       this.mapShow = true
     },
-    getOrgInfo () {
+    getOrgInfo() {
       this.$http.get('/org/get?orgId=' + this.$route.query.oid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
@@ -257,13 +257,13 @@ export default {
         }
       })
     },
-    selectArea (row) {
+    selectArea(row) {
       this.formInfo.latitude = row.lat
       this.formInfo.longitude = row.lng
       this.formInfo.latLong = `${row.lng}，${row.lat}`
       this.mapShow = false
     },
-    getTree () {
+    getTree() {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -275,30 +275,30 @@ export default {
         }
       })
     },
-    getOperationMode () {
+    getOperationMode() {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
         }
       })
     },
-    getServiceType () {
+    getServiceType() {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType () {
+    getOrgType() {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    handleRemove () {},
+    handleRemove() {},
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         console.log(valid)
         if (!valid) return
@@ -332,7 +332,7 @@ export default {
           })
       })
     },
-    uploadImgcad (file) {
+    uploadImgcad(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -342,7 +342,7 @@ export default {
       })
       return false
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -352,7 +352,7 @@ export default {
       })
       return false
     },
-    handleRemove (index) {
+    handleRemove(index) {
       this.formInfo.orgPicList.splice(index, 1)
     }
   }

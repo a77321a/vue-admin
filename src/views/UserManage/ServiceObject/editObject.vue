@@ -73,7 +73,7 @@
               type="primary"
               icon="ios-cloud-upload-outline"
             >选择文件</el-button>
-            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF格式，小于5M，最多可添加9张</div>
+            <div slot="tip" class="el-upload__tip">支持PNG、JPG、GIF、JPEG格式，小于5M，最多可添加9张</div>
           </el-upload>
         </div>
       </el-form-item>
