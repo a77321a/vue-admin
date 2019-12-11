@@ -68,7 +68,7 @@
       <el-form-item label="机构类型" prop="orgType">
         <el-select clearable v-model="formInfo.orgType" style="width:220px" placeholder="请选择">
           <el-option
-            v-for="(item, index) in orgTypeList"
+            v-for="(item, index) in $store.state.config.orgType"
             :key="index"
             :label="item.dictionaryLabel"
             :value="item.dictionaryValue"
@@ -78,7 +78,7 @@
       <el-form-item label="运营模式" prop="operationMode">
         <el-select clearable v-model="formInfo.operationMode" style="width:220px" placeholder="请选择">
           <el-option
-            v-for="(item, index) in operationModeList"
+            v-for="(item, index) in $store.state.config.operationModeList"
             :key="index"
             :label="item.dictionaryLabel"
             :value="item.dictionaryValue"
@@ -88,7 +88,7 @@
       <el-form-item label="服务类型" prop="serviceType">
         <el-select clearable v-model="formInfo.serviceType" style="width:220px" placeholder="请选择">
           <el-option
-            v-for="(item, index) in serviceTypeList"
+            v-for="(item, index) in $store.state.config.serviceType"
             :key="index"
             :label="item.dictionaryLabel"
             :value="item.dictionaryValue"
@@ -228,9 +228,9 @@ export default {
     }
   },
   created() {
-    this.getOrgType()
-    this.getServiceType()
-    this.getOperationMode()
+    // this.getOrgType()
+    // this.getServiceType()
+    // this.getOperationMode()
     this.getTree()
     if (this.$route.query.oid) {
       this.getOrgInfo()

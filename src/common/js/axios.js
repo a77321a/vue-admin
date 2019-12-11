@@ -15,6 +15,13 @@ function startLoading () {
     background: 'rgba(0, 0, 0, 0)'
   })
 }
+
+let name = ''
+router.beforeEach((to, from, next) => {
+  name = to.name
+  next()
+})
+
 function endLoading () {
   loading.close()
 }
@@ -80,7 +87,8 @@ axios.interceptors.response.use(
       tryHideFullScreenLoading()
     };
     if (response.data.code === '00000000') {
-    } else if (response.data.code === '00001111' || response.data.code === '11111111') {
+      // || response.data.code === '11111111'
+    } else if (response.data.code === '00001111') {
       Message.error(response.data.message)
       localStorage.clear()
       sessionStorage.clear()
@@ -114,7 +122,8 @@ function get (url, params = {}, loading = false) {
       params: params,
       loading: loading,
       headers: {
-        'X-Token': localStorage.webToken
+        'X-Token': localStorage.webToken,
+        'X-Resource': name
       }
     })
       .then(response => {
@@ -130,10 +139,12 @@ function get (url, params = {}, loading = false) {
 
 function post (url, data = {}, loading = false) {
   return new Promise((resolve, reject) => {
+    console.log(router)
     axios.post(url, data, {
       loading: loading,
       headers: {
-        'X-Token': localStorage.webToken
+        'X-Token': localStorage.webToken,
+        'X-Resource': name
       }
     })
       .then(response => {
@@ -163,6 +174,7 @@ function postForm (url, formData, loading = true) {
       timeout: 0,
       headers: {
         'X-Token': localStorage.webToken,
+        'X-Resource': name,
         'Content-Type': 'multipart/form-data'
       }
     })

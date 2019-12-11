@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-04 23:16:55
+ * @LastEditTime: 2019-12-11 22:31:54
  -->
 <template>
   <div class="slider-menu">
@@ -18,6 +18,7 @@
         v-for="(item, index) in routerList"
         :key="index"
         :index="item.name"
+        v-if="$store.state.userInfo.superAdmin || $store.state.permNameList.includes(item.name)"
       >
         <template slot="title">
           <i style="margin-right:5px" class="fa" :class="'fa-' + item.icon"></i>
@@ -26,10 +27,10 @@
         <el-menu-item
           @click="handleClick(son)"
           v-for="son in item.children"
+          v-if="$store.state.userInfo.superAdmin || $store.state.permNameList.includes(son.name)"
           :key="son.url"
           :index="son.url"
-          >{{ son.name }}</el-menu-item
-        >
+        >{{ son.name }}</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>

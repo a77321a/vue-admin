@@ -2,7 +2,7 @@
  * @Descripttion: 登陆界面
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-12-11 20:10:40
+ * @LastEditTime: 2019-12-11 22:16:39
  -->
 <template>
   <el-row
@@ -74,8 +74,8 @@ export default {
       maxLength: 6,
       errorCode: '',
       form: {
-        account: 'test',
-        password: '654321'
+        account: '1234567890',
+        password: '123456'
       },
       rules: {
         account: [
@@ -109,18 +109,22 @@ export default {
           console.log(res)
           if (res.code === SUCCESS) {
             this.$store.commit('setToken', res.payload.token)
+            this.$store.commit('setUserInfo', res.payload)
             this.$store.commit('setUserId', res.payload.userId)
-            this.$store.dispatch('get_menu', { router: this.$router })
+            this.$store.commit('setPermList', res.payload.permissionList)
+
+            // this.$store.dispatch('get_menu', { router: this.$router,permissionList:res.payloadpermissionList })
             this.$store.dispatch('getDictionaryManagement', {
-              router: this.$router
+              router: this.$router,
+              permissionList: res.payloadpermissionList
             })
-            this.$http
-              .get('/user/get?userId=' + res.payload.userId)
-              .then(rs => {
-                if (rs.code === SUCCESS) {
-                  this.$store.commit('setUserInfo', rs.payload)
-                }
-              })
+            // this.$http
+            //   .get('/user/get?userId=' + res.payload.userId)
+            //   .then(rs => {
+            //     if (rs.code === SUCCESS) {
+            //       this.$store.commit('setUserInfo', rs.payload)
+            //     }
+            //   })
           } else {
             this.loading = false
           }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 11:41:12
+ * @LastEditTime: 2019-12-11 22:46:45
  -->
 <template>
   <div class="angecy-manage">
@@ -18,7 +18,7 @@
       <el-form-item label="机构类型">
         <el-select clearable v-model="searchData.orgType" placeholder="请选择">
           <el-option
-            v-for="(item, index) in orgTypeList"
+            v-for="(item, index) in $store.state.config.orgType"
             :key="index"
             :label="item.dictionaryLabel"
             :value="item.dictionaryValue"
@@ -119,7 +119,7 @@
 <script>
 export default {
   name: 'agencyManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -153,13 +153,13 @@ export default {
       operationModeList: []
     }
   },
-  created () {
-    this.getOrgType()
-    this.getServiceType()
-    this.getOperationMode()
+  created() {
+    // this.getOrgType()
+    // this.getServiceType()
+    // this.getOperationMode()
   },
   methods: {
-    exportExcel () {
+    exportExcel() {
       window.open(
         `${ctx}/org/export?orgName=${this.searchData.orgName ||
           ''}&orgType=${this.searchData.orgType || ''}&serviceType=${this
@@ -167,7 +167,7 @@ export default {
           ''}&token=${this.$store.state.token}`
       )
     },
-    handleAppend (row) {
+    handleAppend(row) {
       this.$router.push({
         name: 'editAgency',
         query: {
@@ -175,21 +175,21 @@ export default {
         }
       })
     },
-    getServiceType () {
+    getServiceType() {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType () {
+    getOrgType() {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    getOperationMode () {
+    getOperationMode() {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
@@ -197,7 +197,7 @@ export default {
       })
     },
 
-    handleStatus (row) {
+    handleStatus(row) {
       console.log(1)
       let content =
         row.status === 1
@@ -226,7 +226,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete (row) {
+    handleDelete(row) {
       if (row.parentOrgId == 0 && row.children.length > 0) {
         this.$message.error('当前机构下含有分部站点，无法删除')
         return

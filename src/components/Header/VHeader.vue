@@ -99,6 +99,51 @@ export default {
       )
     }
   },
+  created () {
+    console.log(this.routerList, this.activeLink)
+    let serviceHall = []
+    let statisticalAnalysis = []
+    let UserManage = []
+    let systemSetting = []
+    let resourceCenter = []
+    if (this.routerList && this.routerList.length > 0) {
+      this.routerList.forEach(i => {
+        if (i.url === 'serviceHall') {
+          serviceHall = i.children
+        }
+        if (i.url === 'ResourceCenter') {
+          resourceCenter = i.children
+        }
+        if (i.url === 'UserManage') {
+          UserManage = i.children
+        }
+        if (i.url === 'StatisticalAnalysis') {
+          statisticalAnalysis = i.children
+        }
+        if (i.url === 'SystemSetting') {
+          systemSetting = i.children
+        }
+      })
+    }
+    if (this.activeLink.indexOf('/Home') > -1) {
+      this.$store.commit('setNavList', [])
+    }
+    if (this.activeLink.indexOf('/serviceHall/') > -1) {
+      this.$store.commit('setNavList', serviceHall)
+    }
+    if (this.activeLink.indexOf('/ResourceCenter/') > -1) {
+      this.$store.commit('setNavList', resourceCenter)
+    }
+    if (this.activeLink.indexOf('/UserManage/') > -1) {
+      this.$store.commit('setNavList', UserManage)
+    }
+    if (this.activeLink.indexOf('/StatisticalAnalysis/') > -1) {
+      this.$store.commit('setNavList', statisticalAnalysis)
+    }
+    if (this.activeLink.indexOf('/SystemSetting/') > -1) {
+      this.$store.commit('setNavList', systemSetting)
+    }
+  },
   watch: {
     $route () {
       let serviceHall = []

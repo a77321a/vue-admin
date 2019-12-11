@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 14:50:09
+ * @LastEditTime: 2019-12-11 22:33:49
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -13,6 +13,8 @@ import config from '../config/config'
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
+    permList: localStorage.permList ? JSON.parse(localStorage.permList) : [],
+    permNameList: localStorage.permNameList ? JSON.parse(localStorage.permNameList) : [],
     userInfo: localStorage.userInfo ? JSON.parse(localStorage.userInfo) : {},
     userId: localStorage.userId,
     token: localStorage.webToken || '', // token
@@ -80,22 +82,70 @@ const store = new Vuex.Store({
     setDict (state, data) {
       state.config = data
       localStorage.setItem('config', JSON.stringify(data))
+    },
+    setPermList (state, data) {
+      state.permList = data
+      localStorage.setItem('permList', JSON.stringify(data))
+    },
+    setPermName (state, data) {
+      state.permNameList = data
+      localStorage.setItem('permNameList', JSON.stringify(data))
     }
   },
   actions: {
     // 获取用户信息
-    get_menu (context, { router }) {
+    get_menu (context, { router, list }) {
       http.post('/menu/tree').then(res => {
         if (res.code === SUCCESS) {
           let arr = res.payload
           arr.forEach(i => {
             i.active = i.url
           })
-          context.commit('setRouterList', res.payload)
+          let list = context.state.permList
+          let obj = {}
+          list = list.reduce(
+            (cur, next) => {
+              obj[next.permissionId]
+                ? ''
+                : (obj[next.permissionId] = true && cur.push(next))
+              return cur
+            },
+            []
+          )
+          if (context.state.userInfo.superAdmin) {
+            context.commit('setRouterList', arr)
+            router.push({
+              name: 'Home'
+            })
+            return
+          }
+          let tree = []
+          for (let i = 0; i < arr.length; i++) {
+            list.forEach(j => {
+              if (j.permissionDepth == 1) {
+                if (j.permissionUrl === arr[i].url) {
+                  tree.push(arr[i])
+                }
+              }
+            })
+          }
+          let permList = []
+          list.forEach(i => {
+            permList.push(i.permissionName)
+          })
+          for (let i = 0; i < list.length; i++) {
+            if (list[i].permissionDepth == 3) {
+              router.push({ name: list[i].permissionUrl })
+              context.commit('setPermName', permList)
+
+              context.commit('setRouterList', tree)
+              return
+            }
+          }
         }
       })
     },
-    getDictionaryManagement (context, { router }) {
+    getDictionaryManagement (context, { router, list }) {
       // 活动状态枚举值
       const configObj = {}
       http.get('/dictionary/getDictByCatalogKey', {
@@ -104,9 +154,7 @@ const store = new Vuex.Store({
         configObj.activityStatus = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 季节状态枚举值
@@ -116,9 +164,7 @@ const store = new Vuex.Store({
         configObj.seasonStatus = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 图片域名
@@ -128,9 +174,7 @@ const store = new Vuex.Store({
         configObj.systemConfig = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // FOOD_TYPE菜品类型
@@ -140,9 +184,7 @@ const store = new Vuex.Store({
         configObj.foodType = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 职位
@@ -152,9 +194,7 @@ const store = new Vuex.Store({
         configObj.position = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 机构类型
@@ -164,9 +204,7 @@ const store = new Vuex.Store({
         configObj.orgType = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 运营模式
@@ -176,9 +214,7 @@ const store = new Vuex.Store({
         configObj.operationModeList = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 服务类型
@@ -188,9 +224,7 @@ const store = new Vuex.Store({
         configObj.serviceType = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 养老模式
@@ -200,9 +234,7 @@ const store = new Vuex.Store({
         configObj.pensionModeList = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 养老服务
@@ -212,9 +244,7 @@ const store = new Vuex.Store({
         configObj.pensionServiceList = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 政府购买类型
@@ -224,9 +254,7 @@ const store = new Vuex.Store({
         configObj.govBuyTypeList = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 老人类别
@@ -236,9 +264,7 @@ const store = new Vuex.Store({
         configObj.pensionTypeList = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 爱好
@@ -248,9 +274,7 @@ const store = new Vuex.Store({
         configObj.hobbyList = res.payload
         context.commit('setDict', configObj)
         if (Object.keys(configObj).length === 14) {
-          router.push({
-            name: 'Home'
-          })
+          context.dispatch('get_menu', { router, list })
         }
       })
       // 民族
@@ -315,9 +339,7 @@ const store = new Vuex.Store({
       configObj.nationList = nationList
       context.commit('setDict', configObj)
       if (Object.keys(configObj).length === 14) {
-        router.push({
-          name: 'Home'
-        })
+        context.dispatch('get_menu', { router, list })
       }
     }
   }
