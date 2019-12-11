@@ -32,6 +32,11 @@
               size="mini"
               type="info"
             >{{$func.transLabel($store.state.config.serviceType,orgInfo.serviceType)}}</el-tag>
+            <el-tag
+              style="margin-right:5px"
+              size="mini"
+              type="info"
+            >{{$func.transLabel($store.state.config.operationModeList,orgInfo.operationMode)}}</el-tag>
           </h4>
           <el-form
             label-suffix="："

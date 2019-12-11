@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-16 18:41:35
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:15:28
+ * @LastEditTime: 2019-12-10 22:37:44
  -->
 <template>
   <el-col
@@ -39,11 +39,15 @@
               :title="item.orgName"
               :name="index"
             >
+              <template slot="title">
+                <div class="org-title">{{item.orgName}}</div>
+              </template>
               <div
                 :class="son.orgId == checkedOrg.orgId ? 'select' : ''"
                 class="son-list"
                 @click="filterOrg(son)"
                 v-for="(son, index) in item.children"
+                v-if="son.orgId"
                 :key="index"
               >{{ son.orgName }}</div>
             </el-collapse-item>
@@ -59,7 +63,7 @@
 <script>
 export default {
   name: 'OrgTreeList',
-  data() {
+  data () {
     return {
       activeNames: '',
       toggleShow: true,
@@ -71,11 +75,11 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.getOrgList()
   },
   methods: {
-    filterOrg(son, reset) {
+    filterOrg (son, reset) {
       if (reset) {
         this.checkedOrg = {
           orgId: '',
@@ -86,7 +90,7 @@ export default {
       }
       this.$emit('filterOrg', this.checkedOrg.orgId)
     },
-    getOrgList() {
+    getOrgList () {
       this.$http
         .post('/org/tree', {
           orgName: this.orgName
@@ -104,7 +108,7 @@ export default {
           }
         })
     },
-    changeToggleShow() {
+    changeToggleShow () {
       this.toggleShow = !this.toggleShow
       this.$emit('toggleChange', this.toggleShow ? 19 : 23)
     }
@@ -120,6 +124,12 @@ export default {
 .no-padding {
   padding: 0 !important;
   width: 1%;
+}
+.org-title {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .border {
   border: 1px solid #dcdfe6;

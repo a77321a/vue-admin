@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-11 10:54:42
+ * @LastEditTime: 2019-12-11 10:59:44
  -->
 <template>
   <div id="edit-event">
@@ -111,7 +111,7 @@
         </el-select>
         <!-- <el-select clearable v-model="formInfo.serviceProductId" placeholder="请选择"></el-select> -->
       </el-form-item>
-      <el-form-item label="服务人员" prop="serviceProvider">
+      <el-form-item label="服务人员" prop="orgServiceProviderList">
         <el-button
           :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
           @click="dialogServiceUser = true"

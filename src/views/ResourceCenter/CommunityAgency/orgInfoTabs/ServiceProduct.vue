@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:36:06
+ * @LastEditTime: 2019-12-10 22:32:46
  -->
 <template>
   <div class="Participants">
@@ -43,7 +43,7 @@
 <script>
 export default {
   name: 'ServicePerson',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: { orgId: this.orgId },
@@ -52,28 +52,28 @@ export default {
         { label: '服务类型', prop: 'orgServiceTypeName', minWidth: 200 },
         {
           label: '创建人',
-          prop: 'createUser',
+          prop: 'nickName',
           minWidth: 100
         },
         {
           label: '创建时间',
           prop: 'createTime',
-          minWidth: 100
+          minWidth: 120
         },
         {
           label: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 60
+          minWidth: 80
         }
       ]
     }
   },
   props: ['orgId'],
 
-  created() {},
+  created () {},
   methods: {
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.orgServiceProductId] : []
       this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
