@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:02:06
+ * @LastEditTime: 2019-12-11 14:21:42
  -->
 <template>
   <div class="meal-center">
@@ -62,6 +62,8 @@
     <!-- :spanMethod="cellMerge"
     :spanFilter="getSpanArr"-->
     <Table
+      :cellMouseEnter="cellMouseEnter"
+      :cellMouseLeave="cellMouseLeave"
       :menuFor="rowsForamtter"
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
@@ -82,52 +84,64 @@
         </div>
       </template>
       <template slot="two" slot-scope="{ row, scope }">
-        <div class="food-tag" v-for="(item, index) in row.two" :key="index">
-          <el-tag @close="handleDelete(row,item)" closable>
-            <span class="food-name">{{ item.foodName }}</span>
-          </el-tag>
+        <div class="food-wrap">
+          <div class="food-tag" v-for="(item, index) in row.two" :key="index">
+            <el-tag @close="handleDelete(row,item)" closable>
+              <span class="food-name">{{ item.foodName }}</span>
+            </el-tag>
+          </div>
+          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.two)">+ 新增菜品</el-button>
         </div>
-        <el-button class="add-food" size="small" @click="handleAddFood(scope,row.two)">+ 新增菜品</el-button>
       </template>
       <template slot="three" slot-scope="{ row, scope }">
-        <div class="food-tag" v-for="(item, index) in row.three" :key="index">
-          <el-tag @close="handleDelete(row,item)" closable>
-            <span class="food-name">{{ item.foodName }}</span>
-          </el-tag>
+        <div class="food-wrap">
+          <div class="food-tag" v-for="(item, index) in row.three" :key="index">
+            <el-tag @close="handleDelete(row,item)" closable>
+              <span class="food-name">{{ item.foodName }}</span>
+            </el-tag>
+          </div>
+          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.three)">+ 新增菜品</el-button>
         </div>
-        <el-button class="add-food" size="small" @click="handleAddFood(scope,row.three)">+ 新增菜品</el-button>
       </template>
       <template slot="four" slot-scope="{ row, scope }">
-        <div class="food-tag" v-for="(item, index) in row.four" :key="index">
-          <el-tag @close="handleDelete(row,item)" closable>
-            <span class="food-name">{{ item.foodName }}</span>
-          </el-tag>
+        <div class="food-wrap">
+          <div class="food-tag" v-for="(item, index) in row.four" :key="index">
+            <el-tag @close="handleDelete(row,item)" closable>
+              <span class="food-name">{{ item.foodName }}</span>
+            </el-tag>
+          </div>
+          <el-button size="small" class="add-food" @click="handleAddFood(scope,row.four)">+ 新增菜品</el-button>
         </div>
-        <el-button size="small" class="add-food" @click="handleAddFood(scope,row.four)">+ 新增菜品</el-button>
       </template>
       <template slot="five" slot-scope="{ row, scope }">
-        <div class="food-tag" v-for="(item, index) in row.five" :key="index">
-          <el-tag @close="handleDelete(row,item)" closable>
-            <span class="food-name">{{ item.foodName }}</span>
-          </el-tag>
+        <div class="food-wrap">
+          <div class="food-tag" v-for="(item, index) in row.five" :key="index">
+            <el-tag @close="handleDelete(row,item)" closable>
+              <span class="food-name">{{ item.foodName }}</span>
+            </el-tag>
+          </div>
+          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.five)">+ 新增菜品</el-button>
         </div>
-        <el-button class="add-food" size="small" @click="handleAddFood(scope,row.five)">+ 新增菜品</el-button>
       </template>
       <template slot="six" slot-scope="{ row, scope }">
-        <div class="food-tag" v-for="(item, index) in row.six" :key="index">
-          <el-tag @close="handleDelete(row,item)" closable>
-            <span class="food-name">{{ item.foodName }}</span>
-          </el-tag>
+        <div class="food-wrap">
+          <div class="food-tag" v-for="(item, index) in row.six" :key="index">
+            <el-tag @close="handleDelete(row,item)" closable>
+              <span class="food-name">{{ item.foodName }}</span>
+            </el-tag>
+          </div>
+          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.six)">+ 新增菜品</el-button>
         </div>
-        <el-button class="add-food" size="small" @click="handleAddFood(scope,row.six)">+ 新增菜品</el-button>
       </template>
       <template slot="seven" slot-scope="{ row, scope }">
-        <div class="food-tag" v-for="(item, index) in row.seven" :key="index">
-          <el-tag @close="handleDelete(row,item)" closable>
-            <span class="food-name">{{ item.foodName }}</span>
-          </el-tag>
+        <div class="food-wrap">
+          <div class="food-tag" v-for="(item, index) in row.seven" :key="index">
+            <el-tag @close="handleDelete(row,item)" closable>
+              <span class="food-name">{{ item.foodName }}</span>
+            </el-tag>
+          </div>
+          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.seven)">+ 新增菜品</el-button>
         </div>
-        <el-button class="add-food" size="small" @click="handleAddFood(scope,row.seven)">+ 新增菜品</el-button>
       </template>
     </Table>
     <el-dialog title="添加菜品" :visible.sync="dialogFormVisible">
@@ -300,6 +314,21 @@ export default {
     this.getOrg()
   },
   methods: {
+    cellMouseEnter (row, column, cell, event) {
+      event.target.firstElementChild.firstElementChild.lastElementChild.style.display =
+        'block'
+      console.log(
+        event.target.firstElementChild.firstElementChild.lastElementChild
+      )
+    },
+    cellMouseLeave (row, column, cell, event) {
+      // console.log(row, column, cell, event)
+      console.log(
+        event.target.firstElementChild.firstElementChild.lastElementChild
+      )
+      event.target.firstElementChild.firstElementChild.lastElementChild.style.display =
+        'none'
+    },
     handleSaveCopyMenu () {
       if (!this.copyWeek) {
         this.$message.error('请选择时间')
@@ -615,14 +644,12 @@ export default {
   }
 }
 .add-food {
-  // display: none;
+  display: none;
 }
 .food-wrap {
-  line-height: 20px;
-  &:hover {
-    .add-food {
-      display: inline-block;
-    }
-  }
+  min-height: 40px;
+}
+/deep/ tr.is-left {
+  height: auto;
 }
 </style>

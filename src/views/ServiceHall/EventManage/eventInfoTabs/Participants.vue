@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 20:00:38
+ * @LastEditTime: 2019-12-11 20:32:17
  -->
 <template>
   <div class="Participants">
@@ -105,7 +105,7 @@ export default {
       searchData: { activityId: this.activityId },
       tableColumns: [
         { label: '姓名', slot: 'serviceCustomerName', minWidth: 150 },
-        { label: '紧急联系人电话', slot: 'emergencyList', minWidth: 260 },
+        { label: '紧急联系人电话', prop: 'emergencyMobile', minWidth: 260 },
         {
           label: '老人类别',
           slot: 'customerCategoryList',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-11-23 22:31:41
+ * @LastEditTime: 2019-12-11 20:49:00
  -->
 <template>
   <div id="event-room-info">
@@ -20,11 +20,17 @@
             <el-col :span="6">姓名：{{serviceUserInfo.orgServiceProviderName}}</el-col>
             <el-col :span="6">手机号：{{serviceUserInfo.telephoneNum}}</el-col>
             <el-col :span="6">性别：{{serviceUserInfo.sex == 1 ?'男':'女'}}</el-col>
-            <el-col :span="6">服务范围:{{serviceUserInfo.serviceScope}}</el-col>
+            <el-col :span="6">服务范围:{{serviceUserInfo.streetName}}</el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="6">所属机构：{{serviceUserInfo.orgDetail.orgName}}</el-col>
-            <el-col :span="6">服务类型：{{serviceUserInfo.orgServiceTypes.orgServiceTypeName}}</el-col>
+            <el-col :span="6">
+              服务类型：
+              <span
+                v-for="(item, index) in serviceUserInfo.orgServiceTypes"
+                :key="index"
+              >{{item.orgServiceTypeName}}</span>
+            </el-col>
             <el-col :span="12">
               服务产品：
               <el-tag

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-06 14:20:38
+ * @LastEditTime: 2019-12-11 20:52:56
  -->
 <template>
   <div id="edit-event">
@@ -137,7 +137,7 @@
         <el-input placeholder="请输入服务对象详细住址，最多不超过60个字" show-word-limit v-model="formInfo.address"></el-input>
       </el-form-item>
       <div class="title">紧急联系人</div>
-      <el-form-item label="紧急联系人" prop="emergencyList">
+      <el-form-item label="紧急联系人" prop="emergencySelectList">
         <el-button type="primary" @click="dialogServiceObject = true">选择人员</el-button>
         <el-button @click="dialogFormVisible = true">手动添加</el-button>
       </el-form-item>
@@ -316,7 +316,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data () {
+  data() {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -330,6 +330,16 @@ export default {
     const validCard = (rule, value, callback) => {
       if (this.formInfo.idCard == '' && this.formInfo.idCard == '') {
         callback(new Error('请输入证件信息'))
+      } else {
+        callback()
+      }
+    }
+    const validList = (rule, value, callback) => {
+      if (
+        this.formInfo.emergencySelectList.length == 0 &&
+        this.formInfo.emergencyManualList.length == 0
+      ) {
+        callback(new Error('请添加紧急联系人'))
       } else {
         callback()
       }
@@ -407,6 +417,9 @@ export default {
             type: 'array'
           }
         ],
+        emergencySelectList: [
+          { required: true, message: '请添加紧急联系人', validator: validList }
+        ],
         gender: [
           { required: true, message: '请输入服务对象名称', trigger: 'blur' }
         ],
@@ -469,20 +482,20 @@ export default {
       clearList: false
     }
   },
-  created () {
+  created() {
     if (this.$route.query.sid) {
       this.getServiceUserInfo()
     }
     this.getTree()
   },
   methods: {
-    handleSaveForm () {
+    handleSaveForm() {
       this.formInfo.emergencyManualList.push(this.contractUser)
       console.log(this.formInfo.emergencyManualList)
       this.contractUser = {}
       this.dialogFormVisible = false
     },
-    handleClick (tab, event) {
+    handleClick(tab, event) {
       this.clearList = !this.clearList
       this.selectObjectList = []
     },
@@ -491,10 +504,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject () {
+    handleSaveSelectObject() {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
@@ -507,7 +520,7 @@ export default {
       this.selectObjectList = []
       this.dialogServiceObject = false
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -517,10 +530,10 @@ export default {
       })
       return false
     },
-    handleRemove (index) {
+    handleRemove(index) {
       this.formInfo.serviceCustomerPicList.splice(index, 1)
     },
-    uploadImgList (file) {
+    uploadImgList(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -534,7 +547,7 @@ export default {
      * @descripttion: 获取服务对象信息
      * @return: 信息
      */
-    getServiceUserInfo () {
+    getServiceUserInfo() {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {
@@ -556,7 +569,7 @@ export default {
           }
         })
     },
-    getTree () {
+    getTree() {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -569,7 +582,7 @@ export default {
       })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let arr = []

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-07 11:08:50
+ * @LastEditTime: 2019-12-11 20:12:34
  -->
 <template>
   <div id="event-room-info">
@@ -11,7 +11,7 @@
       <el-row style="margin-bottom:20px" :gutter="20">
         <el-col :span="8">活动室：{{eventRoomInfo.activityRoomName}}</el-col>
         <el-col :span="8">活动室编号：{{eventRoomInfo.activityRoomCode}}</el-col>
-        <el-col :span="8">所属机构：{{eventRoomInfo.orgName}}</el-col>4
+        <el-col :span="8">所属机构：{{eventRoomInfo.orgName}}</el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="24">简介：{{eventRoomInfo.activityRoomDesc}}</el-col>

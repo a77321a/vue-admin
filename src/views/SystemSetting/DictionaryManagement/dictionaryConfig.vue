@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:32:05
+ * @LastEditTime: 2019-12-11 14:25:02
  -->
 <template>
   <div class="dictionare-config">
@@ -99,37 +99,37 @@
 <script>
 export default {
   name: 'dictionaryConfig',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
       formInfo: { name: '' },
       rules: {
         dictCatalogName: [
-          { required: true, message: '请输入目录名称', trigger: 'blur' }
+          { required: true, message: '请输入字典名称', trigger: 'blur' }
         ],
         dictCatalogKey: [
-          { required: true, message: '请输入目录标识', trigger: 'blur' }
+          { required: true, message: '请输入字典标识', trigger: 'blur' }
         ]
       },
       tableColumns: [
         {
-          label: '字典目录',
+          label: '字典名称',
           align: 'left',
           prop: 'dictCatalogName',
           minWidth: 100
         },
-        { label: '字典key', prop: 'dictCatalogKey', minWidth: 150 },
+        { label: '字典标识', prop: 'dictCatalogKey', minWidth: 150 },
         {
           label: '字典值',
           prop: 'dictionaryValue',
           minWidth: 100
         },
-        {
-          label: '模块类型',
-          prop: 'dictCatalogKey',
-          minWidth: 150
-        },
+        // {
+        //   label: '模块类型',
+        //   prop: 'dictCatalogKey',
+        //   minWidth: 150
+        // },
         {
           label: '更新时间',
           prop: 'updateTime',
@@ -145,9 +145,9 @@ export default {
       dialogFormVisible: false
     }
   },
-  created() {},
+  created () {},
   methods: {
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       let RowIndex = 1
       rows.forEach(row => {
         row.RowIndex = RowIndex
@@ -163,7 +163,7 @@ export default {
         }
       })
     },
-    handleSaveForm() {
+    handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         if (this.formInfo.dictCatalogId) {
@@ -190,7 +190,7 @@ export default {
         }
       })
     },
-    handleDelete(row, parent) {
+    handleDelete (row, parent) {
       let id = parent ? [row.dictCatalogId] : [row.dictionaryId]
       if (parent && row.dictionaries.length > 0) {
         this.$message.error('当前目录下含有字典，无法删除')
@@ -228,7 +228,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity(row) {
+    handleCloseActivity (row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {

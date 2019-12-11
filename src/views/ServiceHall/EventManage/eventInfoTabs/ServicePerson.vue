@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-06 11:05:10
+ * @LastEditTime: 2019-12-11 20:37:10
  -->
 <template>
   <div class="Participants">
@@ -66,7 +66,11 @@
         </span>
       </template>
       <template slot-scope="{ row }" slot="handleColumn">
-        <el-button type="text" size="small">查看</el-button>
+        <el-button
+          @click="$router.push({name:'serviceUserInfo',query:{uid:row.orgServiceProviderId}})"
+          type="text"
+          size="small"
+        >查看</el-button>
       </template>
     </Table>
   </div>

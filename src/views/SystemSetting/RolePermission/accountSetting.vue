@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-09 15:20:45
+ * @LastEditTime: 2019-12-11 16:53:49
  -->
 <template>
   <div class="account-setting">
@@ -92,7 +92,7 @@ export default {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 130
+          minWidth: 80
         }
       ],
       userList: [],

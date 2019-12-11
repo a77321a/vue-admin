@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-08 20:58:49
+ * @LastEditTime: 2019-12-11 16:51:44
  -->
 <template>
   <div id="edit-role">
@@ -95,8 +95,8 @@
 
       <el-divider></el-divider>
       <el-form-item size="large">
-        <el-button @click="handleSave" type="primary">保 存</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="handleSave" type="primary">立即创建</el-button>
+        <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
     <el-dialog
@@ -128,7 +128,7 @@ export default {
       formInfo: {
         account: '',
         accountType: 1,
-        limit: 2,
+        limit: 1,
         roleIds: []
       },
       roleList: [],
@@ -188,7 +188,6 @@ export default {
       this.formInfo.account = this.templateObj.orgServiceProviderId
       this.formInfo.nickName = this.templateObj.orgServiceProviderName
       this.formInfo.mobile = this.templateObj.telephoneNum
-      console.log(this.formInfo.nickName)
       this.dialogServiceObject = false
     },
     getOrgList() {
@@ -222,9 +221,9 @@ export default {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
           this.formInfo.password = ''
-          this.formInfo.roleIds = this.formInfo.roleIds
-            ? this.formInfo.roleIds
-            : []
+          // this.formInfo.roleIds = this.formInfo.roleIds
+          //   ? this.formInfo.roleIds
+          //   : []
           // this.formInfo.orgIds = this.formInfo.orgIds
           //   ? this.formInfo.orgIds
           //   : []
@@ -260,6 +259,7 @@ export default {
           //       : ''
           //   ])
           // }
+          this.$set(this.formInfo, 'roleIds', [])
           if (
             res.payload.roleInfo.roleList &&
             res.payload.roleInfo.roleList.length > 0
@@ -272,12 +272,6 @@ export default {
             this.formInfo,
             'limit',
             res.payload.superAdmin ? 1 : res.payload.orgIds ? 3 : 2
-          )
-          console.log(this.formInfo.limit)
-          this.$set(
-            this.formInfo,
-            'roleIds',
-            this.formInfo.roleIds ? this.formInfo.roleIds : []
           )
         }
       })

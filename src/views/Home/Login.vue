@@ -2,7 +2,7 @@
  * @Descripttion: 登陆界面
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-12-02 10:07:01
+ * @LastEditTime: 2019-12-11 20:10:40
  -->
 <template>
   <el-row
@@ -14,7 +14,7 @@
   >
     <el-col :xs="{span:22}" style="width: 368px;">
       <el-row class="header">
-        <img src="../../assets/login-logo.png" width="220px" />
+        <img src="../../assets/login-logo.png" style="width:100%" />
         <!-- <div class="description">企业主后台</div> -->
       </el-row>
       <div class="major">管理平台</div>
@@ -50,10 +50,13 @@
         >忘记密码</el-button>
 
         <el-row>
-          <el-button class="login-btn" type="primary" size="large" @click="submitLogin">
-            <span v-if="!loading">登录</span>
-            <span v-else>登录中...</span>
-          </el-button>
+          <el-button
+            :loading="loading"
+            class="login-btn"
+            type="primary"
+            size="large"
+            @click="submitLogin"
+          >{{loading?'登录中...':'登录'}}</el-button>
         </el-row>
       </el-row>
     </el-col>
@@ -96,21 +99,30 @@ export default {
   },
   methods: {
     submitLogin () {
+      this.loading = true
       this.$http
         .post('/admin/login', {
           account: this.form.account,
           password: this.form.password
         })
         .then(res => {
+          console.log(res)
           if (res.code === SUCCESS) {
             this.$store.commit('setToken', res.payload.token)
-            this.$store.commit('setUserInfo', JSON.stringify(res.payload))
+            this.$store.commit('setUserId', res.payload.userId)
             this.$store.dispatch('get_menu', { router: this.$router })
-            this.$store.dispatch('getDictionaryManagement')
-
-            this.$router.push({
-              name: 'Home'
+            this.$store.dispatch('getDictionaryManagement', {
+              router: this.$router
             })
+            this.$http
+              .get('/user/get?userId=' + res.payload.userId)
+              .then(rs => {
+                if (rs.code === SUCCESS) {
+                  this.$store.commit('setUserInfo', rs.payload)
+                }
+              })
+          } else {
+            this.loading = false
           }
         })
     }

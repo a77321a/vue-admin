@@ -42,7 +42,7 @@ export function tryHideFullScreenLoading () {
   needLoadingRequestCount--
   if (needLoadingRequestCount === 0) {
     // 是否一段时间内共用一个loading
-    endLoading()
+    // endLoading()
   }
 }
 // 合并相同请求
@@ -90,7 +90,7 @@ axios.interceptors.response.use(
       })
     } else {
       Message.error(response.data.message)
-      endLoading()
+      // endLoading()
     };
     NProgress.done()
     return response

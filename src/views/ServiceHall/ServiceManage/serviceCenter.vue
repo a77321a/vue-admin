@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 20:32:07
+ * @LastEditTime: 2019-12-11 20:45:15
  -->
 <template>
   <div class="service-center">
@@ -43,7 +43,7 @@
           style="margin-bottom:15px"
           size="small"
           type="primary"
-        >新增产品</el-button>
+        >新增服务</el-button>
 
         <!-- 列表 -->
         <Table
@@ -75,7 +75,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -108,25 +108,25 @@ export default {
       eventRoomList: []
     }
   },
-  created () {
+  created() {
     this.getEventRoomList()
   },
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgIdList = val ? [val] : undefined
       this.searchRefresh = !this.searchRefresh
     },
-    getEventRoomList () {
+    getEventRoomList() {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.serviceRecordId] : []
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',

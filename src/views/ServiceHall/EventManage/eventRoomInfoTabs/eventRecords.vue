@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 11:01:56
+ * @LastEditTime: 2019-12-11 20:39:26
  -->
 <template>
   <div class="user-manage">
@@ -79,6 +79,7 @@
         slot="activityStatus"
         slot-scope="{row}"
       >{{$store.state.config.activityStatus[row.activityStatus].dictionaryLabel}}</template>
+      <template slot="number" slot-scope="{row}">{{row.actualCustomerNum}}/{{row.customerNum}}</template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
@@ -105,7 +106,6 @@
           type="text"
           size="small"
         >总结活动</el-button>
-        <span v-if="row.activityStatus > 1">-</span>
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
@@ -128,7 +128,7 @@ export default {
         { label: '活动时间', prop: 'activityTime', minWidth: 260 },
         {
           label: '参与人员',
-          prop: 'orgName',
+          slot: 'number',
           minWidth: 100
         },
         {
@@ -199,7 +199,7 @@ export default {
         .catch(() => {})
     },
     handleCloseActivity (row) {
-      let id = row ? row.activityId : this.selectActivity.join(',')
+      let id = row ? [row.activityId] : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',

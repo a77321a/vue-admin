@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 18:21:42
+ * @LastEditTime: 2019-12-11 20:21:52
  -->
 <template>
   <div class="serviceObject">
@@ -76,15 +76,15 @@
           type="text"
           size="small"
         >详情</el-button>
-        
+
         <el-button @click="formInfo = row;dialogFormVisible = true" type="text" size="small">健康管理</el-button>
-        
+
         <el-button
           @click="$router.push({name:'editObject',query:{sid:row.serviceCustomerId}})"
           type="text"
           size="small"
         >编辑</el-button>
-        
+
         <el-button type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
@@ -93,6 +93,16 @@
     </Table>
     <el-dialog title="添加健康记录" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="formInfo" label-width="80px" size="small" :model="formInfo">
+        <el-form-item label="服务对象">
+          <div class="flex-t-u">
+            <el-avatar
+              class="avatar"
+              size="medium"
+              :src="$store.state.config.systemConfig[0].dictionaryValue+formInfo.avatar"
+            ></el-avatar>
+            <span class="f-title">{{formInfo.serviceCustomerName}}</span>
+          </div>
+        </el-form-item>
         <el-form-item label="记录时间" prop="recordTime">
           <el-date-picker
             v-model="formInfo.recordTime"

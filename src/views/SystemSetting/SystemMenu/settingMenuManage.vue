@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-03 15:08:14
+ * @LastEditTime: 2019-12-11 16:47:41
  -->
 <template>
   <div id="space-resource">
@@ -28,7 +28,7 @@
       <div class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ data.name }}</span>
         <span style="float:right">
-          <el-button type="text" size="mini">查看</el-button>
+          <el-button @click="handlePreView(data.url)" type="text" size="mini">查看</el-button>
           <el-button
             type="text"
             size="mini"
@@ -48,6 +48,26 @@
         <el-button type="primary" @click="handleSaveForm">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="查看菜单" :visible.sync="dialogVisible">
+      <el-tabs v-if="dialogVisible" value="first">
+        <el-tab-pane label="关联角色" name="first">
+          <Table
+            :searchObj="{url:templateUrl}"
+            :columns="tableColumns"
+            api="/menu/belongToRoles"
+            method="get"
+          />
+        </el-tab-pane>
+        <el-tab-pane label="关联用户" name="second">
+          <Table
+            :searchObj="{url:templateUrl}"
+            :columns="tableColumnsUser"
+            api="/menu/belongToUsers"
+            method="get"
+          />
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -56,11 +76,21 @@ export default {
   data () {
     return {
       dialogFormVisible: false,
+      dialogVisible: false,
       data: [],
       formInfo: {},
+      tableColumns: [
+        { label: '角色名称', prop: 'roleName', minWidth: 200 },
+        { label: '权限', prop: '', minWidth: 150 }
+      ],
+      tableColumnsUser: [
+        { label: '用户名称', prop: 'nickName', minWidth: 200 },
+        { label: '权限', slot: '', minWidth: 150 }
+      ],
       rules: {
         name: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }]
-      }
+      },
+      templateUrl: ''
     }
   },
   created () {
@@ -121,6 +151,10 @@ export default {
     },
     append (node, data) {
       console.log(data, node)
+    },
+    handlePreView (url) {
+      this.templateUrl = url
+      this.dialogVisible = true
     },
     remove (node, data) {
       const parent = node.parent

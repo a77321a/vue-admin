@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 20:25:27
+ * @LastEditTime: 2019-12-11 14:50:09
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -14,6 +14,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     userInfo: localStorage.userInfo ? JSON.parse(localStorage.userInfo) : {},
+    userId: localStorage.userId,
     token: localStorage.webToken || '', // token
     fullPath: '',
     navList: localStorage.navList ? JSON.parse(localStorage.navList) : [],
@@ -40,6 +41,10 @@ const store = new Vuex.Store({
     setUserInfo (state, data) {
       state.userInfo = data
       localStorage.setItem('userInfo', JSON.stringify(data))
+    },
+    setUserId (state, data) {
+      state.userId = data
+      localStorage.setItem('userId', data)
     },
     setToken (state, token) {
       state.token = token
@@ -90,7 +95,7 @@ const store = new Vuex.Store({
         }
       })
     },
-    getDictionaryManagement (context) {
+    getDictionaryManagement (context, { router }) {
       // 活动状态枚举值
       const configObj = {}
       http.get('/dictionary/getDictByCatalogKey', {
@@ -98,6 +103,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.activityStatus = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 季节状态枚举值
       http.get('/dictionary/getDictByCatalogKey', {
@@ -105,6 +115,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.seasonStatus = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 图片域名
       http.get('/dictionary/getDictByCatalogKey', {
@@ -112,6 +127,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.systemConfig = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // FOOD_TYPE菜品类型
       http.get('/dictionary/getDictByCatalogKey', {
@@ -119,6 +139,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.foodType = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 职位
       http.get('/dictionary/getDictByCatalogKey', {
@@ -126,6 +151,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.position = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 机构类型
       http.get('/dictionary/getDictByCatalogKey', {
@@ -133,6 +163,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.orgType = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 运营模式
       http.get('/dictionary/getDictByCatalogKey', {
@@ -140,6 +175,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.operationModeList = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 服务类型
       http.get('/dictionary/getDictByCatalogKey', {
@@ -147,6 +187,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.serviceType = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 养老模式
       http.get('/dictionary/getDictByCatalogKey', {
@@ -154,6 +199,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.pensionModeList = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 养老服务
       http.get('/dictionary/getDictByCatalogKey', {
@@ -161,6 +211,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.pensionServiceList = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 政府购买类型
       http.get('/dictionary/getDictByCatalogKey', {
@@ -168,6 +223,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.govBuyTypeList = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 老人类别
       http.get('/dictionary/getDictByCatalogKey', {
@@ -175,6 +235,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.pensionTypeList = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 爱好
       http.get('/dictionary/getDictByCatalogKey', {
@@ -182,6 +247,11 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.hobbyList = res.payload
         context.commit('setDict', configObj)
+        if (Object.keys(configObj).length === 14) {
+          router.push({
+            name: 'Home'
+          })
+        }
       })
       // 民族
       let nationList = [
@@ -244,6 +314,11 @@ const store = new Vuex.Store({
       ]
       configObj.nationList = nationList
       context.commit('setDict', configObj)
+      if (Object.keys(configObj).length === 14) {
+        router.push({
+          name: 'Home'
+        })
+      }
     }
   }
 })

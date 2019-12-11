@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 11:24:41
+ * @LastEditTime: 2019-12-11 20:16:57
  -->
 <template>
   <div class="event-center">
@@ -87,11 +87,10 @@
           </div>
         </div>
       </template>
-      <template slot="activityStatus" slot-scope="{ row }">
-        {{
-        $store.state.config.activityStatus[row.activityStatus].dictionaryLabel
-        }}
-      </template>
+      <template
+        slot="activityStatus"
+        slot-scope="{ row }"
+      >{{$func.transLabel($store.state.config.activityStatus,row.activityStatus)}}</template>
       <template
         slot="joinUser"
         slot-scope="{ row }"

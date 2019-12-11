@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-11 10:59:44
+ * @LastEditTime: 2019-12-11 20:36:12
  -->
 <template>
   <div id="edit-event">
@@ -128,7 +128,7 @@
             <el-avatar
               :size="22"
               style="vertical-align: middle;margin-right:5px"
-              icon="el-icon-user-solid"
+              :src="$store.state.config.systemConfig[0].dictionaryValue+item.indexPic"
             ></el-avatar>
             <span style="vertical-align: middle;">{{ item.orgServiceProviderName }}</span>
           </el-tag>
@@ -147,7 +147,7 @@
             <el-avatar
               :size="22"
               style="vertical-align: middle;margin-right:5px"
-              icon="el-icon-user-solid"
+              :src="$store.state.config.systemConfig[0].dictionaryValue+item.avatar"
             ></el-avatar>
             <span style="vertical-align: middle;">{{ item.serviceCustomerName }}</span>
           </el-tag>
@@ -211,7 +211,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data () {
+  data() {
     return {
       formInfo: {
         orgId: [],
@@ -265,7 +265,7 @@ export default {
       selectObjectList: []
     }
   },
-  created () {
+  created() {
     // if (this.$route.query.aid) {
     //   this.getActivityInfo()
     // }
@@ -274,11 +274,11 @@ export default {
     this.getProductList()
   },
   methods: {
-    handleTime (date) {
+    handleTime(date) {
       this.formInfo.startTime = date ? date[0] : ''
       this.formInfo.endTime = date ? date[1] : ''
     },
-    arrSplice (arr, index) {
+    arrSplice(arr, index) {
       arr.splice(index, 1)
       console.log(this.formInfo)
     },
@@ -287,16 +287,26 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject () {
+    handleSaveSelectObject() {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
       }
       this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
         this.selectObjectList
+      )
+      let obj = {}
+      this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.reduce(
+        (cur, next) => {
+          obj[next.serviceCustomerId]
+            ? ''
+            : (obj[next.serviceCustomerId] = true && cur.push(next))
+          return cur
+        },
+        []
       )
       this.selectObjectList = []
       this.dialogServiceObject = false
@@ -306,10 +316,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectUser (data) {
+    selectUser(data) {
       this.selectUserList = data
     },
-    handleSaveSelectUser () {
+    handleSaveSelectUser() {
       if (this.selectUserList.length === 0) {
         this.$message.error('请至少选择一个服务人员')
         return false
@@ -317,10 +327,20 @@ export default {
       this.formInfo.orgServiceProviderList = this.formInfo.orgServiceProviderList.concat(
         this.selectUserList
       )
+      let obj = {}
+      this.formInfo.orgServiceProviderList = this.formInfo.orgServiceProviderList.reduce(
+        (cur, next) => {
+          obj[next.orgServiceProviderId]
+            ? ''
+            : (obj[next.orgServiceProviderId] = true && cur.push(next))
+          return cur
+        },
+        []
+      )
       this.selectUserList = []
       this.dialogServiceUser = false
     },
-    getProductList () {
+    getProductList() {
       this.$http
         .post('/org/service/product/pageSearch', {
           pageSize: MAXSIZE,
@@ -330,7 +350,7 @@ export default {
           this.productList = res.payload.records
         })
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (this.$route.query.aid) {
           this.getActivityInfo()
@@ -347,14 +367,14 @@ export default {
         }
       })
     },
-    getEventRoomList () {
+    getEventRoomList() {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    getActivityInfo () {
+    getActivityInfo() {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
@@ -391,7 +411,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let provider = []
@@ -422,7 +442,7 @@ export default {
         }
       })
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {

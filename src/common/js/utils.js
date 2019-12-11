@@ -3,14 +3,14 @@
  * @Author:
  * @Date: 2019-11-19 21:09:55
  * @LastEditors:
- * @LastEditTime: 2019-12-03 11:28:54
+ * @LastEditTime: 2019-12-11 20:18:37
  */
 const func = {
   baseUrl: 'http://118.24.54.72:8061/',
   transLabel: (arr, str) => {
     if (arr.length === 0) return
     for (let i in arr) {
-      if (arr[i].dictionaryValue === str) {
+      if (arr[i].dictionaryValue == str) {
         return arr[i].dictionaryLabel
       }
     }

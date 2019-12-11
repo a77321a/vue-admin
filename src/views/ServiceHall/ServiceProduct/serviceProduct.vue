@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 22:33:05
+ * @LastEditTime: 2019-12-11 20:57:54
  -->
 <template>
   <div class="event-room">
@@ -14,7 +14,20 @@
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="90px" size="small">
             <el-form-item label="服务类型">
-              <el-input placeholder="请输入活动室名称关键字" v-model="searchData.orgServiceTypeId"></el-input>
+              <el-select
+                style="width:200px"
+                clearable
+                multiple
+                v-model="searchData.orgServiceTypeIds"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="(item, index) in orgServiceTypeList"
+                  :key="index"
+                  :label="item.orgServiceTypeName"
+                  :value="item.orgServiceTypeId"
+                ></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="产品名称">
               <el-input placeholder="请输入产品名称关键字" v-model="searchData.orgServiceProductName"></el-input>
@@ -83,6 +96,7 @@ export default {
       toggleWidth: 19,
       searchRefresh: true,
       searchData: {},
+      orgServiceTypeList: [],
       tableColumns: [
         { label: '产品名称', slot: 'orgServiceProductName', minWidth: 200 },
         { label: '服务类型', prop: 'orgServiceTypeName', minWidth: 100 },
@@ -107,11 +121,22 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created () {
+    this.getServiceTypeList()
+  },
   methods: {
     filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
+    },
+    getServiceTypeList () {
+      this.$http
+        .post('/org/service/type/pageSearch', { pageSize: MAXSIZE })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.orgServiceTypeList = res.payload.records
+          }
+        })
     },
     toggleChange (val) {
       this.toggleWidth = val

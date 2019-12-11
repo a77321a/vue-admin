@@ -12,26 +12,29 @@
         @click="setNavList(item)"
         v-for="(item, index) in routerList"
       >
-        <i
-          style="vertical-align:middle"
-          class="fa"
-          :class="'fa-' + item.icon"
-        ></i>
+        <i style="vertical-align:middle" class="fa" :class="'fa-' + item.icon"></i>
         <span class="width-none">{{ item.name }}</span>
       </div>
     </div>
     <div class="tool-bar">
       <ul style="float:right" class="bar-list">
         <li v-click-outside="closeDialog">
-          <el-button
+          <!-- <el-button
             style="cursor:pointer"
             @click.native="infoBlock = !infoBlock"
             type="info"
             icon="el-icon-s-custom"
             circle
-          ></el-button>
+          ></el-button>-->
+          <el-avatar
+            @click.native="infoBlock = !infoBlock"
+            style="cursor:pointer;vertical-align:middle"
+            :size="40"
+            :src="avatar"
+          ></el-avatar>
           <i
             color="#fff"
+            style="vertical-align:middle"
             @click.native="infoBlock = !infoBlock"
             size="30"
             class="el-icon-caret-bottom"
@@ -40,18 +43,13 @@
             <div v-show="infoBlock" class="tdui-user-body" id="userinfo">
               <div class="tdui-user-body-list tdui-user-body-list-first">
                 <div class="tdui-user-body-list-start">
-                  <el-button
-                    type="info"
-                    icon="el-icon-s-custom"
-                    circle
-                  ></el-button>
+                  <!-- <el-button type="info" icon="el-icon-s-custom" circle></el-button> -->
+                  <el-avatar style="margin-top:12px" :size="40" :src="avatar"></el-avatar>
                 </div>
                 <div
                   name="user-login-email"
                   class="tdui-user-body-list-first-end"
-                >
-                  admin
-                </div>
+                >{{$store.state.userInfo.nickName}}</div>
               </div>
               <div
                 @click="
@@ -63,17 +61,13 @@
                 <div class="tdui-user-body-list-start">
                   <i color="#aaa" size="20" class="el-icon-setting" />
                 </div>
-                <div class="tdui-user-body-list-end" name="account-setting">
-                  账号设置
-                </div>
+                <div class="tdui-user-body-list-end" name="account-setting">账号设置</div>
               </div>
               <div @click="loginOut" class="tdui-user-body-list">
                 <div class="tdui-user-body-list-start">
                   <i color="#aaa" size="20" class="el-icon-s-promotion" />
                 </div>
-                <div class="tdui-user-body-list-end" name="account-exit">
-                  退出登录
-                </div>
+                <div class="tdui-user-body-list-end" name="account-exit">退出登录</div>
               </div>
             </div>
           </transition>
@@ -97,6 +91,12 @@ export default {
     },
     activeLink () {
       return this.$store.state.fullPath
+    },
+    avatar () {
+      return (
+        this.$store.state.config.systemConfig[0].dictionaryValue +
+        this.$store.state.userInfo.avatar
+      )
     }
   },
   watch: {
@@ -144,6 +144,9 @@ export default {
         this.$store.commit('setNavList', systemSetting)
       }
     }
+  },
+  created () {
+    // this.getUserInfo()
   },
   methods: {
     loginOut () {
@@ -250,7 +253,7 @@ export default {
       opacity: 1;
     }
     .active::after {
-      content: "";
+      content: '';
       display: block;
       width: 100%;
       height: 4px;

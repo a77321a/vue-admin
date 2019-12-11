@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-02 14:42:31
+ * @LastEditTime: 2019-12-11 11:01:35
  -->
 <template>
   <div id="edit-role">
@@ -50,8 +50,8 @@
       </el-tree>
       <el-divider></el-divider>
       <el-form-item size="large">
-        <el-button @click="handleSave" type="primary">保 存</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="handleSave" type="primary">立即创建</el-button>
+        <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -59,7 +59,7 @@
 <script>
 export default {
   name: 'editRole',
-  data () {
+  data() {
     return {
       formInfo: {
         roleName: '',
@@ -78,11 +78,11 @@ export default {
       data: []
     }
   },
-  created () {
+  created() {
     this.getTree()
   },
   methods: {
-    getTree () {
+    getTree() {
       this.$http.get('/permission/getTree', {}).then(res => {
         if (res.code === SUCCESS) {
           this.data = res.payload
@@ -92,7 +92,7 @@ export default {
         }
       })
     },
-    getRoleInfo () {
+    getRoleInfo() {
       this.$http.get('/role/edit?roleId=' + this.$route.query.id).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
@@ -122,7 +122,7 @@ export default {
         }
       })
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -132,7 +132,7 @@ export default {
       })
       return false
     },
-    handleSave () {
+    handleSave() {
       let nodeList = this.$refs['permissionTree'].getCheckedNodes(false, true)
       let nodeKey = []
       nodeList.forEach(i => {

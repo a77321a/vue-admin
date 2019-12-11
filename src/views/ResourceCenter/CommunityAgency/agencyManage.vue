@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 22:42:21
+ * @LastEditTime: 2019-12-11 11:41:12
  -->
 <template>
   <div class="angecy-manage">
@@ -125,7 +125,7 @@ export default {
       searchData: {},
       tableColumns: [
         { label: '机构名称', prop: 'orgName', minWidth: 250 },
-        { label: '服务范围', prop: 'serviceScopeName', minWidth: 300 },
+        { label: '服务范围', prop: 'communityRegionName', minWidth: 300 },
         {
           label: '机构类型',
           slot: 'orgType',

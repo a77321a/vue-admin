@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-10 22:30:11
+ * @LastEditTime: 2019-12-11 20:59:59
  -->
 <template>
   <div id="service-object-info">
@@ -67,12 +67,12 @@
             <el-col :span="12">
               紧急联系人：
               <span
-                v-for="(item, index) in serviceObjectInfo.emergencySelectList"
+                v-for="(item, index) in serviceObjectInfo.emergencyManualList"
                 :key="index"
               >
                 {{item.name}}/{{item.mobile}}
                 <el-divider
-                  v-if="index !=serviceObjectInfo.emergencySelectList.length - 1"
+                  v-if="index !=serviceObjectInfo.emergencyManualList.length - 1"
                   direction="vertical"
                 ></el-divider>
               </span>
@@ -152,7 +152,7 @@
         <serviceRecords :serviceCustomerId="$route.query.sid"></serviceRecords>
       </el-tab-pane>
       <el-tab-pane label="健康记录" name="four">
-        <healthRecords :serviceCustomerId="$route.query.sid"></healthRecords>
+        <healthRecords :customer="serviceObjectInfo" :serviceCustomerId="$route.query.sid"></healthRecords>
       </el-tab-pane>
     </el-tabs>
     <el-dialog title="照片" :visible.sync="dialogVisible" width="50%">

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-24 18:06:18
+ * @LastEditTime: 2019-12-11 20:25:15
  -->
 <template>
   <div class="user-manage">
@@ -35,6 +35,12 @@
     </Table>
     <el-dialog title="编辑健康记录" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="formInfo" label-width="80px" size="small" :model="formInfo">
+        <el-form-item label="服务对象">
+          <div class="flex-t-u">
+            <el-avatar class="avatar" size="medium" :src="customer.avatar"></el-avatar>
+            <span class="f-title">{{customer.serviceCustomerName}}</span>
+          </div>
+        </el-form-item>
         <el-form-item label="记录时间" prop="recordTime">
           <el-date-picker
             v-model="formInfo.recordTime"
@@ -129,7 +135,7 @@ export default {
     }
   },
   created () {},
-  props: ['serviceCustomerId'],
+  props: ['serviceCustomerId', 'customer'],
   methods: {
     handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {

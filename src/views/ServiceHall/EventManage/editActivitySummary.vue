@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-10 15:48:26
+ * @LastEditTime: 2019-12-11 20:44:02
  -->
 <template>
   <div id="edit-event">
@@ -62,6 +62,11 @@
           @click="dialogServiceUser = true"
           icon="el-icon-plus"
         >选择人员</el-button>
+      </el-form-item>
+      <el-form-item label="实际服务人员">
+        <template slot="label">
+          <span style="color:#999">实际服务人员</span>
+        </template>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
@@ -85,6 +90,11 @@
       </el-form-item>
       <el-form-item label="参加对象" prop="actualServiceCustomerList">
         <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
+      </el-form-item>
+      <el-form-item label="实际参与对象">
+        <template slot="label">
+          <span style="color:#999">实际参与对象</span>
+        </template>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"

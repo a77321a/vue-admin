@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:42:51
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:05:24
+ * @LastEditTime: 2019-12-11 16:45:21
  -->
 <template>
   <div>
@@ -12,6 +12,8 @@
       :highlight-current-row="highlightCurrentRow"
       @current-change="currentChange"
       :row-key="rowKey"
+      @cell-mouse-enter="cellMouseEnter"
+      @cell-mouse-leave="cellMouseLeave"
       v-loading="loading"
       default-expand-all
       :height="height"
@@ -132,6 +134,19 @@ export default {
         return function () {}
       }
     },
+    cellMouseEnter: {
+      type: Function,
+      default: function () {
+        return function () {}
+      }
+    },
+    cellMouseLeave: {
+      type: Function,
+      default: function () {
+        return function () {}
+      }
+    },
+
     highlightCurrentRow: { type: Boolean },
     selectable: { type: Function },
     treeProps: {
@@ -278,7 +293,6 @@ export default {
             if (this.getSpanArr) {
               this.getSpanArr(res.payload)
             }
-            console.log(this.dataSource)
             this.total = Number(res.payload.total)
           }
         })

@@ -3,14 +3,14 @@
  * @Author: 辛顺宁
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-12-04 22:52:05
+ * @LastEditTime: 2019-12-11 15:01:39
  -->
 <template>
   <div id="account-info">
     <el-card header="账号信息" class="box-card">
       <el-form label-width="90px">
         <el-form-item label="头像">
-          <el-avatar style="vertical-align: middle;"></el-avatar>
+          <el-avatar style="vertical-align: middle;" :src="avatar"></el-avatar>
           <el-upload
             action="apii/public/img"
             style="float:right;margin-right:20px;margin-top:5px"
@@ -97,8 +97,14 @@ export default {
     ])
   },
   computed: {
-    userInfo () {
-      return JSON.parse(JSON.parse(localStorage.userInfo))
+    userId () {
+      return localStorage.userId
+    },
+    avatar () {
+      return (
+        this.$store.state.config.systemConfig[0].dictionaryValue +
+        this.$store.state.userInfo.avatar
+      )
     }
   },
   methods: {
@@ -110,11 +116,14 @@ export default {
           // this.formInfo.activityIndexPic = res.payload
           this.$http
             .post('/user/update/avatar', {
-              userId: this.userInfo.userId,
+              userId: this.userId,
               avatar: res.payload
             })
-            .then(res => {
-              if (res.code === SUCCESS) {
+            .then(rs => {
+              if (rs.code === SUCCESS) {
+                let userInfo = this.$store.state.userInfo
+                userInfo.avatar = res.payload
+                this.$store.commit('setUserInfo', userInfo)
                 this.$message.success('操作成功')
               }
             })
@@ -139,7 +148,7 @@ export default {
       })
     },
     getUserDetail () {
-      this.$http.get('/user/get?userId=' + this.userInfo.userId).then(res => {
+      this.$http.get('/user/get?userId=' + this.userId).then(res => {
         if (res.code === SUCCESS) {
           this.userDetail = res.payload
         }
