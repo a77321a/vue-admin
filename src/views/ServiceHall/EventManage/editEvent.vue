@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-05 10:00:59
+ * @LastEditTime: 2019-12-11 10:54:42
  -->
 <template>
   <div id="edit-event">
@@ -48,12 +48,8 @@
             :before-upload="uploadImg"
             accept="image/*"
           >
-            <el-button type="primary" icon="ios-cloud-upload-outline"
-              >选择文件</el-button
-            >
-            <div slot="tip" class="el-upload__tip">
-              只能上传jpg/png文件，且不超过500kb
-            </div>
+            <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </div>
       </el-form-item>
@@ -89,11 +85,7 @@
         ></el-cascader>
       </el-form-item>
       <el-form-item label="活动室" prop="activityRoomId">
-        <el-select
-          clearable
-          v-model="formInfo.activityRoomId"
-          placeholder="请选择"
-        >
+        <el-select clearable v-model="formInfo.activityRoomId" placeholder="请选择">
           <el-option
             v-for="(item, index) in eventRoomList"
             :key="index"
@@ -124,8 +116,7 @@
           :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
           @click="dialogServiceUser = true"
           icon="el-icon-plus"
-          >选择人员</el-button
-        >
+        >选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
@@ -139,16 +130,12 @@
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
             ></el-avatar>
-            <span style="vertical-align: middle;">
-              {{ item.orgServiceProviderName }}
-            </span>
+            <span style="vertical-align: middle;">{{ item.orgServiceProviderName }}</span>
           </el-tag>
         </el-card>
       </el-form-item>
       <el-form-item label="参加对象" prop="Object">
-        <el-button @click="dialogServiceObject = true" icon="el-icon-plus"
-          >选择人员</el-button
-        >
+        <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
@@ -162,12 +149,11 @@
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
             ></el-avatar>
-            <span style="vertical-align: middle;">
-              {{ item.serviceCustomerName }}
-            </span>
+            <span style="vertical-align: middle;">{{ item.serviceCustomerName }}</span>
           </el-tag>
         </el-card>
       </el-form-item>
+      <el-divider></el-divider>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>
@@ -189,11 +175,8 @@
             dialogServiceObject = false;
             selectObjectList = [];
           "
-          >取 消</el-button
-        >
-        <el-button type="primary" @click="handleSaveSelectObject"
-          >确 定</el-button
-        >
+        >取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -205,28 +188,22 @@
     >
       <!-- :isSelected="formInfo.orgServiceProviderList" -->
 
-      <selectServiceUser
-        @selectUser="selectUser"
-        :orgId="formInfo.orgId"
-      ></selectServiceUser>
+      <selectServiceUser @selectUser="selectUser" :orgId="formInfo.orgId"></selectServiceUser>
       <span slot="footer" class="dialog-footer">
         <el-button
           @click="
             dialogServiceUser = false;
             selectUserList = [];
           "
-          >取 消</el-button
-        >
-        <el-button type="primary" @click="handleSaveSelectUser"
-          >确 定</el-button
-        >
+        >取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectUser">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue';
-import selectServiceUser from '../../../components/SelectTable/selectServiceUser.vue';
+import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue'
+import selectServiceUser from '../../../components/SelectTable/selectServiceUser.vue'
 
 export default {
   name: 'editEvent',
@@ -298,8 +275,8 @@ export default {
   },
   methods: {
     handleTime (date) {
-      this.formInfo.startTime = date ? date[0] : '';
-      this.formInfo.endTime = date ? date[1] : '';
+      this.formInfo.startTime = date ? date[0] : ''
+      this.formInfo.endTime = date ? date[1] : ''
     },
     arrSplice (arr, index) {
       arr.splice(index, 1)

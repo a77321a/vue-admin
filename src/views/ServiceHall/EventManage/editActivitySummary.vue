@@ -136,6 +136,7 @@
       <el-form-item label="活动内容总结" prop="activitySummary">
         <UEditor v-model="formInfo.activitySummary"></UEditor>
       </el-form-item>
+      <el-divider></el-divider>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">保存</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>

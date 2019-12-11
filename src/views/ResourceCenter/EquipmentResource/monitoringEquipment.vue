@@ -80,6 +80,12 @@
           </div>
         </div>
       </template>
+      <template slot-scope="{row}" slot="videoInterfaceAddress">
+        {{row.videoStreamAddress}}
+      </template>
+      <template slot-scope="{row}" slot="videoStreamAddress">
+        {{row.activityRoomName ? row.activityRoomName:row.orgName}}
+      </template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           type="text"
@@ -121,7 +127,7 @@ export default {
         },
         {
           label: '所在位置',
-          prop: 'videoStreamAddress',
+          slot: 'videoStreamAddress',
           minWidth: 150
         },
         {

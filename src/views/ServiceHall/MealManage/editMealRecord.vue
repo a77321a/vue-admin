@@ -92,6 +92,7 @@
         </Table>
         <span v-if="formInfo.foodSnapshotList.length">共计消费：￥{{ this.priceSum.toFixed(2) }}</span>
       </el-form-item>
+      <el-divider></el-divider>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>

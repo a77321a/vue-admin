@@ -97,6 +97,7 @@
           :min="0"
         ></el-input-number>
       </el-form-item>
+      <el-divider></el-divider>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>

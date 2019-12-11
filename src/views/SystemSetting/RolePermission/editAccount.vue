@@ -93,6 +93,7 @@
         </el-checkbox-group>
       </el-form-item>
 
+      <el-divider></el-divider>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">保 存</el-button>
         <el-button>取消</el-button>

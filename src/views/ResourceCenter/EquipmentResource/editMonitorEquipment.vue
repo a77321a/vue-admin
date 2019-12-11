@@ -100,6 +100,7 @@
           style="margin-left:5px;font-size:12px"
         >已选：{{ checkedObj.orgName }}</span>
       </el-form-item>
+      <el-divider></el-divider>
       <el-form-item size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>
