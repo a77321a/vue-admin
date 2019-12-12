@@ -4,16 +4,19 @@ import { Message, Loading } from 'element-ui'
 import router from '@/router/router'
 import store from '@/store/store'
 import NProgress from 'nprogress'
+import Vue from 'vue'
 import func from './utils'
 NProgress.configure({ showSpinner: false })
 // 全局定义loading
 let loading
 function startLoading () {
   loading = Loading.service({
+    target: document.querySelector('#load-wrap'),
     lock: true,
     text: '加载中……',
-    background: 'rgba(0, 0, 0, 0)'
+    background: 'rgba(0, 0, 0, .1)'
   })
+  // store.commit('toggleLoading', true)
 }
 
 let name = ''
@@ -23,7 +26,10 @@ router.beforeEach((to, from, next) => {
 })
 
 function endLoading () {
-  loading.close()
+  // store.commit('toggleLoading', false)
+  Vue.prototype.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+    loading.close()
+  })
 }
 // 防抖实现函数
 // function debounce (action, idle) {
@@ -40,7 +46,7 @@ function endLoading () {
 let needLoadingRequestCount = 0
 export function showFullScreenLoading () {
   if (needLoadingRequestCount === 0) {
-    // startLoading()
+    startLoading()
   }
   needLoadingRequestCount++
 }
@@ -49,7 +55,7 @@ export function tryHideFullScreenLoading () {
   needLoadingRequestCount--
   if (needLoadingRequestCount === 0) {
     // 是否一段时间内共用一个loading
-    // endLoading()
+    endLoading()
   }
 }
 // 合并相同请求
@@ -68,8 +74,11 @@ axios.interceptors.request.use(
     //   sources[request]('取消重复请求')
     // } else {
     requestList.push(request)
+    console.log(config)
     if (config.loading) {
-      showFullScreenLoading()
+      // showFullScreenLoading()
+      startLoading()
+      console.log(loading)
       NProgress.start()
     };
     // }
@@ -83,8 +92,9 @@ axios.interceptors.response.use(
   (response) => {
     const request = JSON.stringify(response.config.url) + JSON.stringify(response.config.method) + JSON.stringify(response.config.data || '')
     requestList.splice(requestList.findIndex(item => item === request), 1)
-    if (response.config.loading) {
-      tryHideFullScreenLoading()
+    if (loading) {
+      // tryHideFullScreenLoading()
+      endLoading()
     };
     if (response.data.code === '00000000') {
       // || response.data.code === '11111111'
@@ -98,7 +108,7 @@ axios.interceptors.response.use(
       })
     } else {
       Message.error(response.data.message)
-      // endLoading()
+      endLoading()
     };
     NProgress.done()
     return response
@@ -118,9 +128,10 @@ axios.interceptors.response.use(
 
 function get (url, params = {}, loading = true) {
   return new Promise((resolve, reject) => {
+    if (loading) startLoading()
     axios.get(url, {
       params: params,
-      loading: loading,
+      loading,
       headers: {
         'X-Token': localStorage.webToken,
         'X-Resource': name
@@ -139,7 +150,6 @@ function get (url, params = {}, loading = true) {
 
 function post (url, data = {}, loading = false) {
   return new Promise((resolve, reject) => {
-    console.log(router)
     axios.post(url, data, {
       loading: loading,
       headers: {
@@ -172,6 +182,7 @@ function postForm (url, formData, loading = true) {
   return new Promise((resolve, reject) => {
     axios.post(url, formData, {
       timeout: 0,
+      loading,
       headers: {
         'X-Token': localStorage.webToken,
         'X-Resource': name,
@@ -191,7 +202,8 @@ function put (url, data = {}) {
   return new Promise((resolve, reject) => {
     axios.put(url, data, {
       headers: {
-        'zywxtoken': 'zywx' + localStorage.webToken
+        'X-Token': localStorage.webToken,
+        'X-Resource': name
       }
     })
       .then(response => {

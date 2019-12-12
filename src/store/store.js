@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 10:06:59
+ * @LastEditTime: 2019-12-12 16:06:25
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -25,10 +25,15 @@ const store = new Vuex.Store({
     breadList: sessionStorage.breadList ? JSON.parse(sessionStorage.breadList) : [],
     opens: sessionStorage.opens ? JSON.parse(sessionStorage.opens) : [],
     dialogHeight: `${(document.documentElement.clientHeight) - 330}`,
-    config: localStorage.config ? JSON.parse(localStorage.config) : {}
+    config: localStorage.config ? JSON.parse(localStorage.config) : {},
     // config: config
+    getLoading: false
   },
   mutations: {
+
+    toggleLoading (state, data) {
+      state.getLoading = data
+    },
     setRouterList (state, data) {
       state.routerList = data
       localStorage.setItem('routerList', JSON.stringify(data))

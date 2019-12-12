@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 22:29:01
+ * @LastEditTime: 2019-12-12 16:58:16
  -->
 <template>
   <div class="layout">
@@ -17,7 +17,8 @@
         </el-aside>
         <el-main class="content">
           <BreadCrumb></BreadCrumb>
-          <div class="padding">
+          <!-- v-loading="$store.state.getLoading" -->
+          <div class="padding" id="load-wrap">
             <router-view></router-view>
           </div>
         </el-main>
@@ -42,7 +43,6 @@ export default {
   //   }
   // }
   created () {
-    console.log(this.routerList, this.activeLink)
     let serviceHall = []
     let statisticalAnalysis = []
     let UserManage = []
