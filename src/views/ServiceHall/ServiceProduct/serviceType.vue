@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 10:56:39
+ * @LastEditTime: 2019-12-12 11:00:43
  -->
 <template>
   <div class="service-product">
@@ -33,6 +33,7 @@
           style="margin-bottom:15px"
           size="small"
           type="primary"
+          v-has="'serviceTypeAdd'"
         >新增类型</el-button>
 
         <!-- 列表 -->
@@ -44,9 +45,19 @@
           method="post"
         >
           <template slot-scope="{row}" slot="action">
-            <el-button @click="handleEdit(row)" type="text" size="small">编辑</el-button>
+            <el-button
+              v-has="'serviceTypeEdit'"
+              @click="handleEdit(row)"
+              type="text"
+              size="small"
+            >编辑</el-button>
 
-            <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+            <el-button
+              v-has="'serviceTypeDelete'"
+              @click="handleDelete(row)"
+              type="text"
+              size="small"
+            >删除</el-button>
           </template>
         </Table>
       </el-col>

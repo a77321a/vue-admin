@@ -2,7 +2,7 @@
  * @Descripttion: 登陆界面
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-12-11 22:16:39
+ * @LastEditTime: 2019-12-12 10:47:26
  -->
 <template>
   <el-row
@@ -112,19 +112,18 @@ export default {
             this.$store.commit('setUserInfo', res.payload)
             this.$store.commit('setUserId', res.payload.userId)
             this.$store.commit('setPermList', res.payload.permissionList)
-
+            let permBtn = []
+            res.payload.permissionList.forEach(i => {
+              if (i.permissionDepth === 4) {
+                permBtn.push(i.permissionUrl)
+              }
+            })
+            this.$store.commit('setPermBtnList', permBtn)
             // this.$store.dispatch('get_menu', { router: this.$router,permissionList:res.payloadpermissionList })
             this.$store.dispatch('getDictionaryManagement', {
               router: this.$router,
               permissionList: res.payloadpermissionList
             })
-            // this.$http
-            //   .get('/user/get?userId=' + res.payload.userId)
-            //   .then(rs => {
-            //     if (rs.code === SUCCESS) {
-            //       this.$store.commit('setUserInfo', rs.payload)
-            //     }
-            //   })
           } else {
             this.loading = false
           }

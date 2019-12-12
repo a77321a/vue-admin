@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-11 16:47:41
+ * @LastEditTime: 2019-12-12 11:22:35
  -->
 <template>
   <div id="space-resource">
@@ -28,9 +28,15 @@
       <div class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ data.name }}</span>
         <span style="float:right">
-          <el-button @click="handlePreView(data.url)" type="text" size="mini">查看</el-button>
+          <el-button
+            v-has="'settingMenuManagePreview'"
+            @click="handlePreView(data.url)"
+            type="text"
+            size="mini"
+          >查看</el-button>
           <el-button
             type="text"
+            v-has="'settingMenuManageEdit'"
             size="mini"
             @click="formInfo = JSON.parse(JSON.stringify(data));dialogFormVisible = true"
           >编辑</el-button>

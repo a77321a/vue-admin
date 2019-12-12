@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 20:16:57
+ * @LastEditTime: 2019-12-12 10:36:38
  -->
 <template>
   <div class="event-center">
@@ -60,6 +60,7 @@
       style="margin-bottom:15px"
       size="small"
       type="primary"
+      v-has="'eventCenterAdd'"
     >新增活动</el-button>
     <!-- 列表 -->
     <Table
@@ -100,6 +101,7 @@
           @click="
             $router.push({ name: 'eventInfo', query: { aid: row.activityId } })
           "
+          v-has="'eventCenterPreview'"
           type="text"
           size="small"
         >查看</el-button>
@@ -107,6 +109,7 @@
           @click="
             $router.push({ name: 'editEvent', query: { aid: row.activityId } })
           "
+          v-has="'eventCenterEdit'"
           type="text"
           size="small"
         >编辑</el-button>
@@ -115,6 +118,7 @@
           @click="handleCloseActivity(row)"
           type="text"
           size="small"
+          v-has="'eventCenterClose'"
         >结束活动</el-button>
         <el-button
           @click="
@@ -123,15 +127,21 @@
               query: { aid: row.activityId }
             })
           "
+          v-has="'eventCenterSummary'"
           v-if="row.activityStatus > 1"
           type="text"
           size="small"
         >总结活动</el-button>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button
+          v-has="'eventCenterDelete'"
+          @click="handleDelete(row)"
+          type="text"
+          size="small"
+        >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleCloseActivity(null)" type="text">结束活动</el-button>
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button v-has="'eventCenterSummary'" @click="handleCloseActivity(null)" type="text">结束活动</el-button>
+        <el-button v-has="'eventCenterDelete'" @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>

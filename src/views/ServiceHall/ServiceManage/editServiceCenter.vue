@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors:
- * @LastEditTime: 2019-12-04 22:11:07
+ * @LastEditTime: 2019-12-12 14:33:51
  -->
 <template>
   <div id="editServiceCenter">
@@ -88,6 +88,8 @@
         <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
+            style="margin-right:10px"
+            disable-transitions
             @close="formInfo.serviceCustomerList.splice(index, 1)"
             v-for="(item, index) in formInfo.serviceCustomerList"
             :key="index"
@@ -96,7 +98,7 @@
             <el-avatar
               :size="22"
               style="vertical-align: middle;margin-right:5px"
-              icon="el-icon-user-solid"
+              :src="$store.state.config.systemConfig[0].dictionaryValue+item.avatar"
             ></el-avatar>
             <span style="vertical-align: middle;">
               {{
@@ -151,7 +153,7 @@ import selectServiceObject from '../../../components/SelectTable/selectServiceOb
 export default {
   name: 'editServiceCenter',
   components: { selectServiceObject },
-  data() {
+  data () {
     return {
       formInfo: {
         activityRoomId: '',
@@ -201,7 +203,7 @@ export default {
       selectObjectList: []
     }
   },
-  created() {
+  created () {
     if (this.$route.query.sid) {
       this.getServiceInfo()
     }
@@ -214,10 +216,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
@@ -228,11 +230,11 @@ export default {
       this.selectObjectList = []
       this.dialogServiceObject = false
     },
-    selectTime(date) {
+    selectTime (date) {
       this.formInfo.startTime = date ? date[0] : ''
       this.formInfo.endTime = date ? date[1] : ''
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -246,7 +248,7 @@ export default {
         }
       })
     },
-    getEventRoomList() {
+    getEventRoomList () {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
@@ -257,7 +259,7 @@ export default {
      * @descripttion: 图片自定义上传 同所有单照片表单
      * @param {type}   file
      */
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -267,14 +269,14 @@ export default {
       })
       return false
     },
-    handleRemove(index) {
+    handleRemove (index) {
       this.formInfo.serviceRecordPicList.splice(index, 1)
     },
     /**
      * @descripttion: 获取服务人员信息
      * @return: 信息
      */
-    getServiceInfo() {
+    getServiceInfo () {
       this.$http
         .get('/service/record/get?serviceRecordId=' + this.$route.query.sid)
         .then(res => {
@@ -288,7 +290,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.sid

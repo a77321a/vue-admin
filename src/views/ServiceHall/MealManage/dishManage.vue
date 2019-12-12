@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 20:25:33
+ * @LastEditTime: 2019-12-12 10:39:43
  -->
 <template>
   <div class="dish-manage">
@@ -50,6 +50,7 @@
           @click="$router.push({name:'editDish'})"
           style="margin-bottom:15px"
           size="small"
+          v-has="'dishManageAdd'"
           type="primary"
         >新增菜品</el-button>
         <!-- 列表 -->
@@ -88,12 +89,17 @@
               @click="$router.push({name:'editDish',query:{fid:row.foodId}})"
               type="text"
               size="small"
+              v-has="'dishManageEdit'"
             >编辑</el-button>
-
-            <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+            <el-button
+              v-has="'dishManageDelete'"
+              @click="handleDelete(row)"
+              type="text"
+              size="small"
+            >删除</el-button>
           </template>
           <template slot="footer-left">
-            <el-button @click="handleDelete(null)" type="text">删除</el-button>
+            <el-button v-has="'dishManageDelete'" @click="handleDelete(null)" type="text">删除</el-button>
           </template>
         </Table>
       </el-col>
@@ -108,7 +114,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -141,23 +147,23 @@ export default {
       selectFood: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.foodId)
       })
       this.selectFood = arr
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.foodId] : this.selectFood
       this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

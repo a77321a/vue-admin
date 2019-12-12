@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 22:46:45
+ * @LastEditTime: 2019-12-12 11:01:44
  -->
 <template>
   <div class="angecy-manage">
@@ -55,12 +55,18 @@
       </el-form-item>
     </el-form>
     <el-button
+      v-has="'agencyManageAdd'"
       @click="$router.push({ name: 'editAgency' })"
       style="margin-bottom:15px"
       size="small"
       type="primary"
     >新增机构</el-button>
-    <el-button @click="exportExcel" style="margin-bottom:15px" size="small">导出数据</el-button>
+    <el-button
+      v-has="'agencyManageExport'"
+      @click="exportExcel"
+      style="margin-bottom:15px"
+      size="small"
+    >导出数据</el-button>
     <!-- 列表 -->
     <Table
       rowKey="orgId"
@@ -85,10 +91,12 @@
         <el-button
           @click="handleAppend(row)"
           v-if="row.parentOrgId == 0"
+          v-has="'agencyManageAdd'"
           type="text"
           size="small"
         >新增分部</el-button>
         <el-button
+          v-has="'agencyManageLogout'"
           @click="handleStatus(row)"
           v-else
           type="text"
@@ -102,16 +110,22 @@
         >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button>-->
         <el-button
           type="text"
+          v-has="'agencyManagePreview'"
           size="small"
           @click="$router.push({ name: 'agencyInfo', query: { oid: row.orgId}})"
         >详情</el-button>
         <el-button
+          v-has="'agencyManageEdit'"
           type="text"
           size="small"
           @click="$router.push({ name: 'editAgency', query: { oid: row.orgId,parent:row.parentOrgId == 0 ? '' :row.parentOrgId }})"
         >编辑</el-button>
-
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button
+          v-has="'agencyManageDelete'"
+          @click="handleDelete(row)"
+          type="text"
+          size="small"
+        >删除</el-button>
       </template>
     </Table>
   </div>
@@ -119,7 +133,7 @@
 <script>
 export default {
   name: 'agencyManage',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -153,13 +167,13 @@ export default {
       operationModeList: []
     }
   },
-  created() {
+  created () {
     // this.getOrgType()
     // this.getServiceType()
     // this.getOperationMode()
   },
   methods: {
-    exportExcel() {
+    exportExcel () {
       window.open(
         `${ctx}/org/export?orgName=${this.searchData.orgName ||
           ''}&orgType=${this.searchData.orgType || ''}&serviceType=${this
@@ -167,7 +181,7 @@ export default {
           ''}&token=${this.$store.state.token}`
       )
     },
-    handleAppend(row) {
+    handleAppend (row) {
       this.$router.push({
         name: 'editAgency',
         query: {
@@ -175,21 +189,21 @@ export default {
         }
       })
     },
-    getServiceType() {
+    getServiceType () {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType() {
+    getOrgType () {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    getOperationMode() {
+    getOperationMode () {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
@@ -197,7 +211,7 @@ export default {
       })
     },
 
-    handleStatus(row) {
+    handleStatus (row) {
       console.log(1)
       let content =
         row.status === 1
@@ -226,7 +240,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete(row) {
+    handleDelete (row) {
       if (row.parentOrgId == 0 && row.children.length > 0) {
         this.$message.error('当前机构下含有分部站点，无法删除')
         return

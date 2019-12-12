@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-11 20:44:02
+ * @LastEditTime: 2019-12-12 14:20:31
  -->
 <template>
   <div id="edit-event">
@@ -16,10 +16,10 @@
       label-width="120px"
       size="medium"
     >
-      <el-form-item label="活动名称" prop="activityName">
+      <el-form-item label="活动名称：" prop="activityName">
         <span>{{ formInfo.activityName }}</span>
       </el-form-item>
-      <el-form-item label="活动封面" prop="activityIndexPic">
+      <el-form-item label="活动封面：" prop="activityIndexPic">
         <div style="display:flex;align-items:center;">
           <div v-show="formInfo.activityIndexPic" class="avatars">
             <img
@@ -32,22 +32,22 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="活动时间" prop="eventTime">
+      <el-form-item label="活动时间：" prop="eventTime">
         <span>{{ formInfo.eventTime.join("~") }}</span>
       </el-form-item>
-      <el-form-item label="活动地点" prop="activityAddress">
+      <el-form-item label="活动地点：" prop="activityAddress">
         <span>{{ formInfo.activityAddress }}</span>
       </el-form-item>
-      <el-form-item label="活动详情">
+      <el-form-item label="活动详情：">
         <span v-html="formInfo.activityDesc"></span>
       </el-form-item>
-      <el-form-item label="所属机构" prop="orgId">
+      <el-form-item label="所属机构：" prop="orgId">
         <span>{{ formInfo.orgName }}</span>
       </el-form-item>
-      <el-form-item label="活动室" prop="activityRoomId">
+      <el-form-item label="活动室：" prop="activityRoomId">
         <span>{{ formInfo.activityRoomName }}</span>
       </el-form-item>
-      <el-form-item label="服务产品" prop="orgServiceProductIdList">
+      <el-form-item label="服务产品：" prop="orgServiceProductIdList">
         <span v-for="(item, index) in formInfo.orgServiceProductList" :key="index">
           {{ item.orgServiceProductName }}
           <span
@@ -207,7 +207,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data() {
+  data () {
     return {
       formInfo: {
         orgId: [],
@@ -253,7 +253,7 @@ export default {
       selectObjectList: []
     }
   },
-  created() {
+  created () {
     // if (this.$route.query.aid) {
     //   this.getActivityInfo()
     // }
@@ -267,10 +267,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
@@ -286,10 +286,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectUser(data) {
+    selectUser (data) {
       this.selectUserList = data
     },
-    handleSaveSelectUser() {
+    handleSaveSelectUser () {
       if (this.selectUserList.length === 0) {
         this.$message.error('请至少选择一个服务人员')
         return false
@@ -300,7 +300,7 @@ export default {
       this.selectUserList = []
       this.dialogServiceUser = false
     },
-    getProductList() {
+    getProductList () {
       this.$http
         .post('/org/service/product/pageSearch', {
           pageSize: MAXSIZE,
@@ -310,7 +310,7 @@ export default {
           this.productList = res.payload.records
         })
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (this.$route.query.aid) {
           this.getActivityInfo()
@@ -327,14 +327,14 @@ export default {
         }
       })
     },
-    getEventRoomList() {
+    getEventRoomList () {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    getActivityInfo() {
+    getActivityInfo () {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
@@ -374,7 +374,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let provider = []
@@ -416,7 +416,7 @@ export default {
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -426,7 +426,7 @@ export default {
       })
       return false
     },
-    handleRemove(index) {
+    handleRemove (index) {
       this.formInfo.activityPicList.splice(index, 1)
     }
   }

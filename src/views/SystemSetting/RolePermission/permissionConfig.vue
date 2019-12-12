@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-02 14:58:09
+ * @LastEditTime: 2019-12-12 11:23:29
  -->
 <template>
   <div id="space-resource">
@@ -20,6 +20,7 @@
       @click="dialogFormVisible = true;dialogType = true"
       style="margin-bottom:15px"
       size="small"
+      v-has="'permissionConfigAdd'"
       type="primary"
     >新增权限</el-button>
     <div class="tree-title">
@@ -33,12 +34,24 @@
         <span>{{ data.permissionName }}</span>
         <span style="float:right">
           <el-button
+            v-has="'permissionConfigAdd'"
             type="text"
             size="mini"
+            :class="data.permissionDepth == 4 ? 'hidden':''"
             @click="() => handleAppend(node,data)"
-          >{{data.permissionDepth == 1 ? '新增菜单权限' : data.permissionDepth == 2 ? '新增菜单权限' : data.permissionDepth ==3 ?'新增按钮权限':''}}</el-button>
-          <el-button type="text" size="mini" @click="() => handleEdit(node, data)">编辑</el-button>
-          <el-button type="text" size="mini" @click="() => handleDelete(node, data)">删除</el-button>
+          >{{data.permissionDepth == 1 ? '新增菜单权限' : data.permissionDepth == 2 ? '新增菜单权限' : data.permissionDepth ==3 ?'新增按钮权限':'新增按钮权限'}}</el-button>
+          <el-button
+            v-has="'permissionConfigEdit'"
+            type="text"
+            size="mini"
+            @click="() => handleEdit(node, data)"
+          >编辑</el-button>
+          <el-button
+            v-has="'permissionConfigDelete'"
+            type="text"
+            size="mini"
+            @click="() => handleDelete(node, data)"
+          >删除</el-button>
         </span>
         <span style="float:right;margin-right:300px;">{{data.permissionDepth == 4 ? '按钮':'菜单'}}</span>
 
@@ -291,5 +304,8 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+}
+.hidden {
+  visibility: hidden;
 }
 </style>

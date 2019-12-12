@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-11 16:51:44
+ * @LastEditTime: 2019-12-12 09:24:44
  -->
 <template>
   <div id="edit-role">
@@ -122,7 +122,17 @@ export default {
   components: {
     selectServiceUser
   },
-  data() {
+  data () {
+    const validataPhone = (rule, value, callback) => {
+      let reg = /^1[123456789]\d{9}$/
+      if (value === '') {
+        callback(new Error('请输入手机号'))
+      } else if (!reg.test(value)) {
+        callback(new Error('手机格式不正确'))
+      } else {
+        callback()
+      }
+    }
     return {
       dialogServiceObject: false,
       formInfo: {
@@ -136,7 +146,9 @@ export default {
         nickName: [
           { required: true, message: '请输入账号昵称', trigger: 'blur' }
         ],
-        mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        mobile: [
+          { required: true, message: '请输入手机号', validator: validataPhone }
+        ],
         password: [
           { required: true, message: '请输入账号密码', trigger: 'blur' }
         ],
@@ -147,7 +159,7 @@ export default {
       templateObj: {}
     }
   },
-  created() {
+  created () {
     if (this.$route.query.uid) {
       this.getAccountInfo()
     }
@@ -156,7 +168,7 @@ export default {
     this.getRole()
   },
   methods: {
-    getOrg() {
+    getOrg () {
       this.$http
         .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
         .then(res => {
@@ -165,7 +177,7 @@ export default {
           }
         })
     },
-    getRole() {
+    getRole () {
       this.$http.post('/role/pageSearch', { pageSize: MAXSIZE }).then(res => {
         if (res.code === SUCCESS) {
           this.roleList = res.payload.records
@@ -177,10 +189,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.templateObj = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (!this.templateObj.orgServiceProviderId) {
         this.$message.error('请选择一条记录')
         return
@@ -190,7 +202,7 @@ export default {
       this.formInfo.mobile = this.templateObj.telephoneNum
       this.dialogServiceObject = false
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -204,7 +216,7 @@ export default {
         }
       })
     },
-    getTree() {
+    getTree () {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -216,7 +228,7 @@ export default {
         }
       })
     },
-    getAccountInfo() {
+    getAccountInfo () {
       this.$http.get('/user/get?userId=' + this.$route.query.uid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
@@ -276,7 +288,7 @@ export default {
         }
       })
     },
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.uid ? '/user/update' : '/user/add'

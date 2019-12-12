@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 14:21:42
+ * @LastEditTime: 2019-12-12 10:48:25
  -->
 <template>
   <div class="meal-center">
@@ -46,6 +46,7 @@
       </el-form-item>
       <el-button
         @click="dialogFormMenu = true"
+        v-has="'menuManageCopy'"
         style="margin-bottom:15px;float:right"
         size="small"
       >复制本周菜谱</el-button>
@@ -76,71 +77,127 @@
       <template slot="one" slot-scope="{ row, scope }">
         <div class="food-wrap">
           <div class="food-tag" v-for="(item, index) in row.one" :key="index">
-            <el-tag @close="handleDelete(row,item)" closable>
+            <el-tag
+              @close="handleDelete(row,item)"
+              :closable="$store.state.permBtn.includes('menuManageDelete')||$store.state.userInfo.superAdmin"
+            >
               <span class="food-name">{{ item.foodName }}</span>
             </el-tag>
           </div>
-          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.one)">+ 新增菜品</el-button>
+          <el-button
+            v-has="'menuManageEdit'"
+            class="add-food"
+            size="small"
+            @click="handleAddFood(scope,row.one)"
+          >+ 新增菜品</el-button>
         </div>
       </template>
       <template slot="two" slot-scope="{ row, scope }">
         <div class="food-wrap">
           <div class="food-tag" v-for="(item, index) in row.two" :key="index">
-            <el-tag @close="handleDelete(row,item)" closable>
+            <el-tag
+              @close="handleDelete(row,item)"
+              :closable="$store.state.permBtn.includes('menuManageDelete')||$store.state.userInfo.superAdmin"
+            >
               <span class="food-name">{{ item.foodName }}</span>
             </el-tag>
           </div>
-          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.two)">+ 新增菜品</el-button>
+          <el-button
+            v-has="'menuManageEdit'"
+            class="add-food"
+            size="small"
+            @click="handleAddFood(scope,row.two)"
+          >+ 新增菜品</el-button>
         </div>
       </template>
       <template slot="three" slot-scope="{ row, scope }">
         <div class="food-wrap">
           <div class="food-tag" v-for="(item, index) in row.three" :key="index">
-            <el-tag @close="handleDelete(row,item)" closable>
+            <el-tag
+              @close="handleDelete(row,item)"
+              :closable="$store.state.permBtn.includes('menuManageDelete')||$store.state.userInfo.superAdmin"
+            >
               <span class="food-name">{{ item.foodName }}</span>
             </el-tag>
           </div>
-          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.three)">+ 新增菜品</el-button>
+          <el-button
+            v-has="'menuManageEdit'"
+            class="add-food"
+            size="small"
+            @click="handleAddFood(scope,row.three)"
+          >+ 新增菜品</el-button>
         </div>
       </template>
       <template slot="four" slot-scope="{ row, scope }">
         <div class="food-wrap">
           <div class="food-tag" v-for="(item, index) in row.four" :key="index">
-            <el-tag @close="handleDelete(row,item)" closable>
+            <el-tag
+              @close="handleDelete(row,item)"
+              :closable="$store.state.permBtn.includes('menuManageDelete')||$store.state.userInfo.superAdmin"
+            >
               <span class="food-name">{{ item.foodName }}</span>
             </el-tag>
           </div>
-          <el-button size="small" class="add-food" @click="handleAddFood(scope,row.four)">+ 新增菜品</el-button>
+          <el-button
+            v-has="'menuManageEdit'"
+            size="small"
+            class="add-food"
+            @click="handleAddFood(scope,row.four)"
+          >+ 新增菜品</el-button>
         </div>
       </template>
       <template slot="five" slot-scope="{ row, scope }">
         <div class="food-wrap">
           <div class="food-tag" v-for="(item, index) in row.five" :key="index">
-            <el-tag @close="handleDelete(row,item)" closable>
+            <el-tag
+              @close="handleDelete(row,item)"
+              :closable="$store.state.permBtn.includes('menuManageDelete')||$store.state.userInfo.superAdmin"
+            >
               <span class="food-name">{{ item.foodName }}</span>
             </el-tag>
           </div>
-          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.five)">+ 新增菜品</el-button>
+          <el-button
+            v-has="'menuManageEdit'"
+            class="add-food"
+            size="small"
+            @click="handleAddFood(scope,row.five)"
+          >+ 新增菜品</el-button>
         </div>
       </template>
       <template slot="six" slot-scope="{ row, scope }">
         <div class="food-wrap">
           <div class="food-tag" v-for="(item, index) in row.six" :key="index">
-            <el-tag @close="handleDelete(row,item)" closable>
+            <el-tag
+              @close="handleDelete(row,item)"
+              :closable="$store.state.permBtn.includes('menuManageDelete')||$store.state.userInfo.superAdmin"
+            >
               <span class="food-name">{{ item.foodName }}</span>
             </el-tag>
           </div>
-          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.six)">+ 新增菜品</el-button>
+          <el-button
+            v-has="'menuManageEdit'"
+            class="add-food"
+            size="small"
+            @click="handleAddFood(scope,row.six)"
+          >+ 新增菜品</el-button>
         </div>
       </template>
       <template slot="seven" slot-scope="{ row, scope }">
         <div class="food-wrap">
           <div class="food-tag" v-for="(item, index) in row.seven" :key="index">
-            <el-tag @close="handleDelete(row,item)" closable>
+            <el-tag
+              @close="handleDelete(row,item)"
+              :closable="$store.state.permBtn.includes('menuManageDelete')||$store.state.userInfo.superAdmin"
+            >
               <span class="food-name">{{ item.foodName }}</span>
             </el-tag>
           </div>
-          <el-button class="add-food" size="small" @click="handleAddFood(scope,row.seven)">+ 新增菜品</el-button>
+          <el-button
+            v-has="'menuManageEdit'"
+            class="add-food"
+            size="small"
+            @click="handleAddFood(scope,row.seven)"
+          >+ 新增菜品</el-button>
         </div>
       </template>
     </Table>
@@ -212,7 +269,7 @@ export default {
   components: {
     selectFood
   },
-  data () {
+  data() {
     return {
       dialogFormMenu: false,
       api: '',
@@ -309,19 +366,19 @@ export default {
       tempFoodList: []
     }
   },
-  created () {
+  created() {
     this.getOrgList()
     this.getOrg()
   },
   methods: {
-    cellMouseEnter (row, column, cell, event) {
+    cellMouseEnter(row, column, cell, event) {
       event.target.firstElementChild.firstElementChild.lastElementChild.style.display =
         'block'
       console.log(
         event.target.firstElementChild.firstElementChild.lastElementChild
       )
     },
-    cellMouseLeave (row, column, cell, event) {
+    cellMouseLeave(row, column, cell, event) {
       // console.log(row, column, cell, event)
       console.log(
         event.target.firstElementChild.firstElementChild.lastElementChild
@@ -329,7 +386,7 @@ export default {
       event.target.firstElementChild.firstElementChild.lastElementChild.style.display =
         'none'
     },
-    handleSaveCopyMenu () {
+    handleSaveCopyMenu() {
       if (!this.copyWeek) {
         this.$message.error('请选择时间')
         return false
@@ -396,11 +453,11 @@ export default {
         })
     },
     // 选择菜品
-    selectFood (data) {
+    selectFood(data) {
       this.selectFoodList = data
     },
     // 确定选择
-    handleSaveForm () {
+    handleSaveForm() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let arr = []
@@ -427,7 +484,7 @@ export default {
           })
       })
     },
-    handleSaveSelectFood () {
+    handleSaveSelectFood() {
       if (this.selectFoodList.length === 0) {
         this.$message.error('请至少选择一个菜品')
         return false
@@ -442,7 +499,7 @@ export default {
       // })
       this.dialogFood = false
     },
-    getOrg () {
+    getOrg() {
       this.$http
         .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
         .then(res => {
@@ -451,7 +508,7 @@ export default {
           }
         })
     },
-    handleDelete (row, item) {
+    handleDelete(row, item) {
       console.log(row)
       let content = '删除后，该菜品将不再该时段显示，是否确认？'
       this.$confirm(content, '提示', {
@@ -466,8 +523,8 @@ export default {
                 row.type === '早餐'
                   ? 'breakfast'
                   : row.type === '午餐'
-                    ? 'lunch'
-                    : 'supper',
+                  ? 'lunch'
+                  : 'supper',
               foodId: item.foodId,
               menuId: item.menuId
             })
@@ -480,13 +537,13 @@ export default {
         })
         .catch(() => {})
     },
-    handleAddFood (scope, foodList) {
+    handleAddFood(scope, foodList) {
       this.tempFoodList = foodList
       this.formInfo.dateTime = scope.column.className
       this.addType = scope.row.type
       this.dialogFormVisible = true
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       // if (rows.length < 7) {
       //   let len = 7 - rows.length
       //   for (let i = 0; i < len; i++) {
@@ -556,7 +613,7 @@ export default {
       ]
       return res
     },
-    transferWeek (date) {
+    transferWeek(date) {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
         console.log(date)
@@ -565,7 +622,7 @@ export default {
         this.searchData.week = ''
       }
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -588,7 +645,7 @@ export default {
         }
       })
     },
-    cellMerge ({ row, column, rowIndex, columnIndex }) {
+    cellMerge({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex]
         const _col = _row ? 1 : 0
@@ -602,7 +659,7 @@ export default {
         }
       }
     },
-    getSpanArr (data) {
+    getSpanArr(data) {
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           this.spanArr.push(1)

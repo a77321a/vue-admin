@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 10:46:34
+ * @LastEditTime: 2019-12-12 14:09:59
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -21,12 +21,15 @@ import 'font-awesome/css/font-awesome.css'
 import './common/css/variable.scss'
 import axios from './common/js/axios'
 import func from './common/js/utils'
+import btnControl from './common/js/btnControls'
 // 配置NProgress进度条选项  —— 动画效果
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 // 高德地图
 import VueAMap from 'vue-amap'
+import { format } from 'url'
 
+Vue.use(btnControl)
 Vue.prototype.$func = func
 NProgress.configure({ showSpinner: false })
 Vue.use(VueAMap)
@@ -49,18 +52,37 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   NProgress.start()
   store.commit('setPath', to.fullPath)
-  // if (from.name == null && name !== 'Login') {
-  //   store.dispatch('getDictionaryManagement')
-  // }
   if (!localStorage.webToken && to.name !== 'Login') {
     router.push({ name: 'Login' })
+  }
+  let superAdmin = store.state.userInfo.superAdmin
+  if (!superAdmin) {
+    if (from.name == null && to.name === 'Index') {
+      if (localStorage.routerList) {
+        let routerList = JSON.parse(localStorage.routerList)
+        for (let i in routerList) {
+          if (routerList[i].url === 'Home') {
+            router.push({
+              name: 'Home'
+            })
+            break
+          }
+        }
+        router.push({
+          name: JSON.parse(localStorage.routerList)[0].children[0].children[0].url
+        })
+      } else {
+        router.push({
+          name: 'Login'
+        })
+      }
+      next()
+    }
   }
   if (to.meta.title) {
     document.title = window.docTitle + ' - ' + to.meta.title
   }
-  if (to.name == null) {
-    router.push({ name: 'Login' })
-  } else if (to.name !== 'login' && to.name !== 'lostPassword' && to.name !== '404') {
+  if (to.name !== 'Login' && to.name !== 'lostPassword' && to.name !== '404') {
     if (to.meta.root) {
       store.commit('setBreadList', [{ url: to.name, title: to.meta.title }])
     } else {
@@ -71,7 +93,6 @@ router.beforeEach((to, from, next) => {
         arr.push(breadList[i])
         if (breadList[i].url === to.name) {
           store.commit('setBreadList', arr)
-          console.log(arr)
           breadList = arr
           break
         }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 22:33:49
+ * @LastEditTime: 2019-12-12 10:06:59
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -13,6 +13,7 @@ import config from '../config/config'
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
+    permBtn: localStorage.permBtn ? JSON.parse(localStorage.permBtn) : [],
     permList: localStorage.permList ? JSON.parse(localStorage.permList) : [],
     permNameList: localStorage.permNameList ? JSON.parse(localStorage.permNameList) : [],
     userInfo: localStorage.userInfo ? JSON.parse(localStorage.userInfo) : {},
@@ -90,6 +91,10 @@ const store = new Vuex.Store({
     setPermName (state, data) {
       state.permNameList = data
       localStorage.setItem('permNameList', JSON.stringify(data))
+    },
+    setPermBtnList (state, data) {
+      state.permBtn = data
+      localStorage.setItem('permBtn', JSON.stringify(data))
     }
   },
   actions: {

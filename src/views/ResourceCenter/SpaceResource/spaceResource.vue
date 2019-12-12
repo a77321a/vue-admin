@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:38:56
+ * @LastEditTime: 2019-12-12 11:15:20
  -->
 <template>
   <div id="space-resource">
@@ -31,11 +31,17 @@
         <span>{{ data.addressName }}</span>
         <span style="float:right">
           <el-button
+            v-has="'spaceResourceAdd'"
             type="text"
             size="mini"
             @click="() => handleAppend(node,data)"
           >{{data.depth == 1 ? '新增区（县）' : data.depth == 2 ? '新增街道（乡）' : data.depth ==3 ?'新增社区（村）':''}}</el-button>
-          <el-button type="text" size="mini" @click="() => handleDelete(node, data)">删除</el-button>
+          <el-button
+            v-has="'spaceResourceDelete'"
+            type="text"
+            size="mini"
+            @click="() => handleDelete(node, data)"
+          >删除</el-button>
         </span>
       </div>
     </el-tree>

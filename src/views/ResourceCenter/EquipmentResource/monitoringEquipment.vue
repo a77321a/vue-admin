@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:43:49
+ * @LastEditTime: 2019-12-12 11:06:16
  -->
 <template>
   <div class="event-center">
@@ -57,6 +57,7 @@
       style="margin-bottom:15px"
       size="small"
       type="primary"
+      v-has="'monitoringEquipmentAdd'"
     >新增设备</el-button>
     <!-- 列表 -->
     <Table
@@ -80,22 +81,27 @@
           </div>
         </div>
       </template>
-      <template slot-scope="{row}" slot="videoInterfaceAddress">
-        {{row.videoStreamAddress}}
-      </template>
-      <template slot-scope="{row}" slot="videoStreamAddress">
-        {{row.activityRoomName ? row.activityRoomName:row.orgName}}
-      </template>
+      <template slot-scope="{row}" slot="videoInterfaceAddress">{{row.videoStreamAddress}}</template>
+      <template
+        slot-scope="{row}"
+        slot="videoStreamAddress"
+      >{{row.activityRoomName ? row.activityRoomName:row.orgName}}</template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
+          v-has="'monitoringEquipmentEdit'"
           type="text"
           @click="$router.push({name:'editMonitorEquipment',query:{deviceType:1,deviceId:row.deviceId}})"
           size="small"
         >编辑</el-button>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button
+          v-has="'monitoringEquipmentDelete'"
+          @click="handleDelete(row)"
+          type="text"
+          size="small"
+        >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button v-has="'monitoringEquipmentDelete'" @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>

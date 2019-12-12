@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 20:57:54
+ * @LastEditTime: 2019-12-12 11:00:05
  -->
 <template>
   <div class="event-room">
@@ -47,6 +47,7 @@
             style="margin-bottom:15px"
             size="small"
             type="primary"
+            v-has="'serviceProductAdd'"
           >新增产品</el-button>
           <!-- 列表 -->
           <Table
@@ -71,12 +72,18 @@
             </template>
             <template slot-scope="{row}" slot="action">
               <el-button
+                v-has="'serviceProductEdit'"
                 @click="$router.push({name:'editServiceProduct',query:{pid:row.orgServiceProductId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
 
-              <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+              <el-button
+                v-has="'serviceProductDelete'"
+                @click="handleDelete(row)"
+                type="text"
+                size="small"
+              >删除</el-button>
             </template>
           </Table>
         </div>
@@ -91,7 +98,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -121,15 +128,15 @@ export default {
       selectActivity: []
     }
   },
-  created () {
+  created() {
     this.getServiceTypeList()
   },
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    getServiceTypeList () {
+    getServiceTypeList() {
       this.$http
         .post('/org/service/type/pageSearch', { pageSize: MAXSIZE })
         .then(res => {
@@ -138,10 +145,10 @@ export default {
           }
         })
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.orgServiceProductId] : []
       this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

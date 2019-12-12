@@ -54,6 +54,7 @@
       </el-form-item>
     </el-form>
     <el-button
+      v-has="'countingEquipmentAdd'"
       @click="$router.push({name:'editCountEquipment',query:{deviceType:2}})"
       style="margin-bottom:15px"
       size="small"
@@ -76,13 +77,19 @@
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           type="text"
+          v-has="'countingEquipmentEdit'"
           @click="$router.push({name:'editCountEquipment',query:{deviceType:2,deviceId:row.deviceId}})"
           size="small"
         >编辑</el-button>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button
+          v-has="'countingEquipmentDelete'"
+          @click="handleDelete(row)"
+          type="text"
+          size="small"
+        >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button v-has="'countingEquipmentDelete'" @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>

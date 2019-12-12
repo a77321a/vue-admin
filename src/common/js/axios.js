@@ -40,7 +40,7 @@ function endLoading () {
 let needLoadingRequestCount = 0
 export function showFullScreenLoading () {
   if (needLoadingRequestCount === 0) {
-    startLoading()
+    // startLoading()
   }
   needLoadingRequestCount++
 }
@@ -116,7 +116,7 @@ axios.interceptors.response.use(
 
 // 封装get方法
 
-function get (url, params = {}, loading = false) {
+function get (url, params = {}, loading = true) {
   return new Promise((resolve, reject) => {
     axios.get(url, {
       params: params,

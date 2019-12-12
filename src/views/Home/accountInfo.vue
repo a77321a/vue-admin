@@ -3,7 +3,7 @@
  * @Author: 辛顺宁
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-12-11 15:01:39
+ * @LastEditTime: 2019-12-12 15:37:02
  -->
 <template>
   <div id="account-info">
@@ -31,6 +31,43 @@
             type="text"
             style="float:right;margin-right:20px;margin-top:5px"
           >修改</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+    <el-card header="管理服务人员信息" style="margin-top:20px" v-if="userInfo.inner" class="box-card">
+      <el-form label-width="90px">
+        <el-form-item label="头像">
+          <el-avatar
+            style="vertical-align: middle;"
+            :src="$store.state.config.systemConfig[0].dictionaryValue+userInfo.inner.indexPic"
+          ></el-avatar>
+          <!-- <el-upload
+            action="apii/public/img"
+            style="float:right;margin-right:20px;margin-top:5px"
+            :show-file-list="false"
+            :before-upload="uploadImg"
+            accept="image/*"
+          >
+            <el-button type="text">修改</el-button>
+          </el-upload>-->
+        </el-form-item>
+        <el-form-item label="昵称">{{userInfo.inner.orgServiceProviderName}}</el-form-item>
+
+        <el-form-item label="手机号">{{userInfo.inner.telephoneNum}}</el-form-item>
+        <el-form-item
+          label="服务范围"
+        >{{userInfo.inner.cityName+userInfo.inner.districtName+userInfo.inner.communityName+userInfo.inner.streetName}}</el-form-item>
+        <el-form-item label="服务类型">
+          <span
+            v-for="(item, index) in userInfo.inner.orgServiceTypes"
+            :key="index"
+          >{{item.orgServiceTypeName}}</span>
+        </el-form-item>
+        <el-form-item label="服务产品">
+          <span
+            v-for="(item, index) in userInfo.inner.orgServiceProducts"
+            :key="index"
+          >{{item.orgServiceProductName}}</span>
         </el-form-item>
       </el-form>
     </el-card>
@@ -74,7 +111,7 @@ export default {
       }
     }
     return {
-      userDetail: {},
+      userDetail: this.$store.state.userInfo,
       dialogFormVisible: false,
       formInfo: {},
       rules: {
@@ -99,6 +136,9 @@ export default {
   computed: {
     userId () {
       return localStorage.userId
+    },
+    userInfo () {
+      return this.$store.state.userInfo
     },
     avatar () {
       return (
@@ -146,14 +186,14 @@ export default {
             }
           })
       })
-    },
-    getUserDetail () {
-      this.$http.get('/user/get?userId=' + this.userId).then(res => {
-        if (res.code === SUCCESS) {
-          this.userDetail = res.payload
-        }
-      })
     }
+    // getUserDetail () {
+    //   this.$http.get('/user/get?userId=' + this.userId).then(res => {
+    //     if (res.code === SUCCESS) {
+    //       this.userDetail = res.payload
+    //     }
+    //   })
+    // }
   }
 }
 </script>

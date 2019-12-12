@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 20:39:26
+ * @LastEditTime: 2019-12-12 14:19:20
  -->
 <template>
   <div class="user-manage">
@@ -78,7 +78,7 @@
       <template
         slot="activityStatus"
         slot-scope="{row}"
-      >{{$store.state.config.activityStatus[row.activityStatus].dictionaryLabel}}</template>
+      >{{$func.transLabel($store.state.config.activityStatus,row.activityStatus)}}</template>
       <template slot="number" slot-scope="{row}">{{row.actualCustomerNum}}/{{row.customerNum}}</template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
@@ -117,7 +117,7 @@
 <script>
 export default {
   name: 'eventRecords',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {
@@ -157,15 +157,15 @@ export default {
       selectActivity: []
     }
   },
-  created () {},
+  created() {},
   props: ['activityRoomId'],
   methods: {
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime (date) {
+    handlTime(date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -174,14 +174,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.activityId)
       })
       this.selectActivity = arr
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
@@ -198,7 +198,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity (row) {
+    handleCloseActivity(row) {
       let id = row ? [row.activityId] : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 20:45:15
+ * @LastEditTime: 2019-12-12 10:55:50
  -->
 <template>
   <div class="service-center">
@@ -41,6 +41,7 @@
         <el-button
           @click="$router.push({name:'editServiceCenter'})"
           style="margin-bottom:15px"
+          v-has="'serviceCenterAdd'"
           size="small"
           type="primary"
         >新增服务</el-button>
@@ -56,11 +57,11 @@
           <template slot="customerNum" slot-scope="{row}">{{row.customerNum}}人</template>
           <template slot="action" slot-scope="{row}">
             <el-button
+              v-has="'serviceCenterEdit'"
               @click="$router.push({name:'editServiceCenter',query:{sid:row.serviceRecordId}})"
               type="text"
             >编辑</el-button>
-
-            <el-button @click="handleDelete(row)" type="text">删除</el-button>
+            <el-button v-has="'serviceCenterDelete'" @click="handleDelete(row)" type="text">删除</el-button>
           </template>
         </Table>
       </el-col>

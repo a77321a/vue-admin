@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:47:12
+ * @LastEditTime: 2019-12-12 11:07:14
  -->
 <template>
   <div class="event-room">
@@ -34,6 +34,7 @@
             style="margin-bottom:15px"
             size="small"
             type="primary"
+            v-has="'pensionProductAdd'"
           >新增产品</el-button>
           <!-- 列表 -->
           <Table
@@ -63,12 +64,18 @@
                 @click="$router.push({name:'editPensionProduct',query:{pid:row.pensionServiceProductId}})"
                 type="text"
                 size="small"
+                v-has="'pensionProductEdit'"
               >编辑</el-button>
 
-              <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+              <el-button
+                v-has="'pensionProductDelete'"
+                @click="handleDelete(row)"
+                type="text"
+                size="small"
+              >删除</el-button>
             </template>
             <template slot="footer-left">
-              <el-button @click="handleDelete(null)" type="text">删除</el-button>
+              <el-button v-has="'pensionProductDelete'" @click="handleDelete(null)" type="text">删除</el-button>
             </template>
           </Table>
         </div>

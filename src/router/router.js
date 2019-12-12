@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-11-12 16:56:01
+ * @LastEditTime: 2019-12-12 11:46:37
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -18,7 +18,7 @@ const syncRoute = [
   {
     path: '/',
     name: 'Index',
-    redirect: '/Home',
+    // redirect: '/Home',
     component: () => import('@/Layout.vue'),
     children: [
       {

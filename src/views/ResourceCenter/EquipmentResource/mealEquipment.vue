@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-09 17:13:55
+ * @LastEditTime: 2019-12-12 11:05:31
  -->
 <template>
   <div class="event-center">
@@ -38,6 +38,7 @@
       style="margin-bottom:15px"
       size="small"
       type="primary"
+      v-has="'mealEquipmentAdd'"
     >新增设备</el-button>
     <!-- 列表 -->
     <Table
@@ -64,13 +65,19 @@
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           type="text"
+          v-has="'mealEquipmentEdit'"
           @click="$router.push({name:'editMealEquipment',query:{deviceType:3,deviceId:row.deviceId}})"
           size="small"
         >编辑</el-button>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button
+          v-has="'mealEquipmentDelete'"
+          @click="handleDelete(row)"
+          type="text"
+          size="small"
+        >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button v-has="'mealEquipmentDelete'" @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>

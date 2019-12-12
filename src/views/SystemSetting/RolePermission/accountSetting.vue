@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 16:53:49
+ * @LastEditTime: 2019-12-12 11:24:45
  -->
 <template>
   <div class="account-setting">
@@ -36,6 +36,7 @@
       style="margin-bottom:15px"
       size="small"
       type="primary"
+      v-has="'accountSettingAdd'"
     >新增账号</el-button>
     <!-- 列表 -->
     <Table
@@ -51,14 +52,20 @@
       <template slot-scope="{row}" slot="accountType">{{row.accountType == 1 ? '内部服务人员':'外部人员'}}</template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
+          v-has="'accountSettingEdit'"
           @click="$router.push({name:'editAccount',query:{uid:row.userId}})"
           type="text"
           size="small"
         >编辑</el-button>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button
+          v-has="'accountSettingDelete'"
+          @click="handleDelete(row)"
+          type="text"
+          size="small"
+        >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button v-has="'accountSettingDelete'" @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-11 20:21:52
+ * @LastEditTime: 2019-12-12 14:35:37
  -->
 <template>
   <div class="serviceObject">
@@ -39,8 +39,9 @@
       style="margin-bottom:15px"
       size="small"
       type="primary"
+      v-has="'serviceObjectAdd'"
     >新增对象</el-button>
-    <el-button @click="exportExcel" size="small">导出数据</el-button>
+    <el-button v-has="'serviceObjectExport'" @click="exportExcel" size="small">导出数据</el-button>
     <!-- 列表 -->
     <Table
       @commitSelection="commitSelection"
@@ -75,20 +76,24 @@
           @click="$router.push({name:'serviceObjectInfo',query:{sid:row.serviceCustomerId}})"
           type="text"
           size="small"
+          v-has="'serviceObjectDetail'"
         >详情</el-button>
-
-        <el-button @click="formInfo = row;dialogFormVisible = true" type="text" size="small">健康管理</el-button>
-
+        <el-button
+          v-has="'agencyManageHealthy'"
+          @click="formInfo = row;dialogFormVisible = true"
+          type="text"
+          size="small"
+        >健康管理</el-button>
         <el-button
           @click="$router.push({name:'editObject',query:{sid:row.serviceCustomerId}})"
           type="text"
           size="small"
+          v-has="'serviceObjectEdit'"
         >编辑</el-button>
-
-        <el-button type="text" size="small">删除</el-button>
+        <el-button type="text" v-has="'serviceObjectDelete'" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button type="text">删除</el-button>
+        <el-button v-has="'serviceObjectDelete'" type="text">删除</el-button>
       </template>
     </Table>
     <el-dialog title="添加健康记录" :visible.sync="dialogFormVisible">
@@ -230,7 +235,9 @@ export default {
           .serviceCustomerName || ''}&mobile=${this.searchData.mobile ||
           ''}&cityId=${this.searchData.cityId || ''}&districtId=${this
           .searchData.districtId || ''}&streetId=${this.searchData.streetId ||
-          ''}&communityId=${this.searchData.communityId || ''}`
+          ''}&communityId=${this.searchData.communityId || ''}&token=${
+          this.$store.state.token
+        }`
       )
     },
     changeArea (area) {

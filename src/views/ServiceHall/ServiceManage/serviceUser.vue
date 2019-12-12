@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-09 15:38:08
+ * @LastEditTime: 2019-12-12 10:58:21
  -->
 <template>
   <div class="service-user">
@@ -34,6 +34,7 @@
             style="margin-bottom:15px"
             size="small"
             type="primary"
+            v-has="'serviceUserAdd'"
           >新增人员</el-button>
           <!-- 列表 -->
           <Table
@@ -58,21 +59,28 @@
             <template slot="sex" slot-scope="{row}">{{row.sex == 1 ?'男':'女'}}</template>
             <template slot-scope="{row}" slot="action">
               <el-button
+                v-has="'serviceUserDetail'"
                 @click="$router.push({name:'serviceUserInfo',query:{uid:row.orgServiceProviderId}})"
                 type="text"
                 size="small"
               >详情</el-button>
 
               <el-button
+                v-has="'serviceUserEdit'"
                 @click="$router.push({name:'editServiceUser',query:{uid:row.orgServiceProviderId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
 
-              <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+              <el-button
+                v-has="'serviceUserDelete'"
+                @click="handleDelete(row)"
+                type="text"
+                size="small"
+              >删除</el-button>
             </template>
             <template slot="footer-left">
-              <el-button @click="handleDelete(null)" type="text">删除</el-button>
+              <el-button v-has="'serviceUserDelete'" @click="handleDelete(null)" type="text">删除</el-button>
             </template>
           </Table>
         </div>

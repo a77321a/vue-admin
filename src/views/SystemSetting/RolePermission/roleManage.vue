@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-01 19:23:09
+ * @LastEditTime: 2019-12-12 11:24:13
  -->
 <template>
   <div class="role-manage">
@@ -27,6 +27,7 @@
       style="margin-bottom:15px"
       size="small"
       type="primary"
+      v-has="'roleManageAdd'"
     >新增角色</el-button>
     <!-- 列表 -->
     <Table
@@ -40,19 +41,21 @@
     >
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
+          v-has="'roleManagePreview'"
           @click="$router.push({name:'roleInfo',query:{rid:row.roleId}})"
           type="text"
           size="small"
         >查看</el-button>
         <el-button
+          v-has="'roleManageEdit'"
           @click="$router.push({name:'editRole',query:{id:row.roleId}})"
           type="text"
           size="small"
         >编辑</el-button>
-        <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+        <el-button v-has="'roleManageDelete'" @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button v-has="'roleManageDelete'" @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>

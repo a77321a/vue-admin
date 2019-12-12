@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-07 11:06:10
+ * @LastEditTime: 2019-12-12 10:38:12
  -->
 <template>
   <div class="event-room">
@@ -36,6 +36,7 @@
             @click="$router.push({name:'editEventRoom'})"
             style="margin-bottom:15px"
             size="small"
+            v-has="'eventCenterDelete'"
             type="primary"
           >新增活动室</el-button>
           <!-- 列表 -->
@@ -55,18 +56,25 @@
                 @click="$router.push({name:'eventRoomInfo',query:{aid:row.activityRoomId}})"
                 type="text"
                 size="small"
+                v-has="'eventRoomPreview'"
               >查看</el-button>
 
               <el-button
                 @click="$router.push({name:'editEventRoom',query:{aid:row.activityRoomId}})"
                 type="text"
                 size="small"
+                v-has="'eventRoomEdit'"
               >编辑</el-button>
 
-              <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
+              <el-button
+                v-has="'eventRoomDelete'"
+                @click="handleDelete(row)"
+                type="text"
+                size="small"
+              >删除</el-button>
             </template>
             <template slot="footer-left">
-              <el-button @click="handleDelete(null)" type="text">删除</el-button>
+              <el-button v-has="'eventRoomDelete'" @click="handleDelete(null)" type="text">删除</el-button>
             </template>
           </Table>
         </div>
