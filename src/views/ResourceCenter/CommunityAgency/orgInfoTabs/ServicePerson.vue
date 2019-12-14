@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 22:28:57
+ * @LastEditTime: 2019-12-14 10:35:42
  -->
 <template>
   <div class="Participants">
@@ -29,6 +29,8 @@
           <span class="f-title">{{ row.orgServiceProviderName }}</span>
         </div>
       </template>
+      <template slot="orgServiceProductList" slot-scope="{ row }">{{row.sex == 0 ?'女':'男'}}</template>
+
       <template slot="sex" slot-scope="{ row }">{{row.sex == 0 ?'女':'男'}}</template>
       <template slot-scope="{ row }" slot="handleColumn">
         <el-button

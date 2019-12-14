@@ -10,12 +10,12 @@ NProgress.configure({ showSpinner: false })
 // 全局定义loading
 let loading
 function startLoading () {
-  loading = Loading.service({
-    target: document.querySelector('#load-wrap'),
-    lock: true,
-    text: '加载中……',
-    background: 'rgba(0, 0, 0, .1)'
-  })
+  // loading = Loading.service({
+  //   target: document.querySelector('#load-wrap'),
+  //   lock: true,
+  //   text: '加载中……',
+  //   background: 'rgba(0, 0, 0, .1)'
+  // })
   // store.commit('toggleLoading', true)
 }
 

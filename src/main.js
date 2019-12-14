@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 14:09:59
+ * @LastEditTime: 2019-12-14 10:05:24
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -98,6 +98,11 @@ router.beforeEach((to, from, next) => {
         }
       }
     }
+  }
+  if (to.name === 'Index') {
+    router.push({
+      name: 'Home'
+    })
   }
   next()
 })

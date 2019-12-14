@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:07:37
+ * @LastEditTime: 2019-12-14 10:32:55
  -->
 <template>
   <div class="account-setting">
@@ -56,7 +56,7 @@
       <template slot="footer-left"></template>
     </Table>
     <el-dialog
-      :title="formInfo.pensionServiceTypeId ? '编辑类型' :'新增类型'"
+      :title="formInfo.pensionServiceTypeId ? '编辑产品目录' :'新增产品目录'"
       :visible.sync="dialogFormVisible"
     >
       <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
@@ -80,7 +80,7 @@
 <script>
 export default {
   name: 'productType',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -104,9 +104,9 @@ export default {
       dialogFormVisible: false
     }
   },
-  created() {},
+  created () {},
   methods: {
-    handleSaveForm() {
+    handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.formInfo.pensionServiceTypeId
@@ -126,12 +126,12 @@ export default {
           })
       })
     },
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.accountType = row.superAdmin ? '超级管理员' : '--'
       })
     },
-    handleDelete(row) {
+    handleDelete (row) {
       if (row.productNum > 0) {
         this.$message.error('当前分类下含有产品，无法删除')
         return

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 10:48:25
+ * @LastEditTime: 2019-12-14 10:30:44
  -->
 <template>
   <div class="meal-center">
@@ -269,7 +269,7 @@ export default {
   components: {
     selectFood
   },
-  data() {
+  data () {
     return {
       dialogFormMenu: false,
       api: '',
@@ -366,19 +366,19 @@ export default {
       tempFoodList: []
     }
   },
-  created() {
+  created () {
     this.getOrgList()
     this.getOrg()
   },
   methods: {
-    cellMouseEnter(row, column, cell, event) {
+    cellMouseEnter (row, column, cell, event) {
       event.target.firstElementChild.firstElementChild.lastElementChild.style.display =
         'block'
       console.log(
         event.target.firstElementChild.firstElementChild.lastElementChild
       )
     },
-    cellMouseLeave(row, column, cell, event) {
+    cellMouseLeave (row, column, cell, event) {
       // console.log(row, column, cell, event)
       console.log(
         event.target.firstElementChild.firstElementChild.lastElementChild
@@ -386,7 +386,7 @@ export default {
       event.target.firstElementChild.firstElementChild.lastElementChild.style.display =
         'none'
     },
-    handleSaveCopyMenu() {
+    handleSaveCopyMenu () {
       if (!this.copyWeek) {
         this.$message.error('请选择时间')
         return false
@@ -453,11 +453,11 @@ export default {
         })
     },
     // 选择菜品
-    selectFood(data) {
+    selectFood (data) {
       this.selectFoodList = data
     },
     // 确定选择
-    handleSaveForm() {
+    handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let arr = []
@@ -471,7 +471,7 @@ export default {
             lunch: this.addType === '午餐' ? arr : [],
             supper: this.addType === '晚餐' ? arr : [],
             dateTime: this.formInfo.dateTime,
-            orgIds: this.searchData.orgId
+            orgIds: [this.searchData.orgId]
           })
           .then(res => {
             if (res.code === SUCCESS) {
@@ -484,7 +484,7 @@ export default {
           })
       })
     },
-    handleSaveSelectFood() {
+    handleSaveSelectFood () {
       if (this.selectFoodList.length === 0) {
         this.$message.error('请至少选择一个菜品')
         return false
@@ -499,7 +499,7 @@ export default {
       // })
       this.dialogFood = false
     },
-    getOrg() {
+    getOrg () {
       this.$http
         .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
         .then(res => {
@@ -508,7 +508,7 @@ export default {
           }
         })
     },
-    handleDelete(row, item) {
+    handleDelete (row, item) {
       console.log(row)
       let content = '删除后，该菜品将不再该时段显示，是否确认？'
       this.$confirm(content, '提示', {
@@ -523,8 +523,8 @@ export default {
                 row.type === '早餐'
                   ? 'breakfast'
                   : row.type === '午餐'
-                  ? 'lunch'
-                  : 'supper',
+                    ? 'lunch'
+                    : 'supper',
               foodId: item.foodId,
               menuId: item.menuId
             })
@@ -537,13 +537,13 @@ export default {
         })
         .catch(() => {})
     },
-    handleAddFood(scope, foodList) {
+    handleAddFood (scope, foodList) {
       this.tempFoodList = foodList
       this.formInfo.dateTime = scope.column.className
       this.addType = scope.row.type
       this.dialogFormVisible = true
     },
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       // if (rows.length < 7) {
       //   let len = 7 - rows.length
       //   for (let i = 0; i < len; i++) {
@@ -613,7 +613,7 @@ export default {
       ]
       return res
     },
-    transferWeek(date) {
+    transferWeek (date) {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
         console.log(date)
@@ -622,7 +622,7 @@ export default {
         this.searchData.week = ''
       }
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgList = res.payload
@@ -645,7 +645,7 @@ export default {
         }
       })
     },
-    cellMerge({ row, column, rowIndex, columnIndex }) {
+    cellMerge ({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex]
         const _col = _row ? 1 : 0
@@ -659,7 +659,7 @@ export default {
         }
       }
     },
-    getSpanArr(data) {
+    getSpanArr (data) {
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           this.spanArr.push(1)

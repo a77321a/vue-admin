@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 14:35:37
+ * @LastEditTime: 2019-12-14 09:58:03
  -->
 <template>
   <div class="serviceObject">
@@ -64,6 +64,9 @@
       </template>
       <template slot-scope="{row}" slot="gender">
         <div>{{row.gender == 1 ?'男':'女'}}</div>
+      </template>
+      <template slot-scope="{row}" slot="streetName">
+        <div>{{row.cityName+row.districtName+row.communityName+row.streetName+row.address}}</div>
       </template>
       <template slot-scope="{row}" slot="emergencyList">
         <span v-for="(item, index) in row.emergencyList" :key="index">
@@ -193,6 +196,11 @@ export default {
           prop: 'mobile',
           minWidth: 100
         },
+        // {
+        //   label: '状态',
+        //   prop: 'mobile',
+        //   minWidth: 100
+        // },
         {
           label: '紧急联系电话',
           prop: 'emergencyMobile',
@@ -200,7 +208,7 @@ export default {
         },
         {
           label: '所在区域',
-          prop: 'streetName',
+          slot: 'streetName',
           minWidth: 150
         },
         {

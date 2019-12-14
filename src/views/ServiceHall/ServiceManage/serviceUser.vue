@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 10:58:21
+ * @LastEditTime: 2019-12-14 09:59:53
  -->
 <template>
   <div class="service-user">
@@ -14,7 +14,7 @@
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="80px" size="small">
             <el-form-item label="姓名">
-              <el-input placeholder="请输入姓名关键字" v-model="searchData.serviceProviderName"></el-input>
+              <el-input placeholder="请输入姓名关键字" v-model="searchData.orgServiceProviderName"></el-input>
             </el-form-item>
             <el-form-item label="手机号">
               <el-input placeholder="请输入手机号" v-model="searchData.telephoneNum"></el-input>
@@ -96,7 +96,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -119,19 +119,19 @@ export default {
       selectServiceUser: []
     }
   },
-  created () {
+  created() {
     console.log(JSON.parse(localStorage.config))
   },
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
     // 多选  同所有表格
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.orgServiceProviderId)
@@ -139,7 +139,7 @@ export default {
       this.selectServiceUser = arr
     },
     // 删除
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.orgServiceProviderId] : this.selectServiceUser
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
