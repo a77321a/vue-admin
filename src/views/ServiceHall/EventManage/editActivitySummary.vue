@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-12 14:20:31
+ * @LastEditTime: 2019-12-14 15:19:17
  -->
 <template>
   <div id="edit-event">
@@ -277,6 +277,16 @@ export default {
       }
       this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
         this.selectObjectList
+      )
+      let obj = {}
+      this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.reduce(
+        (cur, next) => {
+          obj[next.serviceCustomerId]
+            ? ''
+            : (obj[next.serviceCustomerId] = true && cur.push(next))
+          return cur
+        },
+        []
       )
       this.selectObjectList = []
       this.dialogServiceObject = false

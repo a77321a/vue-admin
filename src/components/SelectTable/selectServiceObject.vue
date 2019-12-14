@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors:
- * @LastEditTime: 2019-11-24 19:37:58
+ * @LastEditTime: 2019-12-14 15:18:11
  -->
 <template>
   <div id="select-service-object">
@@ -23,8 +23,9 @@
         </el-form-item>
       </el-form>
     </el-form>
+    <!-- :selectable="selectable" -->
+
     <Table
-      :selectable="selectable"
       :highlightCurrentRow="single"
       @commitSelection="commitSelection"
       :height="$store.state.dialogHeight - 200"
@@ -53,7 +54,7 @@
 <script>
 export default {
   name: 'selectServiceObject',
-  data() {
+  data () {
     return {
       name: '',
       searchRefresh: true,
@@ -70,45 +71,45 @@ export default {
     orgId: {},
     single: {
       type: Boolean,
-      default: function() {
+      default: function () {
         return false
       }
     },
     isSelected: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     }
   },
   watch: {
-    clearList() {
+    clearList () {
       this.searchRefresh = !this.searchRefresh
     }
   },
   methods: {
-    selectable(row, index) {
-      if (this.isSelected.length === 0) {
-        return 1
-      }
-      for (let i in this.isSelected) {
-        if (
-          this.isSelected[i].serviceCustomerId &&
-          this.isSelected[i].serviceCustomerId === row.serviceCustomerId
-        ) {
-          return 0
-        } else {
-          return 1
-        }
-      }
-    },
-    commitSelection(data) {
+    // selectable (row, index) {
+    //   if (this.isSelected.length === 0) {
+    //     return 1
+    //   }
+    //   for (let i in this.isSelected) {
+    //     if (
+    //       this.isSelected[i].serviceCustomerId &&
+    //       this.isSelected[i].serviceCustomerId === row.serviceCustomerId
+    //     ) {
+    //       return 0
+    //     } else {
+    //       return 1
+    //     }
+    //   }
+    // },
+    commitSelection (data) {
       this.$emit('selectObject', data)
     },
-    singleSelect(row, orow) {
+    singleSelect (row, orow) {
       this.$emit('selectObject', row)
     },
-    rowsForamtter(row) {}
+    rowsForamtter (row) {}
   }
 }
 </script>
