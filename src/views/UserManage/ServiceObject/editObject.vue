@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-11 20:52:56
+ * @LastEditTime: 2019-12-15 15:19:10
  -->
 <template>
   <div id="edit-event">
@@ -64,12 +64,13 @@
           </div>
           <el-upload
             action="apii/public/img"
+            multiple
             :show-file-list="false"
             :before-upload="uploadImgList"
             accept="image/*"
           >
             <el-button
-              :disabled="formInfo.serviceCustomerPicList.length > 8"
+              v-if="formInfo.serviceCustomerPicList.length < 9"
               type="primary"
               icon="ios-cloud-upload-outline"
             >选择文件</el-button>
@@ -316,7 +317,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data() {
+  data () {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -482,20 +483,20 @@ export default {
       clearList: false
     }
   },
-  created() {
+  created () {
     if (this.$route.query.sid) {
       this.getServiceUserInfo()
     }
     this.getTree()
   },
   methods: {
-    handleSaveForm() {
+    handleSaveForm () {
       this.formInfo.emergencyManualList.push(this.contractUser)
       console.log(this.formInfo.emergencyManualList)
       this.contractUser = {}
       this.dialogFormVisible = false
     },
-    handleClick(tab, event) {
+    handleClick (tab, event) {
       this.clearList = !this.clearList
       this.selectObjectList = []
     },
@@ -504,10 +505,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
@@ -520,7 +521,7 @@ export default {
       this.selectObjectList = []
       this.dialogServiceObject = false
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -530,15 +531,21 @@ export default {
       })
       return false
     },
-    handleRemove(index) {
+    handleRemove (index) {
       this.formInfo.serviceCustomerPicList.splice(index, 1)
     },
-    uploadImgList(file) {
+    uploadImgList (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo.serviceCustomerPicList.push(res.payload)
+          if (this.formInfo.serviceCustomerPicList.length > 9) {
+            this.formInfo.serviceCustomerPicList = this.formInfo.serviceCustomerPicList.splice(
+              0,
+              9
+            )
+          }
         }
       })
       return false
@@ -547,7 +554,7 @@ export default {
      * @descripttion: 获取服务对象信息
      * @return: 信息
      */
-    getServiceUserInfo() {
+    getServiceUserInfo () {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {
@@ -569,7 +576,7 @@ export default {
           }
         })
     },
-    getTree() {
+    getTree () {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -582,7 +589,7 @@ export default {
       })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let arr = []

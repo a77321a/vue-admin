@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-11 11:01:35
+ * @LastEditTime: 2019-12-15 14:57:25
  -->
 <template>
   <div id="edit-role">
@@ -34,7 +34,11 @@
           v-model="formInfo.roleDesc"
         ></el-input>
       </el-form-item>
-      <div class="title">设置权限</div>
+
+      <div class="title">
+        设置权限
+        <el-checkbox style="float:right" v-model="checkAll">全选</el-checkbox>
+      </div>
       <el-tree
         ref="permissionTree"
         style="margin:20px;"
@@ -59,8 +63,9 @@
 <script>
 export default {
   name: 'editRole',
-  data() {
+  data () {
     return {
+      checkAll: false,
       formInfo: {
         roleName: '',
         roleDesc: '',
@@ -78,11 +83,26 @@ export default {
       data: []
     }
   },
-  created() {
+  created () {
     this.getTree()
   },
+  watch: {
+    checkAll (val) {
+      if (val) {
+        let arr = []
+        this.data.forEach(i => {
+          arr.push(i.permissionId)
+        })
+        this.defaultKey = arr
+      } else {
+        console.log(val)
+        this.defaultKey.length = []
+        this.$refs.permissionTree.setCheckedKeys([])
+      }
+    }
+  },
   methods: {
-    getTree() {
+    getTree () {
       this.$http.get('/permission/getTree', {}).then(res => {
         if (res.code === SUCCESS) {
           this.data = res.payload
@@ -92,7 +112,7 @@ export default {
         }
       })
     },
-    getRoleInfo() {
+    getRoleInfo () {
       this.$http.get('/role/edit?roleId=' + this.$route.query.id).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
@@ -122,7 +142,7 @@ export default {
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -132,7 +152,7 @@ export default {
       })
       return false
     },
-    handleSave() {
+    handleSave () {
       let nodeList = this.$refs['permissionTree'].getCheckedNodes(false, true)
       let nodeKey = []
       nodeList.forEach(i => {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:22:35
+ * @LastEditTime: 2019-12-15 14:40:47
  -->
 <template>
   <div id="space-resource">
@@ -87,11 +87,11 @@ export default {
       formInfo: {},
       tableColumns: [
         { label: '角色名称', prop: 'roleName', minWidth: 200 },
-        { label: '权限', prop: '', minWidth: 150 }
+        { label: '创建时间', prop: 'createTime', minWidth: 150 }
       ],
       tableColumnsUser: [
         { label: '用户名称', prop: 'nickName', minWidth: 200 },
-        { label: '权限', slot: '', minWidth: 150 }
+        { label: '创建时间', prop: 'createTime', minWidth: 150 }
       ],
       rules: {
         name: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }]
@@ -151,6 +151,8 @@ export default {
         })
         .then(res => {
           if (res.code === SUCCESS) {
+            this.getMenuTree()
+            this.$store.dispatch('get_menu', { router: this.$router })
             this.$message.success('操作成功')
           }
         })

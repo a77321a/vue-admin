@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 21:23:04
+ * @LastEditTime: 2019-12-15 14:46:40
  -->
 <template>
   <div class="account-setting">
@@ -31,6 +31,7 @@
       :dataArray="userList"
       method="post"
     >
+      <template slot-scope="{row}" slot="nickName">{{row.nickName}}（{{row.mobile}}）</template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           @click="dialogFormVisible = true;formInfo.userId = row.userId"
@@ -77,7 +78,7 @@ export default {
       dialogFormVisible: false,
       formInfo: {},
       tableColumns: [
-        { label: '昵称', prop: 'nickName', minWidth: 200 },
+        { label: '昵称', slot: 'nickName', minWidth: 200 },
         {
           label: '更新时间',
           prop: 'updateTime',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-12 09:24:44
+ * @LastEditTime: 2019-12-15 14:34:06
  -->
 <template>
   <div id="edit-role">
@@ -17,7 +17,7 @@
       size="medium"
     >
       <el-form-item label="人员类型">
-        <el-radio-group v-model="formInfo.accountType">
+        <el-radio-group @click="formInfo = {limit:1}" v-model="formInfo.accountType">
           <el-radio-button style="box-shadow: none;" :label="1">内部服务人员</el-radio-button>
           <el-radio-button style="box-shadow: none;" :label="2">外部人员</el-radio-button>
         </el-radio-group>
@@ -47,7 +47,7 @@
         <el-input type="text" placeholder="请输入密码" v-model="formInfo.password"></el-input>
       </el-form-item>
       <div class="title">资源设置</div>
-      <el-form-item label="管理范围">
+      <el-form-item label="管理范围" required>
         <el-radio-group v-model="formInfo.limit">
           <div class="vert-radio">
             <el-radio :label="1">超级管理员</el-radio>
@@ -70,6 +70,7 @@
               v-if="formInfo.limit == 3"
               clearable
               multiple
+              collapse-tags
               v-model="formInfo.orgIds"
               placeholder="请选择"
             >
@@ -146,9 +147,7 @@ export default {
         nickName: [
           { required: true, message: '请输入账号昵称', trigger: 'blur' }
         ],
-        mobile: [
-          { required: true, message: '请输入手机号', validator: validataPhone }
-        ],
+        mobile: [{ required: true, validator: validataPhone }],
         password: [
           { required: true, message: '请输入账号密码', trigger: 'blur' }
         ],
@@ -197,9 +196,16 @@ export default {
         this.$message.error('请选择一条记录')
         return
       }
-      this.formInfo.account = this.templateObj.orgServiceProviderId
-      this.formInfo.nickName = this.templateObj.orgServiceProviderName
-      this.formInfo.mobile = this.templateObj.telephoneNum
+      // this.formInfo.account = this.templateObj.orgServiceProviderId
+      this.$set(this.formInfo, 'account', this.templateObj.orgServiceProviderId)
+      this.$set(
+        this.formInfo,
+        'nickName',
+        this.templateObj.orgServiceProviderName
+      )
+      this.$set(this.formInfo, 'mobile', this.templateObj.telephoneNum)
+      // this.formInfo.nickName = this.templateObj.orgServiceProviderName
+      // this.formInfo.mobile = this.templateObj.telephoneNum
       this.dialogServiceObject = false
     },
     getOrgList () {

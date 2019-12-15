@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:23:29
+ * @LastEditTime: 2019-12-15 15:10:45
  -->
 <template>
   <div id="space-resource">
@@ -17,7 +17,7 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="dialogFormVisible = true;dialogType = true"
+      @click="dialogFormVisible = true;dialogType = true; formInfo = { permissionList: {} }"
       style="margin-bottom:15px"
       size="small"
       v-has="'permissionConfigAdd'"
@@ -26,8 +26,9 @@
     <div class="tree-title">
       <span class="left">权限名称</span>
       <span class="right">操作</span>
-      <span style="float:right;margin-right:400px">权限类型</span>
-      <span style="float:right;margin-right:244px">描述</span>
+      <span style="float:right;margin-right:280px">更新时间</span>
+      <span style="float:right;margin-right:100px">权限类型</span>
+      <span style="float:right;margin-right:180px">描述</span>
     </div>
     <el-tree :expand-on-click-node="false" :data="data" node-key="regionId" default-expand-all>
       <div class="custom-tree-node" slot-scope="{ node, data }">
@@ -53,16 +54,22 @@
             @click="() => handleDelete(node, data)"
           >删除</el-button>
         </span>
-        <span style="float:right;margin-right:300px;">{{data.permissionDepth == 4 ? '按钮':'菜单'}}</span>
+        <span style="float:right;margin-right:75px;">{{data.updateTime}}</span>
 
+        <span style="float:right;margin-right:125px;">{{data.permissionDepth == 4 ? '按钮':'菜单'}}</span>
         <span
           class="desc"
           :title="data.permissionDesc"
-          style="float:right;margin-right:170px;width:100px;display:inline-block"
+          style="float:right;margin-right:102px;width:100px;display:inline-block"
         >{{data.permissionDesc}}</span>
       </div>
     </el-tree>
-    <el-dialog :title="dialogType ? '添加权限' :'修改权限'" :visible.sync="dialogFormVisible" width="70%">
+    <el-dialog
+      destroy-on-close
+      :title="dialogType ? '添加权限' :'修改权限'"
+      :visible.sync="dialogFormVisible"
+      width="70%"
+    >
       <el-form :rules="rules" ref="formInfo" label-width="80px" :model="formInfo">
         <el-form-item v-if="dialogType" label="菜单" prop="permissionList">
           <el-select
@@ -70,7 +77,7 @@
             clearable
             collapse-tags
             @change="selectTag"
-            v-model="searchData.permissionList"
+            v-model="formInfo.permissionList"
             placeholder="请选择"
             value-key="menuId"
           >
@@ -125,7 +132,7 @@ export default {
       data: [],
       searchData: {},
       tempObj: {},
-      formInfo: { permissionList: {} },
+      formInfo: {},
       rules: {
         permissionList: [{ required: true, message: '菜单或按钮必须选择' }],
         permissionDesc: [{ required: true, message: '请输入权限描述' }]
@@ -150,6 +157,10 @@ export default {
       this.dialogFormVisible = true
     },
     handleSaveForm () {
+      if (!this.formInfo.permissionList.url) {
+        this.$message.error('请选择菜单')
+        return
+      }
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         // let url = this.dialogType ? '/permission/add':'/permission/update'
@@ -195,6 +206,7 @@ export default {
               }
             })
         }
+        this.formInfo = { permissionList: {} }
       })
     },
     getMenuTree () {

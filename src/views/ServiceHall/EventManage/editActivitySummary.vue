@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-14 15:19:17
+ * @LastEditTime: 2019-12-15 15:19:54
  -->
 <template>
   <div id="edit-event">
@@ -129,13 +129,14 @@
             <img :src="$store.state.config.systemConfig[0].dictionaryValue + item" alt />
           </div>
           <el-upload
+            multiple
             action="apii/public/img"
             :show-file-list="false"
             :before-upload="uploadImg"
             accept="image/*"
           >
             <el-button
-              :disabled="formInfo.activityPicList.length > 8"
+              v-if="formInfo.activityPicList.length < 9"
               type="primary"
               icon="ios-cloud-upload-outline"
             >选择文件</el-button>
@@ -432,6 +433,12 @@ export default {
       this.$http.postForm('/file/upload', formdata).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo.activityPicList.push(res.payload)
+          if (this.formInfo.activityPicList.length > 9) {
+            this.formInfo.activityPicList = this.formInfo.activityPicList.splice(
+              0,
+              9
+            )
+          }
         }
       })
       return false

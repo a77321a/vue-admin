@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:24:45
+ * @LastEditTime: 2019-12-15 15:14:41
  -->
 <template>
   <div class="account-setting">
@@ -11,15 +11,22 @@
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="人员类型">
         <el-select clearable v-model="searchData.status" placeholder="请选择">
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+          <el-option label="内部服务人员" value="1"></el-option>
+          <el-option label="外部人员" value="2"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="管理范围">
+        <el-select clearable v-model="searchData.superAdmin" placeholder="请选择">
+          <el-option label="超级管理员" value="1"></el-option>
+          <el-option label="社区管理员" value="2"></el-option>
+          <el-option label="机构管理员" value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="昵称">
-        <el-input placeholder="请输入昵称关键字" v-model="searchData.roleName"></el-input>
+        <el-input placeholder="请输入昵称关键字" v-model="searchData.nickName"></el-input>
       </el-form-item>
       <el-form-item label="手机号">
-        <el-input placeholder="请输入手机号" v-model="searchData.roleName"></el-input>
+        <el-input placeholder="请输入手机号" v-model="searchData.account"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -50,6 +57,8 @@
       method="post"
     >
       <template slot-scope="{row}" slot="accountType">{{row.accountType == 1 ? '内部服务人员':'外部人员'}}</template>
+      <template slot-scope="{row}" slot="nickName">{{row.nickName}}（{{row.mobile}}）</template>
+
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           v-has="'accountSettingEdit'"
@@ -78,7 +87,7 @@ export default {
       searchRefresh: true,
       searchData: {},
       tableColumns: [
-        { label: '昵称', prop: 'nickName', minWidth: 200 },
+        { label: '昵称', slot: 'nickName', minWidth: 200 },
         // { label: '角色', prop: 'account', minWidth: 200 },
         {
           label: '人员类型',
