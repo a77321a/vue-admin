@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-15 14:40:47
+ * @LastEditTime: 2019-12-15 21:03:30
  -->
 <template>
   <div id="space-resource">
@@ -29,6 +29,7 @@
         <span>{{ data.name }}</span>
         <span style="float:right">
           <el-button
+            v-if="data.url"
             v-has="'settingMenuManagePreview'"
             @click="handlePreView(data.url)"
             type="text"
