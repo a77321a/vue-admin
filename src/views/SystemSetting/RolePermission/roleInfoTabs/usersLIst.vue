@@ -3,14 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-15 14:46:40
+ * @LastEditTime: 2019-12-16 20:32:52
  -->
 <template>
   <div class="account-setting">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="昵称">
-        <el-input placeholder="请输入昵称关键字" v-model="searchData.roleName"></el-input>
+        <el-input placeholder="请输入昵称关键字" v-model="searchData.nickName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -106,6 +106,11 @@ export default {
     }
   },
   created () {},
+  watch: {
+    searchRefresh () {
+      this.$emit('searchList', this.searchData)
+    }
+  },
   methods: {
     handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {

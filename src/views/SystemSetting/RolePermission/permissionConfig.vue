@@ -3,13 +3,13 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors:
- * @LastEditTime: 2019-12-15 15:10:45
+ * @LastEditTime: 2019-12-16 20:28:56
  -->
 <template>
   <div id="space-resource">
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="权限名称">
-        <el-input placeholder="请输入权限名称关键字" v-model="searchData.addressName"></el-input>
+        <el-input placeholder="请输入权限名称关键字" v-model="searchData.permissionName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button size="small" type="primary" @click="getTree()" icon="el-icon-search">搜索</el-button>
@@ -126,7 +126,7 @@
 export default {
   name: 'spaceResource',
   components: {},
-  data () {
+  data() {
     return {
       dialogType: true,
       data: [],
@@ -143,20 +143,20 @@ export default {
       menuTree: []
     }
   },
-  created () {
+  created() {
     this.getTree()
     this.getMenuTree()
   },
   methods: {
-    selectTag (val) {
+    selectTag(val) {
       this.formInfo.permissionList = val
     },
-    handleEdit (node, data) {
+    handleEdit(node, data) {
       this.dialogType = false
       this.formInfo = data
       this.dialogFormVisible = true
     },
-    handleSaveForm () {
+    handleSaveForm() {
       if (!this.formInfo.permissionList.url) {
         this.$message.error('请选择菜单')
         return
@@ -209,7 +209,7 @@ export default {
         this.formInfo = { permissionList: {} }
       })
     },
-    getMenuTree () {
+    getMenuTree() {
       this.depthOneList = []
       this.$http.post('/menu/tree').then(res => {
         if (res.code === SUCCESS) {
@@ -218,14 +218,18 @@ export default {
         }
       })
     },
-    getTree () {
-      this.$http.get('/permission/getTree', {}).then(res => {
-        if (res.code === SUCCESS) {
-          this.data = res.payload
-        }
-      })
+    getTree() {
+      this.$http
+        .post('/permission/getTree', {
+          permissionName: this.searchData.permissionName
+        })
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.data = res.payload
+          }
+        })
     },
-    handleDelete (node, data) {
+    handleDelete(node, data) {
       // if (data.children && data.children.length > 0) {
       //   this.$message.error('当前区域下含有子级数据，无法删除')
       //   return
@@ -250,7 +254,7 @@ export default {
         .catch(() => {})
     },
 
-    handleAppend (node, data) {
+    handleAppend(node, data) {
       if (data.permissionDepth == 3) {
         this.$http
           .get('/menu/children', {

@@ -19,7 +19,7 @@
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
         >搜索</el-button>
-        <el-button @click="searchData = {};searchRefresh = !searchRefresh" size="small">重置</el-button>
+        <el-button @click="searchData = {pageSize:20};searchRefresh = !searchRefresh" size="small">重置</el-button>
       </el-form-item>
     </el-form>
     <el-button
@@ -66,7 +66,7 @@ export default {
   data () {
     return {
       searchRefresh: true,
-      searchData: {},
+      searchData: {pageSize:20},
       tableColumns: [
         { label: '角色名称', prop: 'roleName', minWidth: 200 },
         { label: '角色描述', prop: 'roleDesc', minWidth: 200 },

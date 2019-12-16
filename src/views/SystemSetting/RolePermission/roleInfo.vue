@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors:
- * @LastEditTime: 2019-12-07 21:48:02
+ * @LastEditTime: 2019-12-16 20:33:19
  -->
 <template>
   <div id="event-room-info">
@@ -13,7 +13,7 @@
     </el-card>
     <el-tabs value="first" style="margin-top:20px;">
       <el-tab-pane label="用户人员" name="first">
-        <usersLIst :userList="roleInfo.userList"></usersLIst>
+        <usersLIst @searchList="getRoleInfo" :userList="roleInfo.userList"></usersLIst>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -33,15 +33,20 @@ export default {
     }
   },
   created () {
-    this.getRoleInfo()
+    this.getRoleInfo({})
   },
   methods: {
-    getRoleInfo () {
-      this.$http.get('/role/get?roleId=' + this.$route.query.rid).then(res => {
-        if (res.code === SUCCESS) {
-          this.roleInfo = res.payload
-        }
-      })
+    getRoleInfo (val) {
+      this.$http
+        .get(
+          '/role/get?roleId=' + this.$route.query.rid,
+          !val.nickName ? {} : val
+        )
+        .then(res => {
+          if (res.code === SUCCESS) {
+            this.roleInfo = res.payload
+          }
+        })
     }
   }
 }
