@@ -74,11 +74,9 @@ axios.interceptors.request.use(
     //   sources[request]('取消重复请求')
     // } else {
     requestList.push(request)
-    console.log(config)
     if (config.loading) {
       // showFullScreenLoading()
       startLoading()
-      console.log(loading)
       NProgress.start()
     };
     // }

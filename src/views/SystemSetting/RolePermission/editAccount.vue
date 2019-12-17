@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-15 14:34:06
+ * @LastEditTime: 2019-12-17 15:37:30
  -->
 <template>
   <div id="edit-role">
@@ -17,7 +17,10 @@
       size="medium"
     >
       <el-form-item label="人员类型">
-        <el-radio-group @click="formInfo = {limit:1}" v-model="formInfo.accountType">
+        <el-radio-group
+          @change="formInfo.account = '';formInfo.mobile='';formInfo.nickName= ''"
+          v-model="formInfo.accountType"
+        >
           <el-radio-button style="box-shadow: none;" :label="1">内部服务人员</el-radio-button>
           <el-radio-button style="box-shadow: none;" :label="2">外部人员</el-radio-button>
         </el-radio-group>
@@ -31,7 +34,12 @@
           placeholder="请输入用户昵称，最多不超过10个字"
           v-model="formInfo.nickName"
         ></el-input>
-        <el-button size="small" @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
+        <el-button
+          v-if="formInfo.accountType == 1"
+          size="small"
+          @click="dialogServiceObject = true"
+          icon="el-icon-plus"
+        >选择人员</el-button>
       </el-form-item>
       <el-form-item label="手机号" prop="mobile">
         <el-input
@@ -123,9 +131,10 @@ export default {
   components: {
     selectServiceUser
   },
-  data () {
+  data() {
     const validataPhone = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
+      console.log(value)
       if (value === '') {
         callback(new Error('请输入手机号'))
       } else if (!reg.test(value)) {
@@ -147,7 +156,9 @@ export default {
         nickName: [
           { required: true, message: '请输入账号昵称', trigger: 'blur' }
         ],
-        mobile: [{ required: true, validator: validataPhone }],
+        mobile: [
+          { required: true, validator: validataPhone, trigger: 'change' }
+        ],
         password: [
           { required: true, message: '请输入账号密码', trigger: 'blur' }
         ],
@@ -158,7 +169,7 @@ export default {
       templateObj: {}
     }
   },
-  created () {
+  created() {
     if (this.$route.query.uid) {
       this.getAccountInfo()
     }
@@ -167,7 +178,7 @@ export default {
     this.getRole()
   },
   methods: {
-    getOrg () {
+    getOrg() {
       this.$http
         .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
         .then(res => {
@@ -176,7 +187,7 @@ export default {
           }
         })
     },
-    getRole () {
+    getRole() {
       this.$http.post('/role/pageSearch', { pageSize: MAXSIZE }).then(res => {
         if (res.code === SUCCESS) {
           this.roleList = res.payload.records
@@ -188,10 +199,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.templateObj = data
     },
-    handleSaveSelectObject () {
+    handleSaveSelectObject() {
       if (!this.templateObj.orgServiceProviderId) {
         this.$message.error('请选择一条记录')
         return
@@ -208,7 +219,7 @@ export default {
       // this.formInfo.mobile = this.templateObj.telephoneNum
       this.dialogServiceObject = false
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -222,7 +233,7 @@ export default {
         }
       })
     },
-    getTree () {
+    getTree() {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -234,7 +245,7 @@ export default {
         }
       })
     },
-    getAccountInfo () {
+    getAccountInfo() {
       this.$http.get('/user/get?userId=' + this.$route.query.uid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
@@ -294,7 +305,7 @@ export default {
         }
       })
     },
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.uid ? '/user/update' : '/user/add'

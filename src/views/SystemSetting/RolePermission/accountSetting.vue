@@ -16,7 +16,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="管理范围">
-        <el-select clearable v-model="searchData.superAdmin" placeholder="请选择">
+        <el-select clearable v-model="searchData.adminScope" placeholder="请选择">
           <el-option label="超级管理员" value="1"></el-option>
           <el-option label="社区管理员" value="2"></el-option>
           <el-option label="机构管理员" value="3"></el-option>
