@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-14 10:05:24
+ * @LastEditTime: 2019-12-18 16:18:13
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -11,6 +11,9 @@ import App from './App.vue'
 import router from './router/router'
 // Vuex
 import store from './store/store'
+// import { library } from '@fortawesome/fontawesome-svg-core'
+// import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // elementui
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -27,7 +30,8 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 // 高德地图
 import VueAMap from 'vue-amap'
-import { format } from 'url'
+// library.add(faUserSecret)
+// Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(btnControl)
 Vue.prototype.$func = func

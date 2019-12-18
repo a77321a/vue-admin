@@ -2,7 +2,7 @@
  * @Descripttion: 登陆界面
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-12-12 10:47:26
+ * @LastEditTime: 2019-12-18 11:19:36
  -->
 <template>
   <el-row
@@ -65,7 +65,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       loginBg: require('@/assets/login_bg.png'),
       loading: false,
@@ -74,8 +74,8 @@ export default {
       maxLength: 6,
       errorCode: '',
       form: {
-        account: '1234567890',
-        password: '123456'
+        account: '',
+        password: ''
       },
       rules: {
         account: [
@@ -93,12 +93,12 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     sessionStorage.clear()
     this.$store.commit('setNavList', [])
   },
   methods: {
-    submitLogin () {
+    submitLogin() {
       this.loading = true
       this.$http
         .post('/admin/login', {
@@ -130,7 +130,7 @@ export default {
         })
     }
   },
-  mounted () {}
+  mounted() {}
 }
 </script>
 

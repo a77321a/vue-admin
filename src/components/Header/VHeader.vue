@@ -12,7 +12,14 @@
         @click="setNavList(item)"
         v-for="(item, index) in routerList"
       >
-        <i style="vertical-align:middle" class="fa" :class="'fa-' + item.icon"></i>
+        <!-- <font-awesome-icon
+          :icon="['fas', 'fa-' + item.icon]"
+        ></font-awesome-icon> -->
+        <i
+          style="vertical-align:initial;font-size:14px"
+          class="fa"
+          :class="'fa-' + item.icon"
+        ></i>
         <span class="width-none">{{ item.name }}</span>
       </div>
     </div>
@@ -44,12 +51,18 @@
               <div class="tdui-user-body-list tdui-user-body-list-first">
                 <div class="tdui-user-body-list-start">
                   <!-- <el-button type="info" icon="el-icon-s-custom" circle></el-button> -->
-                  <el-avatar style="margin-top:12px" :size="40" :src="avatar"></el-avatar>
+                  <el-avatar
+                    style="margin-top:12px"
+                    :size="40"
+                    :src="avatar"
+                  ></el-avatar>
                 </div>
                 <div
                   name="user-login-email"
                   class="tdui-user-body-list-first-end"
-                >{{$store.state.userInfo.nickName}}</div>
+                >
+                  {{ $store.state.userInfo.nickName }}
+                </div>
               </div>
               <div
                 @click="
@@ -61,13 +74,17 @@
                 <div class="tdui-user-body-list-start">
                   <i color="#aaa" size="20" class="el-icon-setting" />
                 </div>
-                <div class="tdui-user-body-list-end" name="account-setting">账号设置</div>
+                <div class="tdui-user-body-list-end" name="account-setting">
+                  账号设置
+                </div>
               </div>
               <div @click="loginOut" class="tdui-user-body-list">
                 <div class="tdui-user-body-list-start">
                   <i color="#aaa" size="20" class="el-icon-s-promotion" />
                 </div>
-                <div class="tdui-user-body-list-end" name="account-exit">退出登录</div>
+                <div class="tdui-user-body-list-end" name="account-exit">
+                  退出登录
+                </div>
               </div>
             </div>
           </transition>
@@ -288,8 +305,10 @@ export default {
       transition: all 0.2s ease-in-out;
       i {
         display: inline-block;
+        width: 14px;
+        height: 14px;
         margin-right: 4px;
-        vertical-align: middle;
+        vertical-align: initial;
       }
     }
     .header-item.active,
@@ -298,7 +317,7 @@ export default {
       opacity: 1;
     }
     .active::after {
-      content: '';
+      content: "";
       display: block;
       width: 100%;
       height: 4px;
