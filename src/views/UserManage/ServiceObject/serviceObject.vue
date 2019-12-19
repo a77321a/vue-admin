@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-14 09:58:03
+ * @LastEditTime : 2019-12-19 16:03:57
  -->
 <template>
   <div class="serviceObject">
@@ -96,7 +96,11 @@
         <el-button type="text" v-has="'serviceObjectDelete'" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button v-has="'serviceObjectDelete'" type="text">删除</el-button>
+        <el-button
+          :disabled="selectServiceObject.length == 0"
+          v-has="'serviceObjectDelete'"
+          type="text"
+        >删除</el-button>
       </template>
     </Table>
     <el-dialog title="添加健康记录" :visible.sync="dialogFormVisible">

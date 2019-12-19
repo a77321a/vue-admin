@@ -101,7 +101,12 @@
         >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button v-has="'monitoringEquipmentDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button
+          :disabled="selectDevice.length == 0"
+          v-has="'monitoringEquipmentDelete'"
+          @click="handleDelete(null)"
+          type="text"
+        >删除</el-button>
       </template>
     </Table>
   </div>

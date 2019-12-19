@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 10:39:43
+ * @LastEditTime : 2019-12-19 16:02:03
  -->
 <template>
   <div class="dish-manage">
@@ -99,7 +99,12 @@
             >删除</el-button>
           </template>
           <template slot="footer-left">
-            <el-button v-has="'dishManageDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+            <el-button
+              :disabled="selectFood.length == 0"
+              v-has="'dishManageDelete'"
+              @click="handleDelete(null)"
+              type="text"
+            >删除</el-button>
           </template>
         </Table>
       </el-col>
@@ -114,7 +119,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -147,23 +152,23 @@ export default {
       selectFood: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    commitSelection(data) {
+    commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.foodId)
       })
       this.selectFood = arr
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.foodId] : this.selectFood
       this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

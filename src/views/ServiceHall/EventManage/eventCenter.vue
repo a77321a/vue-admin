@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 10:36:38
+ * @LastEditTime : 2019-12-19 15:55:32
  -->
 <template>
   <div class="event-center">
@@ -109,6 +109,7 @@
           @click="
             $router.push({ name: 'editEvent', query: { aid: row.activityId } })
           "
+          v-if="row.activityStatus < 2"
           v-has="'eventCenterEdit'"
           type="text"
           size="small"
@@ -140,8 +141,18 @@
         >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button v-has="'eventCenterSummary'" @click="handleCloseActivity(null)" type="text">结束活动</el-button>
-        <el-button v-has="'eventCenterDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button
+          :disabled="selectActivity.length == 0"
+          v-has="'eventCenterSummary'"
+          @click="handleCloseActivity(null)"
+          type="text"
+        >结束活动</el-button>
+        <el-button
+          :disabled="selectActivity.length == 0"
+          v-has="'eventCenterDelete'"
+          @click="handleDelete(null)"
+          type="text"
+        >删除</el-button>
       </template>
     </Table>
   </div>

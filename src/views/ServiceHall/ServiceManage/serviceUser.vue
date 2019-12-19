@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-14 09:59:53
+ * @LastEditTime : 2019-12-19 16:02:11
  -->
 <template>
   <div class="service-user">
@@ -80,7 +80,12 @@
               >删除</el-button>
             </template>
             <template slot="footer-left">
-              <el-button v-has="'serviceUserDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+              <el-button
+                :disabled="selectServiceUser.length == 0"
+                v-has="'serviceUserDelete'"
+                @click="handleDelete(null)"
+                type="text"
+              >删除</el-button>
             </template>
           </Table>
         </div>
@@ -96,7 +101,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -119,19 +124,19 @@ export default {
       selectServiceUser: []
     }
   },
-  created() {
+  created () {
     console.log(JSON.parse(localStorage.config))
   },
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
     // 多选  同所有表格
-    commitSelection(data) {
+    commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.orgServiceProviderId)
@@ -139,9 +144,9 @@ export default {
       this.selectServiceUser = arr
     },
     // 删除
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.orgServiceProviderId] : this.selectServiceUser
-      this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
+      this.$confirm('删除后，该服务人员将无法被关联使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

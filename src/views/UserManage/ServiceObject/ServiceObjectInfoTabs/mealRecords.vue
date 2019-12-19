@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-08 12:22:50
+ * @LastEditTime : 2019-12-19 16:04:04
  -->
 <template>
   <div class="user-manage">
@@ -41,7 +41,6 @@
 
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
-      <template slot="footer-left"></template>
     </Table>
     <el-dialog title="查看助餐明细" :visible.sync="dialogFormVisible">
       <el-form ref="formInfo" label-width="80px" :model="formInfo">

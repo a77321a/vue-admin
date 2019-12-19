@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-14 10:35:42
+ * @LastEditTime : 2019-12-19 15:52:42
  -->
 <template>
   <div class="Participants">
@@ -51,7 +51,7 @@ export default {
       searchData: { orgId: this.orgId },
       tableColumns: [
         { label: '人员姓名', slot: 'orgServiceProviderName', minWidth: 100 },
-        { label: '服务产品', slot: 'orgServiceProductList', minWidth: 300 },
+        { label: '服务产品', prop: 'orgServiceProducts', minWidth: 300 },
         { label: '性别', slot: 'sex', minWidth: 100 },
         { label: '联系人电话', prop: 'telephoneNum', minWidth: 100 },
         { label: '操作', slot: 'handleColumn', fixed: 'right', minWidth: 60 }

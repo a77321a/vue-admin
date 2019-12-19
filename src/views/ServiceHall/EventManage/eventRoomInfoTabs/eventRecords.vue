@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 14:19:20
+ * @LastEditTime : 2019-12-19 16:01:43
  -->
 <template>
   <div class="user-manage">
@@ -88,6 +88,7 @@
         >查看</el-button>
 
         <el-button
+          v-if="row.activityStatus < 2"
           @click="$router.push({name:'editEvent',query:{aid:row.activityId}})"
           type="text"
           size="small"
@@ -109,7 +110,7 @@
         <el-button @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button :disabled="selectActivity.length == 0" @click="handleDelete(null)" type="text">删除</el-button>
       </template>
     </Table>
   </div>
@@ -117,7 +118,7 @@
 <script>
 export default {
   name: 'eventRecords',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {
@@ -157,15 +158,15 @@ export default {
       selectActivity: []
     }
   },
-  created() {},
+  created () {},
   props: ['activityRoomId'],
   methods: {
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime(date) {
+    handlTime (date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -174,14 +175,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    commitSelection(data) {
+    commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.activityId)
       })
       this.selectActivity = arr
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
@@ -198,7 +199,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity(row) {
+    handleCloseActivity (row) {
       let id = row ? [row.activityId] : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {

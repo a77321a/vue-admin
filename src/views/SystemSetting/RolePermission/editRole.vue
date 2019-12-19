@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-15 14:57:25
+ * @LastEditTime : 2019-12-19 15:56:42
  -->
 <template>
   <div id="edit-role">
@@ -63,7 +63,7 @@
 <script>
 export default {
   name: 'editRole',
-  data () {
+  data() {
     return {
       checkAll: false,
       formInfo: {
@@ -83,11 +83,11 @@ export default {
       data: []
     }
   },
-  created () {
+  created() {
     this.getTree()
   },
   watch: {
-    checkAll (val) {
+    checkAll(val) {
       if (val) {
         let arr = []
         this.data.forEach(i => {
@@ -102,8 +102,8 @@ export default {
     }
   },
   methods: {
-    getTree () {
-      this.$http.get('/permission/getTree', {}).then(res => {
+    getTree() {
+      this.$http.post('/permission/getTree', {}).then(res => {
         if (res.code === SUCCESS) {
           this.data = res.payload
         }
@@ -112,7 +112,7 @@ export default {
         }
       })
     },
-    getRoleInfo () {
+    getRoleInfo() {
       this.$http.get('/role/edit?roleId=' + this.$route.query.id).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
@@ -142,7 +142,7 @@ export default {
         }
       })
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -152,7 +152,7 @@ export default {
       })
       return false
     },
-    handleSave () {
+    handleSave() {
       let nodeList = this.$refs['permissionTree'].getCheckedNodes(false, true)
       let nodeKey = []
       nodeList.forEach(i => {

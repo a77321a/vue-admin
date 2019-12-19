@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-15 14:42:56
+ * @LastEditTime : 2019-12-19 16:03:29
  -->
 <template>
   <div class="role-manage">
@@ -19,7 +19,10 @@
           @click="searchRefresh = !searchRefresh"
           icon="el-icon-search"
         >搜索</el-button>
-        <el-button @click="searchData = {pageSize:20};searchRefresh = !searchRefresh" size="small">重置</el-button>
+        <el-button
+          @click="searchData = {pageSize:20};searchRefresh = !searchRefresh"
+          size="small"
+        >重置</el-button>
       </el-form-item>
     </el-form>
     <el-button
@@ -55,7 +58,12 @@
         <el-button v-has="'roleManageDelete'" @click="handleDelete(row)" type="text" size="small">删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button v-has="'roleManageDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button
+          :disabled="selectRole.length == 0"
+          v-has="'roleManageDelete'"
+          @click="handleDelete(null)"
+          type="text"
+        >删除</el-button>
       </template>
     </Table>
   </div>
@@ -66,7 +74,7 @@ export default {
   data () {
     return {
       searchRefresh: true,
-      searchData: {pageSize:20},
+      searchData: { pageSize: 20 },
       tableColumns: [
         { label: '角色名称', prop: 'roleName', minWidth: 200 },
         { label: '角色描述', prop: 'roleDesc', minWidth: 200 },
@@ -82,12 +90,7 @@ export default {
           minWidth: 100
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
+
       selectRole: []
     }
   },

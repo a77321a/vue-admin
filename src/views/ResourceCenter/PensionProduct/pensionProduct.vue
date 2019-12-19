@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:07:14
+ * @LastEditTime : 2019-12-19 15:58:32
  -->
 <template>
   <div class="event-room">
@@ -75,7 +75,12 @@
               >删除</el-button>
             </template>
             <template slot="footer-left">
-              <el-button v-has="'pensionProductDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+              <el-button
+                :disabled="selectProduct.length == 0"
+                v-has="'pensionProductDelete'"
+                @click="handleDelete(null)"
+                type="text"
+              >删除</el-button>
             </template>
           </Table>
         </div>
@@ -116,7 +121,7 @@ export default {
         }
       ],
       activeNames: '',
-      selectActivity: []
+      selectProduct: []
     }
   },
   created () {},
@@ -133,11 +138,11 @@ export default {
       data.forEach(i => {
         arr.push(i.pensionServiceProductId)
       })
-      this.selectActivity = arr
+      this.selectProduct = arr
     },
     handleDelete (row) {
-      let id = row ? [row.pensionServiceProductId] : this.selectActivity
-      this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
+      let id = row ? [row.pensionServiceProductId] : this.selectProduct
+      this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

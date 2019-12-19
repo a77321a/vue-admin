@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-15 15:14:41
+ * @LastEditTime : 2019-12-19 16:03:13
  -->
 <template>
   <div class="account-setting">
@@ -74,7 +74,12 @@
         >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button v-has="'accountSettingDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button
+          :disabled="selectAccount.length == 0"
+          v-has="'accountSettingDelete'"
+          @click="handleDelete(null)"
+          type="text"
+        >删除</el-button>
       </template>
     </Table>
   </div>
@@ -82,7 +87,7 @@
 <script>
 export default {
   name: 'accountSetting',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -111,34 +116,29 @@ export default {
           minWidth: 80
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
+
       selectAccount: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.superAdmin = row.superAdmin
           ? '超级管理员'
           : row.scopeDepth
-            ? '社区管理员'
-            : '机构管理员'
+          ? '社区管理员'
+          : '机构管理员'
       })
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.userId)
       })
       this.selectAccount = arr
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '提示', {
@@ -158,7 +158,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.userId] : this.selectAccount
       let content = '删除后，该手机号将无法登录后台，是否确定？'
       this.$confirm(content, '提示', {

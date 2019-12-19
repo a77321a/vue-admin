@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:05:31
+ * @LastEditTime : 2019-12-19 15:58:02
  -->
 <template>
   <div class="event-center">
@@ -77,7 +77,12 @@
         >删除</el-button>
       </template>
       <template slot="footer-left">
-        <el-button v-has="'mealEquipmentDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+        <el-button
+          :disabled="selectDevice.length == 0"
+          v-has="'mealEquipmentDelete'"
+          @click="handleDelete(null)"
+          type="text"
+        >删除</el-button>
       </template>
     </Table>
   </div>

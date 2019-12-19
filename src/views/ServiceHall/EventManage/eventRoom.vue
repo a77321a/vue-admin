@@ -74,7 +74,12 @@
               >删除</el-button>
             </template>
             <template slot="footer-left">
-              <el-button v-has="'eventRoomDelete'" @click="handleDelete(null)" type="text">删除</el-button>
+              <el-button
+                :disabled="selectRoom.length == 0"
+                v-has="'eventRoomDelete'"
+                @click="handleDelete(null)"
+                type="text"
+              >删除</el-button>
             </template>
           </Table>
         </div>
@@ -115,7 +120,7 @@ export default {
         }
       ],
       activeNames: '',
-      selectActivity: []
+      selectRoom: []
     }
   },
   created () {},
@@ -128,7 +133,7 @@ export default {
       this.toggleWidth = val
     },
     handleDelete (row) {
-      let id = row ? [row.activityRoomId] : this.selectActivity
+      let id = row ? [row.activityRoomId] : this.selectRoom
       this.$confirm('删除后，该活动室将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
