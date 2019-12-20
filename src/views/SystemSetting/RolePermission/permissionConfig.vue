@@ -2,8 +2,8 @@
  * @Descripttion:空间资源
  * @Author:
  * @Date: 2019-11-06 22:19:24
- * @LastEditors:
- * @LastEditTime : 2019-12-19 10:03:26
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-20 14:48:59
  -->
 <template>
   <div id="space-resource">
@@ -154,6 +154,7 @@ export default {
     handleEdit (node, data) {
       this.dialogType = false
       this.formInfo = data
+      this.$set(this.formInfo, 'permissionList', { url: data.permissionUrl })
       this.dialogFormVisible = true
     },
     handleSaveForm () {
