@@ -2,8 +2,8 @@
  * @Descripttion:左侧菜单
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime: 2019-12-11 22:31:54
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-20 15:23:09
  -->
 <template>
   <div class="slider-menu">
@@ -18,7 +18,7 @@
         v-for="(item, index) in routerList"
         :key="index"
         :index="item.name"
-        v-if="$store.state.userInfo.superAdmin || $store.state.permNameList.includes(item.name)"
+        v-if="$store.state.userInfo.superAdmin || $store.state.permNameList.includes(item.url)"
       >
         <template slot="title">
           <i style="margin-right:5px" class="fa" :class="'fa-' + item.icon"></i>
@@ -27,7 +27,7 @@
         <el-menu-item
           @click="handleClick(son)"
           v-for="son in item.children"
-          v-if="$store.state.userInfo.superAdmin || $store.state.permNameList.includes(son.name)"
+          v-if="$store.state.userInfo.superAdmin || $store.state.permNameList.includes(son.url)"
           :key="son.url"
           :index="son.url"
         >{{ son.name }}</el-menu-item>

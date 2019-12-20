@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime: 2019-12-12 16:06:25
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-20 15:22:41
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -141,7 +141,7 @@ const store = new Vuex.Store({
           }
           let permList = []
           list.forEach(i => {
-            permList.push(i.permissionName)
+            permList.push(i.permissionUrl)
           })
           for (let i = 0; i < list.length; i++) {
             if (list[i].permissionDepth == 3) {
