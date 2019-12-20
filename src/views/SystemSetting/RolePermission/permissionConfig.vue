@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-20 14:48:59
+ * @LastEditTime : 2019-12-20 15:25:36
  -->
 <template>
   <div id="space-resource">
@@ -260,6 +260,7 @@ export default {
     },
 
     handleAppend (node, data) {
+      this.dialogType = true
       if (data.permissionDepth == 3) {
         this.$http
           .get('/menu/children', {
