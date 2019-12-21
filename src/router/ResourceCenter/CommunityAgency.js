@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-12-06 09:53:56
+ * @LastEditTime: 2019-12-21 23:10:19
  */
 export default [
   {
@@ -16,11 +16,20 @@ export default [
     }
   },
   {
-    path: 'editAgency',
-    name: 'editAgency',
+    path: 'agencyManageEdit',
+    name: 'agencyManageEdit',
     component: () => import('@/views/ResourceCenter/CommunityAgency/editAgency.vue'),
     meta: {
-      title: '新增/编辑机构',
+      title: '编辑机构',
+      parent: 'agencyManage'
+    }
+  },
+  {
+    path: 'agencyManageAdd',
+    name: 'agencyManageAdd',
+    component: () => import('@/views/ResourceCenter/CommunityAgency/editAgency.vue'),
+    meta: {
+      title: '新增机构',
       parent: 'agencyManage'
     }
   },

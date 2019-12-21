@@ -30,7 +30,7 @@
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editPensionProduct'})"
+            @click="$router.push({name:'pensionProductAdd'})"
             style="margin-bottom:15px"
             size="small"
             type="primary"
@@ -61,7 +61,7 @@
             </template>
             <template slot-scope="{row}" slot="action">
               <el-button
-                @click="$router.push({name:'editPensionProduct',query:{pid:row.pensionServiceProductId}})"
+                @click="$router.push({name:'pensionProductEdit',query:{pid:row.pensionServiceProductId}})"
                 type="text"
                 size="small"
                 v-has="'pensionProductEdit'"

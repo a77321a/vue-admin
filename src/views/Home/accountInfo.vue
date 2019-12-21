@@ -3,7 +3,7 @@
  * @Author: 辛顺宁
  * @Date: 2019-08-13 17:09:55
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-12-12 15:37:02
+ * @LastEditTime: 2019-12-21 22:18:45
  -->
 <template>
   <div id="account-info">
@@ -128,10 +128,11 @@ export default {
     }
   },
   created () {
-    this.getUserDetail()
+    // this.getUserDetail()
     this.$store.commit('setBreadList', [
       { url: 'accountInfo', title: '账号设置' }
     ])
+    console.log(sessionStorage.breadList)
   },
   computed: {
     userId () {

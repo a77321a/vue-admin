@@ -26,7 +26,7 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editRole'})"
+      @click="$router.push({name:'roleManageAdd'})"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -51,7 +51,7 @@
         >查看</el-button>
         <el-button
           v-has="'roleManageEdit'"
-          @click="$router.push({name:'editRole',query:{id:row.roleId}})"
+          @click="$router.push({name:'roleManageEdit',query:{id:row.roleId}})"
           type="text"
           size="small"
         >编辑</el-button>

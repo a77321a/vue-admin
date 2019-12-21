@@ -30,7 +30,7 @@
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editServiceUser'})"
+            @click="$router.push({name:'serviceUserEdit'})"
             style="margin-bottom:15px"
             size="small"
             type="primary"
@@ -67,7 +67,7 @@
 
               <el-button
                 v-has="'serviceUserEdit'"
-                @click="$router.push({name:'editServiceUser',query:{uid:row.orgServiceProviderId}})"
+                @click="$router.push({name:'serviceUserEdit',query:{uid:row.orgServiceProviderId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
@@ -101,7 +101,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -124,19 +124,19 @@ export default {
       selectServiceUser: []
     }
   },
-  created () {
+  created() {
     console.log(JSON.parse(localStorage.config))
   },
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
     // 多选  同所有表格
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.orgServiceProviderId)
@@ -144,7 +144,7 @@ export default {
       this.selectServiceUser = arr
     },
     // 删除
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.orgServiceProviderId] : this.selectServiceUser
       this.$confirm('删除后，该服务人员将无法被关联使用，是否确认？', '提示', {
         confirmButtonText: '确定',

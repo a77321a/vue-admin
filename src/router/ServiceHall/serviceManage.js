@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-23 20:12:29
+ * @LastEditTime: 2019-12-21 22:59:09
  */
 export default [
   {
@@ -34,8 +34,17 @@ export default [
     }
   },
   {
-    path: 'editServiceUser',
-    name: 'editServiceUser',
+    path: 'serviceUserAdd',
+    name: 'serviceUserAdd',
+    component: () => import('@/views/ServiceHall/ServiceManage/editServiceUser.vue'),
+    meta: {
+      title: '新增服务人员',
+      parent: 'serviceUser'
+    }
+  },
+  {
+    path: 'serviceUserEdit',
+    name: 'serviceUserEdit',
     component: () => import('@/views/ServiceHall/ServiceManage/editServiceUser.vue'),
     meta: {
       title: '新增/编辑服务人员',
@@ -43,11 +52,20 @@ export default [
     }
   },
   {
-    path: 'editServiceCenter',
-    name: 'editServiceCenter',
+    path: 'serviceCenterEdit',
+    name: 'serviceCenterEdit',
     component: () => import('@/views/ServiceHall/ServiceManage/editServiceCenter.vue'),
     meta: {
-      title: '新增/编辑服务信息',
+      title: '编辑服务信息',
+      parent: 'serviceCenter'
+    }
+  },
+  {
+    path: 'serviceCenterAdd',
+    name: 'serviceCenterAdd',
+    component: () => import('@/views/ServiceHall/ServiceManage/editServiceCenter.vue'),
+    meta: {
+      title: '新增服务信息',
       parent: 'serviceCenter'
     }
   }

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-10 22:32:46
+ * @LastEditTime: 2019-12-21 23:02:04
  -->
 <template>
   <div class="Participants">
@@ -31,7 +31,7 @@
       </template>
       <template slot-scope="{row}" slot="action">
         <el-button
-          @click="$router.push({name:'editServiceProduct',query:{pid:row.orgServiceProductId}})"
+          @click="$router.push({name:'serviceProductEdit',query:{pid:row.orgServiceProductId}})"
           type="text"
           size="small"
         >编辑</el-button>

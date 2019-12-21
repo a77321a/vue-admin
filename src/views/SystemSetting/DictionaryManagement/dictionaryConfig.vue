@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:21:58
+ * @LastEditTime: 2019-12-21 23:22:29
  -->
 <template>
   <div class="dictionare-config">
@@ -42,7 +42,7 @@
     >
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
-          @click="$router.push({name:'editDictionary',query:{parent:row.dictCatalogKey}})"
+          @click="$router.push({name:'dictionaryConfigAdd',query:{parent:row.dictCatalogKey}})"
           v-if="row.dictionaries"
           type="text"
           size="small"
@@ -58,7 +58,7 @@
         <el-button
           v-else
           v-has="'dictionaryConfigEdit'"
-          @click="$router.push({name:'editDictionary',query:{did:row.dictionaryId,parent:row.parent}})"
+          @click="$router.push({name:'dictionaryConfigEdit',query:{did:row.dictionaryId,parent:row.parent}})"
           type="text"
           size="small"
         >编辑</el-button>
@@ -103,7 +103,7 @@
 <script>
 export default {
   name: 'dictionaryConfig',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -149,9 +149,9 @@ export default {
       dialogFormVisible: false
     }
   },
-  created() {},
+  created () {},
   methods: {
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       let RowIndex = 1
       rows.forEach(row => {
         row.RowIndex = RowIndex
@@ -167,7 +167,7 @@ export default {
         }
       })
     },
-    handleSaveForm() {
+    handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         if (this.formInfo.dictCatalogId) {
@@ -194,7 +194,7 @@ export default {
         }
       })
     },
-    handleDelete(row, parent) {
+    handleDelete (row, parent) {
       let id = parent ? [row.dictCatalogId] : [row.dictionaryId]
       if (parent && row.dictionaries.length > 0) {
         this.$message.error('当前目录下含有字典，无法删除')
@@ -232,7 +232,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity(row) {
+    handleCloseActivity (row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {

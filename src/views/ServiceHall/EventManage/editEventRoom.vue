@@ -61,7 +61,7 @@
 </template>
 <script>
 export default {
-  name: 'editEvent',
+  name: 'eventCenterEdit',
   data () {
     return {
       formInfo: {},

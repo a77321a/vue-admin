@@ -47,7 +47,7 @@
           </el-form-item>
         </el-form>
         <el-button
-          @click="$router.push({name:'editDish'})"
+          @click="$router.push({name:'dishManageAdd'})"
           style="margin-bottom:15px"
           size="small"
           v-has="'dishManageAdd'"
@@ -86,7 +86,7 @@
           >{{$func.transLabel($store.state.config.seasonStatus,row.season)}}</template>
           <template slot-scope="{row}" slot="action">
             <el-button
-              @click="$router.push({name:'editDish',query:{fid:row.foodId}})"
+              @click="$router.push({name:'dishManageEdit',query:{fid:row.foodId}})"
               type="text"
               size="small"
               v-has="'dishManageEdit'"

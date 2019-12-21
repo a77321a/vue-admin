@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-24 13:00:26
+ * @LastEditTime: 2019-12-21 23:16:24
  */
 export default [
   {
@@ -34,29 +34,56 @@ export default [
     }
   },
   {
-    path: 'editMonitorEquipment',
-    name: 'editMonitorEquipment',
+    path: 'monitoringEquipmentEdit',
+    name: 'monitoringEquipmentEdit',
     component: () => import('@/views/ResourceCenter/EquipmentResource/editMonitorEquipment.vue'),
     meta: {
-      title: '新增/编辑监控设备',
+      title: '编辑监控设备',
       parent: 'monitoringEquipment'
     }
   },
   {
-    path: 'editCountEquipment',
-    name: 'editCountEquipment',
+    path: 'monitoringEquipmentAdd',
+    name: 'monitoringEquipmentAdd',
     component: () => import('@/views/ResourceCenter/EquipmentResource/editMonitorEquipment.vue'),
     meta: {
-      title: '新增/编辑计数设备',
+      title: '新增监控设备',
+      parent: 'monitoringEquipment'
+    }
+  },
+  {
+    path: 'countingEquipmentEdit',
+    name: 'countingEquipmentEdit',
+    component: () => import('@/views/ResourceCenter/EquipmentResource/editMonitorEquipment.vue'),
+    meta: {
+      title: '编辑计数设备',
       parent: 'countingEquipment'
     }
   },
   {
-    path: 'editMealEquipment',
-    name: 'editMealEquipment',
+    path: 'countingEquipmentAdd',
+    name: 'countingEquipmentAdd',
     component: () => import('@/views/ResourceCenter/EquipmentResource/editMonitorEquipment.vue'),
     meta: {
-      title: '新增/编辑助餐设备',
+      title: '新增计数设备',
+      parent: 'countingEquipment'
+    }
+  },
+  {
+    path: 'mealEquipmentAdd',
+    name: 'mealEquipmentAdd',
+    component: () => import('@/views/ResourceCenter/EquipmentResource/editMonitorEquipment.vue'),
+    meta: {
+      title: '新增助餐设备',
+      parent: 'mealEquipment'
+    }
+  },
+  {
+    path: 'mealEquipmentEdit',
+    name: 'mealEquipmentEdit',
+    component: () => import('@/views/ResourceCenter/EquipmentResource/editMonitorEquipment.vue'),
+    meta: {
+      title: '编辑助餐设备',
       parent: 'mealEquipment'
     }
   }

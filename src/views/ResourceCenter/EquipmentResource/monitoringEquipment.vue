@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:06:16
+ * @LastEditTime: 2019-12-21 23:13:19
  -->
 <template>
   <div class="event-center">
@@ -53,7 +53,7 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editMonitorEquipment',query:{deviceType:1}})"
+      @click="$router.push({name:'monitoringEquipmentAdd',query:{deviceType:1}})"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -90,7 +90,7 @@
         <el-button
           v-has="'monitoringEquipmentEdit'"
           type="text"
-          @click="$router.push({name:'editMonitorEquipment',query:{deviceType:1,deviceId:row.deviceId}})"
+          @click="$router.push({name:'monitoringEquipmentEdit',query:{deviceType:1,deviceId:row.deviceId}})"
           size="small"
         >编辑</el-button>
         <el-button

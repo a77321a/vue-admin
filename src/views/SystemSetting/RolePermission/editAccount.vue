@@ -127,7 +127,7 @@
 import selectServiceUser from '../../../components/SelectTable/selectServiceUser.vue'
 
 export default {
-  name: 'editEvent',
+  name: 'eventCenterEdit',
   components: {
     selectServiceUser
   },

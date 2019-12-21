@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 10:43:01
+ * @LastEditTime: 2019-12-21 22:50:13
  -->
 <template>
   <div class="meal-center">
@@ -46,7 +46,7 @@
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editMealRecord'})"
+            @click="$router.push({name:'mealCenterAdd'})"
             v-has="'mealCenterAdd'"
             style="margin-bottom:15px"
             size="small"
@@ -86,7 +86,7 @@
               >查看</el-button>
 
               <el-button
-                @click="$router.push({name:'editMealRecord',query:{mid:row.recordId}})"
+                @click="$router.push({name:'mealCenterEdit',query:{mid:row.recordId}})"
                 type="text"
                 size="small"
                 v-has="'mealCenterEdit'"
@@ -149,7 +149,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -176,13 +176,13 @@ export default {
       selectActivity: []
     }
   },
-  created() {},
+  created () {},
   methods: {
-    handlePreview(row) {
+    handlePreview (row) {
       this.formInfo = row
       this.dialogFormVisible = true
     },
-    rowsForamtter(row) {
+    rowsForamtter (row) {
       row.forEach(i => {
         if (i.foodSnapshotList && i.foodSnapshotList.length > 0) {
           let sum = 0
@@ -193,7 +193,7 @@ export default {
         }
       })
     },
-    handlTime(date) {
+    handlTime (date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -202,14 +202,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.recordId] : []
       this.$confirm('删除后，该数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',

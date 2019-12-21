@@ -16,11 +16,20 @@ export default [
     }
   },
   {
-    path: 'editDish',
-    name: 'editDish',
+    path: 'dishManageAdd',
+    name: 'dishManageAdd',
     component: () => import('@/views/ServiceHall/MealManage/editDish.vue'),
     meta: {
-      title: '新增/编辑菜品',
+      title: '新增菜品',
+      parent: 'dishManage'
+    }
+  },
+  {
+    path: 'dishManageEdit',
+    name: 'dishManageEdit',
+    component: () => import('@/views/ServiceHall/MealManage/editDish.vue'),
+    meta: {
+      title: '编辑菜品',
       parent: 'dishManage'
     }
   },
@@ -34,11 +43,20 @@ export default [
     }
   },
   {
-    path: 'editMealRecord',
-    name: 'editMealRecord',
+    path: 'mealCenterAdd',
+    name: 'mealCenterAdd',
     component: () => import('@/views/ServiceHall/MealManage/editMealRecord.vue'),
     meta: {
-      title: '新增/编辑助餐记录',
+      title: '新增助餐记录',
+      parent: 'mealCenter'
+    }
+  },
+  {
+    path: 'mealCenterEdit',
+    name: 'mealCenterEdit',
+    component: () => import('@/views/ServiceHall/MealManage/editMealRecord.vue'),
+    meta: {
+      title: '编辑助餐记录',
       parent: 'mealCenter'
     }
   },

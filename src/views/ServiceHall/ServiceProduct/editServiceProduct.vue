@@ -123,7 +123,7 @@ import selectPensionProduct from '../../../components/SelectTable/selectPensionP
 import sku from '@/components/SKU/sku.vue'
 
 export default {
-  name: 'editEvent',
+  name: 'eventCenterEdit',
   components: {
     selectPensionProduct,
     sku

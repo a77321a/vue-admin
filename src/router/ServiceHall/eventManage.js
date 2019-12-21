@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors:
- * @LastEditTime: 2019-11-19 16:50:30
+ * @LastEditTime: 2019-12-21 22:36:09
  */
 export default [
   {
@@ -16,6 +16,15 @@ export default [
     }
   },
   {
+    path: 'eventCenterAdd',
+    name: 'eventCenterAdd',
+    component: () => import('@/views/ServiceHall/EventManage/editEvent.vue'),
+    meta: {
+      title: '新增活动',
+      parent: 'eventCenter'
+    }
+  },
+  {
     path: 'eventRoom',
     name: 'eventRoom',
     component: () => import('@/views/ServiceHall/EventManage/eventRoom.vue'),
@@ -25,11 +34,11 @@ export default [
     }
   },
   {
-    path: 'editEvent',
-    name: 'editEvent',
+    path: 'eventCenterEdit',
+    name: 'eventCenterEdit',
     component: () => import('@/views/ServiceHall/EventManage/editEvent.vue'),
     meta: {
-      title: '新增/编辑活动',
+      title: '编辑活动',
       parent: 'eventCenter'
     }
   },
@@ -43,11 +52,20 @@ export default [
     }
   },
   {
-    path: 'editEventRoom',
-    name: 'editEventRoom',
+    path: 'eventRoomAdd',
+    name: 'eventRoomAdd',
     component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
     meta: {
-      title: '新增/编辑活动室',
+      title: '新增活动室',
+      parent: 'eventRoom'
+    }
+  },
+  {
+    path: 'eventRoomEdit',
+    name: 'eventRoomEdit',
+    component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
+    meta: {
+      title: '编辑活动室',
       parent: 'eventRoom'
     }
   },

@@ -55,7 +55,7 @@
     </el-form>
     <el-button
       v-has="'countingEquipmentAdd'"
-      @click="$router.push({name:'editCountEquipment',query:{deviceType:2}})"
+      @click="$router.push({name:'countingEquipmentAdd',query:{deviceType:2}})"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -78,7 +78,7 @@
         <el-button
           type="text"
           v-has="'countingEquipmentEdit'"
-          @click="$router.push({name:'editCountEquipment',query:{deviceType:2,deviceId:row.deviceId}})"
+          @click="$router.push({name:'countingEquipmentEdit',query:{deviceType:2,deviceId:row.deviceId}})"
           size="small"
         >编辑</el-button>
         <el-button

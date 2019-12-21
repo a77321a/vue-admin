@@ -34,7 +34,7 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editMealEquipment',query:{deviceType:3}})"
+      @click="$router.push({name:'mealEquipmentAdd',query:{deviceType:3}})"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -66,7 +66,7 @@
         <el-button
           type="text"
           v-has="'mealEquipmentEdit'"
-          @click="$router.push({name:'editMealEquipment',query:{deviceType:3,deviceId:row.deviceId}})"
+          @click="$router.push({name:'mealEquipmentEdit',query:{deviceType:3,deviceId:row.deviceId}})"
           size="small"
         >编辑</el-button>
         <el-button

@@ -56,7 +56,7 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({ name: 'editEvent' })"
+      @click="$router.push({ name: 'eventCenterAdd' })"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -107,7 +107,7 @@
         >查看</el-button>
         <el-button
           @click="
-            $router.push({ name: 'editEvent', query: { aid: row.activityId } })
+            $router.push({ name: 'eventCenterEdit', query: { aid: row.activityId } })
           "
           v-if="row.activityStatus < 2"
           v-has="'eventCenterEdit'"

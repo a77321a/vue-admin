@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 10:38:12
+ * @LastEditTime: 2019-12-21 22:41:25
  -->
 <template>
   <div class="event-room">
@@ -33,7 +33,7 @@
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editEventRoom'})"
+            @click="$router.push({name:'eventRoomAdd'})"
             style="margin-bottom:15px"
             size="small"
             v-has="'eventCenterDelete'"
@@ -60,7 +60,7 @@
               >查看</el-button>
 
               <el-button
-                @click="$router.push({name:'editEventRoom',query:{aid:row.activityRoomId}})"
+                @click="$router.push({name:'eventRoomEdit',query:{aid:row.activityRoomId}})"
                 type="text"
                 size="small"
                 v-has="'eventRoomEdit'"
@@ -143,7 +143,7 @@ export default {
           this.$http
             .post('/activity/room/delete', { activityRoomIdList: id })
             .then(res => {
-              if (res.code === 200) {
+              if (res.code === SUCCESS) {
                 this.$message.success('操作成功')
                 this.searchRefresh = !this.searchRefresh
               }

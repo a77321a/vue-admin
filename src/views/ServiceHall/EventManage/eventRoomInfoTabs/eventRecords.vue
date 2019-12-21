@@ -89,7 +89,7 @@
 
         <el-button
           v-if="row.activityStatus < 2"
-          @click="$router.push({name:'editEvent',query:{aid:row.activityId}})"
+          @click="$router.push({name:'eventCenterEdit',query:{aid:row.activityId}})"
           type="text"
           size="small"
         >编辑</el-button>

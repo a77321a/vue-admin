@@ -16,11 +16,20 @@ export default [
     }
   },
   {
-    path: 'editServiceProduct',
-    name: 'editServiceProduct',
+    path: 'serviceProductEdit',
+    name: 'serviceProductEdit',
     component: () => import('@/views/ServiceHall/ServiceProduct/editServiceProduct.vue'),
     meta: {
-      title: '新增/编辑服务产品',
+      title: '编辑服务产品',
+      parent: 'serviceProduct'
+    }
+  },
+  {
+    path: 'serviceProductAdd',
+    name: 'serviceProductAdd',
+    component: () => import('@/views/ServiceHall/ServiceProduct/editServiceProduct.vue'),
+    meta: {
+      title: '新增服务产品',
       parent: 'serviceProduct'
     }
   },

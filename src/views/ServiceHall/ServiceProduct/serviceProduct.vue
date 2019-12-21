@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:00:05
+ * @LastEditTime: 2019-12-21 23:02:43
  -->
 <template>
   <div class="event-room">
@@ -43,7 +43,7 @@
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'editServiceProduct'})"
+            @click="$router.push({name:'serviceProductAdd'})"
             style="margin-bottom:15px"
             size="small"
             type="primary"
@@ -73,7 +73,7 @@
             <template slot-scope="{row}" slot="action">
               <el-button
                 v-has="'serviceProductEdit'"
-                @click="$router.push({name:'editServiceProduct',query:{pid:row.orgServiceProductId}})"
+                @click="$router.push({name:'serviceProductEdit',query:{pid:row.orgServiceProductId}})"
                 type="text"
                 size="small"
               >编辑</el-button>
@@ -98,7 +98,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -128,15 +128,15 @@ export default {
       selectActivity: []
     }
   },
-  created() {
+  created () {
     this.getServiceTypeList()
   },
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    getServiceTypeList() {
+    getServiceTypeList () {
       this.$http
         .post('/org/service/type/pageSearch', { pageSize: MAXSIZE })
         .then(res => {
@@ -145,10 +145,10 @@ export default {
           }
         })
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.orgServiceProductId] : []
       this.$confirm('删除后，该产品将无法投入运营使用，是否确认？', '提示', {
         confirmButtonText: '确定',

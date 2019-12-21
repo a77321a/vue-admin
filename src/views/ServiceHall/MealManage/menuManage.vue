@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-14 10:30:44
+ * @LastEditTime: 2019-12-21 22:54:40
  -->
 <template>
   <div class="meal-center">
@@ -374,15 +374,8 @@ export default {
     cellMouseEnter (row, column, cell, event) {
       event.target.firstElementChild.firstElementChild.lastElementChild.style.display =
         'block'
-      console.log(
-        event.target.firstElementChild.firstElementChild.lastElementChild
-      )
     },
     cellMouseLeave (row, column, cell, event) {
-      // console.log(row, column, cell, event)
-      console.log(
-        event.target.firstElementChild.firstElementChild.lastElementChild
-      )
       event.target.firstElementChild.firstElementChild.lastElementChild.style.display =
         'none'
     },
@@ -509,7 +502,6 @@ export default {
         })
     },
     handleDelete (row, item) {
-      console.log(row)
       let content = '删除后，该菜品将不再该时段显示，是否确认？'
       this.$confirm(content, '提示', {
         confirmButtonText: '确定',
@@ -616,7 +608,6 @@ export default {
     transferWeek (date) {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
-        console.log(date)
         this.searchData.year = date.getFullYear()
       } else {
         this.searchData.week = ''
@@ -625,19 +616,17 @@ export default {
     getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
-          this.orgList = res.payload
-          if (this.orgList.length > 0) {
-            if (this.orgList[0].children.length > 0) {
-              this.searchData.orgId = this.orgList[0].children[0].orgId
-            }
-          }
-          this.orgList.forEach(i => {
+          let arr = []
+          res.payload.forEach(i => {
             if (i.children.length > 0) {
+              arr.push(i)
               i.children.forEach(j => {
                 delete j.children
               })
             }
           })
+          this.orgList = arr
+          this.searchData.orgId = this.orgList[0].children[0].orgId
           this.searchData.year = this.week.getFullYear()
           this.api = '/org/foodMenu/week'
           this.searchRefresh = !this.searchRefresh
@@ -649,10 +638,7 @@ export default {
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex]
         const _col = _row ? 1 : 0
-        console.log({
-          rowspan: _row,
-          colspan: _col
-        })
+
         return {
           rowspan: _row,
           colspan: _col

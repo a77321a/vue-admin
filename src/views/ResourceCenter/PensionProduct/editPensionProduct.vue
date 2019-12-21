@@ -98,11 +98,11 @@
 <script>
 import sku from '@/components/SKU/sku.vue'
 export default {
-  name: 'editEvent',
+  name: 'eventCenterEdit',
   components: {
     sku
   },
-  data () {
+  data() {
     return {
       formInfo: {
         pensionServiceProductName: '',
@@ -138,14 +138,14 @@ export default {
       serviceTypeList: []
     }
   },
-  created () {
+  created() {
     if (this.$route.query.pid) {
       this.getProductInfo()
     }
     this.getServiceType()
   },
   methods: {
-    getServiceType () {
+    getServiceType() {
       this.$http
         .post('/pension/service/type/pageSerach', { pageSize: MAXSIZE })
         .then(res => {
@@ -156,7 +156,7 @@ export default {
      * @descripttion: 获取信息
      * @return: 信息
      */
-    getProductInfo () {
+    getProductInfo() {
       this.$http
         .get(
           '/pension/service/product/detail?pensionServiceProductId=' +
@@ -176,7 +176,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       let priceList = this.$refs.sku.toConfirm()
       this.formInfo.pensionServiceProductPrice = priceList
       this.$refs['formInfo'].validate(valid => {
@@ -205,7 +205,7 @@ export default {
           })
       })
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {

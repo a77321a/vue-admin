@@ -35,7 +35,7 @@
       </el-form-item>
     </el-form>
     <el-button
-      @click="$router.push({name:'editObject'})"
+      @click="$router.push({name:'serviceObjectAdd'})"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -88,7 +88,7 @@
           size="small"
         >健康管理</el-button>
         <el-button
-          @click="$router.push({name:'editObject',query:{sid:row.serviceCustomerId}})"
+          @click="$router.push({name:'serviceObjectEdit',query:{sid:row.serviceCustomerId}})"
           type="text"
           size="small"
           v-has="'serviceObjectEdit'"

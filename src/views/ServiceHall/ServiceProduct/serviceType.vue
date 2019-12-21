@@ -3,14 +3,14 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:00:43
+ * @LastEditTime: 2019-12-21 23:05:29
  -->
 <template>
   <div class="service-product">
     <el-row :gutter="20">
       <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
       <!-- 筛选 -->
-      <el-col :span="toggleWidth">
+      <el-col :span="toggleWidth" style="padding-left: 20px;">
         <el-form inline ref="form" label-width="80px" size="small">
           <el-form-item label="类型名称">
             <el-input placeholder="请输入类型名称关键字" v-model="searchData.orgServiceTypeName"></el-input>
@@ -100,7 +100,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -128,11 +128,11 @@ export default {
       orgTree: []
     }
   },
-  created() {
+  created () {
     this.getOrgList()
   },
   methods: {
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -146,11 +146,11 @@ export default {
         }
       })
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.formInfo = row
       this.dialogFormVisible = true
     },
-    handleSaveForm() {
+    handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.formInfo.orgServiceTypeId
@@ -172,14 +172,14 @@ export default {
           })
       })
     },
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       if (row.productNum > 0) {
         this.$message.error('当前分类下含有产品，无法删除')
         return

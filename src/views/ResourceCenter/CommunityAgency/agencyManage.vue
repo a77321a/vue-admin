@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 11:01:44
+ * @LastEditTime: 2019-12-21 23:10:36
  -->
 <template>
   <div class="angecy-manage">
@@ -56,7 +56,7 @@
     </el-form>
     <el-button
       v-has="'agencyManageAdd'"
-      @click="$router.push({ name: 'editAgency' })"
+      @click="$router.push({ name: 'agencyManageAdd' })"
       style="margin-bottom:15px"
       size="small"
       type="primary"
@@ -118,7 +118,7 @@
           v-has="'agencyManageEdit'"
           type="text"
           size="small"
-          @click="$router.push({ name: 'editAgency', query: { oid: row.orgId,parent:row.parentOrgId == 0 ? '' :row.parentOrgId }})"
+          @click="$router.push({ name: 'agencyManageEdit', query: { oid: row.orgId,parent:row.parentOrgId == 0 ? '' :row.parentOrgId }})"
         >编辑</el-button>
         <el-button
           v-has="'agencyManageDelete'"
@@ -183,7 +183,7 @@ export default {
     },
     handleAppend (row) {
       this.$router.push({
-        name: 'editAgency',
+        name: 'agencyManageEdit',
         query: {
           parent: row.orgId
         }

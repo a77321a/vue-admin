@@ -16,11 +16,20 @@ export default [
     }
   },
   {
-    path: 'editDictionary',
-    name: 'editDictionary',
+    path: 'dictionaryConfigEdit',
+    name: 'dictionaryConfigEdit',
     component: () => import('@/views/SystemSetting/DictionaryManagement/editDictionary.vue'),
     meta: {
       title: '新增/编辑字典',
+      parent: 'dictionaryConfig'
+    }
+  },
+  {
+    path: 'dictionaryConfigAdd',
+    name: 'dictionaryConfigAdd',
+    component: () => import('@/views/SystemSetting/DictionaryManagement/editDictionary.vue'),
+    meta: {
+      title: '新增字典',
       parent: 'dictionaryConfig'
     }
   }

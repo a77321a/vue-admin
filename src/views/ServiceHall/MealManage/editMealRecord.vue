@@ -139,7 +139,7 @@ import selectServiceObject from '../../../components/SelectTable/selectServiceOb
 import selectFood from '../../../components/SelectTable/selectFood.vue'
 
 export default {
-  name: 'editMealRecord',
+  name: 'mealCenterEdit',
   components: {
     selectServiceObject,
     selectFood

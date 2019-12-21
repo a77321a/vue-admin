@@ -16,11 +16,20 @@ export default [
     }
   },
   {
-    path: 'editPensionProduct',
-    name: 'editPensionProduct',
+    path: 'pensionProductAdd',
+    name: 'pensionProductAdd',
     component: () => import('@/views/ResourceCenter/PensionProduct/editPensionProduct.vue'),
     meta: {
-      title: '新增/编辑产品',
+      title: '新增产品',
+      parent: 'pensionProduct'
+    }
+  },
+  {
+    path: 'pensionProductEdit',
+    name: 'pensionProductEdit',
+    component: () => import('@/views/ResourceCenter/PensionProduct/editPensionProduct.vue'),
+    meta: {
+      title: '编辑产品',
       parent: 'pensionProduct'
     }
   },

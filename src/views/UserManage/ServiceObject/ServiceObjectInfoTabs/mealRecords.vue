@@ -34,7 +34,7 @@
         <el-button @click="handlePreview(row)" type="text" size="small">查看</el-button>
 
         <el-button
-          @click="$router.push({name:'editMealRecord',query:{mid:row.recordId}})"
+          @click="$router.push({name:'mealCenterEdit',query:{mid:row.recordId}})"
           type="text"
           size="small"
         >编辑</el-button>

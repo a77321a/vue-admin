@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors:
- * @LastEditTime: 2019-12-12 10:55:50
+ * @LastEditTime: 2019-12-21 22:57:54
  -->
 <template>
   <div class="service-center">
@@ -39,7 +39,7 @@
           </el-form-item>
         </el-form>
         <el-button
-          @click="$router.push({name:'editServiceCenter'})"
+          @click="$router.push({name:'serviceCenterAdd'})"
           style="margin-bottom:15px"
           v-has="'serviceCenterAdd'"
           size="small"
@@ -58,7 +58,7 @@
           <template slot="action" slot-scope="{row}">
             <el-button
               v-has="'serviceCenterEdit'"
-              @click="$router.push({name:'editServiceCenter',query:{sid:row.serviceRecordId}})"
+              @click="$router.push({name:'serviceCenterEdit',query:{sid:row.serviceRecordId}})"
               type="text"
             >编辑</el-button>
             <el-button v-has="'serviceCenterDelete'" @click="handleDelete(row)" type="text">删除</el-button>
@@ -76,7 +76,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -109,25 +109,25 @@ export default {
       eventRoomList: []
     }
   },
-  created() {
+  created () {
     this.getEventRoomList()
   },
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgIdList = val ? [val] : undefined
       this.searchRefresh = !this.searchRefresh
     },
-    getEventRoomList() {
+    getEventRoomList () {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.serviceRecordId] : []
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',

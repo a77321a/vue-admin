@@ -43,20 +43,38 @@ export default [
     }
   },
   {
-    path: 'editAccount',
-    name: 'editAccount',
+    path: 'accountSettingEdit',
+    name: 'accountSettingEdit',
     component: () => import('@/views/SystemSetting/RolePermission/editAccount.vue'),
     meta: {
-      title: '新增/修改账号',
+      title: '修改账号',
       parent: 'accountSetting'
     }
   },
   {
-    path: 'editRole',
-    name: 'editRole',
+    path: 'accountSettingAdd',
+    name: 'accountSettingAdd',
+    component: () => import('@/views/SystemSetting/RolePermission/editAccount.vue'),
+    meta: {
+      title: '新增账号',
+      parent: 'accountSetting'
+    }
+  },
+  {
+    path: 'roleManageEdit',
+    name: 'roleManageEdit',
     component: () => import('@/views/SystemSetting/RolePermission/editRole.vue'),
     meta: {
-      title: '新增/编辑角色',
+      title: '编辑角色',
+      parent: 'roleManage'
+    }
+  },
+  {
+    path: 'roleManageAdd',
+    name: 'roleManageAdd',
+    component: () => import('@/views/SystemSetting/RolePermission/editRole.vue'),
+    meta: {
+      title: '新增角色',
       parent: 'roleManage'
     }
   }
