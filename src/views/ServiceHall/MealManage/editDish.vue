@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 15:21:28
  * @LastEditors:
- * @LastEditTime: 2019-12-10 19:29:35
+ * @LastEditTime: 2019-12-21 23:24:55
  -->
 <template>
   <div id="edit-dish">
@@ -84,15 +84,22 @@
         </el-select>
       </el-form-item>
       <el-form-item label="价格" prop="price">
-        <el-input-number v-model="formInfo.price" :precision="2" controls-position="right" :min="0"></el-input-number>
+        <el-input-number
+          placeholder="0.01~500000"
+          v-model="formInfo.price"
+          :precision="2"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>元
       </el-form-item>
       <el-form-item label="划线价">
         <el-input-number
+          placeholder="0.01~500000"
           v-model="formInfo.lineationPrice"
           :precision="2"
           controls-position="right"
           :min="0"
-        ></el-input-number>
+        ></el-input-number>元
       </el-form-item>
       <el-divider></el-divider>
       <el-form-item size="large">

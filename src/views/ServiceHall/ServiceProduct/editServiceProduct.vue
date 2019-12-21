@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-08 15:12:43
+ * @LastEditTime: 2019-12-21 23:25:06
  -->
 <template>
   <div id="edit-event">
@@ -87,15 +87,17 @@
           v-model="formInfo.pensionPrice"
           controls-position="right"
           :min="0"
-        ></el-input-number>
+          placeholder="0.01~500000"
+        ></el-input-number>元
       </el-form-item>
       <el-form-item label="划线价">
         <el-input-number
           :precision="2"
+          placeholder="0.01~500000"
           v-model="formInfo.pensionPlineationPrice"
           controls-position="right"
           :min="0"
-        ></el-input-number>
+        ></el-input-number>元
       </el-form-item>
       <el-divider></el-divider>
       <el-form-item size="large">

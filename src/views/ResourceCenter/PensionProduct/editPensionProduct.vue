@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors:
- * @LastEditTime: 2019-12-10 20:24:12
+ * @LastEditTime: 2019-12-21 23:24:40
  -->
 <template>
   <div id="edit-event">
@@ -76,16 +76,18 @@
           :precision="2"
           v-model="formInfo.pensionPrice"
           controls-position="right"
+          placeholder="0.01~500000"
           :min="0"
         ></el-input-number>
       </el-form-item>
       <el-form-item label="划线价" prop="pensionPlineationPrice">
         <el-input-number
           :precision="2"
+          placeholder="0.01~500000"
           v-model="formInfo.pensionPlineationPrice"
           controls-position="right"
           :min="0"
-        ></el-input-number>
+        ></el-input-number>元
       </el-form-item>
       <el-divider></el-divider>
       <el-form-item size="large">
@@ -102,7 +104,7 @@ export default {
   components: {
     sku
   },
-  data() {
+  data () {
     return {
       formInfo: {
         pensionServiceProductName: '',
@@ -138,14 +140,14 @@ export default {
       serviceTypeList: []
     }
   },
-  created() {
+  created () {
     if (this.$route.query.pid) {
       this.getProductInfo()
     }
     this.getServiceType()
   },
   methods: {
-    getServiceType() {
+    getServiceType () {
       this.$http
         .post('/pension/service/type/pageSerach', { pageSize: MAXSIZE })
         .then(res => {
@@ -156,7 +158,7 @@ export default {
      * @descripttion: 获取信息
      * @return: 信息
      */
-    getProductInfo() {
+    getProductInfo () {
       this.$http
         .get(
           '/pension/service/product/detail?pensionServiceProductId=' +
@@ -176,7 +178,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       let priceList = this.$refs.sku.toConfirm()
       this.formInfo.pensionServiceProductPrice = priceList
       this.$refs['formInfo'].validate(valid => {
@@ -205,7 +207,7 @@ export default {
           })
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
