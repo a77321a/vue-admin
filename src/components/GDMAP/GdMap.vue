@@ -2,33 +2,48 @@
  * @Descripttion:高德地图
  * @Author:
  * @Date: 2019-11-18 17:25:15
- * @LastEditors:
- * @LastEditTime: 2019-11-24 20:28:35
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-23 18:27:38
  -->
 <template>
-  <div style="position:relative" :style="{height:`${$store.state.dialogHeight}px`}">
-    <el-amap-search-box
-      style="position:absolute;top:5px;left:5px;"
-      class="search-box"
-      :search-option="searchOption"
-      :on-search-result="onSearchResult"
-    ></el-amap-search-box>
-    <el-amap
-      :plugin="plugin"
-      vid="amapDemo"
-      :amap-manager="amapManager"
-      :center="mapCenter"
-      :zoom="zoom"
-      :events="events"
-      class="amap-demo"
-    >
-      <el-amap-marker
-        v-for="(marker, index) in markers"
-        :position="marker.position"
-        :key="index"
-        :vid="index"
-      ></el-amap-marker>
-    </el-amap>
+  <div>
+    <div style="position:relative" :style="{height:`${$store.state.dialogHeight}px`}">
+      <el-amap-search-box
+        style="position:absolute;top:5px;right:5px;"
+        class="search-box"
+        :search-option="searchOption"
+        :on-search-result="onSearchResult"
+      ></el-amap-search-box>
+      <el-amap
+        :plugin="plugin"
+        vid="amapDemo"
+        :amap-manager="amapManager"
+        :center="mapCenter"
+        :zoom="zoom"
+        :events="events"
+        class="amap-demo"
+      >
+        <el-amap-marker
+          v-for="(marker, index) in markers"
+          :position="marker.position"
+          :key="index"
+          :vid="index"
+          :extData="marker"
+          :topWhenClick="true"
+          :content="getMarkerContent(marker, 30, 30)"
+          :events="markerEvents"
+        ></el-amap-marker>
+      </el-amap>
+    </div>
+    <el-divider></el-divider>
+    <el-form label-position="left" label-width="90" size="small">
+      <el-form-item label="地址名称">
+        <el-input style="width:200px" v-model="addressInfo.name"></el-input>
+      </el-form-item>
+      <el-form-item label="详细地址">
+        <span>{{addressInfo.address}}</span>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 <script>
@@ -58,6 +73,11 @@ export default {
     return {
       amapManager,
       map: {},
+      addressInfo: {
+        address: '',
+        name: '',
+        position: ['', '']
+      },
       searchOption: {
         city: this.city || '',
         citylimit: true
@@ -82,15 +102,23 @@ export default {
           geocoder.getAddress([lng, lat], function (status, result) {
             if (status === 'complete' && result.info === 'OK') {
               if (result && result.regeocode) {
+                console.log(e)
                 self.address = result.regeocode.formattedAddress
                 let component = result.regeocode.addressComponent
-                self.open(self.address, {
-                  lng,
-                  lat,
-                  component,
-                  result,
-                  address: self.address
-                })
+                let address =
+                  result.regeocode.addressComponent.province +
+                  result.regeocode.addressComponent.city +
+                  result.regeocode.addressComponent.district +
+                  result.regeocode.addressComponent.township +
+                  result.regeocode.addressComponent.street +
+                  result.regeocode.addressComponent.streetNumber
+                let name =
+                  result.regeocode.pois[result.regeocode.pois.length - 1].name
+                self.addressInfo = {
+                  address: address,
+                  name: name,
+                  position: [lng, lat]
+                }
                 self.$nextTick()
               }
             }
@@ -98,6 +126,24 @@ export default {
         }
       },
       mapCenter: [121.59996, 31.197646],
+      markerEvents: {
+        click (e) {
+          if (self.clickedMarker === e.target) return // 点击的是同一个Marker
+          const data = e.target.getExtData()
+          console.log(data)
+          self.addressInfo = data
+          if (self.clickedMarker) {
+            // 先恢复上次点击的Marker的样式
+            self.clickedMarker.setOffset(new AMap.Pixel(-10, -30))
+            self.clickedMarker.setContent(
+              self.getMarkerContent(self.clickedMarker.getExtData(), 30, 30)
+            )
+          }
+          e.target.setContent(self.getMarkerContent(data, 40, 40, true))
+          e.target.setOffset(new AMap.Pixel(-18, -50))
+          self.clickedMarker = e.target
+        }
+      },
       plugin: [
         {
           enableHighAccuracy: true, // 是否使用高精度定位，默认:true
@@ -123,7 +169,6 @@ export default {
               // o 是高德地图定位插件实例
 
               geolocation.getCurrentPosition((status, result) => {
-                console.log(status, result)
                 if (result && result.position) {
                   self.lng = result.position.lng
                   self.lat = result.position.lat
@@ -140,32 +185,62 @@ export default {
   },
   methods: {
     open (str, row) {
-      this.$confirm(`确定选择地址：${str}(${row.lng},${row.lat})`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$emit('selectArea', row)
-        })
-        .catch(() => {})
+      return this.addressInfo
     },
     onSearchResult (pois) {
       let latSum = 0
       let lngSum = 0
       if (pois.length > 0) {
-        pois.forEach(poi => {
+        pois.forEach((poi, v) => {
           let { lng, lat } = poi
           lngSum += lng
           latSum += lat
-          this.markers.push({ position: [poi.lng, poi.lat] })
+          this.markers.push({
+            position: [poi.lng, poi.lat],
+            address: poi.address,
+            num: v + 1 + '',
+            name: poi.name
+          })
         })
+        this.addressInfo = this.markers[0]
         let center = {
           lng: lngSum / pois.length,
           lat: latSum / pois.length
         }
         this.mapCenter = [center.lng, center.lat]
       }
+    },
+    getMarkerContent (item, width, height, isRotate = false) {
+      if (item.num === 1) {
+        this.getMarkerContent(item, width, height, true)
+        return
+      }
+      const bgRoate = isRotate ? 'transform: rotate(45deg);' : ''
+      const txRotate = isRotate ? 'transform: rotate(-45deg);' : ''
+      let backgroundColor =
+        item.level === 'A'
+          ? '#FF8100'
+          : item.level === 'B'
+            ? '#8D3ECD'
+            : '#2DCD72'
+      if (isRotate) {
+        backgroundColor = '#0893FF'
+      }
+      const content = `<div style="display: flex;
+                                      justify-content: center;
+                                      align-items: center;
+                                      height: ${width}px;
+                                      width: ${height}px;
+                                      border-radius: 10px;
+                                      ${bgRoate}
+                                      font-family: Arial-BoldMT;
+                                      font-size: 16px;
+                                      color: #FFFFFF;
+                                      box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.30);
+                                      background-color: ${backgroundColor};"><div style="${txRotate}"> ${
+  item.num
+} </div></div>`
+      return content
     }
   }
 }

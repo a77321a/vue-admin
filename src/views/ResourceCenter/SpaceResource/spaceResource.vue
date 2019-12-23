@@ -2,8 +2,8 @@
  * @Descripttion:空间资源
  * @Author:
  * @Date: 2019-11-06 22:19:24
- * @LastEditors:
- * @LastEditTime: 2019-12-12 11:15:20
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-23 18:27:03
  -->
 <template>
   <div id="space-resource">
@@ -46,7 +46,11 @@
       </div>
     </el-tree>
     <el-dialog title="选择地点" :visible.sync="dialogVisible" width="70%">
-      <GdMap :city="city" @selectArea="selectArea"></GdMap>
+      <GdMap ref="gdmap" :city="city"></GdMap>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="selectArea">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -71,18 +75,13 @@ export default {
     this.getTree()
   },
   methods: {
-    selectArea (row) {
-      this.formInfo.latitude = row.lat
-      this.formInfo.longitude = row.lng
+    selectArea () {
+      let row = this.$refs.gdmap.open()
+      this.formInfo.latitude = row.position[1]
+      this.formInfo.longitude = row.position[0]
       let addressName = ''
       if (this.tempObj.regionId) {
-        if (this.tempObj.depth === 1) {
-          addressName = row.component.district
-        } else if (this.tempObj.depth === 2) {
-          addressName = row.component.township
-        } else if (this.tempObj.depth === 3) {
-          addressName = row.address.split(row.component.township)[1]
-        }
+        addressName = row.name
         this.$http
           .post('/address/add', {
             addressName: addressName,
@@ -101,7 +100,7 @@ export default {
       } else {
         this.$http
           .post('/address/add', {
-            addressName: row.component.city,
+            addressName: row.name,
             depth: 1,
             latitude: this.formInfo.latitude,
             longitude: this.formInfo.longitude,
@@ -155,7 +154,8 @@ export default {
     },
 
     handleAppend (node, data) {
-      this.city = data.addressName
+      // this.city = data.addressName
+      this.city = '南京'
       this.tempObj = data
       this.dialogVisible = true
     }

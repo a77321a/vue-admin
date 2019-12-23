@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑机构
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime: 2019-12-15 15:20:29
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-23 18:30:49
  -->
 <template>
   <div id="edit-agency">
@@ -148,7 +148,11 @@
       </el-form-item>
     </el-form>
     <el-dialog title="选择地点" :visible.sync="mapShow" width="70%">
-      <GdMap @selectArea="selectArea"></GdMap>
+      <GdMap ref="gdmap"></GdMap>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="mapShow = false">取 消</el-button>
+        <el-button type="primary" @click="selectArea">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -159,7 +163,7 @@ export default {
   components: {
     GdMap
   },
-  data () {
+  data() {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -228,7 +232,7 @@ export default {
       spaceTree: []
     }
   },
-  created () {
+  created() {
     // this.getOrgType()
     // this.getServiceType()
     // this.getOperationMode()
@@ -238,10 +242,10 @@ export default {
     }
   },
   methods: {
-    openMap () {
+    openMap() {
       this.mapShow = true
     },
-    getOrgInfo () {
+    getOrgInfo() {
       this.$http.get('/org/get?orgId=' + this.$route.query.oid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
@@ -259,13 +263,16 @@ export default {
         }
       })
     },
-    selectArea (row) {
-      this.formInfo.latitude = row.lat
-      this.formInfo.longitude = row.lng
-      this.formInfo.latLong = `${row.lng}，${row.lat}`
+    selectArea() {
+      let row = this.$refs.gdmap.open()
+      this.formInfo.latitude = row.position[1]
+      this.formInfo.longitude = row.position[0]
+      this.formInfo.latLong = `${row.address}（${row.position[0]}，${
+        row.position[1]
+      }）`
       this.mapShow = false
     },
-    getTree () {
+    getTree() {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -277,30 +284,30 @@ export default {
         }
       })
     },
-    getOperationMode () {
+    getOperationMode() {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
         }
       })
     },
-    getServiceType () {
+    getServiceType() {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType () {
+    getOrgType() {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    handleRemove () {},
+    handleRemove() {},
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         console.log(valid)
         if (!valid) return
@@ -334,7 +341,7 @@ export default {
           })
       })
     },
-    uploadImgcad (file) {
+    uploadImgcad(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -344,7 +351,7 @@ export default {
       })
       return false
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -357,7 +364,7 @@ export default {
       })
       return false
     },
-    handleRemove (index) {
+    handleRemove(index) {
       this.formInfo.orgPicList.splice(index, 1)
     }
   }
