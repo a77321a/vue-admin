@@ -2,8 +2,8 @@
  * @Descripttion:路由模拟
  * @Author:
  * @Date: 2019-11-05 16:05:09
- * @LastEditors:
- * @LastEditTime: 2019-12-02 16:20:38
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-24 17:43:29
  */
 export default [
   {
@@ -89,15 +89,14 @@ export default [
     icon: 'fa-users',
     children: [
       {
-        url: '',
-        name: '社区机构',
+        url: 'dataScreen',
+        name: '数据大屏',
         icon: '',
         children: [
           {
-            url: 'agencyManage',
-            name: '机构管理'
+            url: 'orgScreen',
+            name: '机构大屏'
           }
-
         ]
       },
       {

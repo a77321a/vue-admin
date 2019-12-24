@@ -1,9 +1,9 @@
 /*
- * @Descripttion:社区机构
+ * @Descripttion:养老机构
  * @Author:
  * @Date: 2019-11-06 10:20:37
- * @LastEditors:
- * @LastEditTime: 2019-12-21 23:10:19
+ * @LastEditors  : Please set LastEditors : Please set LastEditors
+ * @LastEditTime : 2019-12-24 15:13:288
  */
 export default [
   {
@@ -11,7 +11,7 @@ export default [
     name: 'agencyManage',
     component: () => import('@/views/ResourceCenter/CommunityAgency/agencyManage.vue'),
     meta: {
-      title: '社区机构',
+      title: '养老机构',
       root: true
     }
   },

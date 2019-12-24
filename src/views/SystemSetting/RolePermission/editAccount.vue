@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑角色
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime: 2019-12-17 15:37:30
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-24 16:00:35
  -->
 <template>
   <div id="edit-role">
@@ -67,14 +67,23 @@
               style="vertical-align:sub"
               v-if="formInfo.limit == 2"
               clearable
-              :props="{value:'regionId',label:'addressName'}"
+              :props="{value:'regionId',label:'addressName',}"
               :options="spaceTree"
               v-model="formInfo.addressList"
             ></el-cascader>
           </div>
           <div class="vert-radio">
             <el-radio :label="3">机构</el-radio>
-            <el-select
+            <el-cascader
+              style="vertical-align:sub;width:300px"
+              v-if="formInfo.limit == 3"
+              clearable
+              collapse-tags
+              :props="{value:'orgId',label:'orgName',multiple:true}"
+              :options="orgList"
+              v-model="formInfo.orgIds"
+            ></el-cascader>
+            <!-- <el-select
               v-if="formInfo.limit == 3"
               clearable
               multiple
@@ -88,7 +97,7 @@
                 :label="item.orgName"
                 :value="item.orgId"
               ></el-option>
-            </el-select>
+            </el-select>-->
           </div>
         </el-radio-group>
       </el-form-item>
@@ -131,7 +140,7 @@ export default {
   components: {
     selectServiceUser
   },
-  data() {
+  data () {
     const validataPhone = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       console.log(value)
@@ -149,7 +158,9 @@ export default {
         account: '',
         accountType: 1,
         limit: 1,
-        roleIds: []
+        roleIds: [],
+        nickName: '',
+        mobile: ''
       },
       roleList: [],
       rules: {
@@ -169,7 +180,7 @@ export default {
       templateObj: {}
     }
   },
-  created() {
+  created () {
     if (this.$route.query.uid) {
       this.getAccountInfo()
     }
@@ -178,16 +189,34 @@ export default {
     this.getRole()
   },
   methods: {
-    getOrg() {
-      this.$http
-        .post('/org/pageSearch', { pageSize: MAXSIZE, level: 2 })
-        .then(res => {
-          if (res.code === SUCCESS) {
-            this.orgList = res.payload.records
-          }
-        })
+    getOrg () {
+      // this.$http
+      //   .post('/org/tree', { pageSize: MAXSIZE, level: 2 })
+      //   .then(res => {
+      //     if (res.code === SUCCESS) {
+      //       this.orgList = res.payload.records
+      //     }
+      //   })
+      this.$http.post('/org/tree').then(res => {
+        if (res.code === SUCCESS) {
+          let arr = res.payload
+          arr.forEach(i => {
+            if (i.children.length > 0) {
+              this.orgList.push(i)
+            }
+          })
+          this.orgList.forEach(i => {
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                delete j.children
+              })
+            }
+          })
+          console.log(this.orgList)
+        }
+      })
     },
-    getRole() {
+    getRole () {
       this.$http.post('/role/pageSearch', { pageSize: MAXSIZE }).then(res => {
         if (res.code === SUCCESS) {
           this.roleList = res.payload.records
@@ -199,10 +228,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.templateObj = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (!this.templateObj.orgServiceProviderId) {
         this.$message.error('请选择一条记录')
         return
@@ -219,7 +248,7 @@ export default {
       // this.formInfo.mobile = this.templateObj.telephoneNum
       this.dialogServiceObject = false
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -233,7 +262,7 @@ export default {
         }
       })
     },
-    getTree() {
+    getTree () {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -245,22 +274,11 @@ export default {
         }
       })
     },
-    getAccountInfo() {
+    getAccountInfo () {
       this.$http.get('/user/get?userId=' + this.$route.query.uid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
           this.formInfo.password = ''
-          // this.formInfo.roleIds = this.formInfo.roleIds
-          //   ? this.formInfo.roleIds
-          //   : []
-          // this.formInfo.orgIds = this.formInfo.orgIds
-          //   ? this.formInfo.orgIds
-          //   : []
-          // if (res.payload.orgEntites && res.payload.orgEntites.length > 0) {
-          //   res.payload.orgEntites.forEach(i => {
-          //     this.formInfo.orgIds.push(i.orgId)
-          //   })
-          // }
           if (res.payload.scopeDepth) {
             this.$set(
               this.formInfo,
@@ -268,26 +286,13 @@ export default {
               res.payload.scopeDepth.split('-')
             )
           }
-          // console.log(this.formInfo.addressList)
-          // if (
-          //   Array.isArray(res.payload.scopeAddressEntities) &&
-          //   res.payload.scopeAddressEntities.length > 0
-          // ) {
-          //   this.$set(this.formInfo, 'addresslIst', [
-          //     res.payload.scopeAddressEntities[0]
-          //       ? res.payload.scopeAddressEntities[0].regionId
-          //       : '',
-          //     res.payload.scopeAddressEntities[1]
-          //       ? res.payload.scopeAddressEntities[1].regionId
-          //       : '',
-          //     res.payload.scopeAddressEntities[2]
-          //       ? res.payload.scopeAddressEntities[2].regionId
-          //       : '',
-          //     res.payload.scopeAddressEntities[3]
-          //       ? res.payload.scopeAddressEntities[3].regionId
-          //       : ''
-          //   ])
-          // }
+          if (res.payload.orgEntities && res.payload.orgEntities.length > 0) {
+            let orgIds = []
+            res.payload.orgEntities.forEach(i => {
+              orgIds.push([i.parentOrgId, i.orgId])
+            })
+            this.$set(this.formInfo, 'orgIds', orgIds)
+          }
           this.$set(this.formInfo, 'roleIds', [])
           if (
             res.payload.roleInfo.roleList &&
@@ -305,7 +310,13 @@ export default {
         }
       })
     },
-    handleSave() {
+    handleSave () {
+      let orgIds = []
+      if (this.formInfo.limit === 3) {
+        for (let i = 0; i < this.formInfo.orgIds.length; i++) {
+          orgIds.push(this.formInfo.orgIds[i][1])
+        }
+      }
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.uid ? '/user/update' : '/user/add'
@@ -316,7 +327,7 @@ export default {
             accountType: this.formInfo.accountType,
             mobile: this.formInfo.mobile,
             nickName: this.formInfo.nickName,
-            orgIds: this.formInfo.limit === 3 ? this.formInfo.orgIds : null,
+            orgIds: this.formInfo.limit === 3 ? orgIds : null,
             password: this.formInfo.password,
             roleIds: this.formInfo.roleIds,
             scopeDepth:
