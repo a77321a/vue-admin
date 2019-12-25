@@ -2,8 +2,8 @@
  * @Descripttion:表格组件
  * @Author:
  * @Date: 2019-11-05 10:42:51
- * @LastEditors:
- * @LastEditTime: 2019-12-11 16:45:21
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-25 16:20:36
  -->
 <template>
   <div>
@@ -262,6 +262,9 @@ export default {
       this.loading = true
       if (param) {
         this.page = 1
+      }
+      if (this.searchObj.pageSize) {
+        this.pageSize = this.searchObj.pageSize
       }
       if (this.searchObj.orgId) {
         this.searchObj.orgId = Array.isArray(this.searchObj.orgId)
