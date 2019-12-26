@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑角色
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime : 2019-12-19 15:56:42
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-26 16:05:37
  -->
 <template>
   <div id="edit-role">
@@ -40,6 +40,7 @@
         <el-checkbox style="float:right" v-model="checkAll">全选</el-checkbox>
       </div>
       <el-tree
+        v-loading="loading"
         ref="permissionTree"
         style="margin:20px;"
         :default-checked-keys="defaultKey"
@@ -50,7 +51,19 @@
       >
         <div class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ data.permissionName }}</span>
+          <span style="margin-left:10px" v-if="data.permissionDepth == 3">
+            <el-checkbox-group style="display:inline-block" v-model="checkButtonList">
+              <el-checkbox
+                v-for="(item, index) in data.child"
+                :key="index"
+                :label="item.permissionId"
+              >{{item.permissionName}}</el-checkbox>
+            </el-checkbox-group>
+          </span>
         </div>
+        <!-- <div class="custom-tree-node" slot-scope="{ node, data }">
+          <span>{{ data.permissionName }}</span>
+        </div>-->
       </el-tree>
       <el-divider></el-divider>
       <el-form-item size="large">
@@ -63,7 +76,7 @@
 <script>
 export default {
   name: 'editRole',
-  data() {
+  data () {
     return {
       checkAll: false,
       formInfo: {
@@ -71,6 +84,7 @@ export default {
         roleDesc: '',
         permissionIds: []
       },
+      checkButtonList: [],
       defaultKey: [],
       rules: {
         roleName: [
@@ -80,50 +94,87 @@ export default {
           { required: true, message: '请选择角色描述', trigger: 'blur' }
         ]
       },
-      data: []
+      data: [],
+      loading: false,
+      allBtnList: []
     }
   },
-  created() {
+  created () {
     this.getTree()
   },
   watch: {
-    checkAll(val) {
+    checkAll (val) {
       if (val) {
         let arr = []
         this.data.forEach(i => {
           arr.push(i.permissionId)
         })
+        this.checkButtonList = this.allBtnList
         this.defaultKey = arr
       } else {
         console.log(val)
         this.defaultKey.length = []
         this.$refs.permissionTree.setCheckedKeys([])
+        this.checkButtonList = []
       }
     }
   },
   methods: {
-    getTree() {
+    getTree () {
+      this.loading = true
       this.$http.post('/permission/getTree', {}).then(res => {
         if (res.code === SUCCESS) {
           this.data = res.payload
+          this.allBtnList = []
+
+          for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i].permissionUrl == 'Home') {
+            } else if (Array.isArray(this.data[i].children)) {
+              for (let j = 0; j < this.data[i].children.length; j++) {
+                if (Array.isArray(this.data[i].children[j].children)) {
+                  for (
+                    let n = 0;
+                    n < this.data[i].children[j].children.length;
+                    n++
+                  ) {
+                    if (
+                      this.data[i].children[j].children[n].permissionDepth == 3
+                    ) {
+                      this.data[i].children[j].children[n].child = this.data[
+                        i
+                      ].children[j].children[n].children
+                      this.data[i].children[j].children[n].children.forEach(
+                        item => {
+                          this.allBtnList.push(item.permissionId)
+                        }
+                      )
+                      delete this.data[i].children[j].children[n].children
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
+        this.loading = false
         if (this.$route.query.id) {
           this.getRoleInfo()
         }
       })
     },
-    getRoleInfo() {
+    getRoleInfo () {
       this.$http.get('/role/edit?roleId=' + this.$route.query.id).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
           let checked = (data, key, newArr) => {
             data.forEach(i => {
               if (i.permissionId === key) {
-                if (Array.isArray(i.children) && i.children.length == 0) {
+                if (i.permissionDepth == 3) {
+                  console.log(i.permissionId)
                   newArr.push(i.permissionId)
                 }
               } else {
-                if (i.children.length !== 0) {
+                if (i.children && i.children.length !== 0) {
                   checked(i.children, key, newArr)
                 }
               }
@@ -132,6 +183,9 @@ export default {
           let arr = []
           this.formInfo.permissionsList.forEach(i => {
             checked(this.data, i.permissionId, arr)
+            if (i.permissionType == 2) {
+              this.checkButtonList.push(i.permissionId)
+            }
           })
 
           this.defaultKey = arr
@@ -139,10 +193,11 @@ export default {
           delete this.formInfo.createTime
           delete this.formInfo.updateTime
           delete this.formInfo.permissionsList
+          delete this.formInfo.userList
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -152,13 +207,15 @@ export default {
       })
       return false
     },
-    handleSave() {
+    handleSave () {
       let nodeList = this.$refs['permissionTree'].getCheckedNodes(false, true)
       let nodeKey = []
       nodeList.forEach(i => {
         nodeKey.push(i.permissionId)
       })
+      nodeKey = [...new Set(nodeKey.concat(this.checkButtonList))]
       this.formInfo.permissionIds = nodeKey
+
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         if (this.$route.query.id) {
@@ -183,28 +240,13 @@ export default {
 </script>
 <style lang="scss">
 #edit-role {
-  .tree-title {
-    display: block;
-    height: 40px;
-    line-height: 40px;
-    font-size: 13px;
-    font-weight: 700;
-    background-color: rgb(241, 241, 241);
-    padding: 0px 20px;
-    text-align: center;
-    .left {
-      float: left;
-    }
-    .right {
-      float: right;
-    }
-  }
   .custom-tree-node {
     padding-right: 20px;
+    // min-height: 40px !important;
     width: 100%;
   }
   /deep/ .el-tree-node__content {
-    height: 40px;
+    height: 40px !important;
     line-height: 40px;
   }
 }

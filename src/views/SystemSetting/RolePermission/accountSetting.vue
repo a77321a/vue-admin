@@ -2,15 +2,15 @@
  * @Descripttion:账号管理
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime : 2019-12-19 16:03:13
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-26 12:11:52
  -->
 <template>
   <div class="account-setting">
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="人员类型">
-        <el-select clearable v-model="searchData.status" placeholder="请选择">
+        <el-select clearable v-model="searchData.accountType" placeholder="请选择">
           <el-option label="内部服务人员" value="1"></el-option>
           <el-option label="外部人员" value="2"></el-option>
         </el-select>
@@ -26,7 +26,7 @@
         <el-input placeholder="请输入昵称关键字" v-model="searchData.nickName"></el-input>
       </el-form-item>
       <el-form-item label="手机号">
-        <el-input placeholder="请输入手机号" v-model="searchData.account"></el-input>
+        <el-input placeholder="请输入手机号" v-model="searchData.mobile"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button

@@ -2,8 +2,8 @@
  * @Descripttion:服务对象
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime : 2019-12-19 16:03:57
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-26 10:16:45
  -->
 <template>
   <div class="serviceObject">
@@ -98,6 +98,7 @@
       <template slot="footer-left">
         <el-button
           :disabled="selectServiceObject.length == 0"
+          @click="handleDelete(null)"
           v-has="'serviceObjectDelete'"
           type="text"
         >删除</el-button>
@@ -311,12 +312,16 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('/service/customer/delete', id).then(res => {
-            if (res.code === 200) {
-              this.$message.success('操作成功')
-              this.searchRefresh = !this.searchRefresh
-            }
-          })
+          this.$http
+            .post('/service/customer/delete', {
+              serviceCustomerIdList: id
+            })
+            .then(res => {
+              if (res.code === SUCCESS) {
+                this.$message.success('操作成功')
+                this.searchRefresh = !this.searchRefresh
+              }
+            })
         })
         .catch(() => {})
     }

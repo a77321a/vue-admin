@@ -2,8 +2,8 @@
  * @Descripttion:空间资源
  * @Author:
  * @Date: 2019-11-06 22:19:24
- * @LastEditors:
- * @LastEditTime: 2019-12-15 21:03:30
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-26 15:00:27
  -->
 <template>
   <div id="space-resource">
@@ -17,6 +17,7 @@
       <span class="right">操作</span>
     </div>
     <el-tree
+      v-loading="loading"
       draggable
       :allow-drop="allowDrop"
       :expand-on-click-node="false"
@@ -84,6 +85,7 @@ export default {
     return {
       dialogFormVisible: false,
       dialogVisible: false,
+      loading: false,
       data: [],
       formInfo: {},
       tableColumns: [
@@ -122,7 +124,9 @@ export default {
       })
     },
     getMenuTree () {
+      this.loading = true
       this.$http.post('/menu/tree').then(res => {
+        this.loading = false
         if (res.code === SUCCESS) {
           this.data = res.payload
         }

@@ -2,15 +2,15 @@
  * @Descripttion:选择服务对象
  * @Author:
  * @Date: 2019-11-11 10:37:53
- * @LastEditors:
- * @LastEditTime: 2019-12-14 15:18:11
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-26 12:12:51
  -->
 <template>
   <div id="select-service-object">
     <el-form>
       <el-form inline ref="form" label-width="80px" size="small">
         <el-form-item label="名称">
-          <el-input placeholder="请输入服务对象名字" v-model="name"></el-input>
+          <el-input placeholder="请输入服务对象名字" v-model="searchData.serviceCustomerName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -48,6 +48,10 @@
           <span class="f-title">{{row.serviceCustomerName}}</span>
         </div>
       </template>
+      <template
+        slot="streetName"
+        slot-scope="{row}"
+      >{{row.cityName}}{{row.districtName}}{{row.communityName}}{{row.streetName}}</template>
     </Table>
   </div>
 </template>
@@ -61,8 +65,8 @@ export default {
       selectData: [],
       searchData: { orgId: this.orgId },
       tableColumns: [
-        { label: '服务人员', slot: 'userInfo', minWidth: 100 },
-        { label: '所在区域', prop: 'streetName', minWidth: 150 }
+        { label: '人员姓名', slot: 'userInfo', minWidth: 100 },
+        { label: '所在区域', slot: 'streetName', minWidth: 150 }
       ]
     }
   },

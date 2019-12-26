@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-20 15:25:36
+ * @LastEditTime : 2019-12-26 14:57:20
  -->
 <template>
   <div id="space-resource">
@@ -30,7 +30,13 @@
       <span style="float:right;margin-right:100px">权限类型</span>
       <span style="float:right;margin-right:180px">描述</span>
     </div>
-    <el-tree :expand-on-click-node="false" :data="data" node-key="regionId" default-expand-all>
+    <el-tree
+      v-loading="loading"
+      :expand-on-click-node="false"
+      :data="data"
+      node-key="regionId"
+      default-expand-all
+    >
       <div class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ data.permissionName }}</span>
         <span style="float:right">
@@ -129,6 +135,7 @@ export default {
   data () {
     return {
       dialogType: true,
+      loading: false,
       data: [],
       searchData: {},
       tempObj: {},
@@ -224,11 +231,13 @@ export default {
       })
     },
     getTree () {
+      this.loading = true
       this.$http
         .post('/permission/getTree', {
           permissionName: this.searchData.permissionName
         })
         .then(res => {
+          this.loading = false
           if (res.code === SUCCESS) {
             this.data = res.payload
           }

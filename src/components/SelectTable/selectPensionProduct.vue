@@ -2,15 +2,15 @@
  * @Descripttion:选择养老产品
  * @Author:
  * @Date: 2019-11-11 10:37:53
- * @LastEditors:
- * @LastEditTime: 2019-12-11 20:50:04
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-26 12:13:30
  -->
 <template>
   <div id="select-service-object">
     <el-form>
       <el-form inline ref="form" label-width="80px" size="small">
         <el-form-item label="名称">
-          <el-input placeholder="请输入养老产品名称关键字" v-model="name"></el-input>
+          <el-input placeholder="请输入养老产品名称关键字" v-model="searchData.pensionServiceProductName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -56,7 +56,7 @@
 <script>
 export default {
   name: 'selectServiceObject',
-  data() {
+  data () {
     return {
       name: '',
       searchRefresh: true,
@@ -72,19 +72,19 @@ export default {
     orgId: {},
     single: {
       type: Boolean,
-      default: function() {
+      default: function () {
         return false
       }
     },
     isSelected: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     }
   },
   methods: {
-    selectable(row, index) {
+    selectable (row, index) {
       if (this.isSelected.length === 0) {
         return 1
       }
@@ -97,13 +97,13 @@ export default {
         }
       }
     },
-    commitSelection(data) {
+    commitSelection (data) {
       this.$emit('selectObject', data)
     },
-    singleSelect(row, orow) {
+    singleSelect (row, orow) {
       this.$emit('selectObject', row)
     },
-    rowsForamtter(row) {}
+    rowsForamtter (row) {}
   }
 }
 </script>

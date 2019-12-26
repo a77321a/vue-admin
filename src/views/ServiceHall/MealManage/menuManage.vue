@@ -2,8 +2,8 @@
  * @Descripttion:菜单管理
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime: 2019-12-21 22:54:40
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-26 10:27:05
  -->
 <template>
   <div class="meal-center">
@@ -11,7 +11,6 @@
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="所属机构">
         <el-cascader
-          clearable
           :props="{ value: 'orgId', label: 'orgName', emitPath: false }"
           :options="orgList"
           v-model="searchData.orgId"
