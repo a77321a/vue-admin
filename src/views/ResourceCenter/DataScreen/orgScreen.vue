@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-12-25 16:05:37
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-25 16:41:00
+ * @LastEditTime : 2019-12-26 16:40:04
  -->
 <template>
   <div id="org-srceen">
@@ -14,8 +14,8 @@
         :xs="11"
         :sm="7"
         :md="7"
-        :lg="5"
-        :xl="5"
+        :lg="7"
+        :xl="7"
       >
         <el-card :body-style="{ padding: '0px' }" class="box-card">
           <el-image :src="item.indexPic" class="box-image"></el-image>
@@ -36,7 +36,6 @@ export default {
   },
   created () {
     let userInfo = JSON.parse(localStorage.userInfo)
-    console.log(userInfo)
     let userType = userInfo.superAdmin
     if (userType) {
       this.orgList = [
@@ -47,23 +46,23 @@ export default {
         }
       ]
     } else {
-      if (Array.isArray(userInfo.orgEntities)) {
+      this.$http.get('/org/authorizedList').then(res => {
+        let data = res.payload
         let arr = []
-        userInfo.orgEntities.forEach(i => {
+        data.forEach(i => {
           arr.push({
             orgName: i.orgName,
             indexPic:
               this.$store.state.config.systemConfig[0].dictionaryValue +
               '' +
-              i.indexPic,
+              i.cad,
             url: `http://118.24.54.72:8078/#/secondpage?orgId=${
-              i.parentOrgId
+              i.orgId
             }&x-token=${userInfo.token}`
           })
         })
-        console.log(arr)
         this.orgList = arr
-      }
+      })
     }
   },
   methods: {
