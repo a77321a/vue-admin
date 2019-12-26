@@ -10,7 +10,7 @@
     <!-- 筛选 -->
     <el-form inline ref="form" label-width="80px" size="small">
       <el-form-item label="字典名称">
-        <el-input placeholder="请输入字典名称关键字" v-model="searchData.dictCatalogName"></el-input>
+        <el-input placeholder="请输入字典名称关键字" v-model="searchData.dictionaryLabel"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
