@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-26 10:27:05
+ * @LastEditTime : 2019-12-28 16:30:48
  -->
 <template>
   <div class="meal-center">
@@ -386,8 +386,13 @@ export default {
       this.$http
         .post('/org/foodMenu/check', {
           orgId: this.searchData.orgId,
-          week: this.$func.getWeek(new Date(this.copyWeek)) + 1,
-          year: new Date(this.copyWeek).getFullYear()
+          week: this.$func.getWeek(new Date(this.copyWeek)),
+          year:
+            this.$func.getWeek(new Date(this.copyWeek)) == 1
+              ? new Date(this.copyWeek).getMonth() == 11
+                ? new Date(this.copyWeek).getFullYear() + 1
+                : new Date(this.copyWeek).getFullYear()
+              : new Date(this.copyWeek).getFullYear()
         })
         .then(res => {
           if (res.payload) {
@@ -404,13 +409,26 @@ export default {
                 .post('/org/foodMenu/copy', {
                   orgId: this.searchData.orgId ? this.searchData.orgId : '',
                   sourceWeek: this.week
-                    ? this.$func.getWeek(this.week) + 1
-                    : this.$func.getWeek(new Date()) + 1,
+                    ? this.$func.getWeek(this.week)
+                    : this.$func.getWeek(new Date()),
                   sourceYear: this.week
-                    ? this.week.getFullYear()
-                    : new Date().getFullYear(),
-                  targetWeek: this.$func.getWeek(this.copyWeek) + 1,
-                  targetYear: this.copyWeek.getFullYear()
+                    ? this.$func.getWeek(this.week) == 1
+                      ? this.week.getMonth() == 11
+                        ? this.week.getFullYear() + 1
+                        : this.week.getFullYear()
+                      : this.week.getFullYear()
+                    : this.$func.getWeek(new Date()) == 1
+                      ? new Date().getMonth() == 11
+                        ? new Date().getFullYear() + 1
+                        : new Date().getFullYear()
+                      : new Date().getFullYear(),
+                  targetWeek: this.$func.getWeek(this.copyWeek),
+                  targetYear:
+                    this.$func.getWeek(new Date(this.copyWeek)) == 1
+                      ? new Date(this.copyWeek).getMonth() == 11
+                        ? new Date(this.copyWeek).getFullYear() + 1
+                        : new Date(this.copyWeek).getFullYear()
+                      : new Date(this.copyWeek).getFullYear()
                 })
                 .then(res => {
                   if (res.code === SUCCESS) {
@@ -425,12 +443,12 @@ export default {
               .post('/org/foodMenu/copy', {
                 orgId: this.searchData.orgId ? this.searchData.orgId : '',
                 sourceWeek: this.week
-                  ? this.$func.getWeek(this.week) + 1
-                  : this.$func.getWeek(new Date()) + 1,
+                  ? this.$func.getWeek(this.week)
+                  : this.$func.getWeek(new Date()),
                 sourceYear: this.week
                   ? this.week.getFullYear()
                   : new Date().getFullYear(),
-                targetWeek: this.$func.getWeek(this.copyWeek) + 1,
+                targetWeek: this.$func.getWeek(this.copyWeek),
                 targetYear: this.copyWeek.getFullYear()
               })
               .then(res => {
@@ -605,9 +623,20 @@ export default {
       return res
     },
     transferWeek (date) {
+      console.log(date)
       if (date) {
-        this.searchData.week = this.$func.getWeek(date) + 1
+        this.searchData.week = this.$func.getWeek(date)
         this.searchData.year = date.getFullYear()
+        this.searchData.year =
+          this.$func.getWeek(date) == 1
+            ? date.getMonth() == 11
+              ? date.getFullYear() + 1
+              : date.getFullYear()
+            : date.getFullYear()
+        // if (this.searchData.week == 1) {
+        //   this.searchData.week.getMonth()
+        //   this.searchData.year = this.searchData.year + 1
+        // }
       } else {
         this.searchData.week = ''
       }
@@ -627,6 +656,17 @@ export default {
           this.orgList = arr
           this.searchData.orgId = this.orgList[0].children[0].orgId
           this.searchData.year = this.week.getFullYear()
+          this.searchData.week = this.$func.getWeek(this.week)
+          this.searchData.year =
+            this.$func.getWeek(this.week) == 1
+              ? this.week.getMonth() == 11
+                ? this.week.getFullYear() + 1
+                : this.week.getFullYear()
+              : this.week.getFullYear()
+          // if (this.searchData.week == 53) {
+          //   this.searchData.week = 1
+          //   this.searchData.year = this.searchData.year + 1
+          // }
           this.api = '/org/foodMenu/week'
           this.searchRefresh = !this.searchRefresh
           // this.$refs.search.click()
