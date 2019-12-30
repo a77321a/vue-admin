@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-30 16:43:18
+ * @LastEditTime : 2019-12-30 16:45:30
  -->
 <template>
   <div class="meal-center">
@@ -607,6 +607,7 @@ export default {
       return res
     },
     transferWeek (date) {
+      console.log(date)
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
         this.searchData.startTime = this.$func.getNowDateAndNowWeek(date).Monday
