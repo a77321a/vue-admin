@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-26 10:27:05
+ * @LastEditTime : 2019-12-30 16:43:18
  -->
 <template>
   <div class="meal-center">
@@ -386,7 +386,8 @@ export default {
       this.$http
         .post('/org/foodMenu/check', {
           orgId: this.searchData.orgId,
-          week: this.$func.getWeek(new Date(this.copyWeek)) + 1,
+          startTime: this.$func.getNowDateAndNowWeek(this.copyWeek).Monday,
+          endTime: this.$func.getNowDateAndNowWeek(this.copyWeek).SunDay,
           year: new Date(this.copyWeek).getFullYear()
         })
         .then(res => {
@@ -403,14 +404,15 @@ export default {
               this.$http
                 .post('/org/foodMenu/copy', {
                   orgId: this.searchData.orgId ? this.searchData.orgId : '',
-                  sourceWeek: this.week
-                    ? this.$func.getWeek(this.week) + 1
-                    : this.$func.getWeek(new Date()) + 1,
-                  sourceYear: this.week
-                    ? this.week.getFullYear()
-                    : new Date().getFullYear(),
-                  targetWeek: this.$func.getWeek(this.copyWeek) + 1,
-                  targetYear: this.copyWeek.getFullYear()
+                  sourceStartTime: this.$func.getNowDateAndNowWeek(this.week)
+                    .Monday,
+                  sourceEndTime: this.$func.getNowDateAndNowWeek(this.week)
+                    .SunDay,
+                  targetStartTime: this.$func.getNowDateAndNowWeek(
+                    this.copyWeek
+                  ).Monday,
+                  targetEndTime: this.$func.getNowDateAndNowWeek(this.copyWeek)
+                    .SunDay
                 })
                 .then(res => {
                   if (res.code === SUCCESS) {
@@ -424,14 +426,14 @@ export default {
             this.$http
               .post('/org/foodMenu/copy', {
                 orgId: this.searchData.orgId ? this.searchData.orgId : '',
-                sourceWeek: this.week
-                  ? this.$func.getWeek(this.week) + 1
-                  : this.$func.getWeek(new Date()) + 1,
-                sourceYear: this.week
-                  ? this.week.getFullYear()
-                  : new Date().getFullYear(),
-                targetWeek: this.$func.getWeek(this.copyWeek) + 1,
-                targetYear: this.copyWeek.getFullYear()
+                sourceStartTime: this.$func.getNowDateAndNowWeek(this.week)
+                  .Monday,
+                sourceEndTime: this.$func.getNowDateAndNowWeek(this.week)
+                  .SunDay,
+                targetStartTime: this.$func.getNowDateAndNowWeek(this.copyWeek)
+                  .Monday,
+                targetEndTime: this.$func.getNowDateAndNowWeek(this.copyWeek)
+                  .SunDay
               })
               .then(res => {
                 if (res.code === SUCCESS) {
@@ -607,7 +609,14 @@ export default {
     transferWeek (date) {
       if (date) {
         this.searchData.week = this.$func.getWeek(date) + 1
-        this.searchData.year = date.getFullYear()
+        this.searchData.startTime = this.$func.getNowDateAndNowWeek(date).Monday
+        this.searchData.endTime = this.$func.getNowDateAndNowWeek(date).SunDay
+        this.searchData.year = new Date(date).getFullYear()
+        if (this.searchData.week == 53) {
+          this.searchData.week = 1
+
+          this.searchData.year = this.searchData.year + 1
+        }
       } else {
         this.searchData.week = ''
       }
@@ -626,7 +635,13 @@ export default {
           })
           this.orgList = arr
           this.searchData.orgId = this.orgList[0].children[0].orgId
-          this.searchData.year = this.week.getFullYear()
+          this.searchData.year = new Date().getFullYear()
+          this.searchData.startTime = this.$func.getNowDateAndNowWeek(
+            this.week
+          ).Monday
+          this.searchData.endTime = this.$func.getNowDateAndNowWeek(
+            this.week
+          ).SunDay
           this.api = '/org/foodMenu/week'
           this.searchRefresh = !this.searchRefresh
           // this.$refs.search.click()
