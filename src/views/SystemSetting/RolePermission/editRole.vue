@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-26 16:05:37
+ * @LastEditTime : 2019-12-30 17:22:33
  -->
 <template>
   <div id="edit-role">
@@ -169,8 +169,10 @@ export default {
           let checked = (data, key, newArr) => {
             data.forEach(i => {
               if (i.permissionId === key) {
+                if (i.permissionUrl == 'Home') {
+                  newArr.push(i.permissionId)
+                }
                 if (i.permissionDepth == 3) {
-                  console.log(i.permissionId)
                   newArr.push(i.permissionId)
                 }
               } else {
@@ -183,11 +185,10 @@ export default {
           let arr = []
           this.formInfo.permissionsList.forEach(i => {
             checked(this.data, i.permissionId, arr)
-            if (i.permissionType == 2) {
+            if (i.permissionDepth == 4) {
               this.checkButtonList.push(i.permissionId)
             }
           })
-
           this.defaultKey = arr
           delete this.formInfo.isVisible
           delete this.formInfo.createTime
@@ -210,12 +211,12 @@ export default {
     handleSave () {
       let nodeList = this.$refs['permissionTree'].getCheckedNodes(false, true)
       let nodeKey = []
+      console.log(nodeList)
       nodeList.forEach(i => {
         nodeKey.push(i.permissionId)
       })
       nodeKey = [...new Set(nodeKey.concat(this.checkButtonList))]
       this.formInfo.permissionIds = nodeKey
-
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         if (this.$route.query.id) {

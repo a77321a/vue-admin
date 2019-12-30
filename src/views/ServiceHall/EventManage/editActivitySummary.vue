@@ -2,8 +2,8 @@
  * @Descripttion:活动总结
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime: 2019-12-15 15:19:54
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-30 17:16:55
  -->
 <template>
   <div id="edit-event">
@@ -208,7 +208,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data() {
+  data () {
     return {
       formInfo: {
         orgId: [],
@@ -254,7 +254,7 @@ export default {
       selectObjectList: []
     }
   },
-  created() {
+  created () {
     // if (this.$route.query.aid) {
     //   this.getActivityInfo()
     // }
@@ -268,19 +268,19 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
       }
-      this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
+      this.formInfo.actualServiceCustomerList = this.formInfo.actualServiceCustomerList.concat(
         this.selectObjectList
       )
       let obj = {}
-      this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.reduce(
+      this.formInfo.actualServiceCustomerList = this.formInfo.actualServiceCustomerList.reduce(
         (cur, next) => {
           obj[next.serviceCustomerId]
             ? ''
@@ -297,21 +297,30 @@ export default {
      * @param {type}
      * @return:
      */
-    selectUser(data) {
+    selectUser (data) {
       this.selectUserList = data
     },
-    handleSaveSelectUser() {
+    handleSaveSelectUser () {
       if (this.selectUserList.length === 0) {
         this.$message.error('请至少选择一个服务人员')
         return false
       }
-      this.formInfo.orgServiceProviderList = this.formInfo.orgServiceProviderList.concat(
+      this.formInfo.actualOrgServiceProviderList = this.formInfo.actualOrgServiceProviderList.concat(
         this.selectUserList
+      )
+      this.formInfo.actualOrgServiceProviderList = this.formInfo.actualOrgServiceProviderList.reduce(
+        (cur, next) => {
+          obj[next.serviceCustomerId]
+            ? ''
+            : (obj[next.serviceCustomerId] = true && cur.push(next))
+          return cur
+        },
+        []
       )
       this.selectUserList = []
       this.dialogServiceUser = false
     },
-    getProductList() {
+    getProductList () {
       this.$http
         .post('/org/service/product/pageSearch', {
           pageSize: MAXSIZE,
@@ -321,7 +330,7 @@ export default {
           this.productList = res.payload.records
         })
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (this.$route.query.aid) {
           this.getActivityInfo()
@@ -338,14 +347,14 @@ export default {
         }
       })
     },
-    getEventRoomList() {
+    getEventRoomList () {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    getActivityInfo() {
+    getActivityInfo () {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
@@ -385,7 +394,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let provider = []
@@ -427,7 +436,7 @@ export default {
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -443,7 +452,7 @@ export default {
       })
       return false
     },
-    handleRemove(index) {
+    handleRemove (index) {
       this.formInfo.activityPicList.splice(index, 1)
     }
   }

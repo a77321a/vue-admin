@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-30 16:45:30
+ * @LastEditTime : 2019-12-30 16:50:33
  -->
 <template>
   <div class="meal-center">
@@ -20,6 +20,7 @@
         <el-date-picker
           v-model="week"
           @change="transferWeek"
+          :clearable="false"
           :picker-options="{ firstDayOfWeek: 1 }"
           type="week"
           format="yyyy 第 WW 周"
@@ -245,6 +246,7 @@
         <el-form-item label="将本周菜谱设置为" required>
           <el-date-picker
             v-model="copyWeek"
+            :clearable="false"
             :picker-options="{ firstDayOfWeek: 1 }"
             type="week"
             format="yyyy 第 WW 周"

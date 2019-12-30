@@ -2,8 +2,8 @@
  * @Descripttion: 服务人员详情
  * @Author:
  * @Date: 2019-11-07 19:28:01
- * @LastEditors:
- * @LastEditTime: 2019-12-11 20:49:00
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2019-12-30 17:12:28
  -->
 <template>
   <div id="event-room-info">
@@ -11,8 +11,9 @@
       <el-row :gutter="20">
         <el-col style="text-align:center" :span="4">
           <el-avatar
+            v-if="serviceUserInfo.indexPic"
             :size="60"
-            :src="$store.state.config.systemConfig[0].dictionaryValue+serviceUserInfo.indexPic"
+            :src="$store.state.config.systemConfig[0].dictionaryValue + serviceUserInfo.indexPic"
           ></el-avatar>
         </el-col>
         <el-col :span="20">
@@ -61,7 +62,10 @@ export default {
   },
   data () {
     return {
-      serviceUserInfo: {}
+      serviceUserInfo: {
+        orgDetail: {},
+        indexPic: ''
+      }
     }
   },
   created () {
