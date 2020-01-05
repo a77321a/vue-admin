@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑活动
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime: 2019-12-21 23:25:06
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-05 19:13:46
  -->
 <template>
   <div id="edit-event">
@@ -16,6 +16,16 @@
       label-width="80px"
       size="medium"
     >
+      <el-form-item label="服务类型" prop="orgServiceTypeId">
+        <el-select clearable v-model="formInfo.orgServiceTypeId" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in serviceTypeList"
+            :key="index"
+            :label="item.orgServiceTypeName"
+            :value="item.orgServiceTypeId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="服务产品" prop="pensionServiceProductId">
         <el-button
           size="small"
@@ -68,16 +78,7 @@
           v-model="formInfo.orgId"
         ></el-cascader>
       </el-form-item>
-      <el-form-item label="服务类型" prop="orgServiceTypeId">
-        <el-select clearable v-model="formInfo.orgServiceTypeId" placeholder="请选择">
-          <el-option
-            v-for="(item, index) in serviceTypeList"
-            :key="index"
-            :label="item.orgServiceTypeName"
-            :value="item.orgServiceTypeId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+
       <el-form-item label="产品价格" prop="orgServiceProductPrice">
         <sku :priceList="priceList" ref="sku"></sku>
       </el-form-item>

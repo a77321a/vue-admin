@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-23 18:30:49
+ * @LastEditTime : 2020-01-05 19:10:55
  -->
 <template>
   <div id="edit-agency">
@@ -107,7 +107,7 @@
 
       <div class="title">其他信息</div>
       <el-form-item label="机构位置" prop="latitude">
-        <el-input style="width:240px" readonly v-model="formInfo.latLong"></el-input>
+        <el-input style="width:472px" readonly v-model="formInfo.latLong"></el-input>
         <el-button style="margin-left:20px" @click="openMap">选择位置</el-button>
       </el-form-item>
       <el-form-item label="详细地址" prop="orgAddress">
@@ -163,7 +163,7 @@ export default {
   components: {
     GdMap
   },
-  data() {
+  data () {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -232,7 +232,7 @@ export default {
       spaceTree: []
     }
   },
-  created() {
+  created () {
     // this.getOrgType()
     // this.getServiceType()
     // this.getOperationMode()
@@ -242,10 +242,10 @@ export default {
     }
   },
   methods: {
-    openMap() {
+    openMap () {
       this.mapShow = true
     },
-    getOrgInfo() {
+    getOrgInfo () {
       this.$http.get('/org/get?orgId=' + this.$route.query.oid).then(res => {
         if (res.code === SUCCESS) {
           this.formInfo = res.payload
@@ -257,13 +257,13 @@ export default {
           this.$set(this.formInfo, 'addressList', [
             res.payload.cityRegionId ? res.payload.cityRegionId : '',
             res.payload.districtRegionId ? res.payload.districtRegionId : '',
-            res.payload.communityRegionId ? res.payload.communityRegionId : '',
-            res.payload.streetRegionId ? res.payload.streetRegionId : ''
+            res.payload.streetRegionId ? res.payload.streetRegionId : '',
+            res.payload.communityRegionId ? res.payload.communityRegionId : ''
           ])
         }
       })
     },
-    selectArea() {
+    selectArea () {
       let row = this.$refs.gdmap.open()
       this.formInfo.latitude = row.position[1]
       this.formInfo.longitude = row.position[0]
@@ -272,7 +272,7 @@ export default {
       }）`
       this.mapShow = false
     },
-    getTree() {
+    getTree () {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -284,30 +284,34 @@ export default {
         }
       })
     },
-    getOperationMode() {
+    getOperationMode () {
       this.$http.get('/org/operationMode').then(res => {
         if (res.code === SUCCESS) {
           this.operationModeList = res.payload
         }
       })
     },
-    getServiceType() {
+    getServiceType () {
       this.$http.get('/org/serviceType').then(res => {
         if (res.code === SUCCESS) {
           this.serviceTypeList = res.payload
         }
       })
     },
-    getOrgType() {
+    getOrgType () {
       this.$http.get('/org/orgType').then(res => {
         if (res.code === SUCCESS) {
           this.orgTypeList = res.payload
         }
       })
     },
-    handleRemove() {},
+    handleRemove () {},
     // 保存按钮
-    handleSave() {
+    handleSave () {
+      if (this.formInfo.addressList.length < 4) {
+        this.$message.error('选择的服务范围有误')
+        return
+      }
       this.$refs['formInfo'].validate(valid => {
         console.log(valid)
         if (!valid) return
@@ -316,8 +320,8 @@ export default {
           .post(url, {
             cityRegionId: this.formInfo.addressList[0],
             districtRegionId: this.formInfo.addressList[1],
-            communityRegionId: this.formInfo.addressList[2],
-            streetRegionId: this.formInfo.addressList[3],
+            streetRegionId: this.formInfo.addressList[2],
+            communityRegionId: this.formInfo.addressList[3],
             contact: this.formInfo.contact,
             latitude: this.formInfo.latitude,
             longitude: this.formInfo.longitude,
@@ -341,7 +345,7 @@ export default {
           })
       })
     },
-    uploadImgcad(file) {
+    uploadImgcad (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -351,7 +355,7 @@ export default {
       })
       return false
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -364,7 +368,7 @@ export default {
       })
       return false
     },
-    handleRemove(index) {
+    handleRemove (index) {
       this.formInfo.orgPicList.splice(index, 1)
     }
   }

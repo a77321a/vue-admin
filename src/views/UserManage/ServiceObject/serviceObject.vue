@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-26 10:16:45
+ * @LastEditTime : 2020-01-05 18:51:06
  -->
 <template>
   <div class="serviceObject">
@@ -45,6 +45,7 @@
     <!-- 列表 -->
     <Table
       @commitSelection="commitSelection"
+      :rowsForamtter="rowsForamtter"
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
       :selection="true"
@@ -93,7 +94,12 @@
           size="small"
           v-has="'serviceObjectEdit'"
         >编辑</el-button>
-        <el-button type="text" v-has="'serviceObjectDelete'" size="small">删除</el-button>
+        <el-button
+          type="text"
+          v-has="'serviceObjectDelete'"
+          @click="handleDelete(row)"
+          size="small"
+        >删除</el-button>
       </template>
       <template slot="footer-left">
         <el-button
@@ -242,6 +248,15 @@ export default {
     this.getTree()
   },
   methods: {
+    rowsForamtter (rows) {
+      rows.forEach(i => {
+        console.log(JSON.parse(i.emergencySelect))
+        if (JSON.parse(i.emergencySelect).length == 0) {
+          console.log(i.emergencyManual)
+          i.emergencyMobile = JSON.parse(i.emergencyManual)[0].mobile
+        }
+      })
+    },
     exportExcel () {
       window.open(
         `${ctx}/service/customer/export?serviceCustomerName=${this.searchData

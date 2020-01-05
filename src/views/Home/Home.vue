@@ -2,8 +2,8 @@
  * @Descripttion:主页
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime: 2019-12-10 19:58:38
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-05 19:08:29
  -->
 <template>
   <div class="Home">
@@ -258,7 +258,21 @@
               type="text"
             >更多</el-button>
           </div>
-          <el-carousel height="105px" direction="vertical" :interval="2000" :autoplay="true">
+          <div v-for="(row, index) in eventList" :key="index" class="flex-t-l">
+            <img
+              class="course-avatar"
+              :src="
+              $store.state.config.systemConfig[0].dictionaryValue +
+                row.activityIndexPic
+            "
+              alt
+            />
+            <div class="flex-column-t">
+              <span class="f-title">{{ row.activityName }}</span>
+            </div>
+          </div>
+          <div v-if="eventList.length == 0" style="text-align:center">暂无活动</div>
+          <!-- <el-carousel height="105px" direction="vertical" :interval="2000" :autoplay="true">
             <el-carousel-item style="padding:10px 0" v-for="(item,index) in eventList" :key="index">
               <div class="flex-t-l">
                 <img
@@ -273,7 +287,7 @@
                 </div>
               </div>
             </el-carousel-item>
-          </el-carousel>
+          </el-carousel>-->
         </el-card>
       </el-col>
     </el-row>

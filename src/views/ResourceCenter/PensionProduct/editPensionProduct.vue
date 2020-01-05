@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑养老产品
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime: 2019-12-21 23:24:40
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-05 18:33:27
  -->
 <template>
   <div id="edit-event">
@@ -16,6 +16,21 @@
       label-width="80px"
       size="medium"
     >
+      <el-form-item label="服务类型" prop="pensionServiceTypeId">
+        <el-select
+          clearable
+          v-model="formInfo.pensionServiceTypeId"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in serviceTypeList"
+            :key="index"
+            :label="item.pensionServiceTypeName"
+            :value="item.pensionServiceTypeId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="产品名称" prop="pensionServiceProductName">
         <el-input
           :maxlength="28"
@@ -53,21 +68,7 @@
         <UEditor v-model="formInfo.detail"></UEditor>
       </el-form-item>
       <div class="title">价格/类型</div>
-      <el-form-item label="服务类型" prop="pensionServiceTypeId">
-        <el-select
-          clearable
-          v-model="formInfo.pensionServiceTypeId"
-          style="width:220px"
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="(item, index) in serviceTypeList"
-            :key="index"
-            :label="item.pensionServiceTypeName"
-            :value="item.pensionServiceTypeId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+
       <el-form-item label="价目表">
         <sku :priceList="priceList" ref="sku"></sku>
       </el-form-item>

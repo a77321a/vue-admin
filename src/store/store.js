@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-20 15:22:41
+ * @LastEditTime : 2020-01-05 19:02:48
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -183,6 +183,7 @@ const store = new Vuex.Store({
       }).then((res) => {
         configObj.systemConfig = res.payload
         context.commit('setDict', configObj)
+        console.log(context)
         if (Object.keys(configObj).length === 14) {
           context.dispatch('get_menu', { router, list })
         }

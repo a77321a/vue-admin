@@ -24,7 +24,7 @@
         </el-input>
         <div class="checked">
           <span>{{checkType.pensionServiceTypeName||'所有类型'}}</span>
-          <i @click="filterOrg (null, true)" style="float:right" class="el-icon-error closeFilter"></i>
+          <i v-if="checkType.pensionServiceTypeId" @click="filterOrg (null, true)" style="float:right" class="el-icon-error closeFilter"></i>
         </div>
         <div>
           <div

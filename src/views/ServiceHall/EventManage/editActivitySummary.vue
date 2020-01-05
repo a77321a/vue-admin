@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-30 17:16:55
+ * @LastEditTime : 2020-01-05 19:04:11
  -->
 <template>
   <div id="edit-event">
@@ -78,7 +78,7 @@
             <el-avatar
               :size="22"
               style="vertical-align: middle;margin-right:5px"
-              icon="el-icon-user-solid"
+              :src="$store.state.config.systemConfig[0].dictionaryValue+item.indexPic"
             ></el-avatar>
             <span style="vertical-align: middle;">
               {{
@@ -106,7 +106,7 @@
             <el-avatar
               :size="22"
               style="vertical-align: middle;margin-right:5px"
-              icon="el-icon-user-solid"
+              :src="$store.state.config.systemConfig[0].dictionaryValue+item.avatar"
             ></el-avatar>
             <span style="vertical-align: middle;">
               {{

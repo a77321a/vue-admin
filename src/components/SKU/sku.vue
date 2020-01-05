@@ -56,6 +56,7 @@
                     :min="0"
                     :precision="2"
                     type="text"
+                    @focus="$event.target.value = ''"
                     v-model="tableList[row-1]['price']"
                   />
                 </td>
@@ -66,6 +67,7 @@
                     :min="0"
                     :precision="2"
                     type="text"
+                    @focus="$event.target.value = ''"
                     v-model="tableList[row-1]['number']"
                   />
                 </td>
