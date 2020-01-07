@@ -2,8 +2,8 @@
  * @Descripttion:养老产品目录
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime : 2019-12-19 16:00:13
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-07 15:13:03
  -->
 <template>
   <div class="account-setting">
@@ -31,14 +31,17 @@
     >新增类型</el-button>
     <!-- 列表 -->
     <Table
+      rowKey="pensionServiceTypeId"
       :searchRefresh="searchRefresh"
       :searchObj="searchData"
       :selection="false"
       :columns="tableColumns"
-      api="/pension/service/type/pageSerach"
+      :treeProps="{children: 'children'}"
+      api="/pension/service/type/tree"
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
+        <el-button v-has="'productTypeAdd'" @click="handleAddType(row)" type="text" size="small">新增</el-button>
         <el-button
           v-has="'productTypeEdit'"
           @click="formInfo = row;dialogFormVisible = true"
@@ -79,7 +82,7 @@
 <script>
 export default {
   name: 'productType',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -91,7 +94,7 @@ export default {
           label: '操作',
           slot: 'handleColumn',
           fixed: 'right',
-          minWidth: 60
+          minWidth: 90
         }
       ],
       rules: {
@@ -103,9 +106,13 @@ export default {
       dialogFormVisible: false
     }
   },
-  created() {},
+  created () {},
   methods: {
-    handleSaveForm() {
+    handleAddType (row) {
+      this.formInfo.parentId = row.pensionServiceTypeId
+      this.dialogFormVisible = true
+    },
+    handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.formInfo.pensionServiceTypeId
@@ -113,6 +120,9 @@ export default {
           : '/pension/service/type/add'
         this.$http
           .post(url, {
+            parentId: this.formInfo.pensionServiceTypeId
+              ? ''
+              : this.formInfo.parentId,
             pensionServiceTypeId: this.formInfo.pensionServiceTypeId,
             pensionServiceTypeName: this.formInfo.pensionServiceTypeName
           })
@@ -125,12 +135,12 @@ export default {
           })
       })
     },
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.accountType = row.superAdmin ? '超级管理员' : '--'
       })
     },
-    handleDelete(row) {
+    handleDelete (row) {
       if (row.productNum > 0) {
         this.$message.error('当前分类下含有产品，无法删除')
         return

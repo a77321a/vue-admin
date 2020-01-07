@@ -36,7 +36,7 @@
             @click="$router.push({name:'eventRoomAdd'})"
             style="margin-bottom:15px"
             size="small"
-            v-has="'eventCenterDelete'"
+            v-has="'eventRoomAdd'"
             type="primary"
           >新增活动室</el-button>
           <!-- 列表 -->

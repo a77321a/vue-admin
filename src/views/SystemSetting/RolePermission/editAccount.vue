@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-24 16:00:35
+ * @LastEditTime : 2020-01-07 15:49:00
  -->
 <template>
   <div id="edit-role">
@@ -314,9 +314,11 @@ export default {
       let orgIds = []
       if (this.formInfo.limit === 3) {
         for (let i = 0; i < this.formInfo.orgIds.length; i++) {
+          orgIds.push(this.formInfo.orgIds[i][0])
           orgIds.push(this.formInfo.orgIds[i][1])
         }
       }
+      orgIds = [...new Set(orgIds)]
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.uid ? '/user/update' : '/user/add'

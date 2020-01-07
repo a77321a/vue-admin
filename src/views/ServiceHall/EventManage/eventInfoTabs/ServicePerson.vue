@@ -41,7 +41,7 @@
       :rowsForamtter="rowsForamtter"
       :searchObj="searchData"
       :columns="tableColumns"
-      :emptyText="'活动尚未结束'"
+      :emptyText="'暂无数据'"
       api="/activity/provider/pageSearch"
       method="post"
     >

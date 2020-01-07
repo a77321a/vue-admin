@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author:
  * @Date: 2019-11-16 18:41:35
- * @LastEditors:
- * @LastEditTime: 2019-11-24 13:20:17
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-07 15:43:18
  -->
 <template>
   <el-col
@@ -17,14 +17,19 @@
           style="margin:10px 0;"
           size="small"
           placeholder="请输入内容"
-          v-model="orgName"
+          v-model="pensionServiceTypeName"
           class="input-with-select"
         >
           <el-button @click="getServiceTypeList" slot="append" icon="el-icon-search"></el-button>
         </el-input>
         <div class="checked">
           <span>{{checkType.pensionServiceTypeName||'所有类型'}}</span>
-          <i v-if="checkType.pensionServiceTypeId" @click="filterOrg (null, true)" style="float:right" class="el-icon-error closeFilter"></i>
+          <i
+            v-if="checkType.pensionServiceTypeId"
+            @click="filterOrg (null, true)"
+            style="float:right"
+            class="el-icon-error closeFilter"
+          ></i>
         </div>
         <div>
           <div
@@ -54,7 +59,8 @@ export default {
       checkType: {
         pensionServiceTypeId: '',
         pensionServiceTypeName: ''
-      }
+      },
+      pensionServiceTypeName: ''
     }
   },
   created () {
@@ -76,7 +82,8 @@ export default {
       this.$http
         .post('/pension/service/type/pageSerach', {
           pageSize: MAXSIZE,
-          pageNum: 1
+          pageNum: 1,
+          pensionServiceTypeName: this.pensionServiceTypeName
         })
         .then(res => {
           if (res.code === SUCCESS) {

@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑活动室
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime: 2019-11-22 16:33:37
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-07 15:37:26
  -->
 <template>
   <div id="edit-event">
@@ -86,6 +86,12 @@ export default {
   },
   created () {
     this.getOrgList()
+    if (!this.$route.query.aid) {
+      let userInfo = this.$store.state.userInfo
+      if (Array.isArray(userInfo.orgIds) && userInfo.orgIds.length > 0) {
+        this.formInfo.orgId = userInfo.orgIds[0]
+      }
+    }
   },
   methods: {
     getOrgList () {
@@ -96,6 +102,8 @@ export default {
             i.children.forEach(j => {
               delete j.children
             })
+          } else {
+            delete i.children
           }
         })
         if (this.$route.query.aid) {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-26 12:13:30
+ * @LastEditTime : 2020-01-07 15:27:14
  -->
 <template>
   <div id="select-service-object">
@@ -11,6 +11,14 @@
       <el-form inline ref="form" label-width="80px" size="small">
         <el-form-item label="名称">
           <el-input placeholder="请输入养老产品名称关键字" v-model="searchData.pensionServiceProductName"></el-input>
+        </el-form-item>
+        <el-form-item label="产品类型">
+          <el-cascader
+            clearable
+            :props="{value:'pensionServiceTypeId',label:'pensionServiceTypeName',emitPath:false}"
+            :options="typeTree"
+            v-model="searchData.pensionServiceTypeId"
+          ></el-cascader>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -65,7 +73,8 @@ export default {
       tableColumns: [
         { label: '产品名称', slot: 'pensionServiceProductName', minWidth: 200 },
         { label: '服务类型', prop: 'pensionServiceTypeName', minWidth: 100 }
-      ]
+      ],
+      typeTree: []
     }
   },
   props: {
@@ -83,19 +92,40 @@ export default {
       }
     }
   },
+  created () {
+    this.getTree()
+  },
   methods: {
     selectable (row, index) {
       if (this.isSelected.length === 0) {
         return 1
       }
       for (let i in this.isSelected) {
-        console.log(row)
         if (this.isSelected[i].serviceCustomerId === row.serviceCustomerId) {
           return 0
         } else {
           return 1
         }
       }
+    },
+    getTree () {
+      this.$http.post('/pension/service/type/tree', {}).then(res => {
+        if (res.code === SUCCESS) {
+          this.typeTree = res.payload
+          this.typeTree.forEach(i => {
+            // i第一层
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                if (j.children.length > 0) {
+                  j.children.forEach(n => {
+                    delete n.children
+                  })
+                }
+              })
+            }
+          })
+        }
+      })
     },
     commitSelection (data) {
       this.$emit('selectObject', data)
