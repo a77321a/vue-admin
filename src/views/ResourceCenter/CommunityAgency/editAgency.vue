@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-05 19:10:55
+ * @LastEditTime : 2020-01-09 09:33:14
  -->
 <template>
   <div id="edit-agency">
@@ -185,7 +185,8 @@ export default {
         contact: '',
         addressList: [],
         operationMode: '',
-        cad: ''
+        cad: '',
+        mapAddress: ''
       },
       rules: {
         cad: [
@@ -267,6 +268,7 @@ export default {
       let row = this.$refs.gdmap.open()
       this.formInfo.latitude = row.position[1]
       this.formInfo.longitude = row.position[0]
+      this.formInfo.mapAddress = row.address
       this.formInfo.latLong = `${row.address}（${row.position[0]}，${
         row.position[1]
       }）`

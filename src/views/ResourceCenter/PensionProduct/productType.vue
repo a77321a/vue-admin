@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-07 15:13:03
+ * @LastEditTime : 2020-01-09 09:29:56
  -->
 <template>
   <div class="account-setting">
@@ -41,7 +41,13 @@
       method="post"
     >
       <template slot-scope="{row}" slot="handleColumn">
-        <el-button v-has="'productTypeAdd'" @click="handleAddType(row)" type="text" size="small">新增</el-button>
+        <el-button
+          :class="row.depth ==3 ?'hidden':''"
+          v-has="'productTypeAdd'"
+          @click="handleAddType(row)"
+          type="text"
+          size="small"
+        >新增</el-button>
         <el-button
           v-has="'productTypeEdit'"
           @click="formInfo = row;dialogFormVisible = true"
@@ -82,7 +88,7 @@
 <script>
 export default {
   name: 'productType',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: {},
@@ -106,13 +112,13 @@ export default {
       dialogFormVisible: false
     }
   },
-  created () {},
+  created() {},
   methods: {
-    handleAddType (row) {
+    handleAddType(row) {
       this.formInfo.parentId = row.pensionServiceTypeId
       this.dialogFormVisible = true
     },
-    handleSaveForm () {
+    handleSaveForm() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.formInfo.pensionServiceTypeId
@@ -135,12 +141,12 @@ export default {
           })
       })
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.accountType = row.superAdmin ? '超级管理员' : '--'
       })
     },
-    handleDelete (row) {
+    handleDelete(row) {
       if (row.productNum > 0) {
         this.$message.error('当前分类下含有产品，无法删除')
         return
@@ -182,6 +188,9 @@ export default {
   }
   .warning-row {
     background-color: #f2f2f2;
+  }
+  .hidden {
+    visibility: hidden;
   }
 }
 </style>
