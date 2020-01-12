@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-05 19:08:29
+ * @LastEditTime : 2020-01-12 21:33:21
  -->
 <template>
   <div class="Home">
@@ -151,11 +151,11 @@
       </el-col>
     </el-row>
     <!-- 第二排统计 -->
-    <el-row style="margin-top:10px" type="flex" justify="space-between">
+    <el-row style="margin-top:30px" type="flex" justify="space-between">
       <el-col :span="14">
-        <el-row type="flex" style="margin-bottom:10px;" justify="space-between">
+        <el-row type="flex" style="margin-bottom:40px;" justify="space-between">
           <el-col :span="7">
-            <el-card>
+            <el-card :body-style="{ padding: '40px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
@@ -170,7 +170,7 @@
             </el-card>
           </el-col>
           <el-col :span="7">
-            <el-card>
+            <el-card :body-style="{ padding: '40px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
@@ -185,7 +185,7 @@
             </el-card>
           </el-col>
           <el-col :span="7">
-            <el-card>
+            <el-card :body-style="{ padding: '40px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
@@ -202,7 +202,7 @@
         </el-row>
         <el-row type="flex" justify="space-between">
           <el-col :span="7">
-            <el-card>
+            <el-card :body-style="{ padding: '40px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
@@ -217,7 +217,7 @@
             </el-card>
           </el-col>
           <el-col :span="7">
-            <el-card>
+            <el-card :body-style="{ padding: '40px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
@@ -232,7 +232,7 @@
             </el-card>
           </el-col>
           <el-col :span="7">
-            <el-card>
+            <el-card :body-style="{ padding: '40px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
@@ -249,7 +249,7 @@
         </el-row>
       </el-col>
       <el-col :span="9">
-        <el-card>
+        <el-card :body-style="{ minHeight: '210px' }">
           <div slot="header">
             <span>本周活动</span>
             <el-button
@@ -258,7 +258,7 @@
               type="text"
             >更多</el-button>
           </div>
-          <div v-for="(row, index) in eventList" :key="index" class="flex-t-l">
+          <div v-if="index<4" v-for="(row, index) in eventList" :key="index" class="flex-t-l">
             <img
               class="course-avatar"
               :src="
@@ -269,6 +269,7 @@
             />
             <div class="flex-column-t">
               <span class="f-title">{{ row.activityName }}</span>
+              <p>{{row.startTime}} ~ {{row.endTime}}</p>
             </div>
           </div>
           <div v-if="eventList.length == 0" style="text-align:center">暂无活动</div>
@@ -294,7 +295,7 @@
     <!-- 视频 -->
     <el-row
       :gutter="20"
-      style="margin-top:10px;min-height:200px"
+      style="margin-top:30px;min-height:200px"
       type="flex"
       justify="space-between"
     >

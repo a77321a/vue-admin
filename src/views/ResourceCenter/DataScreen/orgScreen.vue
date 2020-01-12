@@ -27,11 +27,12 @@
   </div>
 </template>
 <script>
+import orgIcon from '@/common/image/org_icon.png'
 export default {
   name: 'orgScreen',
   data () {
     return {
-      orgList: []
+      orgList: [],orgIcon
     }
   },
   created () {
@@ -41,7 +42,7 @@ export default {
       this.orgList = [
         {
           orgName: '机构大屏',
-          indexPic: '',
+          indexPic: orgIcon,
           url: `http://118.24.54.72:8078/#/?x-token=${userInfo.token}`
         }
       ]

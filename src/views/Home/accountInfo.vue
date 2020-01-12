@@ -2,15 +2,15 @@
  * @Descripttion:个人信息
  * @Author: 辛顺宁
  * @Date: 2019-08-13 17:09:55
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-12-21 22:18:45
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-12 21:24:54
  -->
 <template>
   <div id="account-info">
     <el-card header="账号信息" class="box-card">
       <el-form label-width="90px">
         <el-form-item label="头像">
-          <el-avatar style="vertical-align: middle;" :src="avatar"></el-avatar>
+          <el-avatar icon="el-icon-user-solid" style="vertical-align: middle;" :src="avatar"></el-avatar>
           <el-upload
             action="apii/public/img"
             style="float:right;margin-right:20px;margin-top:5px"
@@ -38,6 +38,7 @@
       <el-form label-width="90px">
         <el-form-item label="头像">
           <el-avatar
+            icon="el-icon-user-solid"
             style="vertical-align: middle;"
             :src="$store.state.config.systemConfig[0].dictionaryValue+userInfo.inner.indexPic"
           ></el-avatar>

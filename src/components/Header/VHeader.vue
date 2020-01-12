@@ -33,6 +33,7 @@
             @click.native="infoBlock = !infoBlock"
             style="cursor:pointer;vertical-align:middle"
             :size="40"
+            icon="el-icon-user-solid"
             :src="avatar"
           ></el-avatar>
           <i
@@ -47,7 +48,12 @@
               <div class="tdui-user-body-list tdui-user-body-list-first">
                 <div class="tdui-user-body-list-start">
                   <!-- <el-button type="info" icon="el-icon-s-custom" circle></el-button> -->
-                  <el-avatar style="margin-top:12px" :size="40" :src="avatar"></el-avatar>
+                  <el-avatar
+                    icon="el-icon-user-solid"
+                    style="margin-top:12px"
+                    :size="40"
+                    :src="avatar"
+                  ></el-avatar>
                 </div>
                 <div
                   name="user-login-email"

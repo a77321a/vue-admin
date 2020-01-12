@@ -15,42 +15,42 @@ export default [
       root: true
     }
   },
-  {
-    path: 'serviceUser',
-    name: 'serviceUser',
-    component: () => import('@/views/ServiceHall/ServiceManage/serviceUser.vue'),
-    meta: {
-      title: '服务人员',
-      root: true
-    }
-  },
-  {
-    path: 'serviceUserInfo',
-    name: 'serviceUserInfo',
-    component: () => import('@/views/ServiceHall/ServiceManage/serviceUserInfo.vue'),
-    meta: {
-      title: '服务人员详情',
-      parent: 'serviceUser'
-    }
-  },
-  {
-    path: 'serviceUserAdd',
-    name: 'serviceUserAdd',
-    component: () => import('@/views/ServiceHall/ServiceManage/editServiceUser.vue'),
-    meta: {
-      title: '新增服务人员',
-      parent: 'serviceUser'
-    }
-  },
-  {
-    path: 'serviceUserEdit',
-    name: 'serviceUserEdit',
-    component: () => import('@/views/ServiceHall/ServiceManage/editServiceUser.vue'),
-    meta: {
-      title: '新增/编辑服务人员',
-      parent: 'serviceUser'
-    }
-  },
+  // {
+  //   path: 'serviceUser',
+  //   name: 'serviceUser',
+  //   component: () => import('@/views/ServiceHall/ServiceManage/serviceUser.vue'),
+  //   meta: {
+  //     title: '服务人员',
+  //     root: true
+  //   }
+  // },
+  // {
+  //   path: 'serviceUserInfo',
+  //   name: 'serviceUserInfo',
+  //   component: () => import('@/views/ServiceHall/ServiceManage/serviceUserInfo.vue'),
+  //   meta: {
+  //     title: '服务人员详情',
+  //     parent: 'serviceUser'
+  //   }
+  // },
+  // {
+  //   path: 'serviceUserAdd',
+  //   name: 'serviceUserAdd',
+  //   component: () => import('@/views/ServiceHall/ServiceManage/editServiceUser.vue'),
+  //   meta: {
+  //     title: '新增服务人员',
+  //     parent: 'serviceUser'
+  //   }
+  // },
+  // {
+  //   path: 'serviceUserEdit',
+  //   name: 'serviceUserEdit',
+  //   component: () => import('@/views/ServiceHall/ServiceManage/editServiceUser.vue'),
+  //   meta: {
+  //     title: '新增/编辑服务人员',
+  //     parent: 'serviceUser'
+  //   }
+  // },
   {
     path: 'serviceCenterEdit',
     name: 'serviceCenterEdit',
