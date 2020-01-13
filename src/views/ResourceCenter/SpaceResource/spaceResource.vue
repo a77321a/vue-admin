@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 22:19:24
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-23 18:27:03
+ * @LastEditTime : 2020-01-13 15:48:45
  -->
 <template>
   <div id="space-resource">
@@ -155,7 +155,8 @@ export default {
 
     handleAppend (node, data) {
       // this.city = data.addressName
-      this.city = '南京'
+      console.log(data)
+      this.city = '厦门'
       this.tempObj = data
       this.dialogVisible = true
     }
