@@ -3,10 +3,11 @@
  * @Author:
  * @Date: 2019-11-19 21:09:55
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-30 16:49:05
+ * @LastEditTime : 2020-01-13 16:05:49
  */
 const func = {
-  baseUrl: 'http://118.24.54.72:8061/',
+  // baseUrl: 'http://118.24.54.72:8061/', //测试
+  baseUrl: 'https://chongqing.hengshan.hk952183.com:8061/', // 生产
   transLabel: (arr, str) => {
     if (arr.length === 0) return
     for (let i in arr) {

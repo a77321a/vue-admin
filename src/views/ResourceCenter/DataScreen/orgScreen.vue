@@ -32,7 +32,8 @@ export default {
   name: 'orgScreen',
   data () {
     return {
-      orgList: [],orgIcon
+      orgList: [],
+      orgIcon
     }
   },
   created () {
@@ -43,7 +44,7 @@ export default {
         {
           orgName: '机构大屏',
           indexPic: orgIcon,
-          url: `http://118.24.54.72:8078/#/?x-token=${userInfo.token}`
+          url: `${this.$screen}#/?x-token=${userInfo.token}`
         }
       ]
     } else {
@@ -57,9 +58,9 @@ export default {
               this.$store.state.config.systemConfig[0].dictionaryValue +
               '' +
               i.cad,
-            url: `http://118.24.54.72:8078/#/secondpage?orgId=${
-              i.orgId
-            }&x-token=${userInfo.token}`
+            url: `${this.$screen}#/secondpage?orgId=${i.orgId}&x-token=${
+              userInfo.token
+            }`
           })
         })
         this.orgList = arr
