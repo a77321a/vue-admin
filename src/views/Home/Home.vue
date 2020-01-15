@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 13:54:19
+ * @LastEditTime : 2020-01-15 16:45:58
  -->
 <template>
   <div class="Home">
@@ -151,7 +151,7 @@
       </el-col>
     </el-row>
     <!-- 第二排统计 -->
-    <el-row style="margin-top:20px" type="flex" justify="space-around">
+    <el-row :gutter="20" style="margin-top:20px" type="flex">
       <el-col :span="14">
         <el-row :gutter="20" type="flex" style="margin-bottom:20px;" justify="space-between">
           <el-col :span="8">
@@ -278,7 +278,7 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="9">
+      <el-col :span="10">
         <el-card :body-style="{ minHeight: '210px' }">
           <div slot="header">
             <span>本周活动</span>
