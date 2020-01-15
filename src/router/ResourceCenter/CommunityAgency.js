@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 09:51:46
+ * @LastEditTime : 2020-01-15 13:41:23
  */
 export default [
   {
@@ -76,6 +76,42 @@ export default [
     meta: {
       title: '新增/编辑服务人员',
       parent: 'serviceUser'
+    }
+  },
+  {
+    path: 'eventRoom',
+    name: 'eventRoom',
+    component: () => import('@/views/ServiceHall/EventManage/eventRoom.vue'),
+    meta: {
+      title: '活动室',
+      root: true
+    }
+  },
+  {
+    path: 'eventRoomAdd',
+    name: 'eventRoomAdd',
+    component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
+    meta: {
+      title: '新增活动室',
+      parent: 'eventRoom'
+    }
+  },
+  {
+    path: 'eventRoomEdit',
+    name: 'eventRoomEdit',
+    component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
+    meta: {
+      title: '编辑活动室',
+      parent: 'eventRoom'
+    }
+  },
+  {
+    path: 'eventRoomPreview',
+    name: 'eventRoomPreview',
+    component: () => import('@/views/ServiceHall/EventManage/eventRoomInfo.vue'),
+    meta: {
+      title: '活动室详情',
+      parent: 'eventRoom'
     }
   }
 ]

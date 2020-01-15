@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 16:05:09
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-24 17:43:29
+ * @LastEditTime : 2020-01-15 13:37:32
  */
 export default [
   {
@@ -59,10 +59,6 @@ export default [
           {
             url: 'serviceCenter',
             name: '服务中心'
-          },
-          {
-            url: 'serviceUser',
-            name: '服务人员'
           }
         ]
       },
@@ -88,6 +84,21 @@ export default [
     active: 'ResourceCenter',
     icon: 'fa-users',
     children: [
+      {
+        url: 'communitAgency',
+        name: '养老机构',
+        icon: '',
+        children: [
+          {
+            url: 'agencyManage',
+            name: '机构管理'
+          },
+          {
+            url: 'serviceUser',
+            name: '服务人员'
+          }
+        ]
+      },
       {
         url: 'dataScreen',
         name: '数据大屏',
@@ -144,7 +155,6 @@ export default [
             url: 'productType',
             name: '产品类型'
           }
-
         ]
       }
     ]

@@ -2,8 +2,8 @@
  * @Descripttion: 活动详情
  * @Author:
  * @Date: 2019-11-07 19:28:01
- * @LastEditors:
- * @LastEditTime: 2019-12-10 20:36:38
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-15 10:22:26
  -->
 <template>
   <div id="event-info">
@@ -48,8 +48,8 @@
             <el-form-item label="服务范围">
               {{ orgInfo.cityRegionName }}
               {{ orgInfo.districtRegionName }}
-              {{ orgInfo.communityRegionName }}
               {{ orgInfo.streetRegionName }}
+              {{ orgInfo.communityRegionName }}
             </el-form-item>
             <el-form-item label="机构联系人">
               {{ orgInfo.contact }}

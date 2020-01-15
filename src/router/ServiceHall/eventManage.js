@@ -24,15 +24,15 @@ export default [
       parent: 'eventCenter'
     }
   },
-  {
-    path: 'eventRoom',
-    name: 'eventRoom',
-    component: () => import('@/views/ServiceHall/EventManage/eventRoom.vue'),
-    meta: {
-      title: '活动室',
-      root: true
-    }
-  },
+  // {
+  //   path: 'eventRoom',
+  //   name: 'eventRoom',
+  //   component: () => import('@/views/ServiceHall/EventManage/eventRoom.vue'),
+  //   meta: {
+  //     title: '活动室',
+  //     root: true
+  //   }
+  // },
   {
     path: 'eventCenterEdit',
     name: 'eventCenterEdit',
@@ -51,33 +51,33 @@ export default [
       parent: 'eventCenter'
     }
   },
-  {
-    path: 'eventRoomAdd',
-    name: 'eventRoomAdd',
-    component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
-    meta: {
-      title: '新增活动室',
-      parent: 'eventRoom'
-    }
-  },
-  {
-    path: 'eventRoomEdit',
-    name: 'eventRoomEdit',
-    component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
-    meta: {
-      title: '编辑活动室',
-      parent: 'eventRoom'
-    }
-  },
-  {
-    path: 'eventRoomPreview',
-    name: 'eventRoomPreview',
-    component: () => import('@/views/ServiceHall/EventManage/eventRoomInfo.vue'),
-    meta: {
-      title: '活动室详情',
-      parent: 'eventRoom'
-    }
-  },
+  // {
+  //   path: 'eventRoomAdd',
+  //   name: 'eventRoomAdd',
+  //   component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
+  //   meta: {
+  //     title: '新增活动室',
+  //     parent: 'eventRoom'
+  //   }
+  // },
+  // {
+  //   path: 'eventRoomEdit',
+  //   name: 'eventRoomEdit',
+  //   component: () => import('@/views/ServiceHall/EventManage/editEventRoom.vue'),
+  //   meta: {
+  //     title: '编辑活动室',
+  //     parent: 'eventRoom'
+  //   }
+  // },
+  // {
+  //   path: 'eventRoomPreview',
+  //   name: 'eventRoomPreview',
+  //   component: () => import('@/views/ServiceHall/EventManage/eventRoomInfo.vue'),
+  //   meta: {
+  //     title: '活动室详情',
+  //     parent: 'eventRoom'
+  //   }
+  // },
   {
     path: 'editActivitySummary',
     name: 'editActivitySummary',

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-12 21:33:21
+ * @LastEditTime : 2020-01-15 13:54:19
  -->
 <template>
   <div class="Home">
@@ -151,97 +151,127 @@
       </el-col>
     </el-row>
     <!-- 第二排统计 -->
-    <el-row style="margin-top:30px" type="flex" justify="space-between">
+    <el-row style="margin-top:20px" type="flex" justify="space-around">
       <el-col :span="14">
-        <el-row type="flex" style="margin-bottom:40px;" justify="space-between">
-          <el-col :span="7">
-            <el-card :body-style="{ padding: '40px 0px' }">
+        <el-row :gutter="20" type="flex" style="margin-bottom:20px;" justify="space-between">
+          <el-col :span="8">
+            <el-card :body-style="{ padding: '45px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
                 </el-col>
                 <el-col :span="12">
                   <h2>
-                    <countTo :startVal="0" :endVal="data.societyOrgNum" :duration="1500"></countTo>
+                    <countTo
+                      style="font-size:30px"
+                      :startVal="0"
+                      :endVal="data.societyOrgNum"
+                      :duration="1500"
+                    ></countTo>
                   </h2>
-                  <div>养老机构数</div>
+                  <div style="font-size:14px">养老机构数</div>
                 </el-col>
               </el-row>
             </el-card>
           </el-col>
-          <el-col :span="7">
-            <el-card :body-style="{ padding: '40px 0px' }">
+          <el-col :span="8">
+            <el-card :body-style="{ padding: '45px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
                 </el-col>
                 <el-col :span="12">
                   <h2>
-                    <countTo :startVal="0" :endVal="data.orgNum" :duration="1500"></countTo>
+                    <countTo
+                      style="font-size:30px"
+                      :startVal="0"
+                      :endVal="data.orgNum"
+                      :duration="1500"
+                    ></countTo>
                   </h2>
-                  <div>社会化运营机构数</div>
+                  <div style="font-size:14px">社会化运营机构数</div>
                 </el-col>
               </el-row>
             </el-card>
           </el-col>
-          <el-col :span="7">
-            <el-card :body-style="{ padding: '40px 0px' }">
+          <el-col :span="8">
+            <el-card :body-style="{ padding: '45px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
                 </el-col>
                 <el-col :span="12">
                   <h2>
-                    <countTo :startVal="0" :endVal="data.relatedOrgNum" :duration="1500"></countTo>
+                    <countTo
+                      style="font-size:30px"
+                      :startVal="0"
+                      :endVal="data.relatedOrgNum"
+                      :duration="1500"
+                    ></countTo>
                   </h2>
-                  <div>涉老机构数</div>
+                  <div style="font-size:14px">涉老机构数</div>
                 </el-col>
               </el-row>
             </el-card>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="space-between">
-          <el-col :span="7">
-            <el-card :body-style="{ padding: '40px 0px' }">
+        <el-row :gutter="20" type="flex" justify="space-between">
+          <el-col :span="8">
+            <el-card :body-style="{ padding: '45px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
                 </el-col>
                 <el-col :span="12">
                   <h2>
-                    <countTo :startVal="0" :endVal="data.activityRoomNum" :duration="1500"></countTo>
+                    <countTo
+                      style="font-size:30px"
+                      :startVal="0"
+                      :endVal="data.activityRoomNum"
+                      :duration="1500"
+                    ></countTo>
                   </h2>
-                  <div>活动室数</div>
+                  <div style="font-size:14px">活动室数</div>
                 </el-col>
               </el-row>
             </el-card>
           </el-col>
-          <el-col :span="7">
-            <el-card :body-style="{ padding: '40px 0px' }">
+          <el-col :span="8">
+            <el-card :body-style="{ padding: '45px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
                 </el-col>
                 <el-col :span="12">
                   <h2>
-                    <countTo :startVal="0" :endVal="data.orgServiceProductNum" :duration="1500"></countTo>
+                    <countTo
+                      style="font-size:30px"
+                      :startVal="0"
+                      :endVal="data.orgServiceProductNum"
+                      :duration="1500"
+                    ></countTo>
                   </h2>
-                  <div>服务产品数</div>
+                  <div style="font-size:14px">服务产品数</div>
                 </el-col>
               </el-row>
             </el-card>
           </el-col>
-          <el-col :span="7">
-            <el-card :body-style="{ padding: '40px 0px' }">
+          <el-col :span="8">
+            <el-card :body-style="{ padding: '45px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
                 </el-col>
                 <el-col :span="12">
                   <h2>
-                    <countTo :startVal="0" :endVal="data.orgServiceProviderNum" :duration="1500"></countTo>
+                    <countTo
+                      style="font-size:30px"
+                      :startVal="0"
+                      :endVal="data.orgServiceProviderNum"
+                      :duration="1500"
+                    ></countTo>
                   </h2>
-                  <div>服务人员数</div>
+                  <div style="font-size:14px">服务人员数</div>
                 </el-col>
               </el-row>
             </el-card>
@@ -295,7 +325,7 @@
     <!-- 视频 -->
     <el-row
       :gutter="20"
-      style="margin-top:30px;min-height:200px"
+      style="margin-top:20px;min-height:200px"
       type="flex"
       justify="space-between"
     >

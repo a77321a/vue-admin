@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-09 09:33:14
+ * @LastEditTime : 2020-01-15 10:20:33
  -->
 <template>
   <div id="edit-agency">
@@ -269,10 +269,16 @@ export default {
       this.formInfo.latitude = row.position[1]
       this.formInfo.longitude = row.position[0]
       this.formInfo.mapAddress = row.address
-      this.formInfo.latLong = `${row.address}（${row.position[0]}，${
-        row.position[1]
-      }）`
+      this.formInfo.latLong = `${row.address}（${row.position[0]}，${row.position[1]}）`
       this.mapShow = false
+    },
+    handleData (arr) {
+      for (let i in arr) {
+        if (arr[i].depth !== 4 && !Array.isArray(arr[i].children)) {
+          arr[i].children = []
+        }
+        this.handleData(arr[i].children)
+      }
     },
     getTree () {
       this.$http.post('/address/tree').then(res => {
@@ -283,6 +289,7 @@ export default {
               this.spaceTree.splice(i, 1)
             }
           }
+          this.handleData(this.spaceTree)
         }
       })
     },

@@ -2,8 +2,8 @@
  * @Descripttion:助餐中心
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime: 2019-12-21 22:50:13
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-15 10:12:52
  -->
 <template>
   <div class="meal-center">
@@ -52,6 +52,12 @@
             size="small"
             type="primary"
           >新增助餐记录</el-button>
+          <el-button
+            @click="handleExport"
+            v-has="'mealCenterExport'"
+            style="margin-bottom:15px"
+            size="small"
+          >导出助餐记录</el-button>
           <!-- 列表 -->
           <Table
             :rowsForamtter="rowsForamtter"
@@ -178,6 +184,17 @@ export default {
   },
   created () {},
   methods: {
+    handleExport () {
+      window.open(
+        `${ctx}/service/customerDinnerRecord/export?serviceCustomerId=${this
+          .searchData.serviceCustomerId || ''}&serviceCustomerName=${this
+          .searchData.serviceCustomerName || ''}&startTime=${this.searchData
+          .startTime || ''}&endTime=${this.searchData.endTime ||
+          ''}&orgId=${this.searchData.orgId || ''}&token=${
+          this.$store.state.token
+        }`
+      )
+    },
     handlePreview (row) {
       this.formInfo = row
       this.dialogFormVisible = true
