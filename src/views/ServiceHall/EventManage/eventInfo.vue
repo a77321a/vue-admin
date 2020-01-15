@@ -11,9 +11,9 @@
       <img
         class="status-img"
         :src="
-          eventInfo.activityStatus == 2
+          eventCenterPreview.activityStatus == 2
             ? summary
-            : eventInfo.activityStatus == 1
+            : eventCenterPreview.activityStatus == 1
             ? going
             : ''
         "
@@ -23,42 +23,42 @@
         <img
           :src="
             $store.state.config.systemConfig[0].dictionaryValue +
-              eventInfo.activityIndexPic
+              eventCenterPreview.activityIndexPic
           "
           alt
         />
         <div class="flex-column-t">
-          <h4 style="margin-bottom:10px;margin-top:5px">{{ eventInfo.activityName }}</h4>
-          <el-form label-position="left" ref="form" :model="eventInfo" label-width="100px">
+          <h4 style="margin-bottom:10px;margin-top:5px">{{ eventCenterPreview.activityName }}</h4>
+          <el-form label-position="left" ref="form" :model="eventCenterPreview" label-width="100px">
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-alarm-clock"></i>活动时间：
               </template>
-              {{ eventInfo.startTime }}~{{ eventInfo.endTime }}
+              {{ eventCenterPreview.startTime }}~{{ eventCenterPreview.endTime }}
             </el-form-item>
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-location-outline"></i>活动地点：
               </template>
-              {{ eventInfo.activityAddress }}
+              {{ eventCenterPreview.activityAddress }}
             </el-form-item>
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-office-building"></i>所在机构：
               </template>
-              {{ eventInfo.orgName }}
+              {{ eventCenterPreview.orgName }}
             </el-form-item>
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-house"></i>活动室：
               </template>
-              {{ eventInfo.activityRoomName }}
+              {{ eventCenterPreview.activityRoomName }}
             </el-form-item>
             <el-form-item>
               <template slot="label">
                 <i class="el-icon-files"></i>服务产品：
               </template>
-              <span v-for="(item, index) in eventInfo.orgServiceProductList" :key="index">
+              <span v-for="(item, index) in eventCenterPreview.orgServiceProductList" :key="index">
                 {{ item.orgServiceProductName }}
                 <el-divider direction="vertical"></el-divider>
               </span>
@@ -70,8 +70,8 @@
     <el-tabs value="first" style="margin-top:20px;">
       <el-tab-pane label="参与对象" name="first">
         <Participants
-          :customerNum="eventInfo.customerNum"
-          :actualCustomerNum="eventInfo.actualCustomerNum"
+          :customerNum="eventCenterPreview.customerNum"
+          :actualCustomerNum="eventCenterPreview.actualCustomerNum"
           :activityId="$route.query.aid"
         ></Participants>
       </el-tab-pane>
@@ -79,20 +79,20 @@
         <ServicePerson :activityId="$route.query.aid"></ServicePerson>
       </el-tab-pane>
       <el-tab-pane label="活动总结" name="third">
-        <ActivitySummary :status="eventInfo.activityStatus" :htmlStr="eventInfo.activitySummary"></ActivitySummary>
+        <ActivitySummary :status="eventCenterPreview.activityStatus" :htmlStr="eventCenterPreview.activitySummary"></ActivitySummary>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-import Participants from './eventInfoTabs/Participants'
-import ServicePerson from './eventInfoTabs/ServicePerson'
-import ActivitySummary from './eventInfoTabs/ActivitySummary'
+import Participants from './eventCenterPreviewTabs/Participants'
+import ServicePerson from './eventCenterPreviewTabs/ServicePerson'
+import ActivitySummary from './eventCenterPreviewTabs/ActivitySummary'
 import summary from '@/common/image/summary.png'
 import going from '@/common/image/going.png'
 
 export default {
-  name: 'eventInfo',
+  name: 'eventCenterPreview',
   components: {
     Participants,
     ServicePerson,
@@ -102,7 +102,7 @@ export default {
     return {
       summary,
       going,
-      eventInfo: {
+      eventCenterPreview: {
         cover: ''
       }
     }
@@ -116,7 +116,7 @@ export default {
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
           if (res.code === SUCCESS) {
-            this.eventInfo = res.payload
+            this.eventCenterPreview = res.payload
           }
         })
     }

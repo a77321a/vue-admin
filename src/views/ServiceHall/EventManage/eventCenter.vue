@@ -99,7 +99,7 @@
       <template slot-scope="{ row }" slot="handleColumn">
         <el-button
           @click="
-            $router.push({ name: 'eventInfo', query: { aid: row.activityId } })
+            $router.push({ name: 'eventCenterPreview', query: { aid: row.activityId } })
           "
           v-has="'eventCenterPreview'"
           type="text"

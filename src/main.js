@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-13 16:06:01
+ * @LastEditTime : 2020-01-13 16:25:00
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -44,8 +44,10 @@ Vue.use(VueAMap)
 // })
 window.SUCCESS = '00000000'
 window.MAXSIZE = 999
-
+// import buildConfig from './build/' + process.env.BUILD_ENV + '.js'
+// console.log(buildConfig)
 window.ctx = func.baseUrl
+
 window.docTitle = document.title
 Vue.component('Table', Table)
 Vue.component('UEditor', UEditor)
@@ -53,7 +55,7 @@ Vue.component('UEditor', UEditor)
 Vue.use(ElementUI)
 Vue.prototype.$http = axios
 // 大屏
-Vue.prototype.$screen = 'https://chongqing.hengshan.hk952183.com:8078/'
+// Vue.prototype.$screen = 'https://chongqing.hengshan.hk952183.com:8078/'
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   NProgress.start()

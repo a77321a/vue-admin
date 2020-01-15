@@ -25,7 +25,7 @@
       >{{$store.state.config.activityStatus[row.activityStatus].dictionaryLabel}}</template>
       <template slot="action" slot-scope="{row}">
         <el-button
-          @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
+          @click="$router.push({name:'eventCenterPreview',query:{aid:row.activityId}})"
           type="text"
         >查看</el-button>
       </template>

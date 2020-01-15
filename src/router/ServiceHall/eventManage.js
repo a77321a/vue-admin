@@ -2,8 +2,8 @@
  * @Descripttion:活动管理
  * @Author:
  * @Date: 2019-11-06 10:20:37
- * @LastEditors:
- * @LastEditTime: 2019-12-21 22:36:09
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-15 09:44:21
  */
 export default [
   {
@@ -43,8 +43,8 @@ export default [
     }
   },
   {
-    path: 'eventInfo',
-    name: 'eventInfo',
+    path: 'eventCenterPreview',
+    name: 'eventCenterPreview',
     component: () => import('@/views/ServiceHall/EventManage/eventInfo.vue'),
     meta: {
       title: '活动详情',

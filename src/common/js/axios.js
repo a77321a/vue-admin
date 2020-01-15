@@ -223,8 +223,11 @@ function todelete (url, params = {}) {
       })
   })
 }
+const buildConfig = require('../../build/' + process.env.BUILD_ENV + '.js')
+window.ctx = buildConfig.BASE_URL
+Vue.prototype.$screen = buildConfig.screen
 axios.defaults.timeout = 0
-axios.defaults.baseURL = func.baseUrl // 测试环境
+axios.defaults.baseURL = buildConfig.BASE_URL
 axios.defaults.headers.Authorization = ''
 // axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 

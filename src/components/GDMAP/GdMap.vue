@@ -3,11 +3,14 @@
  * @Author:
  * @Date: 2019-11-18 17:25:15
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-23 18:27:38
+ * @LastEditTime : 2020-01-13 17:02:09
  -->
 <template>
   <div>
-    <div style="position:relative" :style="{height:`${$store.state.dialogHeight}px`}">
+    <div
+      style="position:relative"
+      :style="{ height: `${$store.state.dialogHeight}px` }"
+    >
       <el-amap-search-box
         style="position:absolute;top:5px;right:5px;"
         class="search-box"
@@ -41,13 +44,13 @@
         <el-input style="width:200px" v-model="addressInfo.name"></el-input>
       </el-form-item>
       <el-form-item label="详细地址">
-        <span>{{addressInfo.address}}</span>
+        <span>{{ addressInfo.address }}</span>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
-import VueAMap, { AMapManager } from 'vue-amap'
+import VueAMap, { AMapManager } from 'vue-amap';
 let amapManager = new AMapManager()
 VueAMap.initAMapApiLoader({
   key: '307510b98ac36649578b31a1c86cb116',
@@ -86,7 +89,7 @@ export default {
       dialogVisible: false,
       nearbyInfo: [], // 周边信息---高德反馈（周边建筑信息）
       address: '', // 城市信息---高德反馈（省市区、adcode）
-      zoom: 13, // 地图缩放
+      zoom: 12, // 地图缩放
       events: {
         init: o => {},
         click: e => {
@@ -125,7 +128,7 @@ export default {
           })
         }
       },
-      mapCenter: [121.59996, 31.197646],
+      mapCenter: [118.110221, 24.490474],
       markerEvents: {
         click (e) {
           if (self.clickedMarker === e.target) return // 点击的是同一个Marker
@@ -213,18 +216,18 @@ export default {
     getMarkerContent (item, width, height, isRotate = false) {
       if (item.num === 1) {
         this.getMarkerContent(item, width, height, true)
-        return
+        return;
       }
-      const bgRoate = isRotate ? 'transform: rotate(45deg);' : ''
-      const txRotate = isRotate ? 'transform: rotate(-45deg);' : ''
+      const bgRoate = isRotate ? 'transform: rotate(45deg);' : '';
+      const txRotate = isRotate ? 'transform: rotate(-45deg);' : '';
       let backgroundColor =
         item.level === 'A'
           ? '#FF8100'
           : item.level === 'B'
             ? '#8D3ECD'
-            : '#2DCD72'
+            : '#2DCD72';
       if (isRotate) {
-        backgroundColor = '#0893FF'
+        backgroundColor = '#0893FF';
       }
       const content = `<div style="display: flex;
                                       justify-content: center;
@@ -237,13 +240,10 @@ export default {
                                       font-size: 16px;
                                       color: #FFFFFF;
                                       box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.30);
-                                      background-color: ${backgroundColor};"><div style="${txRotate}"> ${
-  item.num
-} </div></div>`
+                                      background-color: ${backgroundColor};"><div style="${txRotate}"> ${item.num} </div></div>`
       return content
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

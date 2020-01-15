@@ -82,7 +82,7 @@
       <template slot="number" slot-scope="{row}">{{row.actualCustomerNum}}/{{row.customerNum}}</template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
-          @click="$router.push({name:'eventInfo',query:{aid:row.activityId}})"
+          @click="$router.push({name:'eventCenterPreview',query:{aid:row.activityId}})"
           type="text"
           size="small"
         >查看</el-button>
