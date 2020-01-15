@@ -253,7 +253,7 @@ export default {
           this.$set(
             this.formInfo,
             'latLong',
-            `${res.payload.longitude}，${res.payload.latitude}`
+            `${res.payload.mapAddress}（${res.payload.longitude}，${res.payload.latitude}）`
           )
           this.$set(this.formInfo, 'addressList', [
             res.payload.cityRegionId ? res.payload.cityRegionId : '',
@@ -331,6 +331,7 @@ export default {
             districtRegionId: this.formInfo.addressList[1],
             streetRegionId: this.formInfo.addressList[2],
             communityRegionId: this.formInfo.addressList[3],
+            mapAddress:this.formInfo.mapAddress,
             contact: this.formInfo.contact,
             latitude: this.formInfo.latitude,
             longitude: this.formInfo.longitude,

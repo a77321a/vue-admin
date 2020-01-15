@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-13 16:25:00
+ * @LastEditTime : 2020-01-15 21:54:13
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -46,7 +46,7 @@ window.SUCCESS = '00000000'
 window.MAXSIZE = 999
 // import buildConfig from './build/' + process.env.BUILD_ENV + '.js'
 // console.log(buildConfig)
-window.ctx = func.baseUrl
+// window.ctx = func.baseUrl
 
 window.docTitle = document.title
 Vue.component('Table', Table)
