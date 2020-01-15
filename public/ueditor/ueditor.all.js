@@ -24683,6 +24683,8 @@
                     var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
 
                     var imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
+                    // var imageUrlPrefix = me.getActionUrl(me.getOpt('imageUrlPrefix'));
+
                     var allowFiles = me.getOpt('imageAllowFiles');
 
                     me.focus();
@@ -24757,12 +24759,10 @@ xhr.send(formdata);
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState == 4) {
                             var response = JSON.parse(xhr.responseText);
-                            console.log(response);
                             if (response.state == 'SUCCESS') {
                                 loader = me.document.getElementById(loadingId);
-                                loader.setAttribute('src', window.ctx + response.url);
-                                console.log(loader)
-                                loader.setAttribute('_src', window.ctx + response.url);
+                                loader.setAttribute('src', me.options.imageUrlPrefix + response.url);
+                                loader.setAttribute('_src', me.options.imageUrlPrefix + response.url);
                                 loader.setAttribute('title', response.title || '');
                                 loader.setAttribute('alt', response.original || '');
                                 loader.removeAttribute('id');
