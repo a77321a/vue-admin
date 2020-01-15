@@ -85,9 +85,9 @@
   </div>
 </template>
 <script>
-import Participants from './eventCenterPreviewTabs/Participants'
-import ServicePerson from './eventCenterPreviewTabs/ServicePerson'
-import ActivitySummary from './eventCenterPreviewTabs/ActivitySummary'
+import Participants from './eventInfoTabs/Participants'
+import ServicePerson from './eventInfoTabs/ServicePerson'
+import ActivitySummary from './eventInfoTabs/ActivitySummary'
 import summary from '@/common/image/summary.png'
 import going from '@/common/image/going.png'
 

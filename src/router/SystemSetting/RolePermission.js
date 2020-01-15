@@ -16,8 +16,8 @@ export default [
     }
   },
   {
-    path: 'roleInfo',
-    name: 'roleInfo',
+    path: 'roleManagePreview',
+    name: 'roleManagePreview',
     component: () => import('@/views/SystemSetting/RolePermission/roleInfo.vue'),
     meta: {
       title: '查看角色',

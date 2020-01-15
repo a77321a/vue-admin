@@ -34,7 +34,7 @@
       <template slot="sex" slot-scope="{ row }">{{row.sex == 0 ?'女':'男'}}</template>
       <template slot-scope="{ row }" slot="handleColumn">
         <el-button
-          @click="$router.push({name:'serviceUserInfo',query:{uid:row.orgServiceProviderId}})"
+          @click="$router.push({name:'serviceUserDetail',query:{uid:row.orgServiceProviderId}})"
           type="text"
           size="small"
         >查看</el-button>
@@ -45,7 +45,7 @@
 <script>
 export default {
   name: 'ServicePerson',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: { orgId: this.orgId },
@@ -60,16 +60,16 @@ export default {
   },
   props: ['orgId'],
 
-  created () {},
+  created() {},
   methods: {
-    exportExcel () {
+    exportExcel() {
       window.open(
         `${ctx}/activity/provider/export?orgId=${this.searchData.orgId ||
           ''}&orgServiceProviderName=${this.searchData.orgServiceProviderName ||
           ''}&token=${this.$store.state.token}`
       )
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })

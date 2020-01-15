@@ -2,8 +2,8 @@
  * @Descripttion:角色管理
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime : 2019-12-19 16:03:29
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-15 09:54:39
  -->
 <template>
   <div class="role-manage">
@@ -45,7 +45,7 @@
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
           v-has="'roleManagePreview'"
-          @click="$router.push({name:'roleInfo',query:{rid:row.roleId}})"
+          @click="$router.push({name:'roleManagePreview',query:{rid:row.roleId}})"
           type="text"
           size="small"
         >查看</el-button>
@@ -71,7 +71,7 @@
 <script>
 export default {
   name: 'userManage',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: { pageSize: 20 },
@@ -94,19 +94,19 @@ export default {
       selectRole: []
     }
   },
-  created () {},
+  created() {},
   methods: {
-    clickInfo (row) {
+    clickInfo(row) {
       console.log(row)
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.roleId)
       })
       this.selectRole = arr
     },
-    handleStatus (row) {
+    handleStatus(row) {
       let content =
         row.status === 1 ? '您确定禁用此学员？' : '您确定启用此学员？'
       this.$confirm(content, '提示', {
@@ -126,7 +126,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.roleId] : this.selectRole
       let content = '删除后，该角色将无法恢复，是否确定？'
       this.$confirm(content, '提示', {
@@ -148,7 +148,7 @@ export default {
         })
         .catch(() => {})
     },
-    purchasedCourse (row) {
+    purchasedCourse(row) {
       this.dialogVisible = true
       this.mobile = row.mobile
       this.getCouseList(true)

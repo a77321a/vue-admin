@@ -62,7 +62,7 @@
 <script>
 export default {
   name: 'eventCenterEdit',
-  data () {
+  data() {
     return {
       formInfo: {},
       orgTree: [],
@@ -84,7 +84,7 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.getOrgList()
     if (!this.$route.query.aid) {
       let userInfo = this.$store.state.userInfo
@@ -94,7 +94,7 @@ export default {
     }
   },
   methods: {
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         this.orgTree = res.payload
         this.orgTree.forEach(i => {
@@ -107,11 +107,11 @@ export default {
           }
         })
         if (this.$route.query.aid) {
-          this.getEventRoomInfo()
+          this.geteventRoomPreview()
         }
       })
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -125,7 +125,7 @@ export default {
      * @descripttion: 获取信息
      * @return: 信息
      */
-    getEventRoomInfo () {
+    geteventRoomPreview() {
       this.$http
         .get('/activity/room/get?activityRoomId=' + this.$route.query.aid)
         .then(res => {
@@ -149,7 +149,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let form = JSON.parse(JSON.stringify(this.formInfo))

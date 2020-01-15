@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-12 21:35:37
+ * @LastEditTime : 2020-01-15 09:51:46
  */
 export default [
   {
@@ -52,8 +52,8 @@ export default [
     }
   },
   {
-    path: 'serviceUserInfo',
-    name: 'serviceUserInfo',
+    path: 'serviceUserDetail',
+    name: 'serviceUserDetail',
     component: () => import('@/views/ServiceHall/ServiceManage/serviceUserInfo.vue'),
     meta: {
       title: '服务人员详情',

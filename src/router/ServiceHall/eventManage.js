@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 09:44:21
+ * @LastEditTime : 2020-01-15 09:46:29
  */
 export default [
   {
@@ -70,8 +70,8 @@ export default [
     }
   },
   {
-    path: 'eventRoomInfo',
-    name: 'eventRoomInfo',
+    path: 'eventRoomPreview',
+    name: 'eventRoomPreview',
     component: () => import('@/views/ServiceHall/EventManage/eventRoomInfo.vue'),
     meta: {
       title: '活动室详情',

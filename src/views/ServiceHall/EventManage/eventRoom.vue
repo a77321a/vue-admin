@@ -53,7 +53,7 @@
             >{{row.activityRoomName}}（{{row.activityRoomCode}}）</template>
             <template slot-scope="{row}" slot="action">
               <el-button
-                @click="$router.push({name:'eventRoomInfo',query:{aid:row.activityRoomId}})"
+                @click="$router.push({name:'eventRoomPreview',query:{aid:row.activityRoomId}})"
                 type="text"
                 size="small"
                 v-has="'eventRoomPreview'"

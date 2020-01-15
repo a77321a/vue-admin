@@ -2,19 +2,19 @@
  * @Descripttion: 活动室详情
  * @Author:
  * @Date: 2019-11-07 19:28:01
- * @LastEditors:
- * @LastEditTime: 2019-12-11 20:12:34
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-15 09:47:31
  -->
 <template>
   <div id="event-room-info">
     <el-card shadow="never" class="box-card">
       <el-row style="margin-bottom:20px" :gutter="20">
-        <el-col :span="8">活动室：{{eventRoomInfo.activityRoomName}}</el-col>
-        <el-col :span="8">活动室编号：{{eventRoomInfo.activityRoomCode}}</el-col>
-        <el-col :span="8">所属机构：{{eventRoomInfo.orgName}}</el-col>
+        <el-col :span="8">活动室：{{eventRoomPreview.activityRoomName}}</el-col>
+        <el-col :span="8">活动室编号：{{eventRoomPreview.activityRoomCode}}</el-col>
+        <el-col :span="8">所属机构：{{eventRoomPreview.orgName}}</el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="24">简介：{{eventRoomInfo.activityRoomDesc}}</el-col>
+        <el-col :span="24">简介：{{eventRoomPreview.activityRoomDesc}}</el-col>
       </el-row>
     </el-card>
     <el-tabs value="first" style="margin-top:20px;">
@@ -27,13 +27,13 @@
 <script>
 import eventRecords from './eventRoomInfoTabs/eventRecords'
 export default {
-  name: 'eventRoomInfo',
+  name: 'eventRoomPreview',
   components: {
     eventRecords
   },
   data () {
     return {
-      eventRoomInfo: {}
+      eventRoomPreview: {}
     }
   },
   created () {
@@ -45,7 +45,7 @@ export default {
         .get('/activity/room/get?activityRoomId=' + this.$route.query.aid)
         .then(res => {
           if (res.code === SUCCESS) {
-            this.eventRoomInfo = res.payload
+            this.eventRoomPreview = res.payload
           }
         })
     }

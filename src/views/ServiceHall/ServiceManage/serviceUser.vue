@@ -2,8 +2,8 @@
  * @Descripttion:服务人员
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime : 2019-12-19 16:02:11
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-15 09:52:04
  -->
 <template>
   <div class="service-user">
@@ -60,7 +60,7 @@
             <template slot-scope="{row}" slot="action">
               <el-button
                 v-has="'serviceUserDetail'"
-                @click="$router.push({name:'serviceUserInfo',query:{uid:row.orgServiceProviderId}})"
+                @click="$router.push({name:'serviceUserDetail',query:{uid:row.orgServiceProviderId}})"
                 type="text"
                 size="small"
               >详情</el-button>
@@ -101,7 +101,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data() {
+  data () {
     return {
       toggleWidth: 19,
       searchRefresh: true,
@@ -124,19 +124,19 @@ export default {
       selectServiceUser: []
     }
   },
-  created() {
+  created () {
     console.log(JSON.parse(localStorage.config))
   },
   methods: {
-    filterOrg(val) {
+    filterOrg (val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange(val) {
+    toggleChange (val) {
       this.toggleWidth = val
     },
     // 多选  同所有表格
-    commitSelection(data) {
+    commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.orgServiceProviderId)
@@ -144,7 +144,7 @@ export default {
       this.selectServiceUser = arr
     },
     // 删除
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.orgServiceProviderId] : this.selectServiceUser
       this.$confirm('删除后，该服务人员将无法被关联使用，是否确认？', '提示', {
         confirmButtonText: '确定',
