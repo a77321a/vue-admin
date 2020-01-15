@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-05 19:13:46
+ * @LastEditTime : 2020-01-15 16:12:23
  -->
 <template>
   <div id="edit-event">
@@ -16,15 +16,21 @@
       label-width="80px"
       size="medium"
     >
-      <el-form-item label="服务类型" prop="orgServiceTypeId">
-        <el-select clearable v-model="formInfo.orgServiceTypeId" placeholder="请选择">
+      <el-form-item label="服务类型" prop="pensionServiceTypeName">
+        <!-- <el-select disabled clearable v-model="formInfo.pensionServiceTypeName" placeholder="请选择">
           <el-option
             v-for="(item, index) in serviceTypeList"
             :key="index"
             :label="item.orgServiceTypeName"
             :value="item.orgServiceTypeId"
           ></el-option>
-        </el-select>
+        </el-select>-->
+        <el-input
+          disabled
+          style="width:226px;"
+          v-model="formInfo.pensionServiceTypeName"
+          placeholder="请选择"
+        ></el-input>
       </el-form-item>
       <el-form-item label="服务产品" prop="pensionServiceProductId">
         <el-button
@@ -136,7 +142,9 @@ export default {
       dialogServiceProduce: false,
       checkedObject: {},
       serviceTypeList: [],
-      formInfo: {},
+      formInfo: {
+        pensionServiceTypeName: ''
+      },
       rules: {
         pensionServiceProductId: [
           { required: true, message: '请选择服务产品', trigger: 'change' }
@@ -197,18 +205,8 @@ export default {
      */
     selectObject (data) {
       this.templateObj = data
-      console.log(data)
     },
     handleSaveSelectProduct () {
-      // this.formInfo.pensionProductId = this.templateObj.pensionServiceProductId
-      // this.formInfo.indexPic = this.templateObj.indexPic
-      // this.formInfo.detail = this.templateObj.detail
-      // this.formInfo.orgServiceProductName = this.templateObj.pensionServiceProductName
-      // this.formInfo.description = this.templateObj.description
-      // this.formInfo.orgPlineationPrice = this.templateObj.pensionPlineationPrice
-      // this.formInfo.orgPrice = this.templateObj.pensionPrice
-      // this.formInfo.orgServiceProductPrice = this.pensionServiceProductPrice
-      // this.$set(this, 'formInfo', this.templateObj)
       this.$http
         .get(
           '/pension/service/product/detail?pensionServiceProductId=' +
@@ -217,10 +215,15 @@ export default {
         .then(res => {
           this.formInfo = res.payload
           this.priceList = this.formInfo.pensionServiceProductPrice
-
           this.$set(this.formInfo, 'orgServiceTypeId', '')
+          console.log(this.templateObj)
+          this.$set(
+            this.formInfo,
+            'pensionServiceTypeName',
+            this.templateObj.pensionServiceTypeName
+          )
+          this.templateObj = {}
         })
-      this.templateObj = {}
       this.dialogServiceProduce = false
       this.$forceUpdate()
     },
@@ -264,6 +267,8 @@ export default {
               res.payload.pensionServiceProductDetail.pensionServiceProductId
             this.formInfo.pensionServiceProductName =
               res.payload.pensionServiceProductDetail.pensionServiceProductName
+            this.formInfo.pensionServiceTypeName =
+              res.payload.pensionServiceProductDetail.pensionServiceTypeDetail.pensionServiceTypeName
             this.$forceUpdate()
           }
         })

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-09 09:29:56
+ * @LastEditTime : 2020-01-15 16:15:48
  -->
 <template>
   <div class="account-setting">
@@ -88,7 +88,7 @@
 <script>
 export default {
   name: 'productType',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: {},
@@ -112,13 +112,15 @@ export default {
       dialogFormVisible: false
     }
   },
-  created() {},
+  created () {},
   methods: {
-    handleAddType(row) {
-      this.formInfo.parentId = row.pensionServiceTypeId
+    handleAddType (row) {
+      this.formInfo = {
+        parentId: row.pensionServiceTypeId
+      }
       this.dialogFormVisible = true
     },
-    handleSaveForm() {
+    handleSaveForm () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.formInfo.pensionServiceTypeId
@@ -141,12 +143,12 @@ export default {
           })
       })
     },
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.accountType = row.superAdmin ? '超级管理员' : '--'
       })
     },
-    handleDelete(row) {
+    handleDelete (row) {
       if (row.productNum > 0) {
         this.$message.error('当前分类下含有产品，无法删除')
         return
