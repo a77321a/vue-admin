@@ -3,13 +3,16 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 10:12:52
+ * @LastEditTime : 2020-01-15 23:09:29
  -->
 <template>
   <div class="meal-center">
     <!-- 筛选 -->
     <el-row class="row-span" :gutter="40">
-      <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
+      <OrgTreeList
+        @filterOrg="filterOrg"
+        @toggleChange="toggleChange"
+      ></OrgTreeList>
       <el-col class="col-span" :span="toggleWidth">
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="80px" size="small">
@@ -38,26 +41,33 @@
                 type="primary"
                 @click="searchRefresh = !searchRefresh"
                 icon="el-icon-search"
-              >搜索</el-button>
+                >搜索</el-button
+              >
               <el-button
-                @click="searchData = {orgId:searchData.orgId};searchRefresh = !searchRefresh"
+                @click="
+                  searchData = { orgId: searchData.orgId };
+                  searchRefresh = !searchRefresh;
+                "
                 size="small"
-              >重置</el-button>
+                >重置</el-button
+              >
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'mealCenterAdd'})"
+            @click="$router.push({ name: 'mealCenterAdd' })"
             v-has="'mealCenterAdd'"
             style="margin-bottom:15px"
             size="small"
             type="primary"
-          >新增助餐记录</el-button>
+            >新增助餐记录</el-button
+          >
           <el-button
             @click="handleExport"
             v-has="'mealCenterExport'"
             style="margin-bottom:15px"
             size="small"
-          >导出助餐记录</el-button>
+            >导出助餐记录</el-button
+          >
           <!-- 列表 -->
           <Table
             :rowsForamtter="rowsForamtter"
@@ -67,56 +77,75 @@
             api="/service/customerDinnerRecord/pageSearch"
             method="post"
           >
-            <template slot="customerName" slot-scope="{row}">
+            <template slot="customerName" slot-scope="{ row }">
               <div class="flex-t-u">
                 <el-avatar
                   class="avatar"
                   size="medium"
-                  :src="$store.state.config.systemConfig[0].dictionaryValue + row.avatar"
+                  :src="
+                    $store.state.config.systemConfig[0].dictionaryValue +
+                      row.avatar
+                  "
                 ></el-avatar>
                 <span class="f-title">{{ row.customerName }}</span>
               </div>
             </template>
-            <template slot="foodSnapshotList" slot-scope="{row}">
+            <template slot="foodSnapshotList" slot-scope="{ row }">
               <span v-for="(item, index) in row.foodSnapshotList" :key="index">
-                {{item.foodName}}
-                <span v-if="index !=row.foodSnapshotList.length - 1">、</span>
+                {{ item.foodName }}
+                <span v-if="index != row.foodSnapshotList.length - 1">、</span>
               </span>
             </template>
-            <template slot-scope="{row}" slot="action">
+            <template slot-scope="{ row }" slot="action">
               <el-button
                 v-has="'mealCenterPreview'"
                 @click="handlePreview(row)"
                 type="text"
                 size="small"
-              >查看</el-button>
+                >查看</el-button
+              >
 
               <el-button
-                @click="$router.push({name:'mealCenterEdit',query:{mid:row.recordId}})"
+                @click="
+                  $router.push({
+                    name: 'mealCenterEdit',
+                    query: { mid: row.recordId }
+                  })
+                "
                 type="text"
                 size="small"
                 v-has="'mealCenterEdit'"
-              >编辑</el-button>
+                >编辑</el-button
+              >
 
               <el-button
                 v-has="'mealCenterDelete'"
                 @click="handleDelete(row)"
                 type="text"
                 size="small"
-              >删除</el-button>
+                >删除</el-button
+              >
             </template>
           </Table>
         </div>
       </el-col>
     </el-row>
     <el-dialog title="查看助餐明细" :visible.sync="dialogFormVisible">
-      <el-form label-suffix="：" ref="formInfo" label-width="100px" :model="formInfo">
+      <el-form
+        label-suffix="："
+        ref="formInfo"
+        label-width="100px"
+        :model="formInfo"
+      >
         <el-form-item label="助餐人">
           <div class="flex-t-u">
             <el-avatar
               class="avatar"
               size="medium"
-              :src="$store.state.config.systemConfig[0].dictionaryValue + formInfo.avatar"
+              :src="
+                $store.state.config.systemConfig[0].dictionaryValue +
+                  formInfo.avatar
+              "
             ></el-avatar>
             <span class="f-title">{{ formInfo.customerName }}</span>
           </div>
@@ -124,31 +153,38 @@
             <span class="f-title">{{formInfo.customerName}}</span>
           </div>-->
         </el-form-item>
-        <el-form-item label="助餐时间">{{formInfo.dinnerTime}}</el-form-item>
+        <el-form-item label="助餐时间">{{ formInfo.dinnerTime }}</el-form-item>
         <el-form-item label="助餐详情">
           <!-- <el-timeline> -->
           <!-- <el-timeline-item v-for="(item, index) in formInfo.foodSnapshotList" :key="index"> -->
-          <div v-for="(item, index) in formInfo.foodSnapshotList" :key="index" class="flex-t-l">
+          <div
+            v-for="(item, index) in formInfo.foodSnapshotList"
+            :key="index"
+            class="flex-t-l"
+          >
             <img
               class="course-avatar"
-              :src="$store.state.config.systemConfig[0].dictionaryValue+item.indexPic"
+              :src="
+                $store.state.config.systemConfig[0].dictionaryValue +
+                  item.indexPic
+              "
               alt
             />
             <div style="line-height:20px;" class="flex-column-t">
-              <span class="f-title">{{item.foodName}}</span>
-              <p class="sm-title">￥{{item.price}}</p>
+              <span class="f-title">{{ item.foodName }}</span>
+              <p class="sm-title">￥{{ item.price }}</p>
             </div>
           </div>
           <!-- </el-timeline-item> -->
           <!-- </el-timeline> -->
         </el-form-item>
-        <el-form-item label="共计消费">{{formInfo.priceSum}}</el-form-item>
+        <el-form-item label="共计消费">{{ formInfo.priceSum }}</el-form-item>
       </el-form>
     </el-dialog>
   </div>
 </template>
 <script>
-import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
+import OrgTreeList from '@/components/OrgTreeList/OrgTreeList';
 
 export default {
   name: 'mealCenter',
@@ -186,13 +222,11 @@ export default {
   methods: {
     handleExport () {
       window.open(
-        `${ctx}/service/customerDinnerRecord/export?serviceCustomerId=${this
-          .searchData.serviceCustomerId || ''}&serviceCustomerName=${this
-          .searchData.serviceCustomerName || ''}&startTime=${this.searchData
-          .startTime || ''}&endTime=${this.searchData.endTime ||
-          ''}&orgId=${this.searchData.orgId || ''}&token=${
-          this.$store.state.token
-        }`
+        `${ctx}service/customerDinnerRecord/export?X-Resource=${this.$router
+          .name || ''}&serviceCustomerName=${this.searchData
+          .serviceCustomerName || ''}&startTime=${this.searchData.startTime ||
+          ''}&endTime=${this.searchData.endTime || ''}&orgId=${this.searchData
+          .orgId || ''}&token=${this.$store.state.token}`
       )
     },
     handlePreview (row) {
@@ -215,8 +249,8 @@ export default {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
       } else {
-        this.searchData.startTime = ''
-        this.searchData.endTime = ''
+        this.searchData.startTime = '';
+        this.searchData.endTime = '';
       }
     },
     filterOrg (val) {
@@ -269,7 +303,7 @@ export default {
       display: block;
       width: 0;
       height: 0;
-      content: ' ';
+      content: " ";
       border-color: transparent transparent transparent #fff;
       border-style: solid;
       border-width: 18px 0 18px 8px;
