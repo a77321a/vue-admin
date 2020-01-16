@@ -2,8 +2,8 @@
  * @Descripttion:服务人员
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime: 2019-12-11 20:37:10
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-16 09:44:03
  -->
 <template>
   <div class="Participants">
@@ -67,7 +67,7 @@
       </template>
       <template slot-scope="{ row }" slot="handleColumn">
         <el-button
-          @click="$router.push({name:'serviceUserInfo',query:{uid:row.orgServiceProviderId}})"
+          @click="$router.push({name:'serviceUserDetail',query:{uid:row.orgServiceProviderId}})"
           type="text"
           size="small"
         >查看</el-button>
@@ -78,7 +78,7 @@
 <script>
 export default {
   name: 'ServicePerson',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: { activityId: this.activityId },
@@ -92,16 +92,16 @@ export default {
   },
   props: ['activityId'],
 
-  created () {},
+  created() {},
   methods: {
-    exportExcel () {
+    exportExcel() {
       window.open(
         `${ctx}/activity/provider/export?activityId=${this.searchData
           .activityId || ''}&orgServiceProviderName=${this.searchData
           .orgServiceProviderName || ''}&token=${this.$store.state.token}`
       )
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })

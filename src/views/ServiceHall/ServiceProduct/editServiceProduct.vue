@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 16:12:23
+ * @LastEditTime : 2020-01-16 10:14:48
  -->
 <template>
   <div id="edit-event">
@@ -183,8 +183,8 @@ export default {
   },
   methods: {
     changeOrg () {
-      this.formInfo.orgServiceTypeId = ''
-      this.getServiceTypeList()
+      // this.formInfo.orgServiceTypeId = ''
+      // this.getServiceTypeList()
     },
     getServiceTypeList () {
       this.$http
@@ -215,13 +215,17 @@ export default {
         .then(res => {
           this.formInfo = res.payload
           this.priceList = this.formInfo.pensionServiceProductPrice
-          this.$set(this.formInfo, 'orgServiceTypeId', '')
-          console.log(this.templateObj)
+          this.$set(
+            this.formInfo,
+            'orgServiceTypeId',
+            res.payload.pensionServiceTypeDetail.pensionServiceTypeId
+          )
           this.$set(
             this.formInfo,
             'pensionServiceTypeName',
             this.templateObj.pensionServiceTypeName
           )
+          console.log(this.formInfo)
           this.templateObj = {}
         })
       this.dialogServiceProduce = false
@@ -277,6 +281,7 @@ export default {
     handleSave () {
       let priceList = this.$refs.sku.toConfirm()
       this.formInfo.pensionServiceProductPrice = priceList
+      console.log(this.formInfo)
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.pid

@@ -275,26 +275,7 @@
           style="margin-bottom:20px;"
           justify="space-between"
         >
-          <el-col :span="8">
-            <el-card :body-style="{ padding: '45px 0px' }">
-              <el-row type="flex" class="row-bg" justify="center">
-                <el-col style="font-size:30px;" :span="6">
-                  <i style="margin-top:5px" class="el-icon-office-building"></i>
-                </el-col>
-                <el-col :span="12">
-                  <h2>
-                    <countTo
-                      style="font-size:30px"
-                      :startVal="0"
-                      :endVal="data.societyOrgNum"
-                      :duration="1500"
-                    ></countTo>
-                  </h2>
-                  <div style="font-size:14px">养老机构数</div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </el-col>
+          
           <el-col :span="8">
             <el-card :body-style="{ padding: '45px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
@@ -311,6 +292,26 @@
                     ></countTo>
                   </h2>
                   <div style="font-size:14px">社会化运营机构数</div>
+                </el-col>
+              </el-row>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card :body-style="{ padding: '45px 0px' }">
+              <el-row type="flex" class="row-bg" justify="center">
+                <el-col style="font-size:30px;" :span="6">
+                  <i style="margin-top:5px" class="el-icon-office-building"></i>
+                </el-col>
+                <el-col :span="12">
+                  <h2>
+                    <countTo
+                      style="font-size:30px"
+                      :startVal="0"
+                      :endVal="data.societyOrgNum"
+                      :duration="1500"
+                    ></countTo>
+                  </h2>
+                  <div style="font-size:14px">养老机构数</div>
                 </el-col>
               </el-row>
             </el-card>

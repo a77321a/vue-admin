@@ -2,18 +2,15 @@
  * @Descripttion:选择服务人员
  * @Author:
  * @Date: 2019-11-11 10:37:53
- * @LastEditors:
- * @LastEditTime: 2019-12-05 11:30:18
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-16 09:57:39
  -->
 <template>
   <div id="select-service-object">
     <el-form>
       <el-form inline ref="form" label-width="80px" size="small">
         <el-form-item label="名称">
-          <el-input
-            placeholder="请输入服务人员名称"
-            v-model="searchData.orgServiceProviderName"
-          ></el-input>
+          <el-input placeholder="请输入服务人员名称" v-model="searchData.orgServiceProviderName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -21,23 +18,23 @@
             type="primary"
             @click="searchRefresh = !searchRefresh"
             icon="el-icon-search"
-            >搜索</el-button
-          >
+          >搜索</el-button>
           <el-button
             @click="
               searchData.orgServiceProviderName = '';
               searchRefresh = !searchRefresh;
             "
             size="small"
-            >重置</el-button
-          >
+          >重置</el-button>
         </el-form-item>
       </el-form>
     </el-form>
+    <!-- :selectable="selectable" -->
+
     <Table
       :highlightCurrentRow="single"
-      :selectable="selectable"
       @commitSelection="commitSelection"
+      :selectable="selectable"
       :currentChange="singleSelect"
       :height="$store.state.dialogHeight - 200"
       :searchRefresh="searchRefresh"
@@ -114,18 +111,29 @@ export default {
     },
     selectable (row, index) {
       if (this.isSelected.length === 0) {
-        return 1
+        return true
       }
-      for (let i in this.isSelected) {
-        if (
-          this.isSelected[i].orgServiceProviderId &&
-          this.isSelected[i].orgServiceProviderId === row.orgServiceProviderId
-        ) {
-          return 0
-        } else {
-          return 1
-        }
+      if (
+        this.isSelected.some(el => {
+          return el.orgServiceProviderId === row.orgServiceProviderId
+        })
+      ) {
+        return false
+      } else {
+        return true
       }
+      // for (let i in this.isSelected) {
+      //   console.log(this.isSelected[i])
+
+      //   if (
+      //     this.isSelected[i].orgServiceProviderId &&
+      //     this.isSelected[i].orgServiceProviderId === row.orgServiceProviderId
+      //   ) {
+      //     return 0
+      //   } else {
+      //     return 1
+      //   }
+      // }
     },
     commitSelection (data) {
       this.selectData = data

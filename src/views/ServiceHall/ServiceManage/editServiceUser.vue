@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑服务人员
  * @Author:
  * @Date: 2019-11-11 16:49:56
- * @LastEditors:
- * @LastEditTime: 2019-12-08 12:04:05
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-16 10:37:17
  -->
 <template>
   <div id="edit-service-user">
@@ -72,7 +72,7 @@
       <el-form-item label="性别" prop="sex">
         <el-select clearable v-model="formInfo.sex" placeholder="请选择">
           <el-option label="男" :value="1"></el-option>
-          <el-option label="女" :value="2"></el-option>
+          <el-option label="女" :value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="出生日期" prop="birthday">

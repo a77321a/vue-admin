@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-05 19:04:11
+ * @LastEditTime : 2020-01-16 09:47:27
  -->
 <template>
   <div id="edit-event">
@@ -305,14 +305,16 @@ export default {
         this.$message.error('请至少选择一个服务人员')
         return false
       }
+      console.log(this.selectUserList)
       this.formInfo.actualOrgServiceProviderList = this.formInfo.actualOrgServiceProviderList.concat(
         this.selectUserList
       )
+      let obj = {}
       this.formInfo.actualOrgServiceProviderList = this.formInfo.actualOrgServiceProviderList.reduce(
         (cur, next) => {
-          obj[next.serviceCustomerId]
+          obj[next.orgServiceProviderId]
             ? ''
-            : (obj[next.serviceCustomerId] = true && cur.push(next))
+            : (obj[next.orgServiceProviderId] = true && cur.push(next))
           return cur
         },
         []

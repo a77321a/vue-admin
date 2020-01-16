@@ -2,8 +2,8 @@
  * @Descripttion:服务人员
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime : 2019-12-19 15:52:42
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-16 10:38:15
  -->
 <template>
   <div class="Participants">
@@ -29,9 +29,9 @@
           <span class="f-title">{{ row.orgServiceProviderName }}</span>
         </div>
       </template>
-      <template slot="orgServiceProductList" slot-scope="{ row }">{{row.sex == 0 ?'女':'男'}}</template>
+      <!-- <template slot="orgServiceProductList" slot-scope="{ row }">{{row.sex == 1 ?'男':'男'}}</template> -->
 
-      <template slot="sex" slot-scope="{ row }">{{row.sex == 0 ?'女':'男'}}</template>
+      <template slot="sex" slot-scope="{ row }">{{row.sex == 1 ?'男':'男'}}</template>
       <template slot-scope="{ row }" slot="handleColumn">
         <el-button
           @click="$router.push({name:'serviceUserDetail',query:{uid:row.orgServiceProviderId}})"
@@ -45,7 +45,7 @@
 <script>
 export default {
   name: 'ServicePerson',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: { orgId: this.orgId },
@@ -60,16 +60,16 @@ export default {
   },
   props: ['orgId'],
 
-  created() {},
+  created () {},
   methods: {
-    exportExcel() {
+    exportExcel () {
       window.open(
         `${ctx}/activity/provider/export?orgId=${this.searchData.orgId ||
           ''}&orgServiceProviderName=${this.searchData.orgServiceProviderName ||
           ''}&token=${this.$store.state.token}`
       )
     },
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })

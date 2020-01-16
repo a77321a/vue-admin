@@ -2,8 +2,8 @@
  * @Descripttion:选择机构
  * @Author:
  * @Date: 2019-11-11 10:37:53
- * @LastEditors:
- * @LastEditTime: 2019-12-10 20:43:03
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-16 10:18:55
  -->
 <template>
   <div id="select-org">
@@ -16,6 +16,9 @@
             :options="spaceTree"
             v-model="searchData.address"
           ></el-cascader>
+        </el-form-item>
+        <el-form-item label="机构名称">
+          <el-input placeholder="请输入机构名称" v-model="searchData.orgName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button

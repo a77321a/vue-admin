@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-26 12:12:51
+ * @LastEditTime : 2020-01-16 09:58:45
  -->
 <template>
   <div id="select-service-object">
@@ -28,6 +28,7 @@
     <Table
       :highlightCurrentRow="single"
       @commitSelection="commitSelection"
+      :selectable="selectable"
       :height="$store.state.dialogHeight - 200"
       :searchRefresh="searchRefresh"
       :rowsForamtter="rowsForamtter"
@@ -92,21 +93,30 @@ export default {
     }
   },
   methods: {
-    // selectable (row, index) {
-    //   if (this.isSelected.length === 0) {
-    //     return 1
-    //   }
-    //   for (let i in this.isSelected) {
-    //     if (
-    //       this.isSelected[i].serviceCustomerId &&
-    //       this.isSelected[i].serviceCustomerId === row.serviceCustomerId
-    //     ) {
-    //       return 0
-    //     } else {
-    //       return 1
-    //     }
-    //   }
-    // },
+    selectable (row, index) {
+      if (this.isSelected.length === 0) {
+        return 1
+      }
+      if (
+        this.isSelected.some(el => {
+          return el.serviceCustomerId === row.serviceCustomerId
+        })
+      ) {
+        return false
+      } else {
+        return true
+      }
+      // for (let i in this.isSelected) {
+      //   if (
+      //     this.isSelected[i].serviceCustomerId &&
+      //     this.isSelected[i].serviceCustomerId === row.serviceCustomerId
+      //   ) {
+      //     return 0
+      //   } else {
+      //     return 1
+      //   }
+      // }
+    },
     commitSelection (data) {
       this.$emit('selectObject', data)
     },

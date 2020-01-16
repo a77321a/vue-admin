@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-07 15:49:00
+ * @LastEditTime : 2020-01-16 10:17:03
  -->
 <template>
   <div id="edit-role">
@@ -121,7 +121,7 @@
       width="60%"
       lock-scroll
       destroy-on-close
-      title="选择服务对象"
+      title="选择内部服务人员"
       :visible.sync="dialogServiceObject"
     >
       <selectServiceUser :single="true" @selectObject="selectObject"></selectServiceUser>
