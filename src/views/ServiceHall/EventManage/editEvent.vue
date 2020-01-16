@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑活动
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime: 2019-12-11 20:36:12
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-16 14:09:30
  -->
 <template>
   <div id="edit-event">
@@ -168,7 +168,7 @@
     >
       <!-- :isSelected="formInfo.serviceCustomerList" -->
 
-      <selectServiceObject @selectObject="selectObject"></selectServiceObject>
+      <selectServiceObject :isSelected="formInfo.serviceCustomerList" @selectObject="selectObject"></selectServiceObject>
       <span slot="footer" class="dialog-footer">
         <el-button
           @click="
@@ -188,7 +188,11 @@
     >
       <!-- :isSelected="formInfo.orgServiceProviderList" -->
 
-      <selectServiceUser @selectUser="selectUser" :orgId="formInfo.orgId"></selectServiceUser>
+      <selectServiceUser
+        :isSelected="formInfo.orgServiceProviderList"
+        @selectUser="selectUser"
+        :orgId="formInfo.orgId"
+      ></selectServiceUser>
       <span slot="footer" class="dialog-footer">
         <el-button
           @click="
@@ -211,7 +215,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data() {
+  data () {
     return {
       formInfo: {
         orgId: [],
@@ -265,7 +269,7 @@ export default {
       selectObjectList: []
     }
   },
-  created() {
+  created () {
     // if (this.$route.query.aid) {
     //   this.getActivityInfo()
     // }
@@ -274,11 +278,11 @@ export default {
     this.getProductList()
   },
   methods: {
-    handleTime(date) {
+    handleTime (date) {
       this.formInfo.startTime = date ? date[0] : ''
       this.formInfo.endTime = date ? date[1] : ''
     },
-    arrSplice(arr, index) {
+    arrSplice (arr, index) {
       arr.splice(index, 1)
       console.log(this.formInfo)
     },
@@ -287,10 +291,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
@@ -316,10 +320,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectUser(data) {
+    selectUser (data) {
       this.selectUserList = data
     },
-    handleSaveSelectUser() {
+    handleSaveSelectUser () {
       if (this.selectUserList.length === 0) {
         this.$message.error('请至少选择一个服务人员')
         return false
@@ -340,7 +344,7 @@ export default {
       this.selectUserList = []
       this.dialogServiceUser = false
     },
-    getProductList() {
+    getProductList () {
       this.$http
         .post('/org/service/product/pageSearch', {
           pageSize: MAXSIZE,
@@ -350,7 +354,7 @@ export default {
           this.productList = res.payload.records
         })
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (this.$route.query.aid) {
           this.getActivityInfo()
@@ -367,14 +371,14 @@ export default {
         }
       })
     },
-    getEventRoomList() {
+    getEventRoomList () {
       this.$http
         .post('/activity/room/pageSearch', { pageSize: 99999 })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
     },
-    getActivityInfo() {
+    getActivityInfo () {
       this.$http
         .get('/activity/get?activityId=' + this.$route.query.aid)
         .then(res => {
@@ -411,7 +415,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let provider = []
@@ -442,7 +446,7 @@ export default {
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {

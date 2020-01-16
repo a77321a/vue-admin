@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 09:47:27
+ * @LastEditTime : 2020-01-16 14:05:35
  -->
 <template>
   <div id="edit-event">
@@ -366,6 +366,14 @@ export default {
               .orgServiceProviderList
               ? this.formInfo.orgServiceProviderList
               : []
+            this.formInfo.actualOrgServiceProviderList = this.formInfo
+              .actualOrgServiceProviderList
+              ? this.formInfo.actualOrgServiceProviderList
+              : []
+            this.formInfo.actualServiceCustomerList = this.formInfo
+              .actualServiceCustomerList
+              ? this.formInfo.actualServiceCustomerList
+              : []
             this.formInfo.serviceCustomerList = this.formInfo
               .serviceCustomerList
               ? this.formInfo.serviceCustomerList
@@ -373,6 +381,7 @@ export default {
             this.formInfo.activityPicList = this.formInfo.activityPicList
               ? this.formInfo.activityPicList
               : []
+
             if (Array.isArray(this.orgTree)) {
               this.orgTree.forEach(i => {
                 if (Array.isArray(i.children)) {

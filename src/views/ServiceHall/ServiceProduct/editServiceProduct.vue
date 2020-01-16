@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 10:14:48
+ * @LastEditTime : 2020-01-16 18:10:42
  -->
 <template>
   <div id="edit-event">
@@ -137,7 +137,7 @@ export default {
     selectPensionProduct,
     sku
   },
-  data () {
+  data() {
     return {
       dialogServiceProduce: false,
       checkedObject: {},
@@ -173,7 +173,7 @@ export default {
       priceList: []
     }
   },
-  created () {
+  created() {
     if (this.$route.query.pid) {
       this.getProductInfo()
     }
@@ -182,11 +182,11 @@ export default {
     this.getServiceTypeList()
   },
   methods: {
-    changeOrg () {
+    changeOrg() {
       // this.formInfo.orgServiceTypeId = ''
       // this.getServiceTypeList()
     },
-    getServiceTypeList () {
+    getServiceTypeList() {
       this.$http
         .post('/org/service/type/pageSearch', {
           pageSize: MAXSIZE,
@@ -203,10 +203,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.templateObj = data
     },
-    handleSaveSelectProduct () {
+    handleSaveSelectProduct() {
       this.$http
         .get(
           '/pension/service/product/detail?pensionServiceProductId=' +
@@ -231,7 +231,7 @@ export default {
       this.dialogServiceProduce = false
       this.$forceUpdate()
     },
-    getOrgList () {
+    getOrgList() {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -245,7 +245,7 @@ export default {
         }
       })
     },
-    getProductInfo () {
+    getProductInfo() {
       this.$http
         .get(
           '/org/service/product/detail?orgServiceProductId=' +
@@ -258,7 +258,8 @@ export default {
             this.$set(
               this.formInfo,
               'orgServiceTypeId',
-              res.payload.orgServiceTypeDetail.orgServiceTypeId
+              res.payload.pensionServiceProductDetail.pensionServiceTypeDetail
+                .pensionServiceTypeId
             )
             this.$set(
               this.formInfo,
@@ -273,12 +274,14 @@ export default {
               res.payload.pensionServiceProductDetail.pensionServiceProductName
             this.formInfo.pensionServiceTypeName =
               res.payload.pensionServiceProductDetail.pensionServiceTypeDetail.pensionServiceTypeName
+            // this.formInfo.pensionServiceTypeId =
+            // res.payload.pensionServiceProductDetail.pensionServiceTypeDetail.pensionServiceTypeId
             this.$forceUpdate()
           }
         })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       let priceList = this.$refs.sku.toConfirm()
       this.formInfo.pensionServiceProductPrice = priceList
       console.log(this.formInfo)
@@ -309,7 +312,7 @@ export default {
           })
       })
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
