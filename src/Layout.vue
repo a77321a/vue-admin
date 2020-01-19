@@ -37,11 +37,6 @@ export default {
     VHeader,
     BreadCrumb
   },
-  // data(){
-  //   return{
-  //     showSideNav:false,
-  //   }
-  // }
   created () {
     let serviceHall = []
     let statisticalAnalysis = []
