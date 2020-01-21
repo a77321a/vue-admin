@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑养老产品
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors:
- * @LastEditTime: 2019-12-15 15:19:10
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-21 14:00:11
  -->
 <template>
   <div id="edit-event">
@@ -155,6 +155,8 @@
               :size="22"
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
+              :src="$store.state.config.systemConfig[0].dictionaryValue +
+                  item.indexPic"
             ></el-avatar>
             <span style="vertical-align: middle;">
               {{
@@ -179,6 +181,8 @@
               :size="22"
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
+              :src="$store.state.config.systemConfig[0].dictionaryValue +
+                  item.indexPic"
             ></el-avatar>
             <span style="vertical-align: middle;">{{ item.name }}</span>
           </el-tag>

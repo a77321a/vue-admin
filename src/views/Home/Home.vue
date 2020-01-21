@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 23:19:15
+ * @LastEditTime : 2020-01-21 13:56:37
  -->
 <template>
   <div class="Home">
@@ -15,11 +15,7 @@
           </div>
           <el-col :span="16">
             <H4 style="text-align:center;display:inline-block;width:90%">
-              <countTo
-                :startVal="0"
-                :endVal="data.serviceRecordNumInfo.todayNum"
-                :duration="1500"
-              ></countTo>
+              <countTo :startVal="0" :endVal="data.serviceRecordNumInfo.todayNum" :duration="1500"></countTo>
             </H4>
             <el-divider direction="vertical"></el-divider>
           </el-col>
@@ -45,8 +41,8 @@
                   "
                 ></i>
                 {{
-                  data.serviceRecordNumInfo.todayNum -
-                    data.serviceRecordNumInfo.yesterdayNum
+                data.serviceRecordNumInfo.todayNum -
+                data.serviceRecordNumInfo.yesterdayNum
                 }}
               </span>
             </div>
@@ -71,10 +67,10 @@
                   "
                 ></i>
                 {{
-                  Math.abs(
-                    data.serviceRecordNumInfo.todayNum -
-                      data.serviceRecordNumInfo.sevenDaysNum
-                  )
+                Math.abs(
+                data.serviceRecordNumInfo.todayNum -
+                data.serviceRecordNumInfo.sevenDaysNum
+                )
                 }}
               </span>
             </div>
@@ -88,11 +84,7 @@
           </div>
           <el-col :span="16">
             <H4 style="text-align:center;display:inline-block;width:90%">
-              <countTo
-                :startVal="0"
-                :endVal="data.activityPartNumInfo.todayNum"
-                :duration="1500"
-              ></countTo>
+              <countTo :startVal="0" :endVal="data.activityPartNumInfo.todayNum" :duration="1500"></countTo>
             </H4>
             <el-divider direction="vertical"></el-divider>
           </el-col>
@@ -118,8 +110,8 @@
                   "
                 ></i>
                 {{
-                  data.activityPartNumInfo.todayNum -
-                    data.activityPartNumInfo.yesterdayNum
+                data.activityPartNumInfo.todayNum -
+                data.activityPartNumInfo.yesterdayNum
                 }}
               </span>
             </div>
@@ -144,10 +136,10 @@
                   "
                 ></i>
                 {{
-                  Math.abs(
-                    data.activityPartNumInfo.todayNum -
-                      data.activityPartNumInfo.sevenDaysNum
-                  )
+                Math.abs(
+                data.activityPartNumInfo.todayNum -
+                data.activityPartNumInfo.sevenDaysNum
+                )
                 }}
               </span>
             </div>
@@ -199,8 +191,8 @@
                   "
                 ></i>
                 {{
-                  data.customerDinnerNumInfo.todayNum -
-                    data.customerDinnerNumInfo.yesterdayNum
+                data.customerDinnerNumInfo.todayNum -
+                data.customerDinnerNumInfo.yesterdayNum
                 }}
               </span>
             </div>
@@ -225,10 +217,10 @@
                   "
                 ></i>
                 {{
-                  Math.abs(
-                    data.customerDinnerNumInfo.todayNum -
-                      data.customerDinnerNumInfo.sevenDaysNum
-                  )
+                Math.abs(
+                data.customerDinnerNumInfo.todayNum -
+                data.customerDinnerNumInfo.sevenDaysNum
+                )
                 }}
               </span>
             </div>
@@ -243,11 +235,7 @@
           <el-col :span="11">
             <H4 style="text-align:center;display:inline-block;width:90%">
               已开展
-              <countTo
-                :startVal="0"
-                :endVal="data.activityNumCarriedOutWeek"
-                :duration="1500"
-              ></countTo>
+              <countTo :startVal="0" :endVal="data.activityNumCarriedOutWeek" :duration="1500"></countTo>
             </H4>
           </el-col>
           <el-col :span="2">
@@ -256,11 +244,7 @@
           <el-col :span="11">
             <H4 style="text-align:center;display:inline-block;width:90%">
               待开展
-              <countTo
-                :startVal="0"
-                :endVal="data.activityNumToBeCarriedOutWeek"
-                :duration="1500"
-              ></countTo>
+              <countTo :startVal="0" :endVal="data.activityNumToBeCarriedOutWeek" :duration="1500"></countTo>
             </H4>
           </el-col>
         </el-card>
@@ -269,13 +253,7 @@
     <!-- 第二排统计 -->
     <el-row :gutter="20" style="margin-top:20px" type="flex">
       <el-col :span="14">
-        <el-row
-          :gutter="20"
-          type="flex"
-          style="margin-bottom:20px;"
-          justify="space-between"
-        >
-          
+        <el-row :gutter="20" type="flex" style="margin-bottom:20px;" justify="space-between">
           <el-col :span="8">
             <el-card :body-style="{ padding: '45px 0px' }">
               <el-row type="flex" class="row-bg" justify="center">
@@ -401,21 +379,23 @@
         </el-row>
       </el-col>
       <el-col :span="10">
-        <el-card :body-style="{ minHeight: '222px' }">
+        <el-card :body-style="{ minHeight: '212px' }">
           <div slot="header">
             <span>本周活动</span>
             <el-button
               @click="$router.push({ name: 'eventCenter' })"
               style="float: right; padding: 3px 0"
               type="text"
-              >更多</el-button
-            >
+            >更多</el-button>
           </div>
           <div
             v-if="index < 4"
             v-for="(row, index) in eventList"
             :key="index"
             class="flex-t-l"
+            @click="
+            $router.push({ name: 'eventCenterPreview', query: { aid: row.activityId } })
+          "
           >
             <img
               class="course-avatar"
@@ -430,9 +410,7 @@
               <p>{{ row.startTime }} ~ {{ row.endTime }}</p>
             </div>
           </div>
-          <div v-if="eventList.length == 0" style="text-align:center">
-            暂无活动
-          </div>
+          <div v-if="eventList.length == 0" style="text-align:center">暂无活动</div>
           <!-- <el-carousel height="105px" direction="vertical" :interval="2000" :autoplay="true">
             <el-carousel-item style="padding:10px 0" v-for="(item,index) in eventList" :key="index">
               <div class="flex-t-l">
@@ -474,9 +452,9 @@
 </template>
 
 <script>
-import countTo from "vue-count-to";
+import countTo from 'vue-count-to'
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
     countTo
   },
@@ -495,30 +473,30 @@ export default {
         societyOrgNum: 0
       },
       eventList: []
-    };
+    }
   },
   created() {
-    this.getData();
-    this.getEventList();
-    console.log(typeof (this.$store.state.dialogHeight - 200));
+    this.getData()
+    this.getEventList()
+    console.log(typeof (this.$store.state.dialogHeight - 200))
   },
   methods: {
     getData() {
-      this.$http.get("/stats/home").then(res => {
+      this.$http.get('/stats/home').then(res => {
         if (res.code === SUCCESS) {
-          this.data = res.payload;
+          this.data = res.payload
         }
-      });
+      })
     },
     getEventList() {
-      this.$http.get("/activity/thisWeek").then(res => {
+      this.$http.get('/activity/thisWeek').then(res => {
         if (res.code === SUCCESS) {
-          this.eventList = res.payload;
+          this.eventList = res.payload
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .clearfix {
