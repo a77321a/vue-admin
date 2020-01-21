@@ -2,8 +2,8 @@
  * @Descripttion:活动中心
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime : 2019-12-19 16:01:43
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-01-21 13:52:39
  -->
 <template>
   <div class="user-manage">
@@ -102,7 +102,7 @@
         >结束活动</el-button>
         <span v-if="row.activityStatus==1">-</span>
         <el-button
-          @click="$router.push({name:'editActivitySummary',query:{aid:row.activityId}})"
+          @click="$router.push({name:'eventCenterSummary',query:{aid:row.activityId}})"
           v-if="row.activityStatus > 1"
           type="text"
           size="small"

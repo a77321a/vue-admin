@@ -9,7 +9,7 @@
   <div id="active-summary">
     <div class="header">
       <el-button
-        @click="$router.push({name:'editActivitySummary',query:{aid:$route.query.aid}})"
+        @click="$router.push({name:'eventCenterSummary',query:{aid:$route.query.aid}})"
         class="btn"
         type="text"
       >重新编辑</el-button>

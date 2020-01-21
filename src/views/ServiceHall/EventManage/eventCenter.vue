@@ -124,7 +124,7 @@
         <el-button
           @click="
             $router.push({
-              name: 'editActivitySummary',
+              name: 'eventCenterSummary',
               query: { aid: row.activityId }
             })
           "

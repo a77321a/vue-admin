@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-06 10:20:37
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 09:46:29
+ * @LastEditTime : 2020-01-21 13:52:32
  */
 export default [
   {
@@ -79,8 +79,8 @@ export default [
   //   }
   // },
   {
-    path: 'editActivitySummary',
-    name: 'editActivitySummary',
+    path: 'eventCenterSummary',
+    name: 'eventCenterSummary',
     component: () => import('@/views/ServiceHall/EventManage/editActivitySummary.vue'),
     meta: {
       title: '活动总结',
