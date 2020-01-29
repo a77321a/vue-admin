@@ -333,6 +333,7 @@ export default {
       }
     }
     // zhushi
+    // 无聊的第五天
     const validCard = (rule, value, callback) => {
       if (this.formInfo.idCard == '' && this.formInfo.idCard == '') {
         callback(new Error('请输入证件信息'))
