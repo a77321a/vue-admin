@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-21 14:00:11
+ * @LastEditTime : 2020-02-02 22:30:56
  -->
 <template>
   <div id="edit-event">
@@ -335,6 +335,7 @@ export default {
     // zhushi
     // 无聊的第五天ß
     // mingt
+    //kaigong
     const validCard = (rule, value, callback) => {
       if (this.formInfo.idCard == '' && this.formInfo.idCard == '') {
         callback(new Error('请输入证件信息'))
