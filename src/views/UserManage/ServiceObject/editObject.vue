@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-02-02 22:30:56
+ * @LastEditTime : 2020-02-13 11:57:28
  -->
 <template>
   <div id="edit-event">
@@ -155,8 +155,9 @@
               :size="22"
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
-              :src="$store.state.config.systemConfig[0].dictionaryValue +
-                  item.indexPic"
+              :src="item.indexPic ? $store.state.config.systemConfig[0].dictionaryValue +
+                  item.indexPic:$store.state.config.systemConfig[0].dictionaryValue +
+                  item.avatar"
             ></el-avatar>
             <span style="vertical-align: middle;">
               {{
@@ -181,8 +182,9 @@
               :size="22"
               style="vertical-align: middle;margin-right:5px"
               icon="el-icon-user-solid"
-              :src="$store.state.config.systemConfig[0].dictionaryValue +
-                  item.indexPic"
+              :src="item.indexPic ? $store.state.config.systemConfig[0].dictionaryValue +
+                  item.indexPic:$store.state.config.systemConfig[0].dictionaryValue +
+                  item.avatar"
             ></el-avatar>
             <span style="vertical-align: middle;">{{ item.name }}</span>
           </el-tag>
@@ -333,9 +335,8 @@ export default {
       }
     }
     // zhushi
-    // 无聊的第五天ß
     // mingt
-    //kaigong
+    // kaigong
     const validCard = (rule, value, callback) => {
       if (this.formInfo.idCard == '' && this.formInfo.idCard == '') {
         callback(new Error('请输入证件信息'))
@@ -603,9 +604,10 @@ export default {
         let arr = []
         this.formInfo.emergencySelectList.forEach(i => {
           arr.push({
-            id: i.orgServiceProviderId || i.serviceCustomerId,
+            id: i.orgServiceProviderId || i.serviceCustomerId || i.id,
             mobile: i.mobile || i.telephoneNum,
-            name: i.serviceCustomerName || i.orgServiceProviderName || i.name
+            name: i.serviceCustomerName || i.orgServiceProviderName || i.name,
+            avatar: i.avatar || i.indexPic
           })
         })
         // arr = arr.concat(this.contarctList)

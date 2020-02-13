@@ -2,8 +2,8 @@
  * @Descripttion: 活动详情
  * @Author:
  * @Date: 2019-11-07 19:28:01
- * @LastEditors:
- * @LastEditTime: 2019-12-11 20:59:59
+ * @LastEditors  : Please set LastEditors
+ * @LastEditTime : 2020-02-13 12:00:31
  -->
 <template>
   <div id="service-object-info">
@@ -67,12 +67,12 @@
             <el-col :span="12">
               紧急联系人：
               <span
-                v-for="(item, index) in serviceObjectInfo.emergencyManualList"
+                v-for="(item, index) in (serviceObjectInfo.emergencySelectList.concat(serviceObjectInfo.emergencyManualList))"
                 :key="index"
               >
                 {{item.name}}/{{item.mobile}}
                 <el-divider
-                  v-if="index !=serviceObjectInfo.emergencyManualList.length - 1"
+                  v-if="index !=serviceObjectInfo.emergencySelectList.length - 1"
                   direction="vertical"
                 ></el-divider>
               </span>
@@ -180,14 +180,14 @@ import mealRecords from './ServiceObjectInfoTabs/mealRecords'
 import serviceRecords from './ServiceObjectInfoTabs/serviceRecords'
 import healthRecords from './ServiceObjectInfoTabs/healthRecords'
 export default {
-  name: 'serviceObjectInfo',
+  name: 'serviceObjectDetail',
   components: {
     healthRecords,
     serviceRecords,
     mealRecords,
     activityRecords
   },
-  data () {
+  data() {
     return {
       dialogVisible: false,
       maritalStatus: ['未婚', '已婚', '离异', '再婚', '丧偶'],
@@ -198,11 +198,11 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.getObjectInfo()
   },
   methods: {
-    getObjectInfo () {
+    getObjectInfo() {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {

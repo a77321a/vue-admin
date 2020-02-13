@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 14:09:30
+ * @LastEditTime : 2020-02-13 11:39:42
  -->
 <template>
   <div id="edit-event">
@@ -79,13 +79,19 @@
       <el-form-item label="所属机构" prop="orgId">
         <el-cascader
           clearable
+          @change="formInfo.orgServiceProviderList = [];formInfo.activityRoomId = '';formInfo.orgServiceProductIdList = []"
           :props="{ value: 'orgId', label: 'orgName', emitPath: false }"
           :options="orgTree"
           v-model="formInfo.orgId"
         ></el-cascader>
       </el-form-item>
       <el-form-item label="活动室" prop="activityRoomId">
-        <el-select clearable v-model="formInfo.activityRoomId" placeholder="请选择">
+        <el-select
+          :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
+          clearable
+          v-model="formInfo.activityRoomId"
+          placeholder="请选择"
+        >
           <el-option
             v-for="(item, index) in eventRoomList"
             :key="index"
@@ -97,6 +103,7 @@
       <el-form-item label="服务产品" prop="orgServiceProductIdList">
         <el-select
           clearable
+          :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
           multiple
           collapse-tags
           v-model="formInfo.orgServiceProductIdList"

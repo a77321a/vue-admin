@@ -34,8 +34,8 @@ export default [
     }
   },
   {
-    path: 'serviceObjectInfo',
-    name: 'serviceObjectInfo',
+    path: 'serviceObjectDetail',
+    name: 'serviceObjectDetail',
     component: () => import('@/views/UserManage/ServiceObject/serviceObjectInfo.vue'),
     meta: {
       title: '服务对象详情',

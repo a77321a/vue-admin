@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 10:37:53
  * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 10:18:55
+ * @LastEditTime : 2020-02-13 11:43:10
  -->
 <template>
   <div id="select-org">
@@ -14,7 +14,7 @@
             clearable
             :props="{value:'regionId',label:'addressName',emitPath:false}"
             :options="spaceTree"
-            v-model="searchData.address"
+            v-model="searchData.communityRegionId"
           ></el-cascader>
         </el-form-item>
         <el-form-item label="机构名称">
@@ -69,7 +69,7 @@ export default {
       searchData: { level: 2 },
       tableColumns: [
         { label: '机构名称', prop: 'orgName', align: 'left', minWidth: 100 },
-        { label: '所在区域', prop: 'serviceScopeName', minWidth: 150 }
+        { label: '所在区域', prop: 'communityRegionName', minWidth: 150 }
       ]
     }
   },

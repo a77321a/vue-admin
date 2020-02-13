@@ -88,7 +88,7 @@
       </template>
       <template slot-scope="{row}" slot="handleColumn">
         <el-button
-          @click="$router.push({name:'serviceObjectInfo',query:{sid:row.serviceCustomerId}})"
+          @click="$router.push({name:'serviceObjectDetail',query:{sid:row.serviceCustomerId}})"
           type="text"
           size="small"
         >查看</el-button>
@@ -99,7 +99,7 @@
 <script>
 export default {
   name: 'Participants',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: { activityId: this.activityId },
@@ -121,9 +121,9 @@ export default {
     }
   },
   props: ['activityId', 'actualCustomerNum', 'customerNum'],
-  created() {},
+  created () {},
   methods: {
-    exportExcel() {
+    exportExcel () {
       window.open(
         `${ctx}/activity/customer/export?activityId=${this.searchData
           .activityId || ''}&customerCategory=${this.searchData
@@ -131,12 +131,12 @@ export default {
           .serviceCustomerName || ''}&token=${this.$store.state.token}`
       )
     },
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime(date) {
+    handlTime (date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -145,14 +145,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    commitSelection(data) {
+    commitSelection (data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.activityId)
       })
       this.selectActivity = arr
     },
-    handleDelete(row) {
+    handleDelete (row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
@@ -169,7 +169,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity(row) {
+    handleCloseActivity (row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {
