@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑活动
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-02-13 11:39:42
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:39:15
  -->
 <template>
   <div id="edit-event">
@@ -280,6 +280,10 @@ export default {
     // if (this.$route.query.aid) {
     //   this.getActivityInfo()
     // }
+    let userInfo = this.$store.state.userInfo
+    if (Array.isArray(userInfo.orgIds) && userInfo.orgIds.length > 0) {
+      this.formInfo.orgId = userInfo.orgIds[1]
+    }
     this.getEventRoomList()
     this.getOrgList()
     this.getProductList()

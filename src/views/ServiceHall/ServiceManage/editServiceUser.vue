@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑服务人员
  * @Author:
  * @Date: 2019-11-11 16:49:56
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 10:37:17
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:42:44
  -->
 <template>
   <div id="edit-service-user">
@@ -101,7 +101,9 @@
           v-model="formInfo.orgId"
         ></el-cascader>
       </el-form-item>
-      <el-form-item label="服务类型" prop="orgServiceTypeIds">
+      <!-- <el-form-item label="服务类型" prop="orgServiceTypeIds"> -->
+
+      <el-form-item label="服务类型">
         <el-select
           :disabled="!formInfo.orgId"
           @change="changeType"
@@ -118,7 +120,9 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="服务产品" prop="orgServiceProductIds">
+      <!-- <el-form-item label="服务产品" prop="orgServiceProductIds"> -->
+
+      <el-form-item label="服务产品">
         <el-select
           :disabled="formInfo.orgServiceTypeIds.length == 0 || !formInfo.orgId"
           multiple
@@ -225,6 +229,10 @@ export default {
     }
   },
   created () {
+    let userInfo = this.$store.state.userInfo
+    if (Array.isArray(userInfo.orgIds) && userInfo.orgIds.length > 0) {
+      this.formInfo.orgId = userInfo.orgIds[1]
+    }
     if (this.$route.query.uid) {
       this.getServiceUserInfo()
     }

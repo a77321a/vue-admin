@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑服务人员
  * @Author:
  * @Date: 2019-11-11 16:49:56
- * @LastEditors:
- * @LastEditTime: 2019-12-15 15:20:44
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:42:17
  -->
 <template>
   <div id="editServiceCenter">
@@ -205,6 +205,10 @@ export default {
     }
   },
   created () {
+    let userInfo = this.$store.state.userInfo
+    if (Array.isArray(userInfo.orgIds) && userInfo.orgIds.length > 0) {
+      this.formInfo.orgId = userInfo.orgIds[1]
+    }
     if (this.$route.query.sid) {
       this.getServiceInfo()
     }

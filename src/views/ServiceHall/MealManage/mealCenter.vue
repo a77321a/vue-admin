@@ -2,17 +2,14 @@
  * @Descripttion:助餐中心
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 23:09:29
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:27:52
  -->
 <template>
   <div class="meal-center">
     <!-- 筛选 -->
     <el-row class="row-span" :gutter="40">
-      <OrgTreeList
-        @filterOrg="filterOrg"
-        @toggleChange="toggleChange"
-      ></OrgTreeList>
+      <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
       <el-col class="col-span" :span="toggleWidth">
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="80px" size="small">
@@ -41,16 +38,14 @@
                 type="primary"
                 @click="searchRefresh = !searchRefresh"
                 icon="el-icon-search"
-                >搜索</el-button
-              >
+              >搜索</el-button>
               <el-button
                 @click="
                   searchData = { orgId: searchData.orgId };
                   searchRefresh = !searchRefresh;
                 "
                 size="small"
-                >重置</el-button
-              >
+              >重置</el-button>
             </el-form-item>
           </el-form>
           <el-button
@@ -59,15 +54,13 @@
             style="margin-bottom:15px"
             size="small"
             type="primary"
-            >新增助餐记录</el-button
-          >
+          >新增助餐记录</el-button>
           <el-button
             @click="handleExport"
             v-has="'mealCenterExport'"
             style="margin-bottom:15px"
             size="small"
-            >导出助餐记录</el-button
-          >
+          >导出助餐记录</el-button>
           <!-- 列表 -->
           <Table
             :rowsForamtter="rowsForamtter"
@@ -102,8 +95,7 @@
                 @click="handlePreview(row)"
                 type="text"
                 size="small"
-                >查看</el-button
-              >
+              >查看</el-button>
 
               <el-button
                 @click="
@@ -115,28 +107,21 @@
                 type="text"
                 size="small"
                 v-has="'mealCenterEdit'"
-                >编辑</el-button
-              >
+              >编辑</el-button>
 
               <el-button
                 v-has="'mealCenterDelete'"
                 @click="handleDelete(row)"
                 type="text"
                 size="small"
-                >删除</el-button
-              >
+              >删除</el-button>
             </template>
           </Table>
         </div>
       </el-col>
     </el-row>
     <el-dialog title="查看助餐明细" :visible.sync="dialogFormVisible">
-      <el-form
-        label-suffix="："
-        ref="formInfo"
-        label-width="100px"
-        :model="formInfo"
-      >
+      <el-form label-suffix="：" ref="formInfo" label-width="100px" :model="formInfo">
         <el-form-item label="助餐人">
           <div class="flex-t-u">
             <el-avatar
@@ -157,11 +142,7 @@
         <el-form-item label="助餐详情">
           <!-- <el-timeline> -->
           <!-- <el-timeline-item v-for="(item, index) in formInfo.foodSnapshotList" :key="index"> -->
-          <div
-            v-for="(item, index) in formInfo.foodSnapshotList"
-            :key="index"
-            class="flex-t-l"
-          >
+          <div v-for="(item, index) in formInfo.foodSnapshotList" :key="index" class="flex-t-l">
             <img
               class="course-avatar"
               :src="
@@ -184,7 +165,7 @@
   </div>
 </template>
 <script>
-import OrgTreeList from '@/components/OrgTreeList/OrgTreeList';
+import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
 
 export default {
   name: 'mealCenter',
@@ -249,12 +230,13 @@ export default {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
       } else {
-        this.searchData.startTime = '';
-        this.searchData.endTime = '';
+        this.searchData.startTime = ''
+        this.searchData.endTime = ''
       }
     },
     filterOrg (val) {
       this.searchData.orgId = val
+      this.selectActivity = []
       this.searchRefresh = !this.searchRefresh
     },
     toggleChange (val) {
@@ -303,7 +285,7 @@ export default {
       display: block;
       width: 0;
       height: 0;
-      content: " ";
+      content: ' ';
       border-color: transparent transparent transparent #fff;
       border-style: solid;
       border-width: 18px 0 18px 8px;

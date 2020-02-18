@@ -2,8 +2,8 @@
  * @Descripttion:机构管理
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime: 2019-12-21 23:10:36
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:31:19
  -->
 <template>
   <div class="angecy-manage">
@@ -110,7 +110,7 @@
         >{{ row.status === 1 ? '注销机构' : '重新入网' }}</el-button>-->
         <el-button
           type="text"
-          v-has="'agencyManagePreview'"
+          v-has="'agencyInfo'"
           size="small"
           @click="$router.push({ name: 'agencyInfo', query: { oid: row.orgId}})"
         >详情</el-button>

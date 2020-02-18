@@ -22,7 +22,7 @@
         <el-input placeholder="请输入姓名关键字" v-model="searchData.serviceCustomerName"></el-input>
       </el-form-item>
       <el-form-item label="手机号">
-        <el-input placeholder="请输入活动名称关键字" v-model="searchData.mobile"></el-input>
+        <el-input placeholder="请输入手机号" v-model="searchData.mobile"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button

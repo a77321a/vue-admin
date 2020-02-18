@@ -2,8 +2,8 @@
  * @Descripttion:服务人员
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 09:52:04
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:43:18
  -->
 <template>
   <div class="service-user">
@@ -124,9 +124,7 @@ export default {
       selectServiceUser: []
     }
   },
-  created () {
-    console.log(JSON.parse(localStorage.config))
-  },
+  created () {},
   methods: {
     filterOrg (val) {
       this.searchData.orgId = val

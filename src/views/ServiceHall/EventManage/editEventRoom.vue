@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑活动室
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-07 15:37:26
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:37:27
  -->
 <template>
   <div id="edit-event">
@@ -62,7 +62,7 @@
 <script>
 export default {
   name: 'eventCenterEdit',
-  data() {
+  data () {
     return {
       formInfo: {},
       orgTree: [],
@@ -84,17 +84,17 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.getOrgList()
     if (!this.$route.query.aid) {
       let userInfo = this.$store.state.userInfo
       if (Array.isArray(userInfo.orgIds) && userInfo.orgIds.length > 0) {
-        this.formInfo.orgId = userInfo.orgIds[0]
+        this.formInfo.orgId = userInfo.orgIds[1]
       }
     }
   },
   methods: {
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         this.orgTree = res.payload
         this.orgTree.forEach(i => {
@@ -111,7 +111,7 @@ export default {
         }
       })
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', this.file)
       this.$http.postForm('', formdata).then(res => {
@@ -125,7 +125,7 @@ export default {
      * @descripttion: 获取信息
      * @return: 信息
      */
-    geteventRoomPreview() {
+    geteventRoomPreview () {
       this.$http
         .get('/activity/room/get?activityRoomId=' + this.$route.query.aid)
         .then(res => {
@@ -149,7 +149,7 @@ export default {
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let form = JSON.parse(JSON.stringify(this.formInfo))

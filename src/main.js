@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-02-15 17:21:36
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:10:22
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -56,8 +56,6 @@ Vue.use(ElementUI)
 Vue.prototype.$http = axios
 // 大屏
 // Vue.prototype.$screen = 'https://chongqing.hengshan.hk952183.com:8078/'
-// 添加错误日志处理
-// 准备添加ts
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   NProgress.start()

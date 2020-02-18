@@ -2,8 +2,8 @@
  * @Descripttion: 新增 、 编辑菜品
  * @Author:
  * @Date: 2019-11-11 15:21:28
- * @LastEditors:
- * @LastEditTime: 2019-12-21 23:24:55
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:41:28
  -->
 <template>
   <div id="edit-dish">
@@ -152,6 +152,10 @@ export default {
     }
   },
   created () {
+    let userInfo = this.$store.state.userInfo
+    if (Array.isArray(userInfo.orgIds) && userInfo.orgIds.length > 0) {
+      this.formInfo.orgId = userInfo.orgIds[1]
+    }
     this.getOrgList()
   },
   methods: {

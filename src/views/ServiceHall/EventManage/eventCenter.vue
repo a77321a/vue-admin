@@ -2,166 +2,184 @@
  * @Descripttion:活动中心
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime : 2019-12-19 15:55:32
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-18 13:27:05
  -->
 <template>
   <div class="event-center">
     <!-- 筛选 -->
-    <el-form inline ref="form" label-width="80px" size="small">
-      <el-form-item label="活动状态">
-        <el-select
-          style="width:200px"
-          clearable
-          v-model="searchData.activityStatus"
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="(item, index) in $store.state.config.activityStatus"
-            :key="index"
-            :label="item.dictionaryLabel"
-            :value="item.dictionaryValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="活动时间">
-        <el-date-picker
-          v-model="searchData.rangeTime"
-          style="width:360px;"
-          type="datetimerange"
-          range-separator="至"
-          @change="handlTime"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="活动名称">
-        <el-input style="width:200px" placeholder="请输入活动名称关键字" v-model="searchData.activityName"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          size="small"
-          type="primary"
-          @click="searchRefresh = !searchRefresh"
-          icon="el-icon-search"
-        >搜索</el-button>
-        <el-button
-          @click="
+    <el-row class="row-span" :gutter="40">
+      <OrgTreeList @filterOrg="filterOrg" @toggleChange="toggleChange"></OrgTreeList>
+      <el-col class="col-span" :span="toggleWidth">
+        <div class="grid-content bg-purple">
+          <!-- 筛选 -->
+          <el-form inline ref="form" label-width="80px" size="small">
+            <el-form-item label="活动状态">
+              <el-select
+                style="width:200px"
+                clearable
+                v-model="searchData.activityStatus"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="(item, index) in $store.state.config.activityStatus"
+                  :key="index"
+                  :label="item.dictionaryLabel"
+                  :value="item.dictionaryValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="活动时间">
+              <el-date-picker
+                v-model="searchData.rangeTime"
+                style="width:360px;"
+                type="datetimerange"
+                range-separator="至"
+                @change="handlTime"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd HH:mm:ss"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="活动名称">
+              <el-input
+                style="width:200px"
+                placeholder="请输入活动名称关键字"
+                v-model="searchData.activityName"
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                size="small"
+                type="primary"
+                @click="searchRefresh = !searchRefresh"
+                icon="el-icon-search"
+              >搜索</el-button>
+              <el-button
+                @click="
             searchData = {};
             searchRefresh = !searchRefresh;
           "
-          size="small"
-        >重置</el-button>
-      </el-form-item>
-    </el-form>
-    <el-button
-      @click="$router.push({ name: 'eventCenterAdd' })"
-      style="margin-bottom:15px"
-      size="small"
-      type="primary"
-      v-has="'eventCenterAdd'"
-    >新增活动</el-button>
-    <!-- 列表 -->
-    <Table
-      @commitSelection="commitSelection"
-      :searchRefresh="searchRefresh"
-      :rowsForamtter="rowsForamtter"
-      :searchObj="searchData"
-      :selection="true"
-      :columns="tableColumns"
-      api="/activity/pageSearch"
-      method="post"
-    >
-      <template slot-scope="{ row }" slot="activityName">
-        <div class="flex-t-l">
-          <img
-            class="course-avatar"
-            :src="
+                size="small"
+              >重置</el-button>
+            </el-form-item>
+          </el-form>
+          <el-button
+            @click="$router.push({ name: 'eventCenterAdd' })"
+            style="margin-bottom:15px"
+            size="small"
+            type="primary"
+            v-has="'eventCenterAdd'"
+          >新增活动</el-button>
+          <!-- 列表 -->
+          <Table
+            @commitSelection="commitSelection"
+            :searchRefresh="searchRefresh"
+            :rowsForamtter="rowsForamtter"
+            :searchObj="searchData"
+            :selection="true"
+            :columns="tableColumns"
+            api="/activity/pageSearch"
+            method="post"
+          >
+            <template slot-scope="{ row }" slot="activityName">
+              <div class="flex-t-l">
+                <img
+                  class="course-avatar"
+                  :src="
               $store.state.config.systemConfig[0].dictionaryValue +
                 row.activityIndexPic
             "
-            alt
-          />
-          <div class="flex-column-t">
-            <span class="f-title">{{ row.activityName }}</span>
-          </div>
-        </div>
-      </template>
-      <template
-        slot="activityStatus"
-        slot-scope="{ row }"
-      >{{$func.transLabel($store.state.config.activityStatus,row.activityStatus)}}</template>
-      <template
-        slot="joinUser"
-        slot-scope="{ row }"
-      >{{ row.actualCustomerNum }}/{{ row.customerNum }}</template>
-      <template slot-scope="{ row }" slot="handleColumn">
-        <el-button
-          @click="
+                  alt
+                />
+                <div class="flex-column-t">
+                  <span class="f-title">{{ row.activityName }}</span>
+                </div>
+              </div>
+            </template>
+            <template
+              slot="activityStatus"
+              slot-scope="{ row }"
+            >{{$func.transLabel($store.state.config.activityStatus,row.activityStatus)}}</template>
+            <template
+              slot="joinUser"
+              slot-scope="{ row }"
+            >{{ row.actualCustomerNum }}/{{ row.customerNum }}</template>
+            <template slot-scope="{ row }" slot="handleColumn">
+              <el-button
+                @click="
             $router.push({ name: 'eventCenterPreview', query: { aid: row.activityId } })
           "
-          v-has="'eventCenterPreview'"
-          type="text"
-          size="small"
-        >查看</el-button>
-        <el-button
-          @click="
+                v-has="'eventCenterPreview'"
+                type="text"
+                size="small"
+              >查看</el-button>
+              <el-button
+                @click="
             $router.push({ name: 'eventCenterEdit', query: { aid: row.activityId } })
           "
-          v-if="row.activityStatus < 2"
-          v-has="'eventCenterEdit'"
-          type="text"
-          size="small"
-        >编辑</el-button>
-        <el-button
-          v-if="row.activityStatus == 1"
-          @click="handleCloseActivity(row)"
-          type="text"
-          size="small"
-          v-has="'eventCenterClose'"
-        >结束活动</el-button>
-        <el-button
-          @click="
+                v-if="row.activityStatus < 2"
+                v-has="'eventCenterEdit'"
+                type="text"
+                size="small"
+              >编辑</el-button>
+              <el-button
+                v-if="row.activityStatus == 1"
+                @click="handleCloseActivity(row)"
+                type="text"
+                size="small"
+                v-has="'eventCenterClose'"
+              >结束活动</el-button>
+              <el-button
+                @click="
             $router.push({
               name: 'eventCenterSummary',
               query: { aid: row.activityId }
             })
           "
-          v-has="'eventCenterSummary'"
-          v-if="row.activityStatus > 1"
-          type="text"
-          size="small"
-        >总结活动</el-button>
-        <el-button
-          v-has="'eventCenterDelete'"
-          @click="handleDelete(row)"
-          type="text"
-          size="small"
-        >删除</el-button>
-      </template>
-      <template slot="footer-left">
-        <el-button
-          :disabled="selectActivity.length == 0"
-          v-has="'eventCenterSummary'"
-          @click="handleCloseActivity(null)"
-          type="text"
-        >结束活动</el-button>
-        <el-button
-          :disabled="selectActivity.length == 0"
-          v-has="'eventCenterDelete'"
-          @click="handleDelete(null)"
-          type="text"
-        >删除</el-button>
-      </template>
-    </Table>
+                v-has="'eventCenterSummary'"
+                v-if="row.activityStatus > 1"
+                type="text"
+                size="small"
+              >总结活动</el-button>
+              <el-button
+                v-has="'eventCenterDelete'"
+                @click="handleDelete(row)"
+                type="text"
+                size="small"
+              >删除</el-button>
+            </template>
+            <template slot="footer-left">
+              <el-button
+                :disabled="selectActivity.length == 0"
+                v-has="'eventCenterSummary'"
+                @click="handleCloseActivity(null)"
+                type="text"
+              >结束活动</el-button>
+              <el-button
+                :disabled="selectActivity.length == 0"
+                v-has="'eventCenterDelete'"
+                @click="handleDelete(null)"
+                type="text"
+              >删除</el-button>
+            </template>
+          </Table>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
+import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
+
 export default {
-  name: 'userManage',
+  name: 'eventCenter',
+  components: {
+    OrgTreeList
+  },
   data () {
     return {
+      toggleWidth: 19,
       searchRefresh: true,
       searchData: {},
       tableColumns: [
@@ -199,12 +217,6 @@ export default {
           minWidth: 220
         }
       ],
-      userList: [],
-      limit: 10,
-      limit2: 10,
-      dialogVisible: false,
-      searchCourse: {},
-      mobile: '',
       selectActivity: []
     }
   },
@@ -212,6 +224,13 @@ export default {
     // this.$store.dispatch('getDictionaryManagement')
   },
   methods: {
+    filterOrg (val) {
+      this.searchData.orgId = val
+      this.searchRefresh = !this.searchRefresh
+    },
+    toggleChange (val) {
+      this.toggleWidth = val
+    },
     rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
