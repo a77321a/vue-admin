@@ -171,7 +171,7 @@
 </template>
 <script>
 import OrgTreeList from '@/components/OrgTreeList/OrgTreeList'
-
+//list
 export default {
   name: 'eventCenter',
   components: {
