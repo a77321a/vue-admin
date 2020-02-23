@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-18 13:39:15
+ * @LastEditTime: 2020-02-23 11:13:02
  -->
 <template>
   <div id="edit-event">
@@ -142,7 +142,11 @@
         </el-card>
       </el-form-item>
       <el-form-item label="参加对象" prop="Object">
-        <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
+        <el-button
+          :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
+          @click="dialogServiceObject = true"
+          icon="el-icon-plus"
+        >选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
@@ -175,7 +179,11 @@
     >
       <!-- :isSelected="formInfo.serviceCustomerList" -->
 
-      <selectServiceObject :isSelected="formInfo.serviceCustomerList" @selectObject="selectObject"></selectServiceObject>
+      <selectServiceObject
+        :orgId="formInfo.orgId"
+        :isSelected="formInfo.serviceCustomerList"
+        @selectObject="selectObject"
+      ></selectServiceObject>
       <span slot="footer" class="dialog-footer">
         <el-button
           @click="
@@ -225,7 +233,7 @@ export default {
   data () {
     return {
       formInfo: {
-        orgId: [],
+        orgId: '',
         eventTime: [],
         activityRoomId: '',
         activityIndexPic: '',
@@ -276,15 +284,20 @@ export default {
       selectObjectList: []
     }
   },
+  watch: {
+    'formInfo.orgId' (val) {
+      if (val) {
+        this.getEventRoomList(val)
+        this.getProductList(val)
+      }
+    }
+  },
   created () {
-    // if (this.$route.query.aid) {
-    //   this.getActivityInfo()
-    // }
     let userInfo = this.$store.state.userInfo
     if (Array.isArray(userInfo.orgIds) && userInfo.orgIds.length > 0) {
       this.formInfo.orgId = userInfo.orgIds[1]
     }
-    this.getEventRoomList()
+    this.getEventRoomList(this.formInfo.orgId)
     this.getOrgList()
     this.getProductList()
   },
@@ -382,9 +395,9 @@ export default {
         }
       })
     },
-    getEventRoomList () {
+    getEventRoomList (id) {
       this.$http
-        .post('/activity/room/pageSearch', { pageSize: 99999 })
+        .post('/activity/room/pageSearch', { pageSize: 99999, orgId: id })
         .then(res => {
           this.eventRoomList = res.payload.records
         })
@@ -403,21 +416,6 @@ export default {
               .serviceCustomerList
               ? this.formInfo.serviceCustomerList
               : []
-            // if (Array.isArray(this.orgTree)) {
-            //   this.orgTree.forEach(i => {
-            //     if (Array.isArray(i.children)) {
-            //       i.children.forEach(j => {
-            //         if (j.orgId === this.formInfo.orgId) {
-            //           this.$set(this.formInfo, 'orgId', [
-            //             j.parentOrgId,
-            //             j.orgId
-            //           ])
-            //         }
-            //       })
-            //     }
-            //   })
-            // }
-            console.log(this.formInfo.orgId)
             this.$set(this.formInfo, 'eventTime', [
               res.payload.startTime,
               res.payload.endTime

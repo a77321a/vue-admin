@@ -2,8 +2,8 @@
  * @Descripttion:主页
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-21 13:56:37
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-23 12:27:54
  -->
 <template>
   <div class="Home">
@@ -255,7 +255,10 @@
       <el-col :span="14">
         <el-row :gutter="20" type="flex" style="margin-bottom:20px;" justify="space-between">
           <el-col :span="8">
-            <el-card :body-style="{ padding: '45px 0px' }">
+            <el-card
+              @click.native="$router.push({name:'agencyManage',query:{property:'serviceTypeList',value:'xfy,rjzlzx,jjyl'}})"
+              :body-style="{ padding: '45px 0px',cursor:'pointer' }"
+            >
               <el-row type="flex" class="row-bg" justify="center">
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
@@ -276,7 +279,12 @@
           </el-col>
           <el-col :span="8">
             <el-card :body-style="{ padding: '45px 0px' }">
-              <el-row type="flex" class="row-bg" justify="center">
+              <el-row
+                @click.native="$router.push({name:'agencyManage',query:{property:'orgType',value:'manage'}})"
+                type="flex"
+                class="row-bg"
+                justify="center"
+              >
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
                 </el-col>
@@ -296,7 +304,12 @@
           </el-col>
           <el-col :span="8">
             <el-card :body-style="{ padding: '45px 0px' }">
-              <el-row type="flex" class="row-bg" justify="center">
+              <el-row
+                @click.native="$router.push({name:'agencyManage',query:{property:'serviceTypeList',value:'xfy'}})"
+                type="flex"
+                class="row-bg"
+                justify="center"
+              >
                 <el-col style="font-size:30px;" :span="6">
                   <i style="margin-top:5px" class="el-icon-office-building"></i>
                 </el-col>
@@ -458,7 +471,7 @@ export default {
   components: {
     countTo
   },
-  data() {
+  data () {
     return {
       data: {
         serviceRecordNumInfo: {},
@@ -475,20 +488,20 @@ export default {
       eventList: []
     }
   },
-  created() {
+  created () {
     this.getData()
     this.getEventList()
     console.log(typeof (this.$store.state.dialogHeight - 200))
   },
   methods: {
-    getData() {
+    getData () {
       this.$http.get('/stats/home').then(res => {
         if (res.code === SUCCESS) {
           this.data = res.payload
         }
       })
     },
-    getEventList() {
+    getEventList () {
       this.$http.get('/activity/thisWeek').then(res => {
         if (res.code === SUCCESS) {
           this.eventList = res.payload

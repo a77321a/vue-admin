@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author:
  * @Date: 2019-11-16 18:41:35
- * @LastEditors:
- * @LastEditTime: 2019-12-10 22:37:44
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-23 12:10:43
  -->
 <template>
   <el-col
@@ -31,7 +31,7 @@
             class="el-icon-error closeFilter"
           ></i>
         </div>
-        <div>
+        <div class="tree-list">
           <el-collapse value="0">
             <el-collapse-item
               :key="index"
@@ -145,6 +145,10 @@ export default {
   transform: translateX(-100%);
 }
 .moveL-leave-to {
+}
+.tree-list {
+  max-height: calc(100vh - 300px);
+  overflow-y: scroll;
 }
 #org-tree-list-aside {
   position: relative;

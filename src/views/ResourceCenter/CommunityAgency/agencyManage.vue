@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-18 13:31:19
+ * @LastEditTime: 2020-02-23 12:30:40
  -->
 <template>
   <div class="angecy-manage">
@@ -136,7 +136,16 @@ export default {
   data () {
     return {
       searchRefresh: true,
-      searchData: {},
+      searchData: {
+        serviceTypeList:
+          this.$route.query.property == 'serviceTypeList'
+            ? this.$route.query.value.split(',')
+            : undefined,
+        orgType:
+          this.$route.query.property == 'orgType'
+            ? this.$route.query.value
+            : undefined
+      },
       tableColumns: [
         { label: '机构名称', prop: 'orgName', minWidth: 250 },
         { label: '服务范围', prop: 'communityRegionName', minWidth: 300 },

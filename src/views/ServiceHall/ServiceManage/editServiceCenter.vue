@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-18 13:42:17
+ * @LastEditTime: 2020-02-23 11:30:04
  -->
 <template>
   <div id="editServiceCenter">
@@ -85,6 +85,41 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="服务类型" prop="pensionServiceTypeId">
+        <el-cascader
+          clearable
+          :props="{
+            value: 'pensionServiceTypeId',
+            label: 'pensionServiceTypeName',
+            emitPath: false
+          }"
+          :options="serviceTypeList"
+          v-model="formInfo.pensionServiceTypeId"
+        ></el-cascader>
+      </el-form-item>
+      <el-form-item label="服务人员" prop="orgServiceProviderList">
+        <el-button
+          :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
+          @click="dialogServiceUser = true"
+          icon="el-icon-plus"
+        >选择人员</el-button>
+        <el-card style="margin-top:10px;" shadow="never">
+          <el-tag
+            style="margin-right:10px"
+            @close="formInfo.orgServiceProviderList.splice(index, 1)"
+            v-for="(item, index) in formInfo.orgServiceProviderList"
+            :key="index"
+            closable
+          >
+            <el-avatar
+              :size="22"
+              style="vertical-align: middle;margin-right:5px"
+              :src="$store.state.config.systemConfig[0].dictionaryValue+item.indexPic"
+            ></el-avatar>
+            <span style="vertical-align: middle;">{{ item.orgServiceProviderName }}</span>
+          </el-tag>
+        </el-card>
+      </el-form-item>
       <el-form-item label="服务对象" prop="serviceCustomerList">
         <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
@@ -127,6 +162,28 @@
     </el-form>
     <el-dialog
       width="60%"
+      destroy-on-close
+      lock-scroll
+      title="选择服务人员"
+      :visible.sync="dialogServiceUser"
+    >
+      <selectServiceUser
+        :isSelected="formInfo.orgServiceProviderList"
+        @selectUser="selectUser"
+        :orgId="formInfo.orgId"
+      ></selectServiceUser>
+      <span slot="footer" class="dialog-footer">
+        <el-button
+          @click="
+            dialogServiceUser = false;
+            selectUserList = [];
+          "
+        >取 消</el-button>
+        <el-button type="primary" @click="handleSaveSelectUser">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      width="60%"
       lock-scroll
       destroy-on-close
       title="选择服务对象"
@@ -150,10 +207,11 @@
 </template>
 <script>
 import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue'
+import selectServiceUser from '../../../components/SelectTable/selectServiceUser.vue'
 
 export default {
   name: 'editServiceCenter',
-  components: { selectServiceObject },
+  components: { selectServiceObject, selectServiceUser },
   data () {
     return {
       formInfo: {
@@ -167,8 +225,13 @@ export default {
         serviceCustomerList: [],
         serviceSummary: '',
         startTime: '',
-        serviceTime: []
+        serviceTime: [],
+        orgServiceProviderList: [],
+        orgServiceProviderIdList: []
       },
+      serviceTypeList: [],
+      selectUserList: [],
+      dialogServiceUser: false,
       dialogServiceObject: false,
       rules: {
         serviceRecordName: [
@@ -196,6 +259,16 @@ export default {
         ],
         serviceTime: [
           { required: true, message: '请选择服务时间', trigger: 'change' }
+        ],
+        pensionServiceTypeId: [
+          { required: true, message: '请选择产品服务类型', trigger: 'change' }
+        ],
+        orgServiceProviderList: [
+          {
+            required: true,
+            message: '请选择服务人员',
+            trigger: 'change'
+          }
         ]
       },
       orgList: [],
@@ -214,8 +287,63 @@ export default {
     }
     this.getEventRoomList()
     this.getOrgList()
+    this.getServiceType()
   },
   methods: {
+    /**
+     * @descripttion: 选择服务人员
+     * @param {type}
+     * @return:
+     */
+    selectUser (data) {
+      this.selectUserList = data
+    },
+    handleSaveSelectUser () {
+      if (this.selectUserList.length === 0) {
+        this.$message.error('请至少选择一个服务人员')
+        return false
+      }
+      this.formInfo.orgServiceProviderList = this.formInfo.orgServiceProviderList.concat(
+        this.selectUserList
+      )
+      let obj = {}
+      this.formInfo.orgServiceProviderList = this.formInfo.orgServiceProviderList.reduce(
+        (cur, next) => {
+          obj[next.orgServiceProviderId]
+            ? ''
+            : (obj[next.orgServiceProviderId] = true && cur.push(next))
+          return cur
+        },
+        []
+      )
+      this.selectUserList = []
+      this.dialogServiceUser = false
+    },
+    getServiceType () {
+      this.$http.post('/pension/service/type/tree', {}).then(res => {
+        if (res.code === SUCCESS) {
+          this.serviceTypeList = res.payload
+          this.serviceTypeList.forEach(i => {
+            // i第一层
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                if (j.children.length > 0) {
+                  j.children.forEach(n => {
+                    delete n.children
+                  })
+                }
+              })
+            }
+          })
+        }
+      })
+      // this.$http
+      //   .post('/pension/service/type/pageSerach', { pageSize: MAXSIZE })
+      //   .then(res => {
+      //     this.serviceTypeList = res.payload.records
+
+      //   })
+    },
     /**
      * @descripttion: 选择服务对象
      * @param {type}
@@ -311,6 +439,9 @@ export default {
         this.formInfo.serviceCustomerList.forEach(i => {
           arr.push(i.serviceCustomerId)
         })
+        this.formInfo.orgServiceProviderIdList = this.formInfo.orgServiceProviderList.map(
+          i => i.orgServiceProviderId
+        )
         this.formInfo.serviceCustomerIdList = arr
         this.$http.post(url, this.formInfo).then(res => {
           if (res.code === SUCCESS) {

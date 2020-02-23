@@ -2,8 +2,8 @@
  * @Descripttion:新增、编辑养老产品
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-02-13 11:57:28
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-23 11:34:05
  -->
 <template>
   <div id="edit-event">
@@ -17,6 +17,14 @@
       label-width="110px"
       size="medium"
     >
+      <el-form-item label="所属机构" prop="orgId">
+        <el-cascader
+          clearable
+          :props="{ value: 'orgId', label: 'orgName', emitPath: false }"
+          :options="orgTree"
+          v-model="formInfo.orgId"
+        ></el-cascader>
+      </el-form-item>
       <el-form-item label="姓名" prop="serviceCustomerName">
         <el-input
           placeholder="请输入服务对象姓名，最多不超过10个字"
@@ -28,7 +36,7 @@
       <el-form-item label="手机号" prop="mobile">
         <el-input type="text" :maxlength="11" placeholder="请输入服务对象手机号" v-model="formInfo.mobile"></el-input>
       </el-form-item>
-      <el-form-item label="头像" prop="avatar">
+      <el-form-item label="头像">
         <div style="display:flex;align-items:center;">
           <div v-show="formInfo.avatar" class="avatars">
             <img
@@ -50,7 +58,7 @@
           </el-upload>
         </div>
       </el-form-item>
-      <el-form-item label="照片" prop="serviceCustomerPicList">
+      <el-form-item label="照片">
         <div>
           <div
             style="position:relative"
@@ -323,7 +331,7 @@ export default {
     selectServiceObject,
     selectServiceUser
   },
-  data () {
+  data() {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -397,8 +405,11 @@ export default {
         pensionModeList: [],
         addressList: [],
         emergencySelectList: [],
-        emergencyManualList: []
+        emergencyManualList: [],
+        orgId: ''
       },
+      orgTree: [],
+
       rules: {
         addressList: [
           { required: true, message: '请选择服务范围', trigger: 'change' }
@@ -418,6 +429,9 @@ export default {
         ],
         avatar: [
           { required: true, message: '请上传服务对象头像', trigger: 'change' }
+        ],
+        orgId: [
+          { required: true, message: '请选择所属机构', trigger: 'change' }
         ],
         serviceCustomerPicList: [
           {
@@ -492,20 +506,35 @@ export default {
       clearList: false
     }
   },
-  created () {
+  created() {
     if (this.$route.query.sid) {
       this.getServiceUserInfo()
     }
     this.getTree()
+    this.getOrgList()
   },
   methods: {
-    handleSaveForm () {
+    getOrgList() {
+      this.$http.post('/org/tree').then(res => {
+        if (res.code === SUCCESS) {
+          this.orgTree = res.payload
+          this.orgTree.forEach(i => {
+            if (i.children.length > 0) {
+              i.children.forEach(j => {
+                delete j.children
+              })
+            }
+          })
+        }
+      })
+    },
+    handleSaveForm() {
       this.formInfo.emergencyManualList.push(this.contractUser)
       console.log(this.formInfo.emergencyManualList)
       this.contractUser = {}
       this.dialogFormVisible = false
     },
-    handleClick (tab, event) {
+    handleClick(tab, event) {
       this.clearList = !this.clearList
       this.selectObjectList = []
     },
@@ -514,10 +543,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject (data) {
+    selectObject(data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject () {
+    handleSaveSelectObject() {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
@@ -530,7 +559,7 @@ export default {
       this.selectObjectList = []
       this.dialogServiceObject = false
     },
-    uploadImg (file) {
+    uploadImg(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -540,10 +569,10 @@ export default {
       })
       return false
     },
-    handleRemove (index) {
+    handleRemove(index) {
       this.formInfo.serviceCustomerPicList.splice(index, 1)
     },
-    uploadImgList (file) {
+    uploadImgList(file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -563,7 +592,7 @@ export default {
      * @descripttion: 获取服务对象信息
      * @return: 信息
      */
-    getServiceUserInfo () {
+    getServiceUserInfo() {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {
@@ -585,7 +614,7 @@ export default {
           }
         })
     },
-    getTree () {
+    getTree() {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -598,7 +627,7 @@ export default {
       })
     },
     // 保存按钮
-    handleSave () {
+    handleSave() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let arr = []
@@ -639,7 +668,8 @@ export default {
             pensionServiceList: this.formInfo.pensionServiceList,
             purchaseTypeList: this.formInfo.purchaseTypeList,
             serviceCustomerName: this.formInfo.serviceCustomerName,
-            serviceCustomerPicList: this.formInfo.serviceCustomerPicList
+            serviceCustomerPicList: this.formInfo.serviceCustomerPicList,
+            orgId: this.formInfo.orgId
           })
           .then(res => {
             if (res.code === SUCCESS) {
