@@ -78,7 +78,7 @@
 <script>
 export default {
   name: 'ServicePerson',
-  data() {
+  data () {
     return {
       searchRefresh: true,
       searchData: { activityId: this.activityId },
@@ -92,16 +92,16 @@ export default {
   },
   props: ['activityId'],
 
-  created() {},
+  created () {},
   methods: {
-    exportExcel() {
+    exportExcel () {
       window.open(
-        `${ctx}/activity/provider/export?activityId=${this.searchData
+        `${ctx}activity/provider/export?activityId=${this.searchData
           .activityId || ''}&orgServiceProviderName=${this.searchData
           .orgServiceProviderName || ''}&token=${this.$store.state.token}`
       )
     },
-    rowsForamtter(rows) {
+    rowsForamtter (rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })

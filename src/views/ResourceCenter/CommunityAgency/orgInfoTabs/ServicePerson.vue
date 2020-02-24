@@ -64,7 +64,7 @@ export default {
   methods: {
     exportExcel () {
       window.open(
-        `${ctx}/activity/provider/export?orgId=${this.searchData.orgId ||
+        `${ctx}activity/provider/export?orgId=${this.searchData.orgId ||
           ''}&orgServiceProviderName=${this.searchData.orgServiceProviderName ||
           ''}&token=${this.$store.state.token}`
       )

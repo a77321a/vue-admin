@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-23 11:56:03
+ * @LastEditTime: 2020-02-24 15:38:24
  -->
 <template>
   <div class="serviceObject">
@@ -184,7 +184,7 @@ export default {
   components: {
     OrgTreeList
   },
-  data () {
+  data() {
     const validBlood = (rules, value, callback) => {
       if (!this.formInfo.highBloodPressure || !this.formInfo.lowBloodPressure) {
         callback(new Error('请输入血压信息'))
@@ -257,18 +257,18 @@ export default {
       spaceTree: []
     }
   },
-  created () {
+  created() {
     this.getTree()
   },
   methods: {
-    filterOrg (val) {
+    filterOrg(val) {
       this.searchData.orgId = val
       this.searchRefresh = !this.searchRefresh
     },
-    toggleChange (val) {
+    toggleChange(val) {
       this.toggleWidth = val
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(i => {
         console.log(JSON.parse(i.emergencySelect))
         if (JSON.parse(i.emergencySelect).length == 0) {
@@ -277,9 +277,9 @@ export default {
         }
       })
     },
-    exportExcel () {
+    exportExcel() {
       window.open(
-        `${ctx}/service/customer/export?serviceCustomerName=${this.searchData
+        `${ctx}service/customer/export?serviceCustomerName=${this.searchData
           .serviceCustomerName || ''}&mobile=${this.searchData.mobile ||
           ''}&cityId=${this.searchData.cityId || ''}&districtId=${this
           .searchData.districtId || ''}&streetId=${this.searchData.streetId ||
@@ -288,7 +288,7 @@ export default {
         }`
       )
     },
-    changeArea (area) {
+    changeArea(area) {
       if (area) {
         this.searchData.cityId = area[0]
         this.searchData.districtId = area[1]
@@ -299,7 +299,7 @@ export default {
         this.searchData.communityId = ''
       }
     },
-    getTree () {
+    getTree() {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -311,7 +311,7 @@ export default {
         }
       })
     },
-    handleSaveForm () {
+    handleSaveForm() {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         this.$http
@@ -332,14 +332,14 @@ export default {
           })
       })
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.serviceCustomerId)
       })
       this.selectServiceObject = arr
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.serviceCustomerId] : this.selectServiceObject
       this.$confirm('删除后，该服务对象将被移除，是否确认？', '提示', {
         confirmButtonText: '确定',

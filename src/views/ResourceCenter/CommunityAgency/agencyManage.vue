@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-23 12:30:40
+ * @LastEditTime: 2020-02-24 15:38:01
  -->
 <template>
   <div class="angecy-manage">
@@ -184,7 +184,7 @@ export default {
   methods: {
     exportExcel () {
       window.open(
-        `${ctx}/org/export?orgName=${this.searchData.orgName ||
+        `${ctx}org/export?orgName=${this.searchData.orgName ||
           ''}&orgType=${this.searchData.orgType || ''}&serviceType=${this
           .searchData.serviceType || ''}&status=${this.searchData.status ||
           ''}&token=${this.$store.state.token}`

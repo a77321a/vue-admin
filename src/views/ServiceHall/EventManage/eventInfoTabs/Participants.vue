@@ -2,8 +2,8 @@
  * @Descripttion:参与人员
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-07 14:58:46
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-24 15:38:15
  -->
 <template>
   <div class="Participants">
@@ -99,7 +99,7 @@
 <script>
 export default {
   name: 'Participants',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: { activityId: this.activityId },
@@ -121,22 +121,22 @@ export default {
     }
   },
   props: ['activityId', 'actualCustomerNum', 'customerNum'],
-  created () {},
+  created() {},
   methods: {
-    exportExcel () {
+    exportExcel() {
       window.open(
-        `${ctx}/activity/customer/export?activityId=${this.searchData
+        `${ctx}activity/customer/export?activityId=${this.searchData
           .activityId || ''}&customerCategory=${this.searchData
           .customerCategory || ''}&serviceCustomerName=${this.searchData
           .serviceCustomerName || ''}&token=${this.$store.state.token}`
       )
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })
     },
-    handlTime (date) {
+    handlTime(date) {
       if (date) {
         this.searchData.startTime = date[0]
         this.searchData.endTime = date[1]
@@ -145,14 +145,14 @@ export default {
         this.searchData.endTime = ''
       }
     },
-    commitSelection (data) {
+    commitSelection(data) {
       let arr = []
       data.forEach(i => {
         arr.push(i.activityId)
       })
       this.selectActivity = arr
     },
-    handleDelete (row) {
+    handleDelete(row) {
       let id = row ? [row.activityId] : this.selectActivity
       this.$confirm('删除后，该数据将数据将无法恢复，是否确认？', '提示', {
         confirmButtonText: '确定',
@@ -169,7 +169,7 @@ export default {
         })
         .catch(() => {})
     },
-    handleCloseActivity (row) {
+    handleCloseActivity(row) {
       let id = row ? row.activityId : this.selectActivity.join(',')
       let content = '是否要提前结束活动？'
       this.$confirm(content, '提示', {
