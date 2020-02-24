@@ -122,18 +122,6 @@ export default {
       } else {
         return true
       }
-      // for (let i in this.isSelected) {
-      //   console.log(this.isSelected[i])
-
-      //   if (
-      //     this.isSelected[i].orgServiceProviderId &&
-      //     this.isSelected[i].orgServiceProviderId === row.orgServiceProviderId
-      //   ) {
-      //     return 0
-      //   } else {
-      //     return 1
-      //   }
-      // }
     },
     commitSelection (data) {
       this.selectData = data

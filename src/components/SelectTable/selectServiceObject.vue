@@ -2,8 +2,8 @@
  * @Descripttion:选择服务对象
  * @Author:
  * @Date: 2019-11-11 10:37:53
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 14:08:43
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-24 10:54:13
  -->
 <template>
   <div id="select-service-object">
@@ -94,8 +94,8 @@ export default {
   },
   methods: {
     selectable (row, index) {
-      if (this.isSelected && this.isSelected.length === 0) {
-        return 1
+      if (this.isSelected.length === 0) {
+        return true
       }
       if (
         this.isSelected.some(el => {
@@ -106,16 +106,6 @@ export default {
       } else {
         return true
       }
-      // for (let i in this.isSelected) {
-      //   if (
-      //     this.isSelected[i].serviceCustomerId &&
-      //     this.isSelected[i].serviceCustomerId === row.serviceCustomerId
-      //   ) {
-      //     return 0
-      //   } else {
-      //     return 1
-      //   }
-      // }
     },
     commitSelection (data) {
       this.$emit('selectObject', data)

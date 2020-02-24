@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-23 11:30:04
+ * @LastEditTime: 2020-02-24 10:53:18
  -->
 <template>
   <div id="editServiceCenter">
@@ -189,10 +189,7 @@
       title="选择服务对象"
       :visible.sync="dialogServiceObject"
     >
-      <selectServiceObject
-        :isSelected="formInfo.actualServiceCustomerList"
-        @selectObject="selectObject"
-      ></selectServiceObject>
+      <selectServiceObject :isSelected="formInfo.serviceCustomerList" @selectObject="selectObject"></selectServiceObject>
       <span slot="footer" class="dialog-footer">
         <el-button
           @click="
@@ -359,6 +356,16 @@ export default {
       }
       this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.concat(
         this.selectObjectList
+      )
+      let obj = {}
+      this.formInfo.serviceCustomerList = this.formInfo.serviceCustomerList.reduce(
+        (cur, next) => {
+          obj[next.serviceCustomerId]
+            ? ''
+            : (obj[next.serviceCustomerId] = true && cur.push(next))
+          return cur
+        },
+        []
       )
       this.selectObjectList = []
       this.dialogServiceObject = false
