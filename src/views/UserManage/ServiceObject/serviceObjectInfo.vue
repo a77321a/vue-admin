@@ -2,8 +2,8 @@
  * @Descripttion: 活动详情
  * @Author:
  * @Date: 2019-11-07 19:28:01
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-02-13 12:00:31
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-24 11:34:20
  -->
 <template>
   <div id="service-object-info">
@@ -54,8 +54,9 @@
           <el-row :gutter="10" style="margin-bottom:20px">
             <el-col :span="6">姓名：{{serviceObjectInfo.serviceCustomerName}}</el-col>
             <el-col :span="6">手机号：{{serviceObjectInfo.mobile}}</el-col>
-            <el-col :span="6">性别：{{serviceObjectInfo.gender == 0 ?'女':'男'}}</el-col>
-            <el-col :span="6">民族：{{serviceObjectInfo.ethnic }}</el-col>
+            <el-col :span="3">性别：{{serviceObjectInfo.gender == 0 ?'女':'男'}}</el-col>
+            <el-col :span="3">年龄：{{serviceObjectInfo.age }}</el-col>
+            <el-col :span="3">民族：{{serviceObjectInfo.ethnic }}</el-col>
           </el-row>
           <el-row style="margin-bottom:20px" :gutter="10">
             <el-col :span="6">婚姻状态：{{maritalStatus[serviceObjectInfo.maritalStatus]}}</el-col>
@@ -77,6 +78,7 @@
                 ></el-divider>
               </span>
             </el-col>
+            <el-col :span="6">所属机构：{{serviceObjectInfo.orgName}}</el-col>
             <el-col
               :span="6"
             >所在地域：{{serviceObjectInfo.cityName}}{{serviceObjectInfo.districtName}}{{serviceObjectInfo.communityName}}{{serviceObjectInfo.streetName}}</el-col>
