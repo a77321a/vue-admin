@@ -41,7 +41,7 @@
             action="apii/public/img"
             :show-file-list="false"
             :before-upload="uploadImg"
-            accept="image/*"
+            accept="image/gif,image/jpeg,image/jpg,image/bmp"
           >
             <el-button
               v-if="formInfo.serviceRecordPicList.length < 9"

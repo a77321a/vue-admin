@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-23 11:13:02
+ * @LastEditTime: 2020-02-25 11:21:24
  -->
 <template>
   <div id="edit-event">
@@ -46,7 +46,7 @@
             action="apii/public/img"
             :show-file-list="false"
             :before-upload="uploadImg"
-            accept="image/*"
+            accept="image/gif,image/jpeg,image/jpg,image/bmp"
           >
             <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -299,7 +299,7 @@ export default {
     }
     this.getEventRoomList(this.formInfo.orgId)
     this.getOrgList()
-    this.getProductList()
+    this.getProductList(this.formInfo.orgId)
   },
   methods: {
     handleTime (date) {
@@ -368,11 +368,11 @@ export default {
       this.selectUserList = []
       this.dialogServiceUser = false
     },
-    getProductList () {
+    getProductList (id) {
       this.$http
         .post('/org/service/product/pageSearch', {
           pageSize: MAXSIZE,
-          orgId: this.formInfo.orgId[this.formInfo.orgId.length - 1]
+          orgId: id
         })
         .then(res => {
           this.productList = res.payload.records

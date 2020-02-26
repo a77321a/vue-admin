@@ -2,8 +2,8 @@
  * @Descripttion:个人信息
  * @Author: 辛顺宁
  * @Date: 2019-08-13 17:09:55
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-12 21:24:54
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-25 11:24:30
  -->
 <template>
   <div id="account-info">
@@ -16,7 +16,7 @@
             style="float:right;margin-right:20px;margin-top:5px"
             :show-file-list="false"
             :before-upload="uploadImg"
-            accept="image/*"
+            accept="image/gif, image/jpeg, image/jpg, image/bmp"
           >
             <el-button type="text">修改</el-button>
           </el-upload>
@@ -42,15 +42,6 @@
             style="vertical-align: middle;"
             :src="$store.state.config.systemConfig[0].dictionaryValue+userInfo.inner.indexPic"
           ></el-avatar>
-          <!-- <el-upload
-            action="apii/public/img"
-            style="float:right;margin-right:20px;margin-top:5px"
-            :show-file-list="false"
-            :before-upload="uploadImg"
-            accept="image/*"
-          >
-            <el-button type="text">修改</el-button>
-          </el-upload>-->
         </el-form-item>
         <el-form-item label="昵称">{{userInfo.inner.orgServiceProviderName}}</el-form-item>
 

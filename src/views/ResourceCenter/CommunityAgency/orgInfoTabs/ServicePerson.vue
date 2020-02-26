@@ -2,8 +2,8 @@
  * @Descripttion:服务人员
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 10:38:15
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-25 13:41:32
  -->
 <template>
   <div class="Participants">
@@ -29,9 +29,7 @@
           <span class="f-title">{{ row.orgServiceProviderName }}</span>
         </div>
       </template>
-      <!-- <template slot="orgServiceProductList" slot-scope="{ row }">{{row.sex == 1 ?'男':'男'}}</template> -->
-
-      <template slot="sex" slot-scope="{ row }">{{row.sex == 1 ?'男':'男'}}</template>
+      <template slot="sex" slot-scope="{ row }">{{row.sex == 1 ?'男':'女'}}</template>
       <template slot-scope="{ row }" slot="handleColumn">
         <el-button
           @click="$router.push({name:'serviceUserDetail',query:{uid:row.orgServiceProviderId}})"

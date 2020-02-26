@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-23 11:34:05
+ * @LastEditTime: 2020-02-26 10:52:20
  -->
 <template>
   <div id="edit-event">
@@ -51,7 +51,7 @@
             action="apii/public/img"
             :show-file-list="false"
             :before-upload="uploadImg"
-            accept="image/*"
+            accept="image/gif, image/jpeg, image/jpg, image/bmp"
           >
             <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -75,7 +75,7 @@
             multiple
             :show-file-list="false"
             :before-upload="uploadImgList"
-            accept="image/*"
+            accept="image/gif, image/jpeg, image/jpg, image/bmp"
           >
             <el-button
               v-if="formInfo.serviceCustomerPicList.length < 9"
@@ -101,14 +101,7 @@
           <el-option label="丧偶" :value="4"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="老人居住状况" prop="liveStatus">
-        <el-select clearable v-model="formInfo.liveStatus" style="width:220px" placeholder="请选择">
-          <el-option label="与子女同住" :value="0"></el-option>
-          <el-option label="独自居住" :value="1"></el-option>
-          <el-option label="配偶居住" :value="2"></el-option>
-          <el-option label="其他 " :value="3"></el-option>
-        </el-select>
-      </el-form-item>
+
       <el-form-item label="民族" prop="ethnic">
         <el-select clearable v-model="formInfo.ethnic" style="width:220px" placeholder="请选择">
           <el-option
@@ -145,10 +138,79 @@
       <el-form-item label="详细地址" prop="address">
         <el-input placeholder="请输入服务对象详细住址，最多不超过60个字" show-word-limit v-model="formInfo.address"></el-input>
       </el-form-item>
+      <el-form-item label="文化程度" prop="education">
+        <el-input placeholder="请输入服务对象文化程度" show-word-limit v-model="formInfo.education"></el-input>
+      </el-form-item>
+      <el-form-item label="主要经济来源" prop="incomeSource">
+        <el-select clearable v-model="formInfo.incomeSource" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.incomeSourceList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="退休" prop="isRetire">
+        <el-select clearable v-model="formInfo.isRetire" style="width:220px" placeholder="请选择">
+          <el-option label="是" :value="0"></el-option>
+          <el-option label="否" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 新增字段 -->
+      <el-form-item label="身高" prop="height">
+        <el-input placeholder="请输入服务对象身高" show-word-limit v-model="formInfo.height"></el-input>
+      </el-form-item>
+      <el-form-item label="体重" prop="weight">
+        <el-input placeholder="请输入服务对象体重" show-word-limit v-model="formInfo.weight"></el-input>
+      </el-form-item>
+      <el-form-item label="腰围" prop="waist">
+        <el-input placeholder="请输入服务对象腰围" show-word-limit v-model="formInfo.waist"></el-input>
+      </el-form-item>
+      <el-form-item label="性格" prop="isOutgoing">
+        <el-select clearable v-model="formInfo.isOutgoing" style="width:220px" placeholder="请选择">
+          <el-option label="内向" :value="0"></el-option>
+          <el-option label="外向" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="老人职业" prop="profession">
+        <el-select clearable v-model="formInfo.profession" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.professionList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 新增字段 end-->
+      <div class="title">家庭信息</div>
+      <el-form-item label="子女数" prop="childrenNum">
+        <el-input-number
+          :min="0"
+          :precision="0"
+          v-model="formInfo.childrenNum"
+          controls-position="right"
+        />
+      </el-form-item>
+      <el-form-item label="子女信息" prop="childrenList">
+        <el-button @click="addType='children';dialogFormVisible = true">添加子女</el-button>
+        <el-card style="margin-top:10px;" shadow="never">
+          <el-tag
+            style="margin-right:10px"
+            @close="formInfo.childrenList.splice(index, 1)"
+            v-for="(item, index) in formInfo.childrenList"
+            :key="index"
+            closable
+          >
+            <span style="vertical-align: middle;">{{ item.name }}</span>
+          </el-tag>
+        </el-card>
+      </el-form-item>
       <div class="title">紧急联系人</div>
       <el-form-item label="紧急联系人" prop="emergencySelectList">
         <el-button type="primary" @click="dialogServiceObject = true">选择人员</el-button>
-        <el-button @click="dialogFormVisible = true">手动添加</el-button>
+        <el-button @click="addType='no';dialogFormVisible = true">手动添加</el-button>
       </el-form-item>
       <el-form-item style="color:#666" label="已选人员">
         <el-card style="margin-top:10px;" shadow="never">
@@ -198,6 +260,483 @@
           </el-tag>
         </el-card>
       </el-form-item>
+      <div class="title">居住情况</div>
+      <el-form-item label="老人居住状况" prop="liveStatus">
+        <el-select clearable v-model="formInfo.liveStatus" style="width:220px" placeholder="请选择">
+          <el-option label="与子女同住" :value="0"></el-option>
+          <el-option label="独自居住" :value="1"></el-option>
+          <el-option label="配偶居住" :value="2"></el-option>
+          <el-option label="其他 " :value="3"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="养老方式" prop="pensionWay">
+        <el-select clearable v-model="formInfo.pensionWay" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.pensionWayList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="燃料类型" prop="fuelType">
+        <el-select clearable v-model="formInfo.fuelType" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.fuelTypeList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="饮水类型" prop="waterType">
+        <el-select clearable v-model="formInfo.waterType" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.waterTypeList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="厨房排风设施类型" prop="kitchenType">
+        <el-select clearable v-model="formInfo.kitchenType" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.kitchenTypeList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="宠物">
+        <el-select clearable v-model="formInfo.petType" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.petTypeList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <div class="title">助补</div>
+      <el-form-item label="补偿" prop="compensate">
+        <el-select clearable v-model="formInfo.compensate" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.compensateList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="政府补助" prop="governmentGrants">
+        <el-select
+          clearable
+          v-model="formInfo.governmentGrants"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.governmentGrantsList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="政府补助标准" prop="governmentGrantCondition">
+        <el-select
+          clearable
+          v-model="formInfo.governmentGrantCondition"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.governmentGrantConditionList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <div class="title">需求情况</div>
+
+      <el-form-item label="生活需求" prop="livingNeed">
+        <el-select clearable v-model="formInfo.livingNeed" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.livingNeedList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="家政需求" prop="housekeepingNeed">
+        <el-select
+          clearable
+          v-model="formInfo.housekeepingNeed"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.housekeepingNeedList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="医疗需求" prop="medicalNeed">
+        <el-select clearable v-model="formInfo.medicalNeed" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.medicalNeedList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="精神需求" prop="spiritNeed">
+        <el-select clearable v-model="formInfo.spiritNeed" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.spiritNeedList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="是否接受电话关怀精神慰问" prop="isAcceptSpiritTelephoneCare">
+        <el-select
+          clearable
+          v-model="formInfo.isAcceptSpiritTelephoneCare"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.isAcceptSpiritTelephoneCareList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="分析总结" prop="summary">
+        <el-input
+          type="textarea"
+          :rows="4"
+          maxlength="500"
+          show-word-limit
+          placeholder="请输入分析总结，最多不超过500字"
+          v-model="formInfo.summary"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="老人或及其家庭特殊情况说明" prop="specialInfo">
+        <el-input
+          type="textarea"
+          :rows="4"
+          maxlength="500"
+          show-word-limit
+          placeholder="请输入老人或及其家庭特殊情况说明：，最多不超过500字"
+          v-model="formInfo.specialInfo"
+        ></el-input>
+      </el-form-item>
+      <div class="title">病史</div>
+      <el-form-item label="血压" prop="bloodPressure">
+        <el-input placeholder="请输入服务对象血压信息" show-word-limit v-model="formInfo.bloodPressure"></el-input>
+      </el-form-item>
+      <el-form-item label="血糖" prop="bloodSugar">
+        <el-input placeholder="请输入服务对象血糖信息" show-word-limit v-model="formInfo.bloodSugar"></el-input>
+      </el-form-item>
+      <el-form-item label="遗传病史" prop="geneticHistory">
+        <el-input placeholder="请输入服务对象遗传病史信息" show-word-limit v-model="formInfo.geneticHistory"></el-input>
+      </el-form-item>
+      <el-form-item label="既往病史" prop="medicalHistory">
+        <el-input placeholder="请输入服务对象既往病史信息" show-word-limit v-model="formInfo.medicalHistory"></el-input>
+      </el-form-item>
+      <el-form-item label="药物过敏史" prop="drugAllergyHistory">
+        <el-select
+          clearable
+          v-model="formInfo.drugAllergyHistory"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.drugAllergyHistoryList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 没有 -->
+      <el-form-item label="家庭病史" prop="address">
+        <el-select clearable v-model="formInfo.spiritNeed" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.spiritNeedList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="慢性病" prop="chronicDisease">
+        <el-select
+          clearable
+          v-model="formInfo.chronicDisease"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.chronicDiseaseList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <div class="title">当前身体状态</div>
+
+      <el-form-item label="健康状况自评" prop="healthSelfAssessment">
+        <el-select
+          clearable
+          v-model="formInfo.healthSelfAssessment"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.healthSelfAssessmentList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="自理能力自评" prop="careSelfAssessment">
+        <el-select
+          clearable
+          v-model="formInfo.careSelfAssessment"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.careSelfAssessmentList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="身体状况" prop="physicalCondition">
+        <el-select
+          clearable
+          v-model="formInfo.physicalCondition"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.physicalConditionList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="心理特征" prop="psychologicalCharacteristic">
+        <el-select
+          clearable
+          v-model="formInfo.psychologicalCharacteristic"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.psychologicalCharacteristicList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="痴呆前兆" prop="dementiaPrecursor">
+        <el-select
+          clearable
+          v-model="formInfo.dementiaPrecursor"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.dementiaPrecursorList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="现存症状" prop="existingSymptom">
+        <el-select
+          clearable
+          v-model="formInfo.existingSymptom"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.existingSymptomList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <div class="title">生活习惯</div>
+      <el-form-item label="饮食习惯" prop="eatingHabit">
+        <el-select clearable v-model="formInfo.eatingHabit" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.eatingHabitList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="饮酒情况" prop="drinking">
+        <el-select clearable v-model="formInfo.drinking" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.drinkingList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="日抽烟情况" prop="smoking">
+        <el-select clearable v-model="formInfo.smoking" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.smokingList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="体育锻炼" prop="physicalExercise">
+        <el-select
+          clearable
+          v-model="formInfo.physicalExercise"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.physicalExerciseList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="睡眠情况" prop="sleep">
+        <el-select clearable v-model="formInfo.sleep" style="width:220px" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in enumList.sleepList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="是否长期用药" prop="isLongTimeMedication">
+        <el-select
+          clearable
+          v-model="formInfo.isLongTimeMedication"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.isLongTimeMedicationList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <div class="title">用药情况</div>
+      <el-form-item label="药名" prop="name"></el-form-item>
+      <div>
+        <el-form-item label="每日用量" prop="dailyTimes">
+          <el-select clearable v-model="formInfo.dailyTimes" style="width:220px" placeholder="请选择">
+            <el-option
+              v-for="(item, index) in enumList.dailyTimesList"
+              :key="index"
+              :label="item.label"
+              :value="item.key"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用药时间" prop="eatDrugRegular">
+          <el-select
+            clearable
+            v-model="formInfo.eatDrugRegular"
+            style="width:220px"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in enumList.eatDrugRegularList"
+              :key="index"
+              :label="item.label"
+              :value="item.key"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="服药依从性" prop="eatDrugRegular">
+          <el-select
+            clearable
+            v-model="formInfo.eatDrugRegular"
+            style="width:220px"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in enumList.eatDrugRegularList"
+              :key="index"
+              :label="item.label"
+              :value="item.key"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </div>
+
+      <div class="title">住院情况</div>
+      <el-form-item label="最近第一次入院时间" prop="lastHospitalizationDateTime">
+        <el-date-picker
+          v-model="formInfo.lastHospitalizationDateTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="选择日期"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="住院原因" prop="lastHospitalizationReason">
+        <el-input placeholder="请输入服务对象住院原因" v-model="formInfo.lastHospitalizationReason"></el-input>
+      </el-form-item>
+      <el-form-item label="住院机构" prop="lastHospitalizationOrg">
+        <el-input placeholder="请输入服务对象住院机构" v-model="formInfo.lastHospitalizationOrg"></el-input>
+      </el-form-item>
+      <el-form-item label="健康恢复情况" prop="isFullRecovery">
+        <el-select
+          clearable
+          v-model="formInfo.isFullRecovery"
+          style="width:220px"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, index) in enumList.isFullRecoveryList"
+            :key="index"
+            :label="item.label"
+            :value="item.key"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
       <div class="title">扩展信息</div>
       <el-form-item label="期望养老方式" prop="pensionModeList">
         <el-select
@@ -305,7 +844,7 @@
         <el-button type="primary" @click="handleSaveSelectObject">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="添加紧急联系人" :visible.sync="dialogFormVisible">
+    <el-dialog :title="addType == 'children'?'添加紧急联系人':'添加子女'" :visible.sync="dialogFormVisible">
       <el-form :rules="rulesForm" ref="rulesForm" label-width="80px" :model="contractUser">
         <el-form-item label="名字" prop="name">
           <el-input v-model="contractUser.name" autocomplete="off"></el-input>
@@ -324,14 +863,14 @@
 <script>
 import selectServiceObject from '../../../components/SelectTable/selectServiceObject.vue'
 import selectServiceUser from '../../../components/SelectTable/selectServiceUser.vue'
-
+import enumList from './enum.js'
 export default {
   name: 'editObject',
   components: {
     selectServiceObject,
     selectServiceUser
   },
-  data() {
+  data () {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -363,9 +902,9 @@ export default {
       }
     }
     return {
+      addType: 'children',
       contractUser: {},
       contarctList: [],
-      tabsType: 'first',
       dialogServiceObject: false,
       dialogFormVisible: false,
       rulesForm: {
@@ -380,7 +919,10 @@ export default {
         ]
       },
       selectObjectList: [],
+      // 枚举
+      enumList: enumList,
       formInfo: {
+        serviceCustomerId: this.$route.query.sid,
         serviceCustomerName: '',
         mobile: '',
         avatar: '',
@@ -406,7 +948,58 @@ export default {
         addressList: [],
         emergencySelectList: [],
         emergencyManualList: [],
-        orgId: ''
+        orgId: '',
+        // 新增字段
+        bloodPressure: '',
+        bloodSugar: '',
+        careSelfAssessment: '',
+        childrenNum: '',
+        chronicDisease: '',
+        compensate: '',
+        dementiaPrecursor: '',
+        drinking: '',
+        drugAllergyHistory: '',
+        drugUseInfo: '',
+        eatingHabit: '',
+        education: '',
+        existingSymptom: '',
+        familyDrugHistory: '',
+        fuelType: '',
+        geneticHistory: '',
+        governmentGrantCondition: '',
+        governmentGrants: '',
+        healthSelfAssessment: '',
+        height: '',
+        housekeepingNeedList: '',
+        incomeSource: '',
+        isAcceptSpiritTelephoneCare: '',
+        isFullRecovery: '',
+        isLongTimeMedication: '',
+        isOutgoing: '',
+        isRetire: '',
+        kitchenType: '',
+        lastHospitalizationDateTime: '',
+        lastHospitalizationOrg: '',
+        lastHospitalizationReason: '',
+        livingNeedList: '',
+        medicalNeed: '',
+        oldManType: '',
+        pensionWay: '',
+        pet: '',
+        physicalCondition: '',
+        physicalExercise: '',
+        profession: '',
+        psychologicalCharacteristic: '',
+        sleep: '',
+        smoking: '',
+        specialInfo: '',
+        spiritNeed: '',
+        summary: '',
+        waist: '',
+        waterType: '',
+        weight: '',
+        childrenList: [],
+        drugUseInfoList: []
       },
       orgTree: [],
 
@@ -500,13 +1093,14 @@ export default {
             trigger: 'change',
             type: 'array'
           }
-        ]
+        ],
+        ...enumList.ruleList
       },
       spaceTree: [],
       clearList: false
     }
   },
-  created() {
+  created () {
     if (this.$route.query.sid) {
       this.getServiceUserInfo()
     }
@@ -514,7 +1108,7 @@ export default {
     this.getOrgList()
   },
   methods: {
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -528,13 +1122,16 @@ export default {
         }
       })
     },
-    handleSaveForm() {
-      this.formInfo.emergencyManualList.push(this.contractUser)
-      console.log(this.formInfo.emergencyManualList)
+    handleSaveForm () {
+      if (this.addType == 'children') {
+        this.formInfo.childrenList.push(this.contractUser)
+      } else {
+        this.formInfo.emergencyManualList.push(this.contractUser)
+      }
       this.contractUser = {}
       this.dialogFormVisible = false
     },
-    handleClick(tab, event) {
+    handleClick (tab, event) {
       this.clearList = !this.clearList
       this.selectObjectList = []
     },
@@ -543,10 +1140,10 @@ export default {
      * @param {type}
      * @return:
      */
-    selectObject(data) {
+    selectObject (data) {
       this.selectObjectList = data
     },
-    handleSaveSelectObject() {
+    handleSaveSelectObject () {
       if (this.selectObjectList.length === 0) {
         this.$message.error('请至少选择一个服务对象')
         return false
@@ -559,7 +1156,7 @@ export default {
       this.selectObjectList = []
       this.dialogServiceObject = false
     },
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -569,10 +1166,10 @@ export default {
       })
       return false
     },
-    handleRemove(index) {
+    handleRemove (index) {
       this.formInfo.serviceCustomerPicList.splice(index, 1)
     },
-    uploadImgList(file) {
+    uploadImgList (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -592,7 +1189,7 @@ export default {
      * @descripttion: 获取服务对象信息
      * @return: 信息
      */
-    getServiceUserInfo() {
+    getServiceUserInfo () {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {
@@ -614,7 +1211,7 @@ export default {
           }
         })
     },
-    getTree() {
+    getTree () {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -627,7 +1224,7 @@ export default {
       })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let arr = []
@@ -639,38 +1236,45 @@ export default {
             avatar: i.avatar || i.indexPic
           })
         })
+        this.$set(this.formInfo, 'cityId', addressList[0])
+        this.$set(this.formInfo, 'districtId', addressList[1])
+        this.$set(this.formInfo, 'communityId', addressList[2])
+        this.$set(this.formInfo, 'streetId', addressList[3])
         // arr = arr.concat(this.contarctList)
         let url = this.$route.query.sid
           ? '/service/customer/update'
           : '/service/customer/add'
         this.$http
-          .post(url, {
-            serviceCustomerId: this.$route.query.sid,
-            cityId: this.formInfo.addressList[0],
-            districtId: this.formInfo.addressList[1],
-            communityId: this.formInfo.addressList[2],
-            streetId: this.formInfo.addressList[3],
-            address: this.formInfo.address,
-            avatar: this.formInfo.avatar,
-            birthday: this.formInfo.birthday,
-            citizenCard: this.formInfo.citizenCard,
-            customerCategoryList: this.formInfo.customerCategoryList,
-            customerHobbyList: this.formInfo.customerHobbyList,
-            emergencySelectList: arr,
-            emergencyManualList: this.formInfo.emergencyManualList,
-            ethnic: this.formInfo.ethnic,
-            gender: this.formInfo.gender,
-            idCard: this.formInfo.idCard,
-            liveStatus: this.formInfo.liveStatus,
-            maritalStatus: this.formInfo.maritalStatus,
-            mobile: this.formInfo.mobile,
-            pensionModeList: this.formInfo.pensionModeList,
-            pensionServiceList: this.formInfo.pensionServiceList,
-            purchaseTypeList: this.formInfo.purchaseTypeList,
-            serviceCustomerName: this.formInfo.serviceCustomerName,
-            serviceCustomerPicList: this.formInfo.serviceCustomerPicList,
-            orgId: this.formInfo.orgId
-          })
+          .post(
+            url,
+            this.formInfo
+            // {
+            // cityId: this.formInfo.addressList[0],
+            // districtId: this.formInfo.addressList[1],
+            // communityId: this.formInfo.addressList[2],
+            // streetId: this.formInfo.addressList[3],
+            // address: this.formInfo.address,
+            // avatar: this.formInfo.avatar,
+            // birthday: this.formInfo.birthday,
+            // citizenCard: this.formInfo.citizenCard,
+            // customerCategoryList: this.formInfo.customerCategoryList,
+            // customerHobbyList: this.formInfo.customerHobbyList,
+            // emergencySelectList: arr,
+            // emergencyManualList: this.formInfo.emergencyManualList,
+            // ethnic: this.formInfo.ethnic,
+            // gender: this.formInfo.gender,
+            // idCard: this.formInfo.idCard,
+            // liveStatus: this.formInfo.liveStatus,
+            // maritalStatus: this.formInfo.maritalStatus,
+            // mobile: this.formInfo.mobile,
+            // pensionModeList: this.formInfo.pensionModeList,
+            // pensionServiceList: this.formInfo.pensionServiceList,
+            // purchaseTypeList: this.formInfo.purchaseTypeList,
+            // serviceCustomerName: this.formInfo.serviceCustomerName,
+            // serviceCustomerPicList: this.formInfo.serviceCustomerPicList,
+            // orgId: this.formInfo.orgId
+            // }
+          )
           .then(res => {
             if (res.code === SUCCESS) {
               this.$message.success('操作成功')
