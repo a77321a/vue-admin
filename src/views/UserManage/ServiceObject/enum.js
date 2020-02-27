@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2020-02-25 15:30:24
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-26 19:47:08
+ * @LastEditTime: 2020-02-27 17:03:02
  */
 const config = {
   // 经济来源列表
@@ -113,6 +113,24 @@ const config = {
       label: '其他'
     }
   ],
+  oldManTypeList: [
+    {
+      key: 0,
+      label: '健康老人'
+    },
+    {
+      key: 1,
+      label: '慢性病老人'
+    },
+    {
+      key: 2,
+      label: '重病老人'
+    },
+    {
+      key: 3,
+      label: '残疾老人'
+    }
+  ],
   kitchenTypeList: [
     {
       key: 0,
@@ -212,7 +230,7 @@ const config = {
       label: '低收入'
     }
   ],
-  governmentGrantsList: [
+  governmentGrantList: [
     {
       key: 0,
       label: '无'
@@ -888,26 +906,29 @@ const config = {
     smoking: [
       { required: true, message: '请选择吸烟情况', trigger: 'change' }
     ],
-    physicalExercise: [
+    physicalExerciseList: [
       { required: true, message: '请选择体育锻炼情况', trigger: 'change' }
     ],
     drinking: [
       { required: true, message: '请选择饮酒情况', trigger: 'change' }
     ],
-    existingSymptom: [
+    existingSymptomList: [
       { required: true, message: '请选择现存症状', trigger: 'change' }
     ],
     eatingHabit: [
       { required: true, message: '请选择饮食习惯', trigger: 'change' }
     ],
-    dementiaPrecursor: [
+    dementiaPrecursorList: [
       { required: true, message: '请选择痴呆前兆', trigger: 'change' }
     ],
-    psychologicalCharacteristic: [
+    psychologicalCharacteristicList: [
       { required: true, message: '请选择心理特征', trigger: 'change' }
     ],
-    physicalCondition: [
+    physicalConditionList: [
       { required: true, message: '请选择身体状况', trigger: 'change' }
+    ],
+    familyDrugHistoryList: [
+      { required: true, message: '请选择家庭病史', trigger: 'change' }
     ],
     careSelfAssessment: [
       { required: true, message: '请选择自理能力自评', trigger: 'change' }
@@ -915,10 +936,10 @@ const config = {
     healthSelfAssessment: [
       { required: true, message: '请选择健康状况自评', trigger: 'change' }
     ],
-    chronicDisease: [
+    chronicDiseaseList: [
       { required: true, message: '请选择慢性病', trigger: 'change' }
     ],
-    incomeSource: [
+    incomeSourceList: [
       { required: true, message: '请选择主要经济来源', trigger: 'change' }
     ],
     profession: [
@@ -930,40 +951,43 @@ const config = {
     fuelType: [
       { required: true, message: '请选择燃料类型', trigger: 'change' }
     ],
-    waterType: [
+    waterTypeList: [
       { required: true, message: '请选择饮水类型', trigger: 'change' }
     ],
-    kitchenType: [
+    oldManTypeList: [
+      { required: true, message: '请选择老人类型', trigger: 'change' }
+    ],
+    kitchenTypeList: [
       { required: true, message: '请选择厨房排风设施类型', trigger: 'change' }
     ],
-    petType: [
+    petList: [
       { required: true, message: '请选择宠物', trigger: 'change' }
     ],
     compensate: [
       { required: true, message: '请选择补偿类型', trigger: 'change' }
     ],
-    governmentGrantCondition: [
+    governmentGrantConditionList: [
       { required: true, message: '请选择政府补助标准', trigger: 'change' }
     ],
-    governmentGrants: [
+    governmentGrant: [
       { required: true, message: '请选择政府补助情况', trigger: 'change' }
     ],
-    livingNeed: [
+    livingNeedList: [
       { required: true, message: '请选择生活需求', trigger: 'change' }
     ],
-    housekeepingNeedlist: [
+    housekeepingNeedList: [
       { required: true, message: '请选择家政需求', trigger: 'change' }
     ],
-    medicalNeed: [
+    medicalNeedList: [
       { required: true, message: '请选择医疗需求', trigger: 'change' }
     ],
-    spiritNeed: [
+    spiritNeedList: [
       { required: true, message: '请选择精神需求', trigger: 'change' }
     ],
     isAcceptSpiritTelephoneCare: [
       { required: true, message: '请选择是否接受电话关怀精神慰问', trigger: 'change' }
     ],
-    drugAllergyHistory: [
+    drugAllergyHistoryList: [
       { required: true, message: '请选择药物过敏史', trigger: 'change' }
     ],
     bloodPressure: [
