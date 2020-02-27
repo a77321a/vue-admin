@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2020-02-25 15:30:24
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-26 11:01:25
+ * @LastEditTime: 2020-02-26 19:47:08
  */
 const config = {
   // 经济来源列表
@@ -744,6 +744,60 @@ const config = {
       label: '其他'
     }
   ],
+  familyDrugHistoryList: [
+    {
+      key: 0,
+      label: '无'
+    },
+    {
+      key: 1,
+      label: '高血压'
+    },
+    {
+      key: 2,
+      label: '糖尿病'
+    },
+    {
+      key: 3,
+      label: '冠心病'
+    },
+    {
+      key: 4,
+      label: '慢性堵塞'
+    },
+    {
+      key: 5,
+      label: '性肺疾病'
+    },
+    {
+      key: 6,
+      label: '恶性肿瘤'
+    },
+    {
+      key: 7,
+      label: '脑卒中'
+    },
+    {
+      key: 8,
+      label: '重性精神疾病'
+    },
+    {
+      key: 9,
+      label: '结核病'
+    },
+    {
+      key: 10,
+      label: '肝炎'
+    },
+    {
+      key: 11,
+      label: '先天畸形'
+    },
+    {
+      key: 12,
+      label: '其他'
+    }
+  ],
   sleepList: [
     {
       key: 0,
@@ -814,7 +868,7 @@ const config = {
       label: '不服药'
     }
   ],
-  isFullRecovery: [
+  isFullRecoveryList: [
     {
       key: 0,
       label: '未完全恢复'
@@ -897,7 +951,7 @@ const config = {
     livingNeed: [
       { required: true, message: '请选择生活需求', trigger: 'change' }
     ],
-    housekeepingNeed: [
+    housekeepingNeedlist: [
       { required: true, message: '请选择家政需求', trigger: 'change' }
     ],
     medicalNeed: [

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-26 10:52:20
+ * @LastEditTime: 2020-02-27 10:50:05
  -->
 <template>
   <div id="edit-event">
@@ -120,12 +120,10 @@
           placeholder="选择日期"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="证件信息" prop="idCard">
-        <div style="margin-bottom:10px">
-          身份证：
-          <el-input placeholder="请输入服务对象身份证信息" v-model="formInfo.idCard" style="width:300px"></el-input>
-        </div>市民卡：
-        <el-input placeholder="请输入服务对象市民卡信息" v-model="formInfo.citizenCard" style="width:300px"></el-input>
+      <el-form-item label="身份证：" prop="idCard">
+        <el-input placeholder="请输入服务对象身份证信息" v-model="formInfo.idCard" style="width:300px"></el-input>
+        <!-- 市民卡： -->
+        <!-- <el-input placeholder="请输入服务对象市民卡信息" v-model="formInfo.citizenCard" style="width:300px"></el-input> -->
       </el-form-item>
       <el-form-item label="所在区域" prop="addressList">
         <el-cascader
@@ -372,10 +370,11 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="家政需求" prop="housekeepingNeed">
+      <el-form-item label="家政需求" prop="housekeepingNeedlist">
         <el-select
           clearable
-          v-model="formInfo.housekeepingNeed"
+          multiple
+          v-model="formInfo.housekeepingNeedlist"
           style="width:220px"
           placeholder="请选择"
         >
@@ -397,8 +396,14 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="精神需求" prop="spiritNeed">
-        <el-select clearable v-model="formInfo.spiritNeed" style="width:220px" placeholder="请选择">
+      <el-form-item label="精神需求" prop="spiritNeedlist">
+        <el-select
+          multiple
+          clearable
+          v-model="formInfo.spiritNeedlist"
+          style="width:220px"
+          placeholder="请选择"
+        >
           <el-option
             v-for="(item, index) in enumList.spiritNeedList"
             :key="index"
@@ -471,10 +476,15 @@
         </el-select>
       </el-form-item>
       <!-- 没有 -->
-      <el-form-item label="家庭病史" prop="address">
-        <el-select clearable v-model="formInfo.spiritNeed" style="width:220px" placeholder="请选择">
+      <el-form-item label="家庭病史" prop="familyDrugHistory">
+        <el-select
+          clearable
+          v-model="formInfo.familyDrugHistory"
+          style="width:220px"
+          placeholder="请选择"
+        >
           <el-option
-            v-for="(item, index) in enumList.spiritNeedList"
+            v-for="(item, index) in enumList.familyDrugHistoryList"
             :key="index"
             :label="item.label"
             :value="item.key"
@@ -484,7 +494,7 @@
       <el-form-item label="慢性病" prop="chronicDisease">
         <el-select
           clearable
-          v-model="formInfo.chronicDisease"
+          v-model="formInfo.chronicDiseaselist"
           style="width:220px"
           placeholder="请选择"
         >
@@ -662,10 +672,12 @@
         </el-select>
       </el-form-item>
       <div class="title">用药情况</div>
-      <el-form-item label="药名" prop="name"></el-form-item>
-      <div>
-        <el-form-item label="每日用量" prop="dailyTimes">
-          <el-select clearable v-model="formInfo.dailyTimes" style="width:220px" placeholder="请选择">
+      <div v-for="(items, index) in formInfo.drugUseInfoList" :key="index">
+        <el-form-item label="药名" required>
+          <el-input v-model="items.name"></el-input>
+        </el-form-item>
+        <el-form-item label="每日用量" required>
+          <el-select clearable v-model="items.dailyTimes" style="width:220px" placeholder="请选择">
             <el-option
               v-for="(item, index) in enumList.dailyTimesList"
               :key="index"
@@ -674,28 +686,18 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用药时间" prop="eatDrugRegular">
-          <el-select
-            clearable
-            v-model="formInfo.eatDrugRegular"
-            style="width:220px"
-            placeholder="请选择"
-          >
+        <el-form-item label="用药时间" required>
+          <el-select clearable v-model="items.eatDrugTime" style="width:220px" placeholder="请选择">
             <el-option
-              v-for="(item, index) in enumList.eatDrugRegularList"
+              v-for="(item, index) in enumList.eatDrugTimeList"
               :key="index"
               :label="item.label"
               :value="item.key"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="服药依从性" prop="eatDrugRegular">
-          <el-select
-            clearable
-            v-model="formInfo.eatDrugRegular"
-            style="width:220px"
-            placeholder="请选择"
-          >
+        <el-form-item label="服药依从性" required>
+          <el-select clearable v-model="items.eatDrugRegular" style="width:220px" placeholder="请选择">
             <el-option
               v-for="(item, index) in enumList.eatDrugRegularList"
               :key="index"
@@ -705,13 +707,16 @@
           </el-select>
         </el-form-item>
       </div>
+      <el-form-item label>
+        <el-button @click="handleAddDrug">添加用药情况</el-button>
+      </el-form-item>
 
       <div class="title">住院情况</div>
       <el-form-item label="最近第一次入院时间" prop="lastHospitalizationDateTime">
         <el-date-picker
           v-model="formInfo.lastHospitalizationDateTime"
           type="date"
-          value-format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期"
         ></el-date-picker>
       </el-form-item>
@@ -934,7 +939,6 @@ export default {
         ethnic: '',
         idCard: '',
         birthday: '',
-        citizenCard: '',
         communityId: '',
         cityId: '',
         districtId: '',
@@ -959,7 +963,6 @@ export default {
         dementiaPrecursor: '',
         drinking: '',
         drugAllergyHistory: '',
-        drugUseInfo: '',
         eatingHabit: '',
         education: '',
         existingSymptom: '',
@@ -970,7 +973,7 @@ export default {
         governmentGrants: '',
         healthSelfAssessment: '',
         height: '',
-        housekeepingNeedList: '',
+        housekeepingNeedlist: [],
         incomeSource: '',
         isAcceptSpiritTelephoneCare: '',
         isFullRecovery: '',
@@ -981,7 +984,7 @@ export default {
         lastHospitalizationDateTime: '',
         lastHospitalizationOrg: '',
         lastHospitalizationReason: '',
-        livingNeedList: '',
+        livingNeedlist: '',
         medicalNeed: '',
         oldManType: '',
         pensionWay: '',
@@ -993,7 +996,7 @@ export default {
         sleep: '',
         smoking: '',
         specialInfo: '',
-        spiritNeed: '',
+        spiritNeedlist: [],
         summary: '',
         waist: '',
         waterType: '',
@@ -1108,6 +1111,14 @@ export default {
     this.getOrgList()
   },
   methods: {
+    handleAddDrug () {
+      this.formInfo.drugUseInfoList.push({
+        name: '',
+        dailyTimes: '',
+        eatDrugTime: '',
+        eatDrugRegular: ''
+      })
+    },
     getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
@@ -1236,10 +1247,10 @@ export default {
             avatar: i.avatar || i.indexPic
           })
         })
-        this.$set(this.formInfo, 'cityId', addressList[0])
-        this.$set(this.formInfo, 'districtId', addressList[1])
-        this.$set(this.formInfo, 'communityId', addressList[2])
-        this.$set(this.formInfo, 'streetId', addressList[3])
+        this.$set(this.formInfo, 'cityId', this.formInfo.addressList[0])
+        this.$set(this.formInfo, 'districtId', this.formInfo.addressList[1])
+        this.$set(this.formInfo, 'communityId', this.formInfo.addressList[2])
+        this.$set(this.formInfo, 'streetId', this.formInfo.addressList[3])
         // arr = arr.concat(this.contarctList)
         let url = this.$route.query.sid
           ? '/service/customer/update'

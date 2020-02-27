@@ -2,8 +2,8 @@
  * @Descripttion:养老产品目录
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-15 15:56:04
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-27 13:36:10
  -->
 <template>
   <div class="account-setting">
@@ -37,7 +37,7 @@
       :selection="false"
       :columns="tableColumns"
       :treeProps="{children: 'children'}"
-      api="/pension/service/type/tree"
+      api="/pension/service/type/productTypeListTree"
       method="post"
     >
       <!-- <template slot-scope="{row}" slot="handleColumn">
