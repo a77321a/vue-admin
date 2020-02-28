@@ -64,7 +64,7 @@
             action="apii/public/img"
             :show-file-list="false"
             :before-upload="uploadImg"
-            accept="image/gif,image/jpeg,image/jpg,image/bmp"
+            accept="image/png,image/jpeg,image/jpg,image/bmp"
           >
             <el-button type="primary" icon="ios-cloud-upload-outline">选择文件</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
