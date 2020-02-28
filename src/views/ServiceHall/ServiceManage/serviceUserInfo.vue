@@ -2,8 +2,8 @@
  * @Descripttion: 服务人员详情
  * @Author:
  * @Date: 2019-11-07 19:28:01
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-30 17:12:28
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-27 21:06:27
  -->
 <template>
   <div id="event-room-info">
@@ -30,7 +30,7 @@
               <span
                 v-for="(item, index) in serviceUserInfo.orgServiceTypes"
                 :key="index"
-              >{{item.orgServiceTypeName}}</span>
+              >{{item.pensionServiceTypeName}}</span>
             </el-col>
             <el-col :span="12">
               服务产品：

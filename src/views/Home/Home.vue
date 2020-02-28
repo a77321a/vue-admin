@@ -3,12 +3,12 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-23 12:27:54
+ * @LastEditTime: 2020-02-28 11:26:34
  -->
 <template>
   <div class="Home">
-    <el-row :gutter="20">
-      <el-col :span="6">
+    <el-row type="flex" justify="space-between">
+      <el-col :span="4">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>今日接待人数</span>
@@ -77,7 +77,7 @@
           </el-col>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>今日参与活动人数</span>
@@ -146,7 +146,7 @@
           </el-col>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>今日助餐人次</span>
@@ -227,7 +227,7 @@
           </el-col>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>本周活动开展次数</span>
@@ -244,7 +244,19 @@
           <el-col :span="11">
             <H4 style="text-align:center;display:inline-block;width:90%">
               待开展
-              <countTo :startVal="0" :endVal="data.activityNumToBeCarriedOutWeek" :duration="1500"></countTo>
+              <countTo :startVal="0" :endVal="data.serviceCustomerNum" :duration="1500"></countTo>
+            </H4>
+          </el-col>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>服务对象数</span>
+          </div>
+          <el-col :span="24">
+            <H4 style="text-align:center;display:inline-block;width:90%">
+              <countTo :startVal="0" :endVal="data.serviceCustomerNum" :duration="1500"></countTo>
             </H4>
           </el-col>
         </el-card>
@@ -252,7 +264,7 @@
     </el-row>
     <!-- 第二排统计 -->
     <el-row :gutter="20" style="margin-top:20px" type="flex">
-      <el-col :span="14">
+      <el-col :span="12">
         <el-row :gutter="20" type="flex" style="margin-bottom:20px;" justify="space-between">
           <el-col :span="8">
             <el-card
@@ -272,7 +284,7 @@
                       :duration="1500"
                     ></countTo>
                   </h2>
-                  <div style="font-size:14px">社会化运营机构数</div>
+                  <div style="font-size:12px">社会化运营机构数</div>
                 </el-col>
               </el-row>
             </el-card>
@@ -297,7 +309,7 @@
                       :duration="1500"
                     ></countTo>
                   </h2>
-                  <div style="font-size:14px">养老机构数</div>
+                  <div style="font-size:12px">养老机构数</div>
                 </el-col>
               </el-row>
             </el-card>
@@ -322,7 +334,7 @@
                       :duration="1500"
                     ></countTo>
                   </h2>
-                  <div style="font-size:14px">涉老机构数</div>
+                  <div style="font-size:12px">涉老机构数</div>
                 </el-col>
               </el-row>
             </el-card>
@@ -344,7 +356,7 @@
                       :duration="1500"
                     ></countTo>
                   </h2>
-                  <div style="font-size:14px">活动室数</div>
+                  <div style="font-size:12px">活动室数</div>
                 </el-col>
               </el-row>
             </el-card>
@@ -364,7 +376,7 @@
                       :duration="1500"
                     ></countTo>
                   </h2>
-                  <div style="font-size:14px">服务产品数</div>
+                  <div style="font-size:12px">服务产品数</div>
                 </el-col>
               </el-row>
             </el-card>
@@ -384,14 +396,41 @@
                       :duration="1500"
                     ></countTo>
                   </h2>
-                  <div style="font-size:14px">服务人员数</div>
+                  <div style="font-size:12px">服务人员数</div>
                 </el-col>
               </el-row>
             </el-card>
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="10">
+      <el-col :span="4">
+        <el-card :body-style="{ minHeight: '212px' }">
+          <div slot="header">
+            <span>服务占比TOP5</span>
+          </div>
+          <el-row
+            type="flex"
+            justify="space-between"
+            :key="index"
+            v-for="(item, index) in data.servicePercentList"
+          >
+            <el-col :span="18">
+              <el-progress
+                style="margin-bottom:15px"
+                :stroke-width="24"
+                :text-inside="true"
+                :key="index"
+                :percentage="Number(item.percentage)"
+                :color="colorList[index]"
+              ></el-progress>
+            </el-col>
+            <el-col :span="6">
+              <span style="font-size:12px;margin-left:5px">{{item.name}}</span>
+            </el-col>
+          </el-row>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
         <el-card :body-style="{ minHeight: '212px' }">
           <div slot="header">
             <span>本周活动</span>
@@ -483,9 +522,12 @@ export default {
         orgServiceProductNum: 0,
         orgServiceProviderNum: 0,
         relatedOrgNum: 0,
-        societyOrgNum: 0
+        societyOrgNum: 0,
+        serviceCustomerNum: 0,
+        servicePercentList: []
       },
-      eventList: []
+      eventList: [],
+      colorList: ['#f56c6c', '#e6a23c', '#5cb87a', '#1989fa', '#6f7ad3']
     }
   },
   created () {
@@ -494,6 +536,10 @@ export default {
     console.log(typeof (this.$store.state.dialogHeight - 200))
   },
   methods: {
+    formatText (item) {
+      console.log(item)
+      return item
+    },
     getData () {
       this.$http.get('/stats/home').then(res => {
         if (res.code === SUCCESS) {
@@ -550,5 +596,8 @@ export default {
 }
 .sm-title {
   font-size: 14px;
+}
+/deep/ .el-progress-bar__innerText {
+  color: #000;
 }
 </style>
