@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author:
  * @Date: 2019-11-16 18:41:35
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-07 15:43:18
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-03-01 18:04:04
  -->
 <template>
   <el-col
@@ -31,7 +31,7 @@
             class="el-icon-error closeFilter"
           ></i>
         </div>
-        <div>
+        <div class="tree-list">
           <div
             :class="son.pensionServiceTypeId == checkType.pensionServiceTypeId ? 'isCheck':''"
             class="son-list"
@@ -122,6 +122,10 @@ export default {
 }
 .moveL-enter {
   transform: translateX(-100%);
+}
+.tree-list {
+  max-height: calc(100vh - 300px);
+  overflow-y: scroll;
 }
 #org-tree-list-aside {
   position: relative;

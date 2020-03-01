@@ -2,8 +2,8 @@
  * @Descripttion:面包屑
  * @Author:
  * @Date: 2019-11-12 16:10:39
- * @LastEditors:
- * @LastEditTime: 2019-11-13 16:35:08
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-03-01 14:35:17
  -->
 <template>
   <div id="bread-crumb">
@@ -11,7 +11,7 @@
       <el-breadcrumb-item
         v-for="item in breadList"
         :key="item.url"
-        :to="item.query ? {name:item.url,query:item.query} : item.url"
+        :to="item.query ? {name:item.url,query:item.query} : {name:item.url}"
       >{{item.title}}</el-breadcrumb-item>
     </el-breadcrumb>
   </div>
@@ -42,7 +42,6 @@ export default {
         if (this.breadList[i].url === this.$route.name) {
           this.$store.commit('setBreadList', arr)
           this.breadList = arr
-          console.log(this.breadList)
           break
         }
       }

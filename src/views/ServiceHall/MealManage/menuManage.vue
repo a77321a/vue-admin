@@ -2,8 +2,8 @@
  * @Descripttion:菜单管理
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2019-12-30 16:50:33
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-03-01 15:06:47
  -->
 <template>
   <div class="meal-center">
@@ -38,7 +38,7 @@
         >搜索</el-button>
         <el-button
           @click="
-            searchData = { orgId: searchData.orgId };
+            getOrgList(true)
             searchRefresh = !searchRefresh;
           "
           size="small"
@@ -624,7 +624,7 @@ export default {
         this.searchData.week = ''
       }
     },
-    getOrgList () {
+    getOrgList (param) {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           let arr = []
@@ -639,6 +639,9 @@ export default {
           this.orgList = arr
           this.searchData.orgId = this.orgList[0].children[0].orgId
           this.searchData.year = new Date().getFullYear()
+          if (param) {
+            this.week = new Date()
+          }
           this.searchData.startTime = this.$func.getNowDateAndNowWeek(
             this.week
           ).Monday

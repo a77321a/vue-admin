@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-24 15:38:24
+ * @LastEditTime: 2020-03-01 13:02:18
  -->
 <template>
   <div class="serviceObject">
@@ -62,7 +62,7 @@
                 <el-avatar
                   class="avatar"
                   size="medium"
-                  :src="$store.state.config.systemConfig[0].dictionaryValue+row.avatar"
+                  :src="row.avatar ? $store.state.config.systemConfig[0].dictionaryValue+row.avatar:''"
                 ></el-avatar>
                 <span class="f-title">{{row.serviceCustomerName}}</span>
               </div>
@@ -270,9 +270,7 @@ export default {
     },
     rowsForamtter (rows) {
       rows.forEach(i => {
-        console.log(JSON.parse(i.emergencySelect))
         if (JSON.parse(i.emergencySelect).length == 0) {
-          console.log(i.emergencyManual)
           i.emergencyMobile = JSON.parse(i.emergencyManual)[0].mobile
         }
       })

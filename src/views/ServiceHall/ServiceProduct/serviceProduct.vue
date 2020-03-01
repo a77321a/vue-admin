@@ -2,8 +2,8 @@
  * @Descripttion:服务产品
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors:
- * @LastEditTime: 2019-12-21 23:02:43
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-02-29 14:07:53
  -->
 <template>
   <div class="event-room">
@@ -14,7 +14,7 @@
         <div class="grid-content bg-purple">
           <el-form inline ref="form" label-width="90px" size="small">
             <el-form-item label="服务类型">
-              <el-select
+              <!-- <el-select
                 style="width:200px"
                 clearable
                 multiple
@@ -22,12 +22,19 @@
                 placeholder="请选择"
               >
                 <el-option
-                  v-for="(item, index) in orgServiceTypeList"
+                  v-for="(item, index) in serviceTypeList"
                   :key="index"
                   :label="item.orgServiceTypeName"
                   :value="item.orgServiceTypeId"
                 ></el-option>
-              </el-select>
+              </el-select>-->
+              <el-cascader
+                clearable
+                @change="searchData.orgServiceTypeIds = $event ? [$event]:undefined"
+                :props="{value:'pensionServiceTypeId',label:'pensionServiceTypeName',emitPath:false}"
+                :options="serviceTypeList"
+                v-model="searchData.orgServiceTypeIds"
+              ></el-cascader>
             </el-form-item>
             <el-form-item label="产品名称">
               <el-input placeholder="请输入产品名称关键字" v-model="searchData.orgServiceProductName"></el-input>
@@ -103,7 +110,7 @@ export default {
       toggleWidth: 19,
       searchRefresh: true,
       searchData: {},
-      orgServiceTypeList: [],
+      serviceTypeList: [],
       tableColumns: [
         { label: '产品名称', slot: 'orgServiceProductName', minWidth: 200 },
         { label: '服务类型', prop: 'orgServiceTypeName', minWidth: 100 },
@@ -137,14 +144,47 @@ export default {
       this.searchRefresh = !this.searchRefresh
     },
     getServiceTypeList () {
-      this.$http
-        .post('/org/service/type/pageSearch', { pageSize: MAXSIZE })
-        .then(res => {
-          if (res.code === SUCCESS) {
-            this.orgServiceTypeList = res.payload.records
+      this.$http.post(`/pension/service/type/productTypeListTree`).then(res => {
+        if (res.code === SUCCESS) {
+          this.serviceTypeList = res.payload
+          for (let i = 0; i < this.serviceTypeList.length; i++) {
+            if (
+              this.serviceTypeList[i].children &&
+              this.serviceTypeList[i].children.length > 0
+            ) {
+              for (
+                let j = 0;
+                j < this.serviceTypeList[i].children.length;
+                j++
+              ) {
+                if (
+                  this.serviceTypeList[i].children[j].children &&
+                  this.serviceTypeList[i].children[j].children.length > 0
+                ) {
+                  for (
+                    let n = 0;
+                    n < this.serviceTypeList[i].children[j].children.length;
+                    n++
+                  ) {
+                    delete this.serviceTypeList[i].children[j].children[n]
+                      .children
+                  }
+                }
+              }
+            }
           }
-        })
+        }
+      })
     },
+    // getServiceTypeList () {
+    //   this.$http
+    //     .post('/org/service/type/pageSearch', { pageSize: MAXSIZE })
+    //     .then(res => {
+    //       if (res.code === SUCCESS) {
+    //         this.serviceTypeList = res.payload.records
+    //       }
+    //     })
+    // },
     toggleChange (val) {
       this.toggleWidth = val
     },

@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-05 19:02:48
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-03-01 13:00:07
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -27,10 +27,13 @@ const store = new Vuex.Store({
     dialogHeight: `${(document.documentElement.clientHeight) - 330}`,
     config: localStorage.config ? JSON.parse(localStorage.config) : {},
     // config: config
-    getLoading: false
+    getLoading: false,
+    toEdit: ''
   },
   mutations: {
-
+    toggleToEdit (state, data) {
+      state.toEdit = data
+    },
     toggleLoading (state, data) {
       state.getLoading = data
     },

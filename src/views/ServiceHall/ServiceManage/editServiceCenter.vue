@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-24 10:53:18
+ * @LastEditTime: 2020-03-01 12:26:54
  -->
 <template>
   <div id="editServiceCenter">
@@ -41,7 +41,7 @@
             action="apii/public/img"
             :show-file-list="false"
             :before-upload="uploadImg"
-            accept="image/png,image/jpeg,image/jpg,image/bmp"
+            accept="image/png, image/jpeg, image/jpg, image/bmp"
           >
             <el-button
               v-if="formInfo.serviceRecordPicList.length < 9"
@@ -99,7 +99,7 @@
       </el-form-item>
       <el-form-item label="服务人员" prop="orgServiceProviderList">
         <el-button
-          :disabled="formInfo.orgId ? formInfo.orgId.length == 0 : true"
+          :disabled="formInfo.orgId == ''? true : false"
           @click="dialogServiceUser = true"
           icon="el-icon-plus"
         >选择人员</el-button>
@@ -121,7 +121,11 @@
         </el-card>
       </el-form-item>
       <el-form-item label="服务对象" prop="serviceCustomerList">
-        <el-button @click="dialogServiceObject = true" icon="el-icon-plus">选择人员</el-button>
+        <el-button
+          :disabled="formInfo.orgId == ''? true : false"
+          @click="dialogServiceObject = true"
+          icon="el-icon-plus"
+        >选择人员</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
@@ -189,7 +193,11 @@
       title="选择服务对象"
       :visible.sync="dialogServiceObject"
     >
-      <selectServiceObject :isSelected="formInfo.serviceCustomerList" @selectObject="selectObject"></selectServiceObject>
+      <selectServiceObject
+        :orgId="formInfo.orgId"
+        :isSelected="formInfo.serviceCustomerList"
+        @selectObject="selectObject"
+      ></selectServiceObject>
       <span slot="footer" class="dialog-footer">
         <el-button
           @click="

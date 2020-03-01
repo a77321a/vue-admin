@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-18 13:10:22
+ * @LastEditTime: 2020-03-01 13:21:16
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -91,6 +91,12 @@ router.beforeEach((to, from, next) => {
     document.title = window.docTitle + ' - ' + to.meta.title
   }
   if (to.name !== 'Login' && to.name !== 'lostPassword' && to.name !== '404') {
+    if (to.name.indexOf('Add') > -1) {
+      store.commit('toggleToEdit', '')
+    } else if (from.name && !(from.name.indexOf('Edit') > -1) && !(from.name.indexOf('Detail') > -1) && !(from.name.indexOf('Info') > -1) && !(from.name.indexOf('Preview') > -1)) {
+      store.commit('toggleToEdit', from.name)
+    }
+
     if (to.meta.root) {
       store.commit('setBreadList', [{ url: to.name, title: to.meta.title }])
     } else {

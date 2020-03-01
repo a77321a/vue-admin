@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-24 11:34:20
+ * @LastEditTime: 2020-03-01 13:16:05
  -->
 <template>
   <div id="service-object-info">
@@ -62,7 +62,6 @@
             <el-col :span="6">婚姻状态：{{maritalStatus[serviceObjectInfo.maritalStatus]}}</el-col>
             <el-col :span="6">老人居住状态：{{liveStatus[serviceObjectInfo.liveStatus]}}</el-col>
             <el-col :span="6">身份证：{{serviceObjectInfo.idCard}}</el-col>
-            <el-col :span="6">市民卡：{{serviceObjectInfo.citizenCard }}</el-col>
           </el-row>
           <el-row style="margin-bottom:20px" :gutter="10">
             <el-col :span="12">
@@ -189,22 +188,24 @@ export default {
     mealRecords,
     activityRecords
   },
-  data() {
+  data () {
     return {
       dialogVisible: false,
       maritalStatus: ['未婚', '已婚', '离异', '再婚', '丧偶'],
       liveStatus: ['与子女同住', '独自居住', '配偶居住', '其他'],
       serviceObjectInfo: {
         emergencyList: [],
+        emergencySelectList: [],
+        emergencyManualList: [],
         avatar: ''
       }
     }
   },
-  created() {
+  created () {
     this.getObjectInfo()
   },
   methods: {
-    getObjectInfo() {
+    getObjectInfo () {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-28 11:26:34
+ * @LastEditTime: 2020-03-01 20:15:36
  -->
 <template>
   <div class="Home">
@@ -244,7 +244,7 @@
           <el-col :span="11">
             <H4 style="text-align:center;display:inline-block;width:90%">
               待开展
-              <countTo :startVal="0" :endVal="data.serviceCustomerNum" :duration="1500"></countTo>
+              <countTo :startVal="0" :endVal="data.activityNumToBeCarriedOutWeek" :duration="1500"></countTo>
             </H4>
           </el-col>
         </el-card>
@@ -410,22 +410,19 @@
           </div>
           <el-row
             type="flex"
+            class="list-pro"
             justify="space-between"
             :key="index"
             v-for="(item, index) in data.servicePercentList"
           >
-            <el-col :span="18">
+            <el-col>
               <el-progress
-                style="margin-bottom:15px"
-                :stroke-width="24"
-                :text-inside="true"
+                :stroke-width="20"
                 :key="index"
                 :percentage="Number(item.percentage)"
                 :color="colorList[index]"
               ></el-progress>
-            </el-col>
-            <el-col :span="6">
-              <span style="font-size:12px;margin-left:5px">{{item.name}}</span>
+              <div style="font-size:12px;margin:5px 0">{{item.name}}</div>
             </el-col>
           </el-row>
         </el-card>
@@ -599,5 +596,13 @@ export default {
 }
 /deep/ .el-progress-bar__innerText {
   color: #000;
+}
+.list-pro {
+  div {
+    flex: 1 1 auto;
+  }
+}
+/deep/ .el-progress__text {
+  font-size: 14px !important;
 }
 </style>

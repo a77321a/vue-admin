@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-25 16:04:49
+ * @LastEditTime: 2020-03-01 19:34:09
  -->
 <template>
   <div class="layout">
@@ -37,7 +37,7 @@ export default {
     VHeader,
     BreadCrumb
   },
-  created () {
+  created() {
     let serviceHall = []
     let statisticalAnalysis = []
     let UserManage = []
@@ -82,14 +82,13 @@ export default {
     }
   },
   computed: {
-    routerList () {
+    routerList() {
       return this.$store.state.routerList
     },
-    activeLink () {
+    activeLink() {
       return this.$store.state.fullPath
     },
-    showSideNav () {
-      console.log(this.$route.name)
+    showSideNav() {
       return (
         this.$store.state.navList.length !== 0 && this.$route.name !== 'Home'
       )

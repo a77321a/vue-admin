@@ -16,7 +16,7 @@
             style="float:right;margin-right:20px;margin-top:5px"
             :show-file-list="false"
             :before-upload="uploadImg"
-            accept="image/gif, image/jpeg, image/jpg, image/bmp"
+            accept="image/png, image/jpeg, image/jpg, image/bmp"
           >
             <el-button type="text">修改</el-button>
           </el-upload>

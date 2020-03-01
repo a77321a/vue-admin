@@ -2,8 +2,8 @@
  * @Descripttion:活动总结
  * @Author:
  * @Date: 2019-11-07 18:03:59
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 14:05:35
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-03-01 12:44:25
  -->
 <template>
   <div id="edit-event">
@@ -133,7 +133,7 @@
             action="apii/public/img"
             :show-file-list="false"
             :before-upload="uploadImg"
-            accept="image/png,image/jpeg,image/jpg,image/bmp"
+            accept="image/png, image/jpeg, image/jpg, image/bmp"
           >
             <el-button
               v-if="formInfo.activityPicList.length < 9"
@@ -161,6 +161,7 @@
       :visible.sync="dialogServiceObject"
     >
       <selectServiceObject
+        :orgId="formInfo.orgId"
         :isSelected="formInfo.actualServiceCustomerList"
         @selectObject="selectObject"
       ></selectServiceObject>

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-18 13:43:18
+ * @LastEditTime: 2020-03-01 14:15:08
  -->
 <template>
   <div class="service-user">
@@ -30,7 +30,7 @@
             </el-form-item>
           </el-form>
           <el-button
-            @click="$router.push({name:'serviceUserEdit'})"
+            @click="$router.push({name:'serviceUserAdd'})"
             style="margin-bottom:15px"
             size="small"
             type="primary"
