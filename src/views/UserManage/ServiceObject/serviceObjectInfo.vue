@@ -3,49 +3,17 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-01 13:16:05
+ * @LastEditTime: 2020-03-03 15:16:23
  -->
 <template>
   <div id="service-object-info">
     <el-card shadow="never" class="box-card">
-      <!-- <el-form
-            inline
-            label-suffix=":"
-            label-position="right"
-            ref="form"
-            :model="serviceObjectInfo"
-            label-width="110px"
-          >
-            <el-form-item label="姓名">
-              <span class="content-span">{{serviceObjectInfo.serviceCustomerName}}</span>
-            </el-form-item>
-            <el-form-item label="手机号">
-              <span class="content-span">{{serviceObjectInfo.mobile}}</span>
-            </el-form-item>
-            <el-form-item label="性别">
-              <span class="content-span">{{serviceObjectInfo.gender == 1 ?'男':'女'}}</span>
-            </el-form-item>
-            <el-form-item label="民族">
-              <span class="content-span">{{serviceObjectInfo.ethnic }}</span>
-            </el-form-item>
-            <el-form-item label="婚姻状态">
-              <span class="content-span">{{serviceObjectInfo.maritalStatus}}</span>
-            </el-form-item>
-            <el-form-item label="老人居住状态">
-              <span class="content-span">{{serviceObjectInfo.mobile}}</span>
-            </el-form-item>
-            <el-form-item label="身份证">
-              <span class="content-span">{{serviceObjectInfo.idCard}}</span>
-            </el-form-item>
-            <el-form-item label="市民卡">
-              <span class="content-span">{{serviceObjectInfo.citizenCard }}</span>
-            </el-form-item>
-      </el-form>-->
-      <el-row :gutter="10">
+      <el-row style="postion:relative" :gutter="10">
         <el-col style="text-align:center" :span="4">
           <el-avatar :size="60" :src="serviceObjectInfo.avatar"></el-avatar>
           <el-button
             @click="dialogVisible = true"
+            :disabled="serviceObjectInfo.serviceCustomerPicList.length==0"
             style="width:100%;display:block"
             type="text"
           >查看生活照片</el-button>
@@ -84,9 +52,14 @@
             <el-col :span="6">地址详情：{{serviceObjectInfo.address}}</el-col>
           </el-row>
         </el-col>
+        <el-button
+          @click="dialogFormVisible = true"
+          style="position:absolute;right:0;bottom:-15px;"
+          type="text"
+        >查看更多</el-button>
       </el-row>
     </el-card>
-    <el-card style="margin-top:20px" shadow="never" class="box-card">
+    <!-- <el-card style="margin-top:20px" shadow="never" class="box-card">
       <el-row style="margin-bottom:20px">
         <el-col :span="8">
           期望养老模式：
@@ -141,7 +114,7 @@
           >{{$func.transLabel($store.state.config.hobbyList,item)}}</el-tag>
         </el-col>
       </el-row>
-    </el-card>
+    </el-card>-->
     <el-tabs value="first" style="margin-top:20px;">
       <el-tab-pane label="活动记录" name="first">
         <activityRecords :serviceCustomerId="$route.query.sid"></activityRecords>
@@ -173,20 +146,27 @@
         </el-carousel-item>
       </el-carousel>
     </el-dialog>
+    <el-dialog title="服务对象" :visible.sync="dialogFormVisible" width="50%">
+      <objectInfo :child="true"></objectInfo>
+    </el-dialog>
   </div>
 </template>
 <script>
+import enumList from './enum.js'
+
 import activityRecords from './ServiceObjectInfoTabs/activityRecords'
 import mealRecords from './ServiceObjectInfoTabs/mealRecords'
 import serviceRecords from './ServiceObjectInfoTabs/serviceRecords'
 import healthRecords from './ServiceObjectInfoTabs/healthRecords'
+import objectInfo from './editObject'
 export default {
   name: 'serviceObjectDetail',
   components: {
     healthRecords,
     serviceRecords,
     mealRecords,
-    activityRecords
+    activityRecords,
+    objectInfo
   },
   data () {
     return {
@@ -197,8 +177,12 @@ export default {
         emergencyList: [],
         emergencySelectList: [],
         emergencyManualList: [],
+        serviceCustomerPicList: [],
         avatar: ''
-      }
+      },
+      dialogFormVisible: true,
+      enumList: enumList,
+      formInfo: {}
     }
   },
   created () {
@@ -214,6 +198,20 @@ export default {
             this.serviceObjectInfo.avatar =
               this.$store.state.config.systemConfig[0].dictionaryValue +
               this.serviceObjectInfo.avatar
+            this.formInfo = res.payload
+            this.$set(
+              this.formInfo,
+              'emergencyManualList',
+              this.formInfo.emergencyManualList
+                ? this.formInfo.emergencyManualList
+                : []
+            )
+            this.$set(this.formInfo, 'addressList', [
+              res.payload.cityId,
+              res.payload.districtId,
+              res.payload.communityId,
+              res.payload.streetId
+            ])
           }
         })
     }
@@ -229,7 +227,6 @@ export default {
   color: #666;
 }
 .el-form-item {
-  margin-bottom: 0;
   /deep/.el-form-item__label,
   /deep/.el-form-item__content {
     height: 30px !important;

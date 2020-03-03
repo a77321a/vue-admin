@@ -3,14 +3,15 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-02-27 17:05:44
+ * @LastEditTime: 2020-03-03 15:42:37
  -->
 <template>
   <div id="edit-event">
     <!-- label-suffix="：" -->
     <div class="title">基本信息</div>
     <el-form
-      style="width:700px"
+      :style="{width:child ? 'auto':'700px'}"
+      :disabled="child ? true:false"
       ref="formInfo"
       :rules="rules"
       :model="formInfo"
@@ -36,7 +37,7 @@
       <el-form-item label="手机号" prop="mobile">
         <el-input type="text" :maxlength="11" placeholder="请输入服务对象手机号" v-model="formInfo.mobile"></el-input>
       </el-form-item>
-      <el-form-item label="头像">
+      <el-form-item v-if="!child" label="头像">
         <div style="display:flex;align-items:center;">
           <div v-show="formInfo.avatar" class="avatars">
             <img
@@ -58,7 +59,7 @@
           </el-upload>
         </div>
       </el-form-item>
-      <el-form-item label="照片">
+      <el-form-item v-if="!child" label="照片">
         <div>
           <div
             style="position:relative"
@@ -162,16 +163,16 @@
         </el-select>
       </el-form-item>
       <!-- 新增字段 -->
-      <el-form-item label="身高" prop="height">
+      <el-form-item label="身高">
         <el-input placeholder="请输入服务对象身高" show-word-limit v-model="formInfo.height"></el-input>
       </el-form-item>
-      <el-form-item label="体重" prop="weight">
+      <el-form-item label="体重">
         <el-input placeholder="请输入服务对象体重" show-word-limit v-model="formInfo.weight"></el-input>
       </el-form-item>
-      <el-form-item label="腰围" prop="waist">
+      <el-form-item label="腰围">
         <el-input placeholder="请输入服务对象腰围" show-word-limit v-model="formInfo.waist"></el-input>
       </el-form-item>
-      <el-form-item label="性格" prop="isOutgoing">
+      <el-form-item label="性格">
         <el-select clearable v-model="formInfo.isOutgoing" style="width:220px" placeholder="请选择">
           <el-option label="内向" :value="0"></el-option>
           <el-option label="外向" :value="1"></el-option>
@@ -197,15 +198,18 @@
           controls-position="right"
         />
       </el-form-item>
-      <el-form-item label="子女信息" prop="childrenList">
-        <el-button @click="addType = 'children';dialogFormVisible = true">添加子女</el-button>
+      <el-form-item v-if="formInfo.childrenNum" label="子女信息" prop="childrenList">
+        <el-button
+          :disabled="formInfo.childrenNum == formInfo.childrenList.length"
+          @click="addType = 'children';dialogFormVisible = true"
+        >添加子女</el-button>
         <el-card style="margin-top:10px;" shadow="never">
           <el-tag
             style="margin-right:10px"
             @close="formInfo.childrenList.splice(index, 1)"
             v-for="(item, index) in formInfo.childrenList"
             :key="index"
-            closable
+            :closable="!child"
           >
             <span style="vertical-align: middle;">{{ item.name }}</span>
           </el-tag>
@@ -223,7 +227,7 @@
             @close="formInfo.emergencySelectList.splice(index, 1)"
             v-for="(item, index) in formInfo.emergencySelectList"
             :key="index"
-            closable
+            :closable="!child"
           >
             <el-avatar
               :size="22"
@@ -250,7 +254,7 @@
             @close="formInfo.emergencyManualList.splice(index, 1)"
             v-for="(item, index) in formInfo.emergencyManualList"
             :key="index"
-            closable
+            :closable="!child"
           >
             <el-avatar
               :size="22"
@@ -325,7 +329,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="厨房排风设施类型" prop="kitchenTypeList">
+      <el-form-item label="厨房排风设施类型">
         <el-select
           clearable
           multiple
@@ -357,7 +361,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <div class="title">助补</div>
+      <div class="title">补助</div>
       <el-form-item label="补偿" prop="compensate">
         <el-select clearable v-model="formInfo.compensate" style="width:220px" placeholder="请选择">
           <el-option
@@ -734,10 +738,10 @@
       </el-form-item>
       <div class="title">用药情况</div>
       <div v-for="(items, index) in formInfo.drugUseInfoList" :key="index">
-        <el-form-item label="药名" required>
+        <el-form-item label="药名">
           <el-input v-model="items.name"></el-input>
         </el-form-item>
-        <el-form-item label="每日用量" required>
+        <el-form-item label="每日用量">
           <el-select clearable v-model="items.dailyTimes" style="width:220px" placeholder="请选择">
             <el-option
               v-for="(item, index) in enumList.dailyTimesList"
@@ -747,7 +751,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用药时间" required>
+        <el-form-item label="用药时间">
           <el-select clearable v-model="items.eatDrugTime" style="width:220px" placeholder="请选择">
             <el-option
               v-for="(item, index) in enumList.eatDrugTimeList"
@@ -757,7 +761,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="服药依从性" required>
+        <el-form-item label="服药依从性">
           <el-select clearable v-model="items.eatDrugRegular" style="width:220px" placeholder="请选择">
             <el-option
               v-for="(item, index) in enumList.eatDrugRegularList"
@@ -773,7 +777,7 @@
       </el-form-item>
 
       <div class="title">住院情况</div>
-      <el-form-item label="最近第一次入院时间" prop="lastHospitalizationDateTime">
+      <el-form-item label="最近第一次入院时间">
         <el-date-picker
           v-model="formInfo.lastHospitalizationDateTime"
           type="date"
@@ -781,13 +785,13 @@
           placeholder="选择日期"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="住院原因" prop="lastHospitalizationReason">
+      <el-form-item label="住院原因">
         <el-input placeholder="请输入服务对象住院原因" v-model="formInfo.lastHospitalizationReason"></el-input>
       </el-form-item>
-      <el-form-item label="住院机构" prop="lastHospitalizationOrg">
+      <el-form-item label="住院机构">
         <el-input placeholder="请输入服务对象住院机构" v-model="formInfo.lastHospitalizationOrg"></el-input>
       </el-form-item>
-      <el-form-item label="健康恢复情况" prop="isFullRecovery">
+      <el-form-item label="健康恢复情况">
         <el-select
           clearable
           v-model="formInfo.isFullRecovery"
@@ -884,8 +888,8 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-divider></el-divider>
-      <el-form-item size="large">
+      <el-divider v-if="!child"></el-divider>
+      <el-form-item v-if="!child" size="large">
         <el-button @click="handleSave" type="primary">立即创建</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
@@ -1165,6 +1169,12 @@ export default {
       },
       spaceTree: [],
       clearList: false
+    }
+  },
+  props: {
+    child: {
+      type: Boolean,
+      default: false
     }
   },
   created () {

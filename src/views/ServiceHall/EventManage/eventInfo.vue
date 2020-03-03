@@ -2,8 +2,8 @@
  * @Descripttion: 活动详情
  * @Author:
  * @Date: 2019-11-07 19:28:01
- * @LastEditors:
- * @LastEditTime: 2019-12-08 11:38:07
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-03-03 14:32:36
  -->
 <template>
   <div id="event-info">
@@ -79,7 +79,11 @@
         <ServicePerson :activityId="$route.query.aid"></ServicePerson>
       </el-tab-pane>
       <el-tab-pane label="活动总结" name="third">
-        <ActivitySummary :status="eventCenterPreview.activityStatus" :htmlStr="eventCenterPreview.activitySummary"></ActivitySummary>
+        <ActivitySummary
+          :picList="eventCenterPreview.activityPicList"
+          :status="eventCenterPreview.activityStatus"
+          :htmlStr="eventCenterPreview.activitySummary"
+        ></ActivitySummary>
       </el-tab-pane>
     </el-tabs>
   </div>

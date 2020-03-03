@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-05 10:27:14
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-01 20:15:36
+ * @LastEditTime: 2020-03-03 14:13:53
  -->
 <template>
   <div class="Home">
@@ -280,7 +280,7 @@
                     <countTo
                       style="font-size:30px"
                       :startVal="0"
-                      :endVal="data.orgNum"
+                      :endVal="data.societyOrgNum"
                       :duration="1500"
                     ></countTo>
                   </h2>
@@ -305,7 +305,7 @@
                     <countTo
                       style="font-size:30px"
                       :startVal="0"
-                      :endVal="data.societyOrgNum"
+                      :endVal="data.orgNum"
                       :duration="1500"
                     ></countTo>
                   </h2>
