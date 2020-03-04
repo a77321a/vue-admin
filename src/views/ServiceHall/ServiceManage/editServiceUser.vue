@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-11 16:49:56
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-01 14:10:39
+ * @LastEditTime: 2020-03-04 09:55:53
  -->
 <template>
   <div id="edit-service-user">
@@ -157,7 +157,7 @@
 <script>
 export default {
   name: 'editServiceUser',
-  data() {
+  data () {
     const validMobile = (rule, value, callback) => {
       let reg = /^1[123456789]\d{9}$/
       if (!value) {
@@ -235,7 +235,7 @@ export default {
       serviceProductList: []
     }
   },
-  created() {
+  created () {
     let userInfo = this.$store.state.userInfo
     if (Array.isArray(userInfo.orgIds) && userInfo.orgIds.length > 0) {
       this.formInfo.orgId = userInfo.orgIds[1]
@@ -248,17 +248,17 @@ export default {
     this.getTree()
   },
   methods: {
-    changeOrg(val) {
+    changeOrg (val) {
       this.formInfo.orgServiceTypeIds = ''
       this.formInfo.orgServiceProductIds = []
       this.getServiceTypeList(val)
     },
-    changeType(val) {
+    changeType (val) {
       this.formInfo.orgServiceTypeIds = val
       this.formInfo.orgServiceProductIds = []
       this.getServiceProductList()
     },
-    getServiceProductList() {
+    getServiceProductList () {
       this.$http
         .post('/org/service/product/pageSearch', {
           pageSize: MAXSIZE,
@@ -270,7 +270,7 @@ export default {
           }
         })
     },
-    getTree() {
+    getTree () {
       this.$http.post('/address/tree').then(res => {
         if (res.code === SUCCESS) {
           this.spaceTree = res.payload
@@ -282,7 +282,7 @@ export default {
         }
       })
     },
-    getOrgList() {
+    getOrgList () {
       this.$http.post('/org/tree').then(res => {
         if (res.code === SUCCESS) {
           this.orgTree = res.payload
@@ -296,7 +296,7 @@ export default {
         }
       })
     },
-    getServiceTypeList(id) {
+    getServiceTypeList (id) {
       this.$http
         .post(`/pension/service/type/treeByOrgId?orgId=${id || ''}`, {
           orgId: id
@@ -337,7 +337,7 @@ export default {
      * @descripttion: 图片自定义上传 同所有单照片表单
      * @param {type}   file
      */
-    uploadImg(file) {
+    uploadImg (file) {
       let formdata = new FormData()
       formdata.append('file', file)
       this.$http.postForm('/file/upload', formdata).then(res => {
@@ -347,12 +347,12 @@ export default {
       })
       return false
     },
-    handleRemove() {},
+    handleRemove () {},
     /**
      * @descripttion: 获取服务人员信息
      * @return: 信息
      */
-    getServiceUserInfo() {
+    getServiceUserInfo () {
       this.$http
         .get(
           '/org/service/provider/detail?serviceProviderId=' +
@@ -365,12 +365,17 @@ export default {
             // this.$set(this.formInfo,'orgServiceTypeIds',[])
             let arr = []
             let arr1 = []
-            res.payload.orgServiceTypes.forEach(i => {
-              arr.push(i.pensionServiceTypeId)
-            })
-            res.payload.orgServiceProducts.forEach(i => {
-              arr1.push(i.orgServiceProductId)
-            })
+            if (res.payload.orgServiceTypes) {
+              res.payload.orgServiceTypes.forEach(i => {
+                arr.push(i.pensionServiceTypeId)
+              })
+            }
+            if (res.payload.orgServiceProducts) {
+              res.payload.orgServiceProducts.forEach(i => {
+                arr1.push(i.orgServiceProductId)
+              })
+            }
+            this.$set(this.formInfo, 'orgServiceProductIds', arr1)
             this.$set(this.formInfo, 'serviceScope', [
               res.payload.cityId ? res.payload.cityId : '',
               res.payload.districtId ? res.payload.districtId : '',
@@ -380,19 +385,19 @@ export default {
             this.$set(
               this.formInfo,
               'pensionServiceTypeId',
-              res.payload.orgServiceTypes.length > 0
+              res.payload.orgServiceTypes &&
+                res.payload.orgServiceTypes.length > 0
                 ? res.payload.orgServiceTypes[0].pensionServiceTypeId
                 : ''
             )
 
-            this.$set(this.formInfo, 'orgServiceProductIds', arr1)
             this.getServiceTypeList(this.formInfo.orgId)
             this.getServiceProductList()
           }
         })
     },
     // 保存按钮
-    handleSave() {
+    handleSave () {
       this.$refs['formInfo'].validate(valid => {
         if (!valid) return
         let url = this.$route.query.uid

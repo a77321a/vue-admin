@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 19:28:01
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-03 15:16:23
+ * @LastEditTime: 2020-03-03 15:59:10
  -->
 <template>
   <div id="service-object-info">
@@ -12,7 +12,7 @@
         <el-col style="text-align:center" :span="4">
           <el-avatar :size="60" :src="serviceObjectInfo.avatar"></el-avatar>
           <el-button
-            @click="dialogVisible = true"
+            @click="()=>{dialogVisible = true}"
             :disabled="serviceObjectInfo.serviceCustomerPicList.length==0"
             style="width:100%;display:block"
             type="text"
@@ -168,7 +168,7 @@ export default {
     activityRecords,
     objectInfo
   },
-  data () {
+  data() {
     return {
       dialogVisible: false,
       maritalStatus: ['未婚', '已婚', '离异', '再婚', '丧偶'],
@@ -180,16 +180,16 @@ export default {
         serviceCustomerPicList: [],
         avatar: ''
       },
-      dialogFormVisible: true,
+      dialogFormVisible: false,
       enumList: enumList,
       formInfo: {}
     }
   },
-  created () {
+  created() {
     this.getObjectInfo()
   },
   methods: {
-    getObjectInfo () {
+    getObjectInfo() {
       this.$http
         .get('/service/customer/get?serviceCustomerId=' + this.$route.query.sid)
         .then(res => {

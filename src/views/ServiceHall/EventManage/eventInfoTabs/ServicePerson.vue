@@ -2,8 +2,8 @@
  * @Descripttion:服务人员
  * @Author:
  * @Date: 2019-11-05 10:27:14
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2020-01-16 09:44:03
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-03-04 09:47:51
  -->
 <template>
   <div class="Participants">
@@ -58,12 +58,15 @@
         </div>
       </template>
       <template slot="orgServiceProductList" slot-scope="{ row }">
-        <span :key="index" v-for="(item, index) in row.orgServiceProductList">
-          {{ item.orgServiceProductName }}
-          <span
-            v-if="index != row.orgServiceProductList.length - 1"
-          >、</span>
+        <span v-if="row.orgServiceProductList">
+          <span :key="index" v-for="(item, index) in row.orgServiceProductList">
+            {{ item.orgServiceProductName }}
+            <span
+              v-if="index != row.orgServiceProductList.length - 1"
+            >、</span>
+          </span>
         </span>
+        <span v-else>--</span>
       </template>
       <template slot-scope="{ row }" slot="handleColumn">
         <el-button
@@ -78,7 +81,7 @@
 <script>
 export default {
   name: 'ServicePerson',
-  data () {
+  data() {
     return {
       searchRefresh: true,
       searchData: { activityId: this.activityId },
@@ -92,16 +95,16 @@ export default {
   },
   props: ['activityId'],
 
-  created () {},
+  created() {},
   methods: {
-    exportExcel () {
+    exportExcel() {
       window.open(
         `${ctx}activity/provider/export?activityId=${this.searchData
           .activityId || ''}&orgServiceProviderName=${this.searchData
           .orgServiceProviderName || ''}&token=${this.$store.state.token}`
       )
     },
-    rowsForamtter (rows) {
+    rowsForamtter(rows) {
       rows.forEach(row => {
         row.activityTime = row.startTime + '~' + row.endTime
       })

@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-03 15:42:37
+ * @LastEditTime: 2020-03-04 09:37:18
  -->
 <template>
   <div id="edit-event">
@@ -824,7 +824,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="期望养老服务" prop="pensionServiceList">
+      <!-- <el-form-item label="期望养老服务" prop="pensionServiceList">
         <el-select
           multiple
           clearable
@@ -855,8 +855,8 @@
             :value="item.dictionaryValue"
           ></el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="老人类别" prop="customerCategoryList">
+      </el-form-item>-->
+      <!-- <el-form-item label="老人类别" prop="customerCategoryList">
         <el-select
           multiple
           clearable
@@ -871,7 +871,7 @@
             :value="item.dictionaryValue"
           ></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="老人喜好" prop="customerHobbyList">
         <el-select
           multiple
@@ -1302,6 +1302,9 @@ export default {
           this.spaceTree = res.payload
           for (let i in this.spaceTree) {
             if (this.spaceTree[i].depth == 0) {
+              this.spaceTree.splice(i, 1)
+            }
+            if (!this.spaceTree[i].children) {
               this.spaceTree.splice(i, 1)
             }
           }
