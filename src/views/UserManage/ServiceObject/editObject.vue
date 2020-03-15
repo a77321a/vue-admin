@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-11-07 18:03:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-04 09:37:18
+ * @LastEditTime: 2020-03-04 10:54:44
  -->
 <template>
   <div id="edit-event">
@@ -313,7 +313,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="老人类型" prop="oldManTypeList">
+      <!-- <el-form-item label="老人类型" prop="oldManTypeList">
         <el-select
           multiple
           clearable
@@ -328,7 +328,7 @@
             :value="item.key"
           ></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="厨房排风设施类型">
         <el-select
           clearable
@@ -856,7 +856,7 @@
           ></el-option>
         </el-select>
       </el-form-item>-->
-      <!-- <el-form-item label="老人类别" prop="customerCategoryList">
+      <el-form-item label="老人类别" prop="customerCategoryList">
         <el-select
           multiple
           clearable
@@ -871,7 +871,7 @@
             :value="item.dictionaryValue"
           ></el-option>
         </el-select>
-      </el-form-item>-->
+      </el-form-item>
       <el-form-item label="老人喜好" prop="customerHobbyList">
         <el-select
           multiple
@@ -1286,6 +1286,11 @@ export default {
               this.formInfo.emergencyManualList
                 ? this.formInfo.emergencyManualList
                 : []
+            )
+            this.$set(
+              this.formInfo,
+              'drugUseInfoList',
+              res.payload.drugUseInfoList ? res.payload.drugUseInfoList : []
             )
             this.$set(this.formInfo, 'addressList', [
               res.payload.cityId,
