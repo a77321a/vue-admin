@@ -59,6 +59,7 @@
       api="/activity/customer/pageSearch"
       method="post"
     >
+    <!-- 表格 -->
       <template slot="serviceCustomerName" slot-scope="{row}">
         <div class="flex-t-u">
           <el-avatar
