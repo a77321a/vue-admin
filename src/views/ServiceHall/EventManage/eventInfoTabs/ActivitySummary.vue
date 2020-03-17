@@ -36,12 +36,11 @@
         arrow="always"
         indicator-position="outside"
         :autoplay="false"
-        trigger="click"
         height="450px"
       >
         <el-carousel-item v-for="item in picList" :key="item">
           <img
-            style="width:100%;height:100%;"
+            style="height:400px;"
             :src="$store.state.config.systemConfig[0].dictionaryValue+item"
             alt
           />
