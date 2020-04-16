@@ -3,7 +3,7 @@
  * @Author:
  * @Date: 2019-12-09 15:07:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-15 19:51:37
+ * @LastEditTime: 2020-03-17 11:23:16
  -->
 
 <template>
@@ -17,7 +17,7 @@
     </div>
     <div class="title">活动照片</div>
     <el-row :gutter="20">
-      <el-col class="img-grid" v-for="(item, index) in picList" :key="index" :span="8">
+      <el-col class="img-grid" v-for="(item, index) in picList" :key="index" :span="7">
         <img
           @click="showThisPic(index)"
           :src="$store.state.config.systemConfig[0].dictionaryValue+item"
